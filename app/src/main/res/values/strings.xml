@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name" translatable="false">Dietary</string>
+    <string name="take_photo_button">take photo</string>
+    <string name="gallery_button">Gallery</string>
+    <string name="rotate_button">Rotate</string>
+    <string name="camera_supporting_text">Keep a 30cm distance from food to camera</string>
+    <string name="home_title" translatable="false">Home</string>
+    <string name="report_title">Report</string>
+    <string name="my_profile_title" translatable="false">My Profile</string>
+    <string name="health_profile_dialog_title">Health Profile</string>
+    <string name="health_profile_dialog_negative_btn">Update</string>
+    <string name="health_profile_dialog_positive_btn">Done</string>
+    <string name="health_profile_dialog_message">Review your health profile: verify and update your information for accuracy.</string>
+    <string name="age_label">Age</string>
+    <string name="dummy_dialog_age">40 years old</string>
+    <string name="weight_label">Weight</string>
+    <string name="dummy_dialog_weight" translatable="false">70 kg</string>
+    <string name="height_label">Height</string>
+    <string name="dummy_dialog_height" translatable="false">170 cm</string>
+    <string name="gender_label">Gender</string>
+    <string name="dummy_dialog_gender">Man</string>
+    <string name="save">Save</string>
+    <string name="dummy_age" translatable="false">40</string>
+    <string name="dummy_height" translatable="false">170</string>
+    <string name="dummy_gender">Man</string>
+    <string name="dummy_weight" translatable="false">70</string>
+    <string-array name="gender">
+        <item>Man</item>
+        <item>Woman</item>
+    </string-array>
+    <string name="food_scanner_title" translatable="false">Food Scanner</string>
+    <string name="camera_permission_message">The food scanner is not available cause you have denied access to camera. You could give the permission from setting</string>
+    <string name="yes">Yes</string>
+    <string name="no_thanks">No, thanks</string>
+    <string name="camera_access_dialog_message">Camera access is required to access the food scanner feature. Would you like to give the permission?</string>
+</resources>

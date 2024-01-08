@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="take_photo_button">tangkap gambar</string>
+    <string name="gallery_button">Galeri</string>
+    <string name="rotate_button">Rotasi</string>
+    <string name="camera_supporting_text">Jaga jarak 30cm dari makanan ke kamera</string>
+    <string name="report_title">Laporan</string>
+    <string name="health_profile_dialog_title">Profil Kesehatan</string>
+    <string name="health_profile_dialog_negative_btn">Perbarui</string>
+    <string name="health_profile_dialog_positive_btn">Selesai</string>
+    <string name="health_profile_dialog_message">Tinjau profil kesehatan Anda: verifikasi dan perbarui informasi Anda untuk akurasi.</string>
+    <string name="age_label">Umur</string>
+    <string name="dummy_dialog_age">40 tahun</string>
+    <string name="weight_label">Berat</string>
+    <string name="height_label">Tinggi</string>
+    <string name="gender_label">Jenis Kelamin</string>
+    <string name="dummy_dialog_gender">Pria</string>
+    <string name="save">Simpan</string>
+    <string name="dummy_gender">Pria</string>
+    <string name="camera_permission_message">Food scanner tidak tersedia karena Anda menolak akses ke kamera. Anda dapat memberikan izin melalui pengaturan</string>
+    <string name="yes">Ya</string>
+    <string name="no_thanks">Tidak, terimakasih</string>
+    <string name="camera_access_dialog_message">Akses kamera diperlukan untuk mengakses fitur food scanner. Apakah Anda ingin memberikan izin?</string>
+</resources>
