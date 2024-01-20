@@ -44,4 +44,8 @@
     <string name="reset_password">Atur Ulang Kata Sandi!</string>
     <string name="reset_password_message">Lupa kata sandi Anda? Jangan khawatir, kami akan mengirimkan Anda instruksi pengaturan ulang</string>
     <string name="new_password_message">Masukkan kata sandi baru Anda</string>
+    <string-array name="gender">
+        <item>Pria</item>
+        <item>Wanita</item>
+    </string-array>
 </resources>

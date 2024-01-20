@@ -250,7 +250,7 @@ private fun FoodScannerBody(
         Surface(
             modifier = Modifier.fillMaxSize(),
             content = cameraPreview,
-            color = ComposeColor.White
+            color = ComposeColor.Black
         )
         LottieAnimation(composition = lottieComposition,
             iterations = LottieConstants.IterateForever,
