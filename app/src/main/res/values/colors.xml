@@ -2,4 +2,10 @@
 <resources>
     <color name="md_theme_light_primary">#246C2D</color>
     <color name="md_theme_dark_primary">#8DD88C</color>
+    <color name="md_theme_light_surface">#FFF7FBF1</color>
+    <color name="md_theme_dark_surface">#FF10140F</color>
+    <color name="md_theme_light_surface_variant">#FFDEE5D9</color>
+    <color name="md_theme_dark_surface_variant">#FF424940</color>
+    <color name="md_theme_light_on_surface">#FF181D17</color>
+    <color name="md_theme_dark_on_surface">#FFE0E4DB</color>
 </resources>

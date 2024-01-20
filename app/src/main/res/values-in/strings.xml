@@ -21,4 +21,27 @@
     <string name="yes">Ya</string>
     <string name="no_thanks">Tidak, terimakasih</string>
     <string name="camera_access_dialog_message">Akses kamera diperlukan untuk mengakses fitur food scanner. Apakah Anda ingin memberikan izin?</string>
+    <string name="sign_in_with_google">Masuk dengan Google</string>
+    <string name="or">Atau</string>
+    <string name="email_address_placeholder">Masukkan alamat email anda</string>
+    <string name="email_address_label">Alamat Email</string>
+    <string name="email_address_error_text">Tolong masukkan alamat email yang valid</string>
+    <string name="supporting_text_required">*wajib</string>
+    <string name="password_placeholder">Masukkan kata sandi anda</string>
+    <string name="password_error_text">Kata sandi harus 8 karakter dan tanpa spasi</string>
+    <string name="password_label">Kata Sandi</string>
+    <string name="sign_in">Masuk</string>
+    <string name="don_t_have_an_account">"Tidak punya akun? "</string>
+    <string name="sign_up_here">Daftar disini</string>
+    <string name="forgot_password">Lupa Kata Sandi?</string>
+    <string name="join_us_today">🌟 Bergabunglah! 🌟</string>
+    <string name="confirmation_password_placeholder">Masukkan ulang kata sandi anda</string>
+    <string name="confirmation_password_error_text">Tolong konfirmasi kata sandi anda dengan benar</string>
+    <string name="sign_up">Daftar</string>
+    <string name="sign_up_with_google">Daftar dengan Google</string>
+    <string name="have_an_account">"Punya akun? "</string>
+    <string name="sign_in_here">Masuk disini</string>
+    <string name="reset_password">Atur Ulang Kata Sandi!</string>
+    <string name="reset_password_message">Lupa kata sandi Anda? Jangan khawatir, kami akan mengirimkan Anda instruksi pengaturan ulang</string>
+    <string name="new_password_message">Masukkan kata sandi baru Anda</string>
 </resources>

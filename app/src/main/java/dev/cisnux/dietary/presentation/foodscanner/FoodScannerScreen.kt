@@ -16,7 +16,6 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,7 +27,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -38,8 +36,10 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -74,7 +74,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.LifecycleOwner
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -147,7 +146,6 @@ fun FoodScannerScreen(
     FoodScannerContent(
         body = {
             FoodScannerBody(
-                lifecycleOwner = lifecycleOwner,
                 lottieComposition = lottieComposition,
                 onNavigateUp = onNavigateUp,
                 onCaptureByCamera = {
@@ -159,8 +157,24 @@ fun FoodScannerScreen(
                     isCapturedByCamera = false
                 },
                 onRotateButton = { isBackCamera = !isBackCamera },
-                cameraController = cameraController,
-                isBackCamera = isBackCamera,
+                cameraPreview = {
+                    AndroidView(factory = { context ->
+                        cameraController.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                        cameraController.isTapToFocusEnabled
+                        cameraController.setEnabledUseCases(CameraController.IMAGE_CAPTURE)
+                        cameraController.bindToLifecycle(lifecycleOwner)
+                        PreviewView(context).apply {
+                            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                            setBackgroundColor(Color.BLACK)
+                            scaleType = PreviewView.ScaleType.FILL_START
+                            controller = cameraController
+                        }
+                    }, update = { preview ->
+                        preview.controller?.cameraSelector =
+                            if (isBackCamera) CameraSelector.DEFAULT_BACK_CAMERA
+                            else CameraSelector.DEFAULT_FRONT_CAMERA
+                    })
+                },
                 modifier = modifier.padding(it)
             )
             HealthProfileDialog(
@@ -189,24 +203,18 @@ fun FoodScannerScreen(
 @Preview(showBackground = true)
 @Composable
 private fun FoodScannerContentPreview() {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
-    val cameraController = remember {
-        LifecycleCameraController(context)
-    }
     val lottieComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(resId = R.raw.focusable_anim))
 
     DietaryTheme(darkTheme = false) {
         FoodScannerContent(body = {
             FoodScannerContent(body = {
                 FoodScannerBody(
-                    lifecycleOwner = lifecycleOwner,
                     lottieComposition = lottieComposition,
                     onNavigateUp = { /*TODO*/ },
                     onCaptureByCamera = { /*TODO*/ },
                     onGalleryButton = { /*TODO*/ },
                     onRotateButton = { /*TODO*/ },
-                    cameraController = cameraController,
+                    cameraPreview = {},
                     modifier = Modifier.padding(it)
                 )
             })
@@ -227,40 +235,23 @@ private fun FoodScannerContent(
 
 @Composable
 private fun FoodScannerBody(
-    cameraController: LifecycleCameraController,
-    lifecycleOwner: LifecycleOwner,
     lottieComposition: LottieComposition?,
     onNavigateUp: () -> Unit,
     onCaptureByCamera: () -> Unit,
     onGalleryButton: () -> Unit,
     onRotateButton: () -> Unit,
+    cameraPreview: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    isBackCamera: Boolean = true,
 ) {
     ConstraintLayout(
         modifier = modifier.fillMaxSize()
     ) {
-        val (previewView, buttonContainer, supportingTextContainer, supportingText, focusableAnim, backButton, galleryButton, rotateButton, takePictureButton) = createRefs()
-        AndroidView(factory = { context ->
-            cameraController.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-            cameraController.isTapToFocusEnabled
-            cameraController.setEnabledUseCases(CameraController.IMAGE_CAPTURE)
-            cameraController.bindToLifecycle(lifecycleOwner)
-            PreviewView(context).apply {
-                layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                setBackgroundColor(Color.BLACK)
-                scaleType = PreviewView.ScaleType.FILL_START
-                controller = cameraController
-            }
-        }, update = {
-            it.controller?.cameraSelector = if (isBackCamera) CameraSelector.DEFAULT_BACK_CAMERA
-            else CameraSelector.DEFAULT_FRONT_CAMERA
-        }, modifier = Modifier.constrainAs(previewView) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            bottom.linkTo(parent.bottom)
-        })
+        val (buttonContainer, supportingTextContainer, supportingText, focusableAnim, backButton, galleryButton, rotateButton, takePictureButton) = createRefs()
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            content = cameraPreview,
+            color = ComposeColor.White
+        )
         LottieAnimation(composition = lottieComposition,
             iterations = LottieConstants.IterateForever,
             modifier = Modifier
@@ -295,21 +286,26 @@ private fun FoodScannerBody(
                     bottom.linkTo(supportingTextContainer.bottom)
                 }
                 .width(150.dp))
-        IconButton(onClick = onNavigateUp, content = {
-            Icon(
-                tint = ComposeColor.White,
-                imageVector = Icons.Rounded.ArrowBack,
-                contentDescription = "back"
-            )
-        }, modifier = Modifier
-            .constrainAs(backButton) {
-                top.linkTo(parent.top, 8.dp)
-                start.linkTo(parent.start, 8.dp)
-            }
-            .background(
-                color = ComposeColor.Black.copy(alpha = 0.54f),
-                shape = CircleShape,
-            ))
+        FilledIconButton(
+            onClick = onNavigateUp,
+            colors = IconButtonDefaults.filledIconButtonColors(
+                containerColor = ComposeColor.Black.copy(
+                    alpha = 0.54f
+                )
+            ),
+            content = {
+                Icon(
+                    tint = ComposeColor.White,
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = "back"
+                )
+            },
+            modifier = Modifier
+                .constrainAs(backButton) {
+                    top.linkTo(parent.top, 8.dp)
+                    start.linkTo(parent.start, 8.dp)
+                }
+        )
         Surface(color = ComposeColor.Black.copy(alpha = 0.45f),
             modifier = Modifier
                 .constrainAs(buttonContainer) {
