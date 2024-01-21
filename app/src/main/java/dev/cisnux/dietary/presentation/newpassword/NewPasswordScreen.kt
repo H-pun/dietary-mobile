@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -81,9 +82,9 @@ private fun NewPasswordContentPreview() {
 
 @Preview(
     showBackground = true,
-    name = "dark",
+    name = "dark and indonesia",
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
-    wallpaper = Wallpapers.NONE, device = "id:pixel_7_pro"
+    wallpaper = Wallpapers.NONE, device = "id:pixel_7_pro", locale = "in"
 )
 @Composable
 private fun NewPasswordContentDarkPreview() {
@@ -111,6 +112,39 @@ private fun NewPasswordContentDarkPreview() {
     }
 }
 
+@Preview(
+    showBackground = true,
+    name = "(loading) dark and indonesia",
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
+    wallpaper = Wallpapers.NONE, device = "id:pixel_7_pro", locale = "in"
+)
+@Composable
+private fun NewPasswordContentLoadingDarkPreview() {
+    var password by rememberSaveable {
+        mutableStateOf("")
+    }
+    var confirmationPassword by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    DietaryTheme {
+        NewPasswordContent(
+            body = {
+                NewPasswordBody(
+                    password = password,
+                    confirmationPassword = confirmationPassword,
+                    onPasswordChange = { newValue -> password = newValue },
+                    onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
+                    onResetPassword = {},
+                    modifier = Modifier.padding(it),
+                    isResetPasswordLoading = true
+                )
+            },
+            snackbarHostState = SnackbarHostState(),
+        )
+    }
+}
+
 @Composable
 private fun NewPasswordBody(
     password: String,
@@ -118,7 +152,8 @@ private fun NewPasswordBody(
     onPasswordChange: (String) -> Unit,
     onConfirmationPasswordChange: (String) -> Unit,
     onResetPassword: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isResetPasswordLoading: Boolean = false
 ) {
     var isPasswordVisible by rememberSaveable {
         mutableStateOf(false)
@@ -257,7 +292,7 @@ private fun NewPasswordBody(
             singleLine = true,
             label = {
                 Text(
-                    text = "Confirm Password",
+                    text = stringResource(id = R.string.confirmation_password_label),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
@@ -285,9 +320,12 @@ private fun NewPasswordBody(
             onClick = onResetPassword,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = password.isPasswordSecure() and (password == confirmationPassword),
+            enabled = password.isPasswordSecure() and (password == confirmationPassword) and !isResetPasswordLoading,
         ) {
-            Text(text = "Reset Password")
+            if (isResetPasswordLoading)
+                CircularProgressIndicator()
+            else
+                Text(text = "Reset Password")
         }
     }
 }

@@ -17,10 +17,43 @@ class NavComponentAction(
     val navigateToScannerResult: (
         foodPicture: String,
     ) -> Unit = { foodPicture ->
-        navController.navigate(route = "scanner_result?foodPicture=$foodPicture")
+        navController.navigate(route = AppDestination.ScannerResultRoute.createRouteUrl(foodPicture = foodPicture))
     }
     val navigateUp: () -> Unit = {
         navController.navigateUp()
+    }
+    val navigateToHome: () -> Unit = {
+        navController.navigate(route = AppDestination.HomeRoute.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            restoreState = true
+            launchSingleTop = true
+        }
+    }
+    val navigateToSignUp: () -> Unit = {
+        navController.navigate(AppDestination.SignUpRoute.route)
+    }
+    val navigateToSignIn: () -> Unit = {
+        navController.navigate(route = AppDestination.SignInRoute.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            restoreState = true
+            launchSingleTop = true
+        }
+    }
+    val navigateToResetPassword: () -> Unit = {
+        navController.navigate(AppDestination.ResetPasswordRoute.route)
+    }
+    val navigateToAddMyProfile: () -> Unit = {
+        navController.navigate(route = AppDestination.AddMyProfileRoute.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            restoreState = true
+            launchSingleTop = true
+        }
     }
     val bottomNavigation: (destination: AppDestination, currentRoute: AppDestination) -> Unit =
         { destination, currentRoute ->

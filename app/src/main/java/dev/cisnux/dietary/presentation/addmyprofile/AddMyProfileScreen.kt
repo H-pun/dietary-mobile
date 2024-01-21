@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -123,10 +124,10 @@ private fun AddMyProfileContentPreview() {
 
 @Preview(
     showBackground = true,
-    name = "dark",
+    name = "dark and indonesia",
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
     wallpaper = Wallpapers.NONE,
-    device = "id:pixel_7_pro"
+    device = "id:pixel_7_pro", locale = "in"
 )
 @Composable
 private fun AddMyProfileContentDarkPreview() {
@@ -190,6 +191,76 @@ private fun AddMyProfileContentDarkPreview() {
     }
 }
 
+@Preview(
+    showBackground = true,
+    name = "(loading) dark and indonesia",
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
+    wallpaper = Wallpapers.NONE,
+    device = "id:pixel_7_pro", locale = "in"
+)
+@Composable
+private fun AddMyProfileContentLoadingDarkPreview() {
+    val genders = stringArrayResource(id = R.array.gender)
+    val goals = stringArrayResource(id = R.array.goal)
+    val activityLevels = stringArrayResource(id = R.array.activity_level)
+    val activityDescriptions = stringArrayResource(id = R.array.activity_description)
+
+    var myProfile by rememberSaveable {
+        mutableStateOf(
+            MyProfile(
+                username = "",
+                age = "",
+                weight = "",
+                height = "",
+                gender = genders[0],
+                goal = goals[0],
+                targetWeight = "",
+                activityLevel = activityLevels[0],
+            )
+        )
+    }
+
+
+    DietaryTheme {
+        AddMyProfileContent(
+            body = {
+                MyProfileBody(
+                    username = myProfile.username,
+                    age = myProfile.age,
+                    weight = myProfile.weight,
+                    height = myProfile.height,
+                    selectedGender = myProfile.gender,
+                    selectedGoal = myProfile.goal,
+                    targetWeight = myProfile.targetWeight,
+                    selectedActivityLevel = myProfile.activityLevel,
+                    genders = genders,
+                    activityLevels = activityLevels,
+                    goals = goals,
+                    activityDescriptions = activityDescriptions,
+                    onUsernameChange = { newValue ->
+                        myProfile = myProfile.copy(username = newValue)
+                    },
+                    onAgeChange = { newValue -> myProfile = myProfile.copy(age = newValue) },
+                    onHeightChange = { newValue -> myProfile = myProfile.copy(height = newValue) },
+                    onWeightChange = { newValue -> myProfile = myProfile.copy(weight = newValue) },
+                    onGenderChange = { newValue -> myProfile = myProfile.copy(gender = newValue) },
+                    onGoalChange = { newValue -> myProfile = myProfile.copy(goal = newValue) },
+                    onTargetWeightChange = { newValue ->
+                        myProfile = myProfile.copy(targetWeight = newValue)
+                    },
+                    onActivityLevelChange = { newValue ->
+                        myProfile = myProfile.copy(activityLevel = newValue)
+                    },
+                    onBuildProfile = {},
+                    modifier = Modifier.padding(it),
+                    isBuildProfileLoading = true
+                )
+            },
+            snackbarHostState = SnackbarHostState()
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MyProfileBody(
@@ -215,6 +286,7 @@ private fun MyProfileBody(
     onActivityLevelChange: (String) -> Unit,
     onBuildProfile: () -> Unit,
     modifier: Modifier = Modifier,
+    isBuildProfileLoading: Boolean = false,
 ) {
     val scrollState = rememberScrollState()
     var isUsernameFocused by rememberSaveable {
@@ -232,9 +304,6 @@ private fun MyProfileBody(
     var isTargetWeightFocused by rememberSaveable {
         mutableStateOf(false)
     }
-    var isActivityLevelFocused by rememberSaveable {
-        mutableStateOf(false)
-    }
     var isGenderExpanded by rememberSaveable { mutableStateOf(false) }
     var isGoalExpanded by rememberSaveable { mutableStateOf(false) }
     var isActivityLevelExpanded by rememberSaveable { mutableStateOf(false) }
@@ -247,7 +316,7 @@ private fun MyProfileBody(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Let's make healthy\neating exciting and\neffortless \uD83E\uDD57\uD83D\uDCAA",
+            text = stringResource(R.string.add_my_profile_label),
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.ExtraBold,
             textAlign = TextAlign.Start,
@@ -272,20 +341,20 @@ private fun MyProfileBody(
             onValueChange = onUsernameChange,
             placeholder = {
                 Text(
-                    text = "Enter your username",
+                    text = stringResource(R.string.username_placeholder),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             label = {
                 Text(
-                    text = "Username",
+                    text = stringResource(R.string.username_label),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             supportingText = {
                 if (username.isNotEmpty() and !username.isUsernameValid())
                     Text(
-                        text = "Please enter a username without any spaces",
+                        text = stringResource(R.string.username_error_text),
                         style = MaterialTheme.typography.bodySmall,
                     )
                 else if (isUsernameFocused)
@@ -325,20 +394,20 @@ private fun MyProfileBody(
             onValueChange = onAgeChange,
             placeholder = {
                 Text(
-                    text = "Enter your age",
+                    text = stringResource(R.string.age_placeholder),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             label = {
                 Text(
-                    text = "Age",
+                    text = stringResource(id = R.string.age_label),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             supportingText = {
                 if (age.isNotEmpty() and !age.isAgeValid())
                     Text(
-                        text = "The age must be a integer and greater than 0",
+                        text = stringResource(R.string.age_error_text),
                         style = MaterialTheme.typography.bodySmall,
                     )
                 else if (isAgeFocused)
@@ -378,20 +447,20 @@ private fun MyProfileBody(
             onValueChange = onWeightChange,
             placeholder = {
                 Text(
-                    text = "Enter your weight",
+                    text = stringResource(R.string.weight_placeholder),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             label = {
                 Text(
-                    text = "Weight",
+                    text = stringResource(id = R.string.weight_label),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             supportingText = {
                 if (weight.isNotEmpty() and !weight.isHeightOrWeightValid())
                     Text(
-                        text = "The weight must be a number and greater than 0",
+                        text = stringResource(R.string.weight_error_text),
                         style = MaterialTheme.typography.bodySmall,
                     )
                 else if (isWeightFocused)
@@ -407,7 +476,7 @@ private fun MyProfileBody(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
                     )
-                else Text(text = "kg")
+                else Text(text = stringResource(R.string.trailing_text_kg))
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -432,20 +501,20 @@ private fun MyProfileBody(
             onValueChange = onHeightChange,
             placeholder = {
                 Text(
-                    text = "Enter your height",
+                    text = stringResource(R.string.height_placeholder),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             label = {
                 Text(
-                    text = "Height",
+                    text = stringResource(id = R.string.height_label),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             supportingText = {
                 if (height.isNotEmpty() and !height.isHeightOrWeightValid())
                     Text(
-                        text = "The height must be a number and greater than 0",
+                        text = stringResource(R.string.height_error_text),
                         style = MaterialTheme.typography.bodySmall,
                     )
                 else if (isHeightFocused)
@@ -461,7 +530,7 @@ private fun MyProfileBody(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
                     )
-                else Text(text = "cm")
+                else Text(text = stringResource(R.string.trailing_text_cm))
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -533,7 +602,7 @@ private fun MyProfileBody(
                 onValueChange = {},
                 label = {
                     Text(
-                        text = "Goal",
+                        text = stringResource(R.string.goal_label),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
@@ -578,20 +647,20 @@ private fun MyProfileBody(
                 onValueChange = onTargetWeightChange,
                 placeholder = {
                     Text(
-                        text = "Enter your target weight",
+                        text = stringResource(R.string.target_weight_placeholder),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 label = {
                     Text(
-                        text = "Target Weight",
+                        text = stringResource(R.string.target_weight_label),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 supportingText = {
                     if (targetWeight.isNotEmpty() and !targetWeight.isTargetWeightValid())
                         Text(
-                            text = "The target weight must be a number and greater than or equal to 0",
+                            text = stringResource(R.string.target_weight_error_text),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     else if (isTargetWeightFocused)
@@ -633,7 +702,7 @@ private fun MyProfileBody(
                 onValueChange = {},
                 label = {
                     Text(
-                        text = "Activity Level",
+                        text = stringResource(R.string.activity_level_label),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
@@ -679,9 +748,14 @@ private fun MyProfileBody(
             onClick = onBuildProfile,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = username.isUsernameValid() and age.isAgeValid() and weight.isHeightOrWeightValid() and height.isHeightOrWeightValid() and targetWeight.isTargetWeightValid(),
+            enabled = username.isUsernameValid() and age.isAgeValid()
+                    and weight.isHeightOrWeightValid() and height.isHeightOrWeightValid()
+                    and targetWeight.isTargetWeightValid() and !isBuildProfileLoading,
         ) {
-            Text(text = "Build Profile")
+            if (isBuildProfileLoading)
+                CircularProgressIndicator()
+            else
+                Text(text = stringResource(R.string.build_profile))
         }
     }
 }

@@ -42,8 +42,8 @@
     <string name="password_placeholder">Enter your password</string>
     <string name="password_error_text">Password must be 8 characters long and without any spaces</string>
     <string name="password_label">Password</string>
-    <string name="welcome_back" translatable="false">Welcome back!</string>
-    <string name="you_ve_been_missed" translatable="false">You\'ve been missed</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="you_ve_been_missed">You\'ve been missed 🤗</string>
     <string name="sign_in">Sign In</string>
     <string name="don_t_have_an_account">"Don't have an account? "</string>
     <string name="sign_up_here">Sign Up Here</string>
@@ -58,6 +58,26 @@
     <string name="reset_password">Reset Password!</string>
     <string name="reset_password_message">Forgot your password? No worries,\n we’ll send you reset instructions</string>
     <string name="new_password_message">Enter your new password</string>
+    <string name="add_my_profile_label">Let\'s make healthy\neating exciting and\neffortless 🥗💪</string>
+    <string name="username_placeholder">Enter your username</string>
+    <string name="username_label" translatable="false">Username</string>
+    <string name="username_error_text">Please enter a username without any spaces</string>
+    <string name="age_placeholder">Enter your age</string>
+    <string name="age_error_text">The age must be a integer and greater than 0</string>
+    <string name="weight_placeholder">Enter your weight</string>
+    <string name="weight_error_text">The weight must be a number and greater than 0</string>
+    <string name="height_placeholder">Enter your height</string>
+    <string name="height_error_text">The height must be a number and greater than 0</string>
+    <string name="trailing_text_kg" translatable="false">kg</string>
+    <string name="trailing_text_cm" translatable="false">cm</string>
+    <string name="goal_label">Goal</string>
+    <string name="target_weight_label">Weight Target</string>
+    <string name="target_weight_placeholder">Enter your target weight</string>
+    <string name="target_weight_error_text">The weight target must be a number and greater than or equal to 0</string>
+    <string name="activity_level_label">Activity Level</string>
+    <string name="build_profile">Build Profile</string>
+    <string name="confirmation_password_label">Confirm Password</string>
+    <string name="verify_email">Verify Email Address</string>
     <string-array name="goal">
         <item>Weight loss</item>
         <item>Maintain my current weight</item>

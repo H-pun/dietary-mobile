@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -59,7 +60,8 @@ import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.isEmailValid
 import dev.cisnux.dietary.presentation.utils.isPasswordSecure
 
-@Preview(showBackground = true, name = "light",
+@Preview(
+    showBackground = true, name = "light",
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
     wallpaper = Wallpapers.NONE
 )
@@ -92,9 +94,10 @@ private fun SignInContentPreview() {
     }
 }
 
-@Preview(showBackground = true, name = "dark", backgroundColor = 0xFFFFFFFF,
+@Preview(
+    showBackground = true, name = "dark and indonesia", backgroundColor = 0xFFFFFFFF,
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
-    device = "id:pixel_7_pro"
+    device = "id:pixel_7_pro", locale = "in"
 )
 @Composable
 private fun SignInContentDarkPreview() {
@@ -125,6 +128,42 @@ private fun SignInContentDarkPreview() {
     }
 }
 
+@Preview(
+    showBackground = true, name = "(loading) dark and indonesia", backgroundColor = 0xFFFFFFFF,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
+    device = "id:pixel_7_pro", locale = "in"
+)
+@Composable
+private fun SignInContentLoadingDarkPreview() {
+    var emailAddress by rememberSaveable {
+        mutableStateOf("")
+    }
+    var password by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    DietaryTheme {
+        SignInContent(
+            body = {
+                SignInBody(
+                    onSignUp = { /*TODO*/ },
+                    onGoogleSignIn = { /*TODO*/ },
+                    onEmailPasswordSignIn = { /*TODO*/ },
+                    emailAddress = emailAddress,
+                    password = password,
+                    onEmailAddressChange = { newValue -> emailAddress = newValue },
+                    onPasswordChange = { newValue -> password = newValue },
+                    onForgotPassword = {},
+                    modifier = Modifier.padding(it),
+                    isEmailPassSignInLoading = true,
+                    isGoogleSignInLoading = true
+                )
+            },
+            snackbarHostState = SnackbarHostState(),
+        )
+    }
+}
+
 @Composable
 private fun SignInBody(
     onSignUp: () -> Unit,
@@ -136,6 +175,8 @@ private fun SignInBody(
     onEmailAddressChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    isEmailPassSignInLoading: Boolean = false,
+    isGoogleSignInLoading: Boolean = false
 ) {
     var isPasswordVisible by rememberSaveable {
         mutableStateOf(false)
@@ -176,17 +217,23 @@ private fun SignInBody(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedButton(
             shape = MaterialTheme.shapes.medium,
-            onClick = onGoogleSignIn, modifier = Modifier.fillMaxWidth(),
+            onClick = onGoogleSignIn,
+            enabled = !isEmailPassSignInLoading,
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_google_24dp),
-                contentDescription = null,
-            )
-            Text(
-                text = stringResource(R.string.sign_in_with_google),
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold
-            )
+            if (isGoogleSignInLoading)
+                CircularProgressIndicator()
+            else {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_google_24dp),
+                    contentDescription = null,
+                )
+                Text(
+                    text = stringResource(R.string.sign_in_with_google),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
         Spacer(modifier = Modifier.height(4.dp))
         Box(
@@ -258,7 +305,10 @@ private fun SignInBody(
                 },
         )
         OutlinedTextField(
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Rounded.Lock,
@@ -336,10 +386,14 @@ private fun SignInBody(
             onClick = onEmailPasswordSignIn,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = emailAddress.isEmailValid() and password.isPasswordSecure(),
+            enabled = emailAddress.isEmailValid() and password.isPasswordSecure() and !isEmailPassSignInLoading,
         ) {
-            Text(text = stringResource(R.string.sign_in))
+            if (isEmailPassSignInLoading)
+                CircularProgressIndicator()
+            else
+                Text(text = stringResource(R.string.sign_in))
         }
+
         Spacer(modifier = Modifier.height(2.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),

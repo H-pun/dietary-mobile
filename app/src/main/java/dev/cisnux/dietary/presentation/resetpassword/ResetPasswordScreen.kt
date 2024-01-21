@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -62,7 +63,7 @@ private fun ResetPasswordPreview() {
             body = {
                 ResetPasswordBody(
                     onNavigateUp = { /*TODO*/ },
-                    onVerifyEmail = { /*TODO*/ },
+                    onVerifyEmailAddress = { /*TODO*/ },
                     emailAddress = emailAddress,
                     onEmailAddressChange = { newValue -> emailAddress = newValue },
                     modifier = Modifier.padding(it)
@@ -74,9 +75,9 @@ private fun ResetPasswordPreview() {
 
 @Preview(
     showBackground = true,
-    name = "dark",
+    name = "dark and indonesia",
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
-    wallpaper = Wallpapers.NONE, device = "id:pixel_7_pro"
+    wallpaper = Wallpapers.NONE, device = "id:pixel_7_pro", locale = "in"
 )
 @Composable
 private fun ResetPasswordDarkPreview() {
@@ -89,7 +90,7 @@ private fun ResetPasswordDarkPreview() {
             body = {
                 ResetPasswordBody(
                     onNavigateUp = { /*TODO*/ },
-                    onVerifyEmail = { /*TODO*/ },
+                    onVerifyEmailAddress = { /*TODO*/ },
                     emailAddress = emailAddress,
                     onEmailAddressChange = { newValue -> emailAddress = newValue },
                     modifier = Modifier.padding(it)
@@ -99,13 +100,42 @@ private fun ResetPasswordDarkPreview() {
     }
 }
 
+@Preview(
+    showBackground = true,
+    name = "(loading) dark and indonesia",
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
+    wallpaper = Wallpapers.NONE, device = "id:pixel_7_pro", locale = "in"
+)
+@Composable
+private fun ResetPasswordLoadingDarkPreview() {
+    var emailAddress by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    DietaryTheme {
+        ResetPasswordContent(
+            body = {
+                ResetPasswordBody(
+                    onNavigateUp = { /*TODO*/ },
+                    onVerifyEmailAddress = { /*TODO*/ },
+                    emailAddress = emailAddress,
+                    onEmailAddressChange = { newValue -> emailAddress = newValue },
+                    modifier = Modifier.padding(it),
+                    isVerifyEmailAddressLoading = true
+                )
+            }, snackbarHostState = SnackbarHostState()
+        )
+    }
+}
+
 @Composable
 private fun ResetPasswordBody(
     onNavigateUp: () -> Unit,
-    onVerifyEmail: () -> Unit,
+    onVerifyEmailAddress: () -> Unit,
     emailAddress: String,
     onEmailAddressChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isVerifyEmailAddressLoading: Boolean = false,
 ) {
     val scrollState = rememberScrollState()
     var isEmailAddressFocused by rememberSaveable {
@@ -203,12 +233,15 @@ private fun ResetPasswordBody(
         )
         Spacer(modifier = Modifier.height(2.dp))
         Button(
-            onClick = onVerifyEmail,
+            onClick = onVerifyEmailAddress,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = emailAddress.isEmailValid(),
+            enabled = emailAddress.isEmailValid() and !isVerifyEmailAddressLoading,
         ) {
-            Text(text = "Verify Email")
+            if (isVerifyEmailAddressLoading)
+                CircularProgressIndicator()
+            else
+                Text(text = stringResource(R.string.verify_email))
         }
     }
 }

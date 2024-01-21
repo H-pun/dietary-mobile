@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -94,8 +95,8 @@ private fun SignUpContentPreview() {
 }
 
 @Preview(
-    showBackground = true, name = "dark", device = "id:pixel_7_pro",
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+    showBackground = true, name = "dark and indonesia", device = "id:pixel_7_pro",
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL, locale = "in"
 )
 @Composable
 private fun SignUpContentDarkPreview() {
@@ -130,6 +131,45 @@ private fun SignUpContentDarkPreview() {
     }
 }
 
+@Preview(
+    showBackground = true, name = "(loading) dark and indonesia", device = "id:pixel_7_pro",
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL, locale = "in"
+)
+@Composable
+private fun SignUpContentLoadingDarkPreview() {
+    var emailAddress by rememberSaveable {
+        mutableStateOf("")
+    }
+    var password by rememberSaveable {
+        mutableStateOf("")
+    }
+    var confirmationPassword by remember {
+        mutableStateOf("")
+    }
+
+    DietaryTheme {
+        SignUpContent(
+            body = {
+                SignUpBody(
+                    onSignIn = {},
+                    onGoogleSignUp = {},
+                    onEmailPasswordSignUp = {},
+                    emailAddress = emailAddress,
+                    password = password,
+                    confirmationPassword = confirmationPassword,
+                    onEmailAddressChange = { newValue -> emailAddress = newValue },
+                    onPasswordChange = { newValue -> password = newValue },
+                    onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
+                    modifier = Modifier.padding(it),
+                    isEmailPassSignUpLoading = true,
+                    isGoogleSignUpLoading = true
+                )
+            },
+            snackbarHostState = SnackbarHostState(),
+        )
+    }
+}
+
 @Composable
 private fun SignUpBody(
     onSignIn: () -> Unit,
@@ -141,7 +181,9 @@ private fun SignUpBody(
     onEmailAddressChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onConfirmationPasswordChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isEmailPassSignUpLoading: Boolean = false,
+    isGoogleSignUpLoading: Boolean = false
 ) {
     var isPasswordVisible by rememberSaveable {
         mutableStateOf(false)
@@ -328,7 +370,7 @@ private fun SignUpBody(
             singleLine = true,
             label = {
                 Text(
-                    text = "Confirm Password",
+                    text = stringResource(R.string.confirmation_password_label),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
@@ -356,9 +398,12 @@ private fun SignUpBody(
             onClick = onEmailPasswordSignUp,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = emailAddress.isEmailValid() and password.isPasswordSecure() and (password == confirmationPassword),
+            enabled = emailAddress.isEmailValid() and password.isPasswordSecure() and (password == confirmationPassword) and !isEmailPassSignUpLoading,
         ) {
-            Text(text = stringResource(R.string.sign_up))
+            if (isEmailPassSignUpLoading)
+                CircularProgressIndicator()
+            else
+                Text(text = stringResource(R.string.sign_up))
         }
         Spacer(modifier = Modifier.height(4.dp))
         Box(
@@ -378,17 +423,22 @@ private fun SignUpBody(
         Spacer(modifier = Modifier.height(4.dp))
         OutlinedButton(
             shape = MaterialTheme.shapes.medium,
+            enabled = !isGoogleSignUpLoading,
             onClick = onGoogleSignUp, modifier = Modifier.fillMaxWidth(),
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_google_24dp),
-                contentDescription = null,
-            )
-            Text(
-                text = stringResource(R.string.sign_up_with_google),
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold
-            )
+            if (isGoogleSignUpLoading)
+                CircularProgressIndicator()
+            else {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_google_24dp),
+                    contentDescription = null,
+                )
+                Text(
+                    text = stringResource(R.string.sign_up_with_google),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
         Spacer(modifier = Modifier.height(2.dp))
         Row(
