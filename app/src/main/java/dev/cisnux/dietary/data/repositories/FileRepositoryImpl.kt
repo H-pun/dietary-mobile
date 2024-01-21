@@ -1,9 +1,10 @@
-package dev.cisnux.dietary.data.locals
+package dev.cisnux.dietary.data.repositories
 
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dev.cisnux.dietary.domain.repositories.FileRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -11,9 +12,9 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import javax.inject.Inject
 
-class FileServiceImpl @Inject constructor(
+class FileRepositoryImpl @Inject constructor(
     @ApplicationContext private val application: Context,
-) : FileService {
+) : FileRepository {
     override suspend fun createFile(): File = withContext(Dispatchers.IO) {
         val storageDir: File? = application.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         File.createTempFile(System.currentTimeMillis().toString(), ".jpg", storageDir)

@@ -56,7 +56,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.utils.isEmail
+import dev.cisnux.dietary.presentation.utils.isEmailValid
 import dev.cisnux.dietary.presentation.utils.isPasswordSecure
 
 @Preview(showBackground = true, name = "light", device = "id:pixel_7_pro")
@@ -150,13 +150,13 @@ private fun SignUpBody(
         mutableStateOf(false)
     }
     val scrollState = rememberScrollState()
-    var isEmailAddressFocused by remember {
+    var isEmailAddressFocused by rememberSaveable {
         mutableStateOf(false)
     }
-    var isPasswordFocused by remember {
+    var isPasswordFocused by rememberSaveable {
         mutableStateOf(false)
     }
-    var isConfirmationPassFocused by remember {
+    var isConfirmationPassFocused by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -177,7 +177,7 @@ private fun SignUpBody(
         Text(
             text = stringResource(R.string.join_us_today),
             color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.ExtraBold,
             style = MaterialTheme.typography.titleLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -209,7 +209,7 @@ private fun SignUpBody(
                 )
             },
             supportingText = {
-                if (emailAddress.isNotEmpty() and !emailAddress.isEmail())
+                if (emailAddress.isNotEmpty() and !emailAddress.isEmailValid())
                     Text(
                         text = stringResource(R.string.email_address_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -220,9 +220,9 @@ private fun SignUpBody(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = emailAddress.isNotEmpty() and !emailAddress.isEmail(),
+            isError = emailAddress.isNotEmpty() and !emailAddress.isEmailValid(),
             trailingIcon = {
-                if (emailAddress.isNotEmpty() and !emailAddress.isEmail())
+                if (emailAddress.isNotEmpty() and !emailAddress.isEmailValid())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
@@ -356,7 +356,7 @@ private fun SignUpBody(
             onClick = onEmailPasswordSignUp,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = emailAddress.isEmail() and password.isPasswordSecure() and (password == confirmationPassword),
+            enabled = emailAddress.isEmailValid() and password.isPasswordSecure() and (password == confirmationPassword),
         ) {
             Text(text = stringResource(R.string.sign_up))
         }

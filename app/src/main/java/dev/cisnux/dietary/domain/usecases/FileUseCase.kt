@@ -1,4 +1,4 @@
-package dev.cisnux.dietary.domain
+package dev.cisnux.dietary.domain.usecases
 
 import android.net.Uri
 import java.io.File

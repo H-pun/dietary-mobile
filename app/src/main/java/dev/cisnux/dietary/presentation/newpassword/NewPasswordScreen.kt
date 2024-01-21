@@ -90,7 +90,7 @@ private fun NewPasswordContentDarkPreview() {
     var password by rememberSaveable {
         mutableStateOf("")
     }
-    var confirmationPassword by remember {
+    var confirmationPassword by rememberSaveable {
         mutableStateOf("")
     }
 
@@ -127,10 +127,10 @@ private fun NewPasswordBody(
         mutableStateOf(false)
     }
     val scrollState = rememberScrollState()
-    var isPasswordFocused by remember {
+    var isPasswordFocused by rememberSaveable {
         mutableStateOf(false)
     }
-    var isConfirmationPassFocused by remember {
+    var isConfirmationPassFocused by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -153,7 +153,7 @@ private fun NewPasswordBody(
         Text(
             text = stringResource(id = R.string.reset_password),
             color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.ExtraBold,
             style = MaterialTheme.typography.titleLarge
         )
         Text(

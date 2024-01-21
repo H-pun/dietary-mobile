@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.cisnux.dietary.domain.FileInteractor
-import dev.cisnux.dietary.domain.FileUseCase
+import dev.cisnux.dietary.domain.usecases.FileInteractor
+import dev.cisnux.dietary.domain.usecases.FileUseCase
 import javax.inject.Singleton
 
 @Module

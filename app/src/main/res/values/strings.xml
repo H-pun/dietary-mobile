@@ -58,4 +58,21 @@
     <string name="reset_password">Reset Password!</string>
     <string name="reset_password_message">Forgot your password? No worries,\n we’ll send you reset instructions</string>
     <string name="new_password_message">Enter your new password</string>
+    <string-array name="goal">
+        <item>Weight loss</item>
+        <item>Maintain my current weight</item>
+        <item>Weight gain</item>
+    </string-array>
+    <string-array name="activity_level">
+        <item>Sedentary</item>
+        <item>Low Active</item>
+        <item>Active</item>
+        <item>Very Active</item>
+    </string-array>
+    <string-array name="activity_description">
+        <item>Daily activities require minimal effort such as resting, desk work or driving</item>
+        <item>Daily activities require some effort such as periods of standing, housework or some light exercise</item>
+        <item>Daily activities require reasonable effort such as standing, physical work or regular moderate exercise</item>
+        <item>Daily activities require intense physical effort such as construction work or regular vigorous exercise</item>
+    </string-array>
 </resources>

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="SignInContentDarkPreview">
+      <entry key="AddMyProfileContentPreview - light">
         <State />
       </entry>
       <entry key="SignInContentDarkPreview - dark">
@@ -11,10 +11,10 @@
       <entry key="SignInContentPreview - light">
         <State />
       </entry>
-      <entry key="SignUpContentDarkPreview">
+      <entry key="SignUpContentDarkPreview - light">
         <State />
       </entry>
-      <entry key="SignUpContentDarkPreview - light">
+      <entry key="SignUpContentPreview - light">
         <State />
       </entry>
       <entry key="app">

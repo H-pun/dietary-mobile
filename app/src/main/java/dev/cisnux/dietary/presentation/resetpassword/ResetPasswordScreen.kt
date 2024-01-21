@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,7 +43,7 @@ import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.utils.isEmail
+import dev.cisnux.dietary.presentation.utils.isEmailValid
 
 @Preview(
     showBackground = true,
@@ -109,7 +108,7 @@ private fun ResetPasswordBody(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
-    var isEmailAddressFocused by remember {
+    var isEmailAddressFocused by rememberSaveable {
         mutableStateOf(false)
     }
     Column(
@@ -139,7 +138,7 @@ private fun ResetPasswordBody(
         Text(
             text = stringResource(R.string.reset_password),
             color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.ExtraBold,
             style = MaterialTheme.typography.titleLarge
         )
         Text(
@@ -177,7 +176,7 @@ private fun ResetPasswordBody(
                 )
             },
             supportingText = {
-                if (emailAddress.isNotEmpty() and !emailAddress.isEmail())
+                if (emailAddress.isNotEmpty() and !emailAddress.isEmailValid())
                     Text(
                         text = stringResource(R.string.email_address_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -188,9 +187,9 @@ private fun ResetPasswordBody(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = emailAddress.isNotEmpty() and !emailAddress.isEmail(),
+            isError = emailAddress.isNotEmpty() and !emailAddress.isEmailValid(),
             trailingIcon = {
-                if (emailAddress.isNotEmpty() and !emailAddress.isEmail())
+                if (emailAddress.isNotEmpty() and !emailAddress.isEmailValid())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
@@ -207,7 +206,7 @@ private fun ResetPasswordBody(
             onClick = onVerifyEmail,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = emailAddress.isEmail(),
+            enabled = emailAddress.isEmailValid(),
         ) {
             Text(text = "Verify Email")
         }

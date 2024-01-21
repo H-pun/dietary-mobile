@@ -48,4 +48,21 @@
         <item>Pria</item>
         <item>Wanita</item>
     </string-array>
+    <string-array name="goal">
+        <item>Penurunan berat badan</item>
+        <item>Pertahankan berat badanku saat ini</item>
+        <item>Kenaikan berat badan</item>
+    </string-array>
+    <string-array name="activity_level">
+        <item>Tidak Banyak Bergerak</item>
+        <item>Kurang Aktif</item>
+        <item>Aktif</item>
+        <item>Sangat Aktif</item>
+    </string-array>
+    <string-array name="activity_description">
+        <item>Aktivitas sehari-hari memerlukan sedikit usaha seperti istirahat, bekerja di meja, atau mengemudi</item>
+        <item>Aktivitas sehari-hari memerlukan usaha seperti berdiri, melakukan pekerjaan rumah, atau berolahraga ringan</item>
+        <item>Aktivitas sehari-hari memerlukan upaya yang wajar seperti berdiri, kerja fisik, atau olahraga ringan yang teratur</item>
+        <item>Aktivitas sehari-hari memerlukan upaya fisik yang intens seperti pekerjaan konstruksi atau olahraga berat yang teratur</item>
+    </string-array>
 </resources>

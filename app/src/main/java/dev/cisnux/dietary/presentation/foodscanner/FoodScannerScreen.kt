@@ -383,8 +383,8 @@ fun UpdateHealthProfileDialog(
     modifier: Modifier = Modifier,
 ) {
     val genders = stringArrayResource(id = R.array.gender)
-    var expanded by remember { mutableStateOf(false) }
-    var selectedOptionText by remember { mutableStateOf(genders[0]) }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
+    var selectedOptionText by rememberSaveable { mutableStateOf(genders[0]) }
 
     if (isDialogOpen)
         Dialog(
@@ -485,8 +485,8 @@ fun UpdateHealthProfileDialog(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         ExposedDropdownMenuBox(
-                            expanded = expanded,
-                            onExpandedChange = { expanded = it },
+                            expanded = isExpanded,
+                            onExpandedChange = { isExpanded = it },
                         ) {
                             OutlinedTextField(
                                 leadingIcon = {
@@ -507,22 +507,22 @@ fun UpdateHealthProfileDialog(
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 },
-                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
                                 readOnly = true,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .menuAnchor(),
                             )
                             ExposedDropdownMenu(
-                                expanded = expanded,
-                                onDismissRequest = { expanded = false },
+                                expanded = isExpanded,
+                                onDismissRequest = { isExpanded = false },
                             ) {
-                                genders.forEach { selectionOption ->
+                                genders.forEach { selectedOption ->
                                     DropdownMenuItem(
-                                        text = { Text(selectionOption) },
+                                        text = { Text(selectedOption) },
                                         onClick = {
-                                            selectedOptionText = selectionOption
-                                            expanded = false
+                                            selectedOptionText = selectedOption
+                                            isExpanded = false
                                         },
                                         contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                                     )
