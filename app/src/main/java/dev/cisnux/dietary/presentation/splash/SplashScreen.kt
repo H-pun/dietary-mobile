@@ -19,6 +19,18 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 
+@Composable
+fun SplashScreen(
+    navigateToLanding: () -> Unit,
+    navigateToSignIn: () -> Unit,
+    navigateToAddMyProfile: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val lottieComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading_anim))
+
+    SplashContent(lottieComposition = lottieComposition, modifier = modifier)
+}
+
 @Preview(
     showBackground = true, name = "light",
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
@@ -36,7 +48,7 @@ private fun SplashContentPreview() {
 @Preview(
     showBackground = true, name = "dark",
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
-    wallpaper = Wallpapers.NONE, device = "id:pixel_7_pro"
+    wallpaper = Wallpapers.NONE, device = "spec:parent=pixel_7_pro,orientation=landscape"
 )
 @Composable
 private fun SplashContentDarkPreview() {
@@ -48,7 +60,7 @@ private fun SplashContentDarkPreview() {
 }
 
 @Composable
-fun SplashContent(lottieComposition: LottieComposition?, modifier: Modifier = Modifier) {
+private fun SplashContent(lottieComposition: LottieComposition?, modifier: Modifier = Modifier) {
     Scaffold {
         Box(
             contentAlignment = Alignment.Center,

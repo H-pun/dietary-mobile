@@ -46,6 +46,32 @@ import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.isEmailValid
 
+@Composable
+fun ResetPasswordScreen(
+    navigateUp: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var emailAddress by rememberSaveable {
+        mutableStateOf("")
+    }
+    val snackbarHostState = rememberSaveable {
+        SnackbarHostState()
+    }
+
+    ResetPasswordContent(
+        body = {
+            ResetPasswordBody(
+                onNavigateUp = navigateUp,
+                onVerifyEmailAddress = { /*TODO*/ },
+                emailAddress = emailAddress,
+                onEmailAddressChange = { newValue -> emailAddress = newValue },
+                modifier = modifier.padding(it)
+            )
+        },
+        snackbarHostState = snackbarHostState
+    )
+}
+
 @Preview(
     showBackground = true,
     name = "light",
@@ -95,7 +121,8 @@ private fun ResetPasswordDarkPreview() {
                     onEmailAddressChange = { newValue -> emailAddress = newValue },
                     modifier = Modifier.padding(it)
                 )
-            }, snackbarHostState = SnackbarHostState()
+            },
+            snackbarHostState = SnackbarHostState()
         )
     }
 }

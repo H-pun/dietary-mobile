@@ -60,6 +60,43 @@ import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.isEmailValid
 import dev.cisnux.dietary.presentation.utils.isPasswordSecure
 
+@Composable
+fun SignUpScreen(
+    navigateToSignIn: () -> Unit,
+    modifier: Modifier
+) {
+    var emailAddress by rememberSaveable {
+        mutableStateOf("")
+    }
+    var password by rememberSaveable {
+        mutableStateOf("")
+    }
+    var confirmationPassword by rememberSaveable {
+        mutableStateOf("")
+    }
+    val snackbarHostState = rememberSaveable {
+        SnackbarHostState()
+    }
+
+    SignUpContent(
+        body = {
+            SignUpBody(
+                onSignIn = navigateToSignIn,
+                onGoogleSignUp = {},
+                onEmailPasswordSignUp = {},
+                emailAddress = emailAddress,
+                password = password,
+                confirmationPassword = confirmationPassword,
+                onEmailAddressChange = { newValue -> emailAddress = newValue },
+                onPasswordChange = { newValue -> password = newValue },
+                onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
+                modifier = modifier.padding(it)
+            )
+        },
+        snackbarHostState = snackbarHostState
+    )
+}
+
 @Preview(showBackground = true, name = "light", device = "id:pixel_7_pro")
 @Composable
 private fun SignUpContentPreview() {
@@ -69,7 +106,7 @@ private fun SignUpContentPreview() {
     var password by rememberSaveable {
         mutableStateOf("")
     }
-    var confirmationPassword by remember {
+    var confirmationPassword by rememberSaveable {
         mutableStateOf("")
     }
 

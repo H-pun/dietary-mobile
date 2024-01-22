@@ -48,6 +48,36 @@ import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.isPasswordSecure
 
+@Composable
+fun NewPasswordScreen(
+    navigateToSignIn: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var password by rememberSaveable {
+        mutableStateOf("")
+    }
+    var confirmationPassword by rememberSaveable {
+        mutableStateOf("")
+    }
+    val snackbarHostState = rememberSaveable {
+        SnackbarHostState()
+    }
+
+    NewPasswordContent(
+        body = {
+            NewPasswordBody(
+                password = password,
+                confirmationPassword = confirmationPassword,
+                onPasswordChange = { newValue -> password = newValue },
+                onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
+                onResetPassword = {},
+                modifier = modifier.padding(it)
+            )
+        },
+        snackbarHostState = snackbarHostState
+    )
+}
+
 @Preview(
     showBackground = true,
     name = "light",
@@ -59,7 +89,7 @@ private fun NewPasswordContentPreview() {
     var password by rememberSaveable {
         mutableStateOf("")
     }
-    var confirmationPassword by remember {
+    var confirmationPassword by rememberSaveable {
         mutableStateOf("")
     }
 

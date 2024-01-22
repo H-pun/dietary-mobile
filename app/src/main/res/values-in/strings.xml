@@ -31,7 +31,7 @@
     <string name="password_error_text">Kata sandi harus 8 karakter dan tanpa spasi</string>
     <string name="password_label">Kata Sandi</string>
     <string name="sign_in">Masuk</string>
-    <string name="don_t_have_an_account">"Tidak punya akun? "</string>
+    <string name="don_t_have_an_account">"Tidak punya akun?"</string>
     <string name="sign_up_here">Daftar disini</string>
     <string name="forgot_password">Lupa Kata Sandi?</string>
     <string name="join_us_today">🌟 Bergabunglah! 🌟</string>
@@ -39,7 +39,7 @@
     <string name="confirmation_password_error_text">Tolong konfirmasi kata sandi anda dengan benar</string>
     <string name="sign_up">Daftar</string>
     <string name="sign_up_with_google">Daftar dengan Google</string>
-    <string name="have_an_account">"Punya akun? "</string>
+    <string name="have_an_account">"Punya akun?"</string>
     <string name="sign_in_here">Masuk disini</string>
     <string name="reset_password">Atur Ulang Kata Sandi!</string>
     <string name="reset_password_message">Lupa kata sandi Anda? Jangan khawatir, kami akan mengirimkan Anda instruksi pengaturan ulang</string>
@@ -84,4 +84,10 @@
     <string name="build_profile">Bangun Profil</string>
     <string name="confirmation_password_label">Konfirmasi Kata Sandi</string>
     <string name="verify_email">Verifikasi Alamat Email</string>
+    <string name="terms_of_use_label_button">Dengan mengklik masuk, Anda setuju dengan</string>
+    <string name="terms_of_use">\nSyarat Penggunaan</string>
+    <string name="welcome_to">Selamat Datang di</string>
+    <string name="your_diet_s_best_ally">\nTeman terbaik dietmu 🌟</string>
+    <string name="landing_message">Rekomendasi makanan yang dipersonalisasi\nuntuk gaya hidup Anda yang lebih sehat.</string>
+    <string name="get_started">Mulai</string>
 </resources>

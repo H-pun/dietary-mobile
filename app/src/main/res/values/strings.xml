@@ -45,7 +45,7 @@
     <string name="welcome_back">Welcome back!</string>
     <string name="you_ve_been_missed">You\'ve been missed 🤗</string>
     <string name="sign_in">Sign In</string>
-    <string name="don_t_have_an_account">"Don't have an account? "</string>
+    <string name="don_t_have_an_account">"Don't have an account?"</string>
     <string name="sign_up_here">Sign Up Here</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="join_us_today">🌟 Join Us Today! 🌟</string>
@@ -53,7 +53,7 @@
     <string name="confirmation_password_error_text">Please enter a correct confirmation password</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_up_with_google">Sign Up with Google</string>
-    <string name="have_an_account">"Have an account? "</string>
+    <string name="have_an_account">"Have an account?"</string>
     <string name="sign_in_here">Sign In Here</string>
     <string name="reset_password">Reset Password!</string>
     <string name="reset_password_message">Forgot your password? No worries,\n we’ll send you reset instructions</string>
@@ -78,6 +78,13 @@
     <string name="build_profile">Build Profile</string>
     <string name="confirmation_password_label">Confirm Password</string>
     <string name="verify_email">Verify Email Address</string>
+    <string name="terms_of_use_label_button">By clicking sign in you agree to our</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="dietary" translatable="false">" Dietary!"</string>
+    <string name="your_diet_s_best_ally">"\nYour diet’s best ally 🌟"</string>
+    <string name="landing_message">Personalized food recommendations\nfor your healthier lifestyle.</string>
+    <string name="get_started">Get Started</string>
     <string-array name="goal">
         <item>Weight loss</item>
         <item>Maintain my current weight</item>

@@ -53,6 +53,71 @@ import dev.cisnux.dietary.presentation.utils.isHeightOrWeightValid
 import dev.cisnux.dietary.presentation.utils.isTargetWeightValid
 import dev.cisnux.dietary.presentation.utils.isUsernameValid
 
+@Composable
+fun AddMyProfileScreen(
+    navigateToHome: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val genders = stringArrayResource(id = R.array.gender)
+    val goals = stringArrayResource(id = R.array.goal)
+    val activityLevels = stringArrayResource(id = R.array.activity_level)
+    val activityDescriptions = stringArrayResource(id = R.array.activity_description)
+    val snackbarHostState = rememberSaveable {
+        SnackbarHostState()
+    }
+
+    var myProfile by rememberSaveable {
+        mutableStateOf(
+            MyProfile(
+                username = "",
+                age = "",
+                weight = "",
+                height = "",
+                gender = genders[0],
+                goal = goals[0],
+                targetWeight = "",
+                activityLevel = activityLevels[0],
+            )
+        )
+    }
+
+    AddMyProfileContent(
+        body = {
+            MyProfileBody(
+                username = myProfile.username,
+                age = myProfile.age,
+                weight = myProfile.weight,
+                height = myProfile.height,
+                selectedGender = myProfile.gender,
+                selectedGoal = myProfile.goal,
+                targetWeight = myProfile.targetWeight,
+                selectedActivityLevel = myProfile.activityLevel,
+                genders = genders,
+                activityLevels = activityLevels,
+                goals = goals,
+                activityDescriptions = activityDescriptions,
+                onUsernameChange = { newValue ->
+                    myProfile = myProfile.copy(username = newValue)
+                },
+                onAgeChange = { newValue -> myProfile = myProfile.copy(age = newValue) },
+                onHeightChange = { newValue -> myProfile = myProfile.copy(height = newValue) },
+                onWeightChange = { newValue -> myProfile = myProfile.copy(weight = newValue) },
+                onGenderChange = { newValue -> myProfile = myProfile.copy(gender = newValue) },
+                onGoalChange = { newValue -> myProfile = myProfile.copy(goal = newValue) },
+                onTargetWeightChange = { newValue ->
+                    myProfile = myProfile.copy(targetWeight = newValue)
+                },
+                onActivityLevelChange = { newValue ->
+                    myProfile = myProfile.copy(activityLevel = newValue)
+                },
+                onBuildProfile = {},
+                modifier = modifier.padding(it),
+            )
+        },
+        snackbarHostState = snackbarHostState
+    )
+}
+
 @Preview(
     showBackground = true,
     name = "light",
@@ -583,7 +648,7 @@ private fun MyProfileBody(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         ExposedDropdownMenuBox(
             expanded = isGoalExpanded,
             onExpandedChange = { isGoalExpanded = it },
@@ -628,7 +693,7 @@ private fun MyProfileBody(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         AnimatedVisibility(visible = selectedGoal != goals[1]) {
             OutlinedTextField(
                 keyboardOptions = KeyboardOptions(

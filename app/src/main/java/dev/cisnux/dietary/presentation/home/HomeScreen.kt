@@ -58,7 +58,7 @@ fun HomeScreen(
     onFabFoodScanner: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val snackbarHostState = remember {
+    val snackbarHostState = rememberSaveable {
         SnackbarHostState()
     }
     val coroutineScope = rememberCoroutineScope()

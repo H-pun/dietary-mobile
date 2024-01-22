@@ -60,6 +60,42 @@ import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.isEmailValid
 import dev.cisnux.dietary.presentation.utils.isPasswordSecure
 
+@Composable
+fun SignInScreen(
+    navigateToHome: () -> Unit,
+    navigateToAddMyProfile: () -> Unit,
+    navigateToResetPassword: () -> Unit,
+    navigateToSignUp: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var emailAddress by rememberSaveable {
+        mutableStateOf("")
+    }
+    var password by rememberSaveable {
+        mutableStateOf("")
+    }
+    val snackbarHostState = rememberSaveable {
+        SnackbarHostState()
+    }
+
+    SignInContent(
+        body = {
+            SignInBody(
+                onSignUp = navigateToSignUp,
+                onGoogleSignIn = { /*TODO*/ },
+                onEmailPasswordSignIn = { /*TODO*/ },
+                emailAddress = emailAddress,
+                password = password,
+                onEmailAddressChange = { newValue -> emailAddress = newValue },
+                onPasswordChange = { newValue -> password = newValue },
+                onForgotPassword = navigateToResetPassword,
+                modifier = modifier.padding(it)
+            )
+        },
+        snackbarHostState = snackbarHostState,
+    )
+}
+
 @Preview(
     showBackground = true, name = "light",
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
@@ -393,7 +429,6 @@ private fun SignInBody(
             else
                 Text(text = stringResource(R.string.sign_in))
         }
-
         Spacer(modifier = Modifier.height(2.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
