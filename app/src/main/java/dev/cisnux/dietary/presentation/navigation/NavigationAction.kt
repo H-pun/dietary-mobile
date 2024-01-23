@@ -31,6 +31,15 @@ class NavComponentAction(
             launchSingleTop = true
         }
     }
+    val navigateToLanding: () -> Unit = {
+        navController.navigate(route = AppDestination.LandingRoute.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            restoreState = true
+            launchSingleTop = true
+        }
+    }
     val navigateToSignUp: () -> Unit = {
         navController.navigate(AppDestination.SignUpRoute.route)
     }

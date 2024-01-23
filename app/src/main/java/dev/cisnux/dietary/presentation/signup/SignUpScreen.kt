@@ -63,7 +63,7 @@ import dev.cisnux.dietary.presentation.utils.isPasswordSecure
 @Composable
 fun SignUpScreen(
     navigateToSignIn: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     var emailAddress by rememberSaveable {
         mutableStateOf("")
@@ -74,7 +74,7 @@ fun SignUpScreen(
     var confirmationPassword by rememberSaveable {
         mutableStateOf("")
     }
-    val snackbarHostState = rememberSaveable {
+    val snackbarHostState = remember {
         SnackbarHostState()
     }
 

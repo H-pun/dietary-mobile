@@ -31,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -62,7 +63,7 @@ fun AddMyProfileScreen(
     val goals = stringArrayResource(id = R.array.goal)
     val activityLevels = stringArrayResource(id = R.array.activity_level)
     val activityDescriptions = stringArrayResource(id = R.array.activity_description)
-    val snackbarHostState = rememberSaveable {
+    val snackbarHostState = remember {
         SnackbarHostState()
     }
 

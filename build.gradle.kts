@@ -3,4 +3,5 @@ plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.daggerHiltAndroid) apply false
+    kotlin("plugin.serialization") version libs.versions.kotlin apply false
 }

@@ -29,3 +29,5 @@ fun String.isTargetWeightValid(): Boolean = try {
 } catch (e: NumberFormatException) {
     false
 }
+
+const val SplashWaitTimeMillis = 1000L

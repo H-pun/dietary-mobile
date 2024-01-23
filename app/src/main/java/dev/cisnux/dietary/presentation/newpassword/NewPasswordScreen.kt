@@ -59,7 +59,7 @@ fun NewPasswordScreen(
     var confirmationPassword by rememberSaveable {
         mutableStateOf("")
     }
-    val snackbarHostState = rememberSaveable {
+    val snackbarHostState = remember {
         SnackbarHostState()
     }
 

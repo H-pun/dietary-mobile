@@ -18,11 +18,13 @@ sealed class AppDestination(val route: String) {
     data object AddMyProfileRoute : AppDestination(route = "add_my_profile")
     data object ResetPasswordRoute : AppDestination(route = "reset_password")
     data object NewPasswordRoute :
-        AppDestination(route = "new_password?emailAddress={emailAddress}") {
+        AppDestination(route = "new_password/{token}") {
         val deepLinkPattern = "https://www.dietary.xyz/$route"
-        fun createDeepLinkUrl(emailAddress: String): String =
-            "new_password?emailAddress=$emailAddress"
+        fun createDeepLinkUrl(token: String): String =
+            "new_password/$token"
     }
 
     data object SplashRoute : AppDestination(route = "splash")
+    data object LandingRoute : AppDestination(route = "landing")
+    data object IntroductionRoute : AppDestination(route = "introduction")
 }
