@@ -30,4 +30,4 @@ fun String.isTargetWeightValid(): Boolean = try {
     false
 }
 
-const val SplashWaitTimeMillis = 1000L
+const val SplashWaitTimeMillis = 1300L
