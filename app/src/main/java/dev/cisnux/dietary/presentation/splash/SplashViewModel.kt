@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
+import dev.cisnux.dietary.domain.usecases.LandingUseCase
 import dev.cisnux.dietary.domain.usecases.UserProfileUseCase
-import dev.cisnux.dietary.utils.UserState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
@@ -14,21 +14,21 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     authenticationUseCase: AuthenticationUseCase,
-    userProfileUseCase: UserProfileUseCase
+    userProfileUseCase: UserProfileUseCase,
+    landingUseCase: LandingUseCase
 ) : ViewModel() {
-    val userState = authenticationUseCase.hasAuthTokenExpired
+    val hasTokenExpired = authenticationUseCase.hasAuthTokenExpired
         .combine(authenticationUseCase.hasFoodSecretTokenExpired) { hasAuthTokenExpired, hasFoodSecretTokenExpired ->
             hasAuthTokenExpired or hasFoodSecretTokenExpired
-        }
-        .combine(userProfileUseCase.isUserProfileExist) { hasTokenExpired, isUserProfileExist ->
-            when {
-                hasTokenExpired -> UserState.NOT_LOGIN
-                !isUserProfileExist -> UserState.NOT_HAVE_PROFILE
-                else -> UserState.LOGIN_WITH_PROFILE
-            }
-        }.stateIn(
-            scope = viewModelScope,
-            initialValue = UserState.INITIAL,
-            started = SharingStarted.Eagerly
-        )
+        }.stateIn(scope = viewModelScope, initialValue = null, started = SharingStarted.Eagerly)
+    val isUserProfileExist = userProfileUseCase.isUserProfileExist.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = null
+    )
+    val hasLandingShowed = landingUseCase.hasLandingShowed.stateIn(
+        scope = viewModelScope,
+        initialValue = null,
+        started = SharingStarted.Eagerly
+    )
 }

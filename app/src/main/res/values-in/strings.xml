@@ -90,4 +90,5 @@
     <string name="your_diet_s_best_ally">\nTeman terbaik dietmu 🌟</string>
     <string name="landing_message">Rekomendasi makanan yang dipersonalisasi\nuntuk gaya hidup Anda yang lebih sehat.</string>
     <string name="get_started">Mulai</string>
+    <string name="failed_to_took_picture">Gagal mengambil gambar</string>
 </resources>

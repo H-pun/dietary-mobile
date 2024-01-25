@@ -85,6 +85,7 @@
     <string name="your_diet_s_best_ally">"\nYour diet’s best ally 🌟"</string>
     <string name="landing_message">Personalized food recommendations\nfor your healthier lifestyle.</string>
     <string name="get_started">Get Started</string>
+    <string name="failed_to_took_picture">Failed to took picture</string>
     <string-array name="goal">
         <item>Weight loss</item>
         <item>Maintain my current weight</item>

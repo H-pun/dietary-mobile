@@ -137,7 +137,7 @@ private fun LandingContent(
             }
             Spacer(modifier = Modifier.height(2.dp))
             Button(
-                onClick = navigateToIntroduction,
+                onClick = navigateToSignIn,
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.medium,
             ) {

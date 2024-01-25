@@ -1,56 +1,282 @@
 package dev.cisnux.dietary.presentation.myprofile
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import dev.cisnux.dietary.R
+import dev.cisnux.dietary.domain.models.UserProfileDetail
+import dev.cisnux.dietary.presentation.addmyprofile.MyProfile
 import dev.cisnux.dietary.presentation.ui.components.BottomBar
+import dev.cisnux.dietary.presentation.ui.components.ListTileProfile
+import dev.cisnux.dietary.presentation.ui.components.MyProfileForm
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.AppDestination
+import dev.cisnux.dietary.presentation.utils.isAgeValid
+import dev.cisnux.dietary.presentation.utils.isHeightOrWeightValid
+import dev.cisnux.dietary.presentation.utils.isTargetWeightValid
+import dev.cisnux.dietary.presentation.utils.isUsernameValid
 
 @Composable
 fun MyProfileScreen(
     navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
+    navigateToSignIn: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val userProfileDetail = UserProfileDetail(
+        username = "yagamijaeger",
+        emailAddress = "yagami12@gmail.com",
+        age = 40,
+        weight = 50f,
+        height = 170f,
+        gender = "Man",
+        goal = "Weight Loss",
+        weightTarget = 10f,
+        activityLevel = "Very Active"
+    )
+    var isUpdateMyProfileDialogOpen by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var myProfile by rememberSaveable {
+        mutableStateOf(
+            MyProfile(
+                username = userProfileDetail.username,
+                age = userProfileDetail.age.toString(),
+                weight = userProfileDetail.weight.toDouble().toString(),
+                height = userProfileDetail.height.toDouble().toString(),
+                gender = userProfileDetail.gender,
+                goal = userProfileDetail.goal,
+                weightTarget = userProfileDetail.weightTarget.toDouble().toString(),
+                activityLevel = userProfileDetail.activityLevel
+            )
+        )
+    }
+    val genders = stringArrayResource(id = R.array.gender)
+    val goals = stringArrayResource(id = R.array.goal)
+    val activityLevels = stringArrayResource(id = R.array.activity_level)
+    val activityDescriptions = stringArrayResource(id = R.array.activity_description)
+
     MyProfileContent(
         onSelectedDestination = navigateForBottomNav,
-        body = { MyProfileBody(modifier = modifier.padding(it)) },
+        body = {
+            MyProfileBody(
+                username = userProfileDetail.username,
+                emailAddress = userProfileDetail.emailAddress,
+                age = userProfileDetail.age,
+                weight = userProfileDetail.weight,
+                height = userProfileDetail.height,
+                gender = userProfileDetail.gender,
+                goal = userProfileDetail.goal,
+                weightTarget = userProfileDetail.weightTarget,
+                activityLevel = userProfileDetail.activityLevel,
+                onEdit = {
+                    isUpdateMyProfileDialogOpen = true
+                },
+                modifier = modifier.padding(it)
+            )
+            UpdateMyProfileDialog(
+                onSave = { isUpdateMyProfileDialogOpen = false },
+                onCancel = { isUpdateMyProfileDialogOpen = false },
+                onDismissRequest = { isUpdateMyProfileDialogOpen = false },
+                isDialogOpen = isUpdateMyProfileDialogOpen,
+                username = myProfile.username,
+                age = myProfile.age,
+                weight = myProfile.weight,
+                height = myProfile.height,
+                selectedGender = myProfile.gender,
+                selectedGoal = myProfile.goal,
+                weightTarget = myProfile.weightTarget,
+                selectedActivityLevel = myProfile.activityLevel,
+                genders = genders,
+                activityLevels = activityLevels,
+                goals = goals,
+                activityDescriptions = activityDescriptions,
+                onUsernameChange = { newValue ->
+                    myProfile = myProfile.copy(username = newValue)
+                },
+                onAgeChange = { newValue -> myProfile = myProfile.copy(age = newValue) },
+                onHeightChange = { newValue -> myProfile = myProfile.copy(height = newValue) },
+                onWeightChange = { newValue -> myProfile = myProfile.copy(weight = newValue) },
+                onGenderChange = { newValue -> myProfile = myProfile.copy(gender = newValue) },
+                onGoalChange = { newValue -> myProfile = myProfile.copy(goal = newValue) },
+                onTargetWeightChange = { newValue ->
+                    myProfile = myProfile.copy(weightTarget = newValue)
+                },
+                onActivityLevelChange = { newValue ->
+                    myProfile = myProfile.copy(activityLevel = newValue)
+                },
+            )
+        },
         shouldBottomBarOpen = true,
+        onSignOut = navigateToSignIn,
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun MyProfilePreview() {
+private fun MyProfileContentPreview() {
+    val userProfileDetail = UserProfileDetail(
+        username = "yagamijaeger",
+        emailAddress = "yagami12@gmail.com",
+        age = 40,
+        weight = 50f,
+        height = 170f,
+        gender = "Man",
+        goal = "Weight Loss",
+        weightTarget = 10f,
+        activityLevel = "Very Active"
+    )
+    var isUpdateMyProfileDialogOpen by remember {
+        mutableStateOf(false)
+    }
+    var myProfile by rememberSaveable {
+        mutableStateOf(
+            MyProfile(
+                username = userProfileDetail.username,
+                age = userProfileDetail.age.toString(),
+                weight = userProfileDetail.weight.toDouble().toString(),
+                height = userProfileDetail.height.toDouble().toString(),
+                gender = userProfileDetail.gender,
+                goal = userProfileDetail.goal,
+                weightTarget = userProfileDetail.weightTarget.toDouble().toString(),
+                activityLevel = userProfileDetail.activityLevel
+            )
+        )
+    }
+    val genders = stringArrayResource(id = R.array.gender)
+    val goals = stringArrayResource(id = R.array.goal)
+    val activityLevels = stringArrayResource(id = R.array.activity_level)
+    val activityDescriptions = stringArrayResource(id = R.array.activity_description)
+
     DietaryTheme {
         MyProfileContent(
             onSelectedDestination = { _, _ -> },
-            body = { MyProfileBody(modifier = Modifier.padding(it)) },
-            shouldBottomBarOpen = true
+            body = {
+                MyProfileBody(
+                    username = userProfileDetail.username,
+                    emailAddress = userProfileDetail.emailAddress,
+                    age = userProfileDetail.age,
+                    weight = userProfileDetail.weight,
+                    height = userProfileDetail.height,
+                    gender = userProfileDetail.gender,
+                    goal = userProfileDetail.goal,
+                    weightTarget = userProfileDetail.weightTarget,
+                    activityLevel = userProfileDetail.activityLevel,
+                    onEdit = {
+                        isUpdateMyProfileDialogOpen = true
+                    },
+                    modifier = Modifier.padding(it)
+                )
+                UpdateMyProfileDialog(
+                    onSave = { isUpdateMyProfileDialogOpen = false },
+                    onCancel = { isUpdateMyProfileDialogOpen = false },
+                    onDismissRequest = { isUpdateMyProfileDialogOpen = false },
+                    isDialogOpen = isUpdateMyProfileDialogOpen,
+                    username = myProfile.username,
+                    age = myProfile.age,
+                    weight = myProfile.weight,
+                    height = myProfile.height,
+                    selectedGender = myProfile.gender,
+                    selectedGoal = myProfile.goal,
+                    weightTarget = myProfile.weightTarget,
+                    selectedActivityLevel = myProfile.activityLevel,
+                    genders = genders,
+                    activityLevels = activityLevels,
+                    goals = goals,
+                    activityDescriptions = activityDescriptions,
+                    onUsernameChange = { newValue ->
+                        myProfile = myProfile.copy(username = newValue)
+                    },
+                    onAgeChange = { newValue -> myProfile = myProfile.copy(age = newValue) },
+                    onHeightChange = { newValue -> myProfile = myProfile.copy(height = newValue) },
+                    onWeightChange = { newValue -> myProfile = myProfile.copy(weight = newValue) },
+                    onGenderChange = { newValue -> myProfile = myProfile.copy(gender = newValue) },
+                    onGoalChange = { newValue -> myProfile = myProfile.copy(goal = newValue) },
+                    onTargetWeightChange = { newValue ->
+                        myProfile = myProfile.copy(weightTarget = newValue)
+                    },
+                    onActivityLevelChange = { newValue ->
+                        myProfile = myProfile.copy(activityLevel = newValue)
+                    },
+                )
+            },
+            shouldBottomBarOpen = true,
+            onSignOut = {},
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MyProfileContent(
     onSelectedDestination: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     body: @Composable (innerPadding: PaddingValues) -> Unit,
     shouldBottomBarOpen: Boolean,
+    onSignOut: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.my_profile_title),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                },
+                actions = {
+                    IconButton(onClick = onSignOut) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_logout_24dp),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+            )
+        },
         bottomBar = {
             AnimatedVisibility(visible = shouldBottomBarOpen) {
                 BottomBar(
@@ -67,17 +293,416 @@ private fun MyProfileContent(
 
 @Composable
 private fun MyProfileBody(
+    username: String,
+    emailAddress: String,
+    age: Int,
+    weight: Float,
+    height: Float,
+    gender: String,
+    goal: String,
+    weightTarget: Float,
+    activityLevel: String,
+    onEdit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    val scrollState = rememberScrollState()
+
+    Column(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 7.dp)
+            .verticalScroll(state = scrollState),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = stringResource(id = R.string.my_profile_title),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.align(alignment = Alignment.Center)
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row {
+                Box(contentAlignment = Alignment.Center) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.tertiaryContainer,
+                        modifier = Modifier
+                            .size(90.dp)
+                            .clip(CircleShape)
+                    ) {}
+                    Text(
+                        text = username[0].uppercase(),
+                        color = MaterialTheme.colorScheme.onTertiaryContainer,
+                        style = MaterialTheme.typography.headlineMedium,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+                Spacer(modifier = Modifier.padding(start = 16.dp))
+                Column(modifier = Modifier.padding(top = 8.dp)) {
+                    Text(
+                        text = username,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = emailAddress,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            }
+            IconButton(onClick = onEdit) {
+                Icon(
+                    imageVector = Icons.Rounded.Edit,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Column(modifier = Modifier.padding(start = 6.dp, end = 16.dp)) {
+            ListTileProfile(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_age_100dp),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.age_label),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                bodyLabel = {
+                    Text(
+                        text = "$age years old",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                },
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ListTileProfile(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_height_100dp),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.height_label),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                bodyLabel = {
+                    Text(
+                        text = "$height cm",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ListTileProfile(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_scale_100dp),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.weight_label),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                bodyLabel = {
+                    Text(
+                        text = "$weight kg",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ListTileProfile(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_male_100dp),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.gender_label),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                bodyLabel = {
+                    Text(
+                        text = gender,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ListTileProfile(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_goal_24dp),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.goal_label),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                bodyLabel = {
+                    Text(
+                        text = goal,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            )
+            if (weightTarget != 0f) {
+                Spacer(modifier = Modifier.height(16.dp))
+                ListTileProfile(
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_scale_100dp),
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.target_weight_label),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.Bold
+                        )
+                    },
+                    bodyLabel = {
+                        Text(
+                            text = "$weightTarget kg",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            ListTileProfile(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_activity_100dp),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.activity_level_label),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                bodyLabel = {
+                    Text(
+                        text = activityLevel,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Preview(showBackground = true, device = "spec:parent=pixel_5,orientation=landscape")
+@Composable
+private fun UpdateHealthProfileDialogPreview() {
+    val genders = stringArrayResource(id = R.array.gender)
+    val goals = stringArrayResource(id = R.array.goal)
+    val activityLevels = stringArrayResource(id = R.array.activity_level)
+    val activityDescriptions = stringArrayResource(id = R.array.activity_description)
+
+    var myProfile by rememberSaveable {
+        mutableStateOf(
+            MyProfile(
+                username = "yagamijaeger",
+                age = "40",
+                weight = "50",
+                height = "170",
+                gender = "Man",
+                goal = "Weight Loss",
+                weightTarget = "10",
+                activityLevel = "Very Active"
+            )
         )
     }
+
+    DietaryTheme {
+        UpdateMyProfileDialog(
+            onSave = { /*TODO*/ },
+            onCancel = { /*TODO*/ },
+            onDismissRequest = {},
+            isDialogOpen = true,
+            username = myProfile.username,
+            age = myProfile.age,
+            weight = myProfile.weight,
+            height = myProfile.height,
+            selectedGender = myProfile.gender,
+            selectedGoal = myProfile.goal,
+            weightTarget = myProfile.weightTarget,
+            selectedActivityLevel = myProfile.activityLevel,
+            genders = genders,
+            activityLevels = activityLevels,
+            goals = goals,
+            activityDescriptions = activityDescriptions,
+            onUsernameChange = { newValue ->
+                myProfile = myProfile.copy(username = newValue)
+            },
+            onAgeChange = { newValue -> myProfile = myProfile.copy(age = newValue) },
+            onHeightChange = { newValue -> myProfile = myProfile.copy(height = newValue) },
+            onWeightChange = { newValue -> myProfile = myProfile.copy(weight = newValue) },
+            onGenderChange = { newValue -> myProfile = myProfile.copy(gender = newValue) },
+            onGoalChange = { newValue -> myProfile = myProfile.copy(goal = newValue) },
+            onTargetWeightChange = { newValue ->
+                myProfile = myProfile.copy(weightTarget = newValue)
+            },
+            onActivityLevelChange = { newValue ->
+                myProfile = myProfile.copy(activityLevel = newValue)
+            },
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UpdateMyProfileDialog(
+    onSave: () -> Unit,
+    onCancel: () -> Unit,
+    isDialogOpen: Boolean,
+    onDismissRequest: () -> Unit,
+    username: String,
+    age: String,
+    weight: String,
+    height: String,
+    selectedGender: String,
+    selectedGoal: String,
+    weightTarget: String,
+    selectedActivityLevel: String,
+    genders: Array<String>,
+    activityLevels: Array<String>,
+    goals: Array<String>,
+    activityDescriptions: Array<String>,
+    onUsernameChange: (String) -> Unit,
+    onAgeChange: (String) -> Unit,
+    onHeightChange: (String) -> Unit,
+    onWeightChange: (String) -> Unit,
+    onGenderChange: (String) -> Unit,
+    onGoalChange: (String) -> Unit,
+    onTargetWeightChange: (String) -> Unit,
+    onActivityLevelChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val scrollState = rememberScrollState()
+
+    if (isDialogOpen)
+        Dialog(
+            onDismissRequest = onDismissRequest,
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false,
+                dismissOnBackPress = true,
+            ),
+        ) {
+            Scaffold(
+                modifier = modifier,
+                topBar = {
+                    TopAppBar(
+                        navigationIcon = {
+                            IconButton(onClick = onCancel) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Close,
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    contentDescription = null
+                                )
+                            }
+                        },
+                        title = {
+                            Text(
+                                text = stringResource(id = R.string.health_profile_dialog_title),
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                        },
+                        actions = {
+                            TextButton(
+                                onClick = onSave,
+                                enabled = username.isUsernameValid() and age.isAgeValid()
+                                        and weight.isHeightOrWeightValid() and height.isHeightOrWeightValid()
+                                        and weightTarget.isTargetWeightValid(),
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.save),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                MyProfileForm(
+                    username = username,
+                    age = age,
+                    weight = weight,
+                    height = height,
+                    selectedGender = selectedGender,
+                    selectedGoal = selectedGoal,
+                    weightTarget = weightTarget,
+                    selectedActivityLevel = selectedActivityLevel,
+                    genders = genders,
+                    activityLevels = activityLevels,
+                    goals = goals,
+                    activityDescriptions = activityDescriptions,
+                    onUsernameChange = onUsernameChange,
+                    onAgeChange = onAgeChange,
+                    onHeightChange = onHeightChange,
+                    onWeightChange = onWeightChange,
+                    onGenderChange = onGenderChange,
+                    onGoalChange = onGoalChange,
+                    onTargetWeightChange = onTargetWeightChange,
+                    onActivityLevelChange = onActivityLevelChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(paddingValues)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                        .verticalScroll(scrollState)
+                )
+            }
+        }
 }

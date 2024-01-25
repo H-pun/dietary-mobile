@@ -1,4 +1,4 @@
-package dev.cisnux.dietary.presentation.addmyprofile
+package dev.cisnux.dietary.presentation.ui.components
 
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
@@ -6,13 +6,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Stable
-data class MyProfile(
-    val username: String,
+data class HealthProfile(
     val age: String,
     val weight: String,
     val height: String,
     val gender: String,
-    val goal: String,
-    val weightTarget: String,
-    val activityLevel: String,
 ) : Parcelable

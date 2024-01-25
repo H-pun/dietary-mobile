@@ -16,32 +16,19 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -53,7 +40,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
@@ -64,13 +50,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -80,6 +63,9 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import dev.cisnux.dietary.R
+import dev.cisnux.dietary.presentation.ui.components.HealthProfile
+import dev.cisnux.dietary.presentation.ui.components.HealthProfileDialog
+import dev.cisnux.dietary.presentation.ui.components.UpdateHealthProfileDialog
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 
 @Composable
@@ -111,14 +97,25 @@ fun FoodScannerScreen(
     }
     val cameraFile by viewModel.cameraFile.collectAsState()
     val galleryFile by viewModel.galleryFile.collectAsState()
-    var isHealthProfileDialogOpen by remember {
+    var isHealthProfileDialogOpen by rememberSaveable {
         mutableStateOf(false)
     }
-    var isUpdateHealthProfileDialogOpen by remember {
+    var isUpdateHealthProfileDialogOpen by rememberSaveable {
         mutableStateOf(false)
     }
     var isCapturedByCamera by rememberSaveable {
         mutableStateOf(false)
+    }
+    val genders = stringArrayResource(id = R.array.gender)
+    var healthProfile by rememberSaveable {
+        mutableStateOf(
+            HealthProfile(
+                age = "40",
+                weight = "50",
+                height = "170",
+                gender = genders[0],
+            )
+        )
     }
 
     cameraFile?.let { file ->
@@ -133,7 +130,8 @@ fun FoodScannerScreen(
 
                 override fun onError(exception: ImageCaptureException) {
                     Toast.makeText(
-                        context, "failed to took picture", Toast.LENGTH_SHORT
+                        context,
+                        context.getString(R.string.failed_to_took_picture), Toast.LENGTH_SHORT
                     ).show()
                 }
             })
@@ -188,13 +186,32 @@ fun FoodScannerScreen(
                     else viewModel.createFile()
                 },
                 onDismissRequest = { isHealthProfileDialogOpen = false },
-                isDialogOpen = isHealthProfileDialogOpen
+                isDialogOpen = isHealthProfileDialogOpen,
+                age = "40",
+                weight = "50",
+                height = "170",
+                gender = "Man",
             )
             UpdateHealthProfileDialog(
                 onSave = { isUpdateHealthProfileDialogOpen = false },
                 onCancel = { isUpdateHealthProfileDialogOpen = false },
+                onDismissRequest = { isUpdateHealthProfileDialogOpen = false },
                 isDialogOpen = isUpdateHealthProfileDialogOpen,
-                onDismissRequest = { isUpdateHealthProfileDialogOpen = false }
+                age = healthProfile.age,
+                weight = healthProfile.weight,
+                height = healthProfile.height,
+                selectedGender = healthProfile.gender,
+                onAgeChange = { newValue -> healthProfile = healthProfile.copy(age = newValue) },
+                onHeightChange = { newValue ->
+                    healthProfile = healthProfile.copy(height = newValue)
+                },
+                onWeightChange = { newValue ->
+                    healthProfile = healthProfile.copy(weight = newValue)
+                },
+                onGenderChange = { newValue ->
+                    healthProfile = healthProfile.copy(gender = newValue)
+                },
+                genders = genders
             )
         },
     )
@@ -356,352 +373,6 @@ private fun FoodScannerBody(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun UpdateHealthProfileDialogPreview() {
-    DietaryTheme {
-        UpdateHealthProfileDialog(
-            onSave = { /*TODO*/ },
-            onCancel = { /*TODO*/ },
-            onDismissRequest = {},
-            isDialogOpen = true
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun UpdateHealthProfileDialog(
-    onSave: () -> Unit,
-    onCancel: () -> Unit,
-    isDialogOpen: Boolean,
-    onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val genders = stringArrayResource(id = R.array.gender)
-    var isExpanded by rememberSaveable { mutableStateOf(false) }
-    var selectedOptionText by rememberSaveable { mutableStateOf(genders[0]) }
-
-    if (isDialogOpen)
-        Dialog(
-            onDismissRequest = onDismissRequest,
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false,
-                dismissOnBackPress = true,
-            ),
-        ) {
-            Surface(color = MaterialTheme.colorScheme.surface, modifier = modifier.fillMaxSize()) {
-                Column {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            IconButton(onClick = onCancel) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Close,
-                                    tint = MaterialTheme.colorScheme.onSurface,
-                                    contentDescription = "close dialog"
-                                )
-                            }
-                            Text(
-                                text = stringResource(id = R.string.health_profile_dialog_title),
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                        }
-                        TextButton(onClick = onSave) {
-                            Text(
-                                text = stringResource(id = R.string.save),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        OutlinedTextField(
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_age_100dp),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            },
-                            value = stringResource(id = R.string.dummy_age),
-                            onValueChange = {},
-                            label = {
-                                Text(
-                                    text = stringResource(id = R.string.age_label),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        OutlinedTextField(
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_height_100dp),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            },
-                            value = stringResource(id = R.string.dummy_height),
-                            onValueChange = {},
-                            label = {
-                                Text(
-                                    text = stringResource(id = R.string.height_label),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        OutlinedTextField(
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_scale_100dp),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            },
-                            value = stringResource(id = R.string.dummy_weight),
-                            onValueChange = {},
-                            label = {
-                                Text(
-                                    text = stringResource(id = R.string.weight_label),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        ExposedDropdownMenuBox(
-                            expanded = isExpanded,
-                            onExpandedChange = { isExpanded = it },
-                        ) {
-                            OutlinedTextField(
-                                leadingIcon = {
-                                    Icon(
-                                        painter = painterResource(
-                                            id = if (selectedOptionText == genders[0]) R.drawable.ic_male_100dp
-                                            else R.drawable.ic_female_100dp
-                                        ),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                },
-                                value = selectedOptionText,
-                                onValueChange = {},
-                                label = {
-                                    Text(
-                                        text = stringResource(id = R.string.gender_label),
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                },
-                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
-                                readOnly = true,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .menuAnchor(),
-                            )
-                            ExposedDropdownMenu(
-                                expanded = isExpanded,
-                                onDismissRequest = { isExpanded = false },
-                            ) {
-                                genders.forEach { selectedOption ->
-                                    DropdownMenuItem(
-                                        text = { Text(selectedOption) },
-                                        onClick = {
-                                            selectedOptionText = selectedOption
-                                            isExpanded = false
-                                        },
-                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-}
-
-@Preview
-@Composable
-private fun HealthProfileDialogPreview() {
-    DietaryTheme {
-        HealthProfileDialog(isDialogOpen = true, onUpdate = {}, onDone = {}, onDismissRequest = {})
-    }
-}
-
-@Composable
-private fun HealthProfileDialog(
-    onUpdate: () -> Unit,
-    onDone: () -> Unit,
-    onDismissRequest: () -> Unit,
-    isDialogOpen: Boolean,
-    modifier: Modifier = Modifier,
-) {
-    if (isDialogOpen) Dialog(onDismissRequest = onDismissRequest) {
-        Surface(
-            color = MaterialTheme.colorScheme.surface,
-            modifier = Modifier.clip(MaterialTheme.shapes.extraLarge)
-        ) {
-            Column(
-                modifier = modifier.padding(horizontal = 20.dp, vertical = 24.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.health_profile_dialog_title),
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = stringResource(id = R.string.health_profile_dialog_message),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_age_100dp),
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(id = R.string.age_label),
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    Text(
-                        text = stringResource(id = R.string.dummy_dialog_age),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Divider(color = MaterialTheme.colorScheme.onSurface)
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_height_100dp),
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(id = R.string.height_label),
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    Text(
-                        text = stringResource(id = R.string.dummy_dialog_height),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Divider(color = MaterialTheme.colorScheme.onSurface)
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_scale_100dp),
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(id = R.string.weight_label),
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    Text(
-                        text = stringResource(id = R.string.dummy_dialog_weight),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Divider(color = MaterialTheme.colorScheme.onSurface)
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_male_100dp),
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(id = R.string.gender_label),
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    Text(
-                        text = stringResource(id = R.string.dummy_dialog_gender),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Divider(color = MaterialTheme.colorScheme.onSurface)
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TextButton(onClick = onUpdate) {
-                        Text(
-                            text = stringResource(id = R.string.health_profile_dialog_negative_btn),
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    TextButton(onClick = onDone) {
-                        Text(
-                            text = stringResource(id = R.string.health_profile_dialog_positive_btn),
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    }
-                }
-            }
         }
     }
 }

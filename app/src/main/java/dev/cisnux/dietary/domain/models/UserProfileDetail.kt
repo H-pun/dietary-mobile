@@ -8,6 +8,6 @@ data class UserProfileDetail(
     val height: Float,
     val gender: String,
     val goal: String,
-    val targetWeight: Float = 0F,
-    val activity: String
+    val weightTarget: Float = 0f,
+    val activityLevel: String
 )

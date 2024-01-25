@@ -25,6 +25,7 @@ class NavComponentAction(
     val navigateToHome: () -> Unit = {
         navController.navigate(route = AppDestination.HomeRoute.route) {
             popUpTo(navController.graph.findStartDestination().id) {
+                inclusive = true
                 saveState = true
             }
             restoreState = true
@@ -34,6 +35,7 @@ class NavComponentAction(
     val navigateToLanding: () -> Unit = {
         navController.navigate(route = AppDestination.LandingRoute.route) {
             popUpTo(navController.graph.findStartDestination().id) {
+                inclusive = true
                 saveState = true
             }
             restoreState = true
@@ -52,12 +54,23 @@ class NavComponentAction(
             launchSingleTop = true
         }
     }
+    val navigateToSignInForSignOut: () -> Unit = {
+        navController.navigate(route = AppDestination.SignInRoute.route) {
+            popUpTo(AppDestination.MyProfileRoute.route) {
+                inclusive = true
+                saveState = true
+            }
+            restoreState = true
+            launchSingleTop = true
+        }
+    }
     val navigateToResetPassword: () -> Unit = {
         navController.navigate(AppDestination.ResetPasswordRoute.route)
     }
     val navigateToAddMyProfile: () -> Unit = {
         navController.navigate(route = AppDestination.AddMyProfileRoute.route) {
             popUpTo(navController.graph.findStartDestination().id) {
+                inclusive = true
                 saveState = true
             }
             restoreState = true
@@ -68,7 +81,8 @@ class NavComponentAction(
         { destination, currentRoute ->
             if (destination.route != currentRoute.route)
                 navController.navigate(route = destination.route) {
-                    popUpTo(navController.graph.findStartDestination().id) {
+                    popUpTo(currentRoute.route) {
+                        inclusive = true
                         saveState = true
                     }
                     restoreState = true

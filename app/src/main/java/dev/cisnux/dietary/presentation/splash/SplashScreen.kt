@@ -23,7 +23,6 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.SplashWaitTimeMillis
-import dev.cisnux.dietary.utils.UserState
 import kotlinx.coroutines.delay
 
 @Composable
@@ -39,16 +38,21 @@ fun SplashScreen(
     val onNavigateToSignIn by rememberUpdatedState(navigateToSignIn)
     val onNavigateToAddMyProfile by rememberUpdatedState(navigateToAddMyProfile)
     val onNavigateToHome by rememberUpdatedState(navigateToHome)
-    val userState by viewModel.userState.collectAsState()
+    val hasTokenExpired by viewModel.hasTokenExpired.collectAsState()
+    val isUserProfileExist by viewModel.isUserProfileExist.collectAsState()
+    val hasLandingShowed by viewModel.hasLandingShowed.collectAsState()
 
     LaunchedEffect(Unit) {
         delay(SplashWaitTimeMillis)
-        when (userState) {
-            UserState.NOT_LOGIN -> onNavigateToSignIn()
-            UserState.NOT_HAVE_PROFILE -> onNavigateToAddMyProfile()
-            UserState.LOGIN_WITH_PROFILE -> onNavigateToHome()
-            else -> {}
-        }
+        if (hasLandingShowed != null && hasTokenExpired != null && isUserProfileExist != null)
+            when {
+                !hasLandingShowed!! -> onNavigateToLanding()
+                hasTokenExpired!! -> onNavigateToSignIn()
+                !isUserProfileExist!! -> onNavigateToAddMyProfile()
+                else -> {
+                    onNavigateToHome()
+                }
+            }
     }
 
     val lottieComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading_anim))
