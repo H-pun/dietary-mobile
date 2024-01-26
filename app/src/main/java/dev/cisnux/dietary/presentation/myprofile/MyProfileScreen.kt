@@ -53,6 +53,7 @@ import dev.cisnux.dietary.presentation.ui.components.ListTileProfile
 import dev.cisnux.dietary.presentation.ui.components.MyProfileForm
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.AppDestination
+import dev.cisnux.dietary.presentation.utils.asMyProfile
 import dev.cisnux.dietary.presentation.utils.isAgeValid
 import dev.cisnux.dietary.presentation.utils.isHeightOrWeightValid
 import dev.cisnux.dietary.presentation.utils.isTargetWeightValid
@@ -172,16 +173,7 @@ private fun MyProfileContentPreview() {
     }
     var myProfile by rememberSaveable {
         mutableStateOf(
-            MyProfile(
-                username = userProfileDetail.username,
-                age = userProfileDetail.age.toString(),
-                weight = userProfileDetail.weight.toDouble().toString(),
-                height = userProfileDetail.height.toDouble().toString(),
-                gender = userProfileDetail.gender,
-                goal = userProfileDetail.goal,
-                weightTarget = userProfileDetail.weightTarget.toDouble().toString(),
-                activityLevel = userProfileDetail.activityLevel
-            )
+            userProfileDetail.asMyProfile
         )
     }
     val genders = stringArrayResource(id = R.array.gender)
@@ -232,7 +224,11 @@ private fun MyProfileContentPreview() {
                     onHeightChange = { newValue -> myProfile = myProfile.copy(height = newValue) },
                     onWeightChange = { newValue -> myProfile = myProfile.copy(weight = newValue) },
                     onGenderChange = { newValue -> myProfile = myProfile.copy(gender = newValue) },
-                    onGoalChange = { newValue -> myProfile = myProfile.copy(goal = newValue) },
+                    onGoalChange = { newValue ->
+                        myProfile = myProfile.copy(goal = newValue)
+                        if (myProfile.goal == goals[1])
+                            myProfile = myProfile.copy(weightTarget = "0")
+                    },
                     onTargetWeightChange = { newValue ->
                         myProfile = myProfile.copy(weightTarget = newValue)
                     },

@@ -30,11 +30,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -55,15 +60,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.isEmailValid
 import dev.cisnux.dietary.presentation.utils.isPasswordSecure
+import dev.cisnux.dietary.utils.UiState
 
 @Composable
 fun SignUpScreen(
     navigateToSignIn: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
     var emailAddress by rememberSaveable {
         mutableStateOf("")
@@ -77,20 +85,83 @@ fun SignUpScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+    val signUpWithEmailAndPasswordState by viewModel.signUpWithEmailAndPasswordState.collectAsState()
+    val signUpWithGoogleState by viewModel.signUpWithGoogleState.collectAsState()
+    val context = LocalContext.current
+
+    when (signUpWithEmailAndPasswordState) {
+        is UiState.Success -> {
+            navigateToSignIn()
+        }
+
+        is UiState.Error -> {
+            (signUpWithEmailAndPasswordState as UiState.Error).error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = context.getString(R.string.retry),
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                        if (snackbarResult == SnackbarResult.ActionPerformed)
+                            viewModel.signUpWithEmailAndPassword(
+                                emailAddress = emailAddress,
+                                password = password
+                            )
+                    }
+                }
+            }
+        }
+
+        else -> {}
+    }
+
+    when (signUpWithGoogleState) {
+        is UiState.Success -> {
+            navigateToSignIn()
+        }
+
+        is UiState.Error -> {
+            (signUpWithGoogleState as UiState.Error).error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = context.getString(R.string.retry),
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                        if (snackbarResult == SnackbarResult.ActionPerformed)
+                            viewModel.signUpWithGoogle()
+                    }
+                }
+            }
+        }
+
+        else -> {}
+    }
 
     SignUpContent(
         body = {
             SignUpBody(
                 onSignIn = navigateToSignIn,
-                onGoogleSignUp = {},
-                onEmailPasswordSignUp = {},
+                onGoogleSignUp = { viewModel.signUpWithGoogle() },
+                onEmailPasswordSignUp = {
+                    viewModel.signUpWithEmailAndPassword(
+                        emailAddress = emailAddress,
+                        password = password
+                    )
+                },
                 emailAddress = emailAddress,
                 password = password,
                 confirmationPassword = confirmationPassword,
                 onEmailAddressChange = { newValue -> emailAddress = newValue },
                 onPasswordChange = { newValue -> password = newValue },
                 onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
-                modifier = modifier.padding(it)
+                modifier = modifier.padding(it),
+                isEmailPassSignUpLoading = signUpWithEmailAndPasswordState is UiState.Loading,
+                isGoogleSignUpLoading = signUpWithGoogleState is UiState.Loading
             )
         },
         snackbarHostState = snackbarHostState
@@ -435,7 +506,8 @@ private fun SignUpBody(
             onClick = onEmailPasswordSignUp,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = emailAddress.isEmailValid() and password.isPasswordSecure() and (password == confirmationPassword) and !isEmailPassSignUpLoading,
+            enabled = emailAddress.isEmailValid() and password.isPasswordSecure() and (password == confirmationPassword)
+                    and !isEmailPassSignUpLoading and !isGoogleSignUpLoading,
         ) {
             if (isEmailPassSignUpLoading)
                 CircularProgressIndicator()
@@ -460,7 +532,7 @@ private fun SignUpBody(
         Spacer(modifier = Modifier.height(4.dp))
         OutlinedButton(
             shape = MaterialTheme.shapes.medium,
-            enabled = !isGoogleSignUpLoading,
+            enabled = !isGoogleSignUpLoading and !isEmailPassSignUpLoading,
             onClick = onGoogleSignUp, modifier = Modifier.fillMaxWidth(),
         ) {
             if (isGoogleSignUpLoading)

@@ -13,10 +13,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.components.MyProfileForm
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
@@ -38,11 +44,13 @@ import dev.cisnux.dietary.presentation.utils.isAgeValid
 import dev.cisnux.dietary.presentation.utils.isHeightOrWeightValid
 import dev.cisnux.dietary.presentation.utils.isTargetWeightValid
 import dev.cisnux.dietary.presentation.utils.isUsernameValid
+import dev.cisnux.dietary.utils.UiState
 
 @Composable
 fun AddMyProfileScreen(
     navigateToHome: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: AddMyProfileViewModel = hiltViewModel()
 ) {
     val genders = stringArrayResource(id = R.array.gender)
     val goals = stringArrayResource(id = R.array.goal)
@@ -51,7 +59,6 @@ fun AddMyProfileScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
-
     var myProfile by rememberSaveable {
         mutableStateOf(
             MyProfile(
@@ -65,6 +72,33 @@ fun AddMyProfileScreen(
                 activityLevel = activityLevels[0],
             )
         )
+    }
+    val context = LocalContext.current
+    val addMyProfileState by viewModel.addMyProfileState.collectAsState()
+
+    when (addMyProfileState) {
+        is UiState.Success -> {
+            navigateToHome()
+        }
+
+        is UiState.Error -> {
+            (addMyProfileState as UiState.Error).error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = context.getString(R.string.retry),
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                        if (snackbarResult == SnackbarResult.ActionPerformed)
+                            viewModel.addMyProfile(myProfile)
+                    }
+                }
+            }
+        }
+
+        else -> {}
     }
 
     AddMyProfileContent(
@@ -89,15 +123,20 @@ fun AddMyProfileScreen(
                 onHeightChange = { newValue -> myProfile = myProfile.copy(height = newValue) },
                 onWeightChange = { newValue -> myProfile = myProfile.copy(weight = newValue) },
                 onGenderChange = { newValue -> myProfile = myProfile.copy(gender = newValue) },
-                onGoalChange = { newValue -> myProfile = myProfile.copy(goal = newValue) },
+                onGoalChange = { newValue ->
+                    myProfile = myProfile.copy(goal = newValue)
+                    if (myProfile.goal == goals[1])
+                        myProfile = myProfile.copy(weightTarget = "0")
+                },
                 onTargetWeightChange = { newValue ->
                     myProfile = myProfile.copy(weightTarget = newValue)
                 },
                 onActivityLevelChange = { newValue ->
                     myProfile = myProfile.copy(activityLevel = newValue)
                 },
-                onBuildProfile = {},
+                onBuildProfile = { viewModel.addMyProfile(myProfile) },
                 modifier = modifier.padding(it),
+                isBuildProfileLoading = addMyProfileState is UiState.Loading
             )
         },
         snackbarHostState = snackbarHostState

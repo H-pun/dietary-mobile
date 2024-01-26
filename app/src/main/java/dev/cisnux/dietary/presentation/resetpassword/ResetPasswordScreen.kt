@@ -22,10 +22,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,14 +48,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.isEmailValid
+import dev.cisnux.dietary.utils.UiState
 
 @Composable
 fun ResetPasswordScreen(
-    navigateUp: () -> Unit,
+    navigateToSignIn: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: ResetPasswordViewModel = hiltViewModel()
 ) {
     var emailAddress by rememberSaveable {
         mutableStateOf("")
@@ -58,15 +66,43 @@ fun ResetPasswordScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+    val resetPasswordState by viewModel.resetPasswordState.collectAsState()
+    val context = LocalContext.current
+
+    when (resetPasswordState) {
+        is UiState.Success -> {
+            navigateToSignIn()
+        }
+
+        is UiState.Error -> {
+            (resetPasswordState as UiState.Error).error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = context.getString(R.string.retry),
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                        if (snackbarResult == SnackbarResult.ActionPerformed)
+                            viewModel.resetPassword(emailAddress)
+                    }
+                }
+            }
+        }
+
+        else -> {}
+    }
 
     ResetPasswordContent(
         body = {
             ResetPasswordBody(
-                onNavigateUp = navigateUp,
-                onVerifyEmailAddress = { /*TODO*/ },
+                onNavigateUp = navigateToSignIn,
+                onVerifyEmailAddress = { viewModel.resetPassword(emailAddress) },
                 emailAddress = emailAddress,
                 onEmailAddressChange = { newValue -> emailAddress = newValue },
-                modifier = modifier.padding(it)
+                modifier = modifier.padding(it),
+                isVerifyEmailAddressLoading = resetPasswordState is UiState.Loading
             )
         },
         snackbarHostState = snackbarHostState

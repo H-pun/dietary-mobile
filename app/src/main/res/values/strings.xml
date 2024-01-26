@@ -61,7 +61,7 @@
     <string name="add_my_profile_label">Let\'s make healthy\neating exciting and\neffortless 🥗💪</string>
     <string name="username_placeholder">Enter your username</string>
     <string name="username_label" translatable="false">Username</string>
-    <string name="username_error_text">Please enter a username without any spaces</string>
+    <string name="username_error_text">Please enter a username with minimum 6 characters and maximum 20 characters without any spaces and special characters like @, $, etc</string>
     <string name="age_placeholder">Enter your age</string>
     <string name="age_error_text">The age must be a integer and greater than 0</string>
     <string name="weight_placeholder">Enter your weight</string>
@@ -103,4 +103,5 @@
         <item>Daily activities require reasonable effort such as standing, physical work or regular moderate exercise</item>
         <item>Daily activities require intense physical effort such as construction work or regular vigorous exercise</item>
     </string-array>
+    <string name="retry">Retry</string>
 </resources>

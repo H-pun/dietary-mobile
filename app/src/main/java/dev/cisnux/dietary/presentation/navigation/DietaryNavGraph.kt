@@ -192,7 +192,7 @@ fun DietaryNavGraph(
                 )
             }
         ) {
-            ResetPasswordScreen(navigateUp = navComponentAction.navigateUp)
+            ResetPasswordScreen(navigateToSignIn = navComponentAction.navigateUp)
         }
         composable(
             route = AppDestination.AddMyProfileRoute.route,

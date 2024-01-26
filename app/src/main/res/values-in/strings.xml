@@ -67,7 +67,7 @@
     </string-array>
     <string name="add_my_profile_label">Mari kita jadikan makan sehat\nmenjadi menyenangkan dan\nmudah 🥗💪</string>
     <string name="username_placeholder">Masukkan username Anda</string>
-    <string name="username_error_text">Tolong masukkan username tanpa spasi</string>
+    <string name="username_error_text">Tolong masukkan username dengan minimum 6 karakter dan maximum 20 karakter tanpa spasi dan spesial karakter seperti  @, $, etc</string>
     <string name="welcome_back">Selamat datang kembali!</string>
     <string name="you_ve_been_missed">Kamu sudah ditunggu 🤗</string>
     <string name="age_placeholder">Masukkan usia Anda</string>
@@ -91,4 +91,5 @@
     <string name="landing_message">Rekomendasi makanan yang dipersonalisasi\nuntuk gaya hidup Anda yang lebih sehat.</string>
     <string name="get_started">Mulai</string>
     <string name="failed_to_took_picture">Gagal mengambil gambar</string>
+    <string name="retry">Ulangi</string>
 </resources>

@@ -30,11 +30,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,10 +61,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.utils.isEmailValid
 import dev.cisnux.dietary.presentation.utils.isPasswordSecure
+import dev.cisnux.dietary.utils.UiState
 
 @Composable
 fun SignInScreen(
@@ -68,6 +75,7 @@ fun SignInScreen(
     navigateToResetPassword: () -> Unit,
     navigateToSignUp: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
     var emailAddress by rememberSaveable {
         mutableStateOf("")
@@ -78,19 +86,97 @@ fun SignInScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+    val signInWithEmailAndPasswordState by viewModel.signInWithEmailAndPasswordState.collectAsState()
+    val signInWithGoogleState by viewModel.signInWithGoogleState.collectAsState()
+    val context = LocalContext.current
+
+    when (signInWithEmailAndPasswordState) {
+        is UiState.Success -> {
+            val isUserProfileExist by viewModel.isUserProfileExist.collectAsState(initial = null)
+            isUserProfileExist?.let {
+                if (it)
+                    navigateToHome()
+                else
+                    navigateToAddMyProfile()
+            }
+        }
+
+        is UiState.Error -> {
+            (signInWithEmailAndPasswordState as UiState.Error).error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = context.getString(R.string.retry),
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                        if (snackbarResult == SnackbarResult.ActionPerformed)
+                            viewModel.signInWithEmailAndPassword(
+                                emailAddress = emailAddress,
+                                password = password
+                            )
+                    }
+                }
+            }
+        }
+
+        else -> {}
+    }
+
+    when (signInWithGoogleState) {
+        is UiState.Success -> {
+            val isUserProfileExist by viewModel.isUserProfileExist.collectAsState(initial = null)
+            isUserProfileExist?.let {
+                if (it)
+                    navigateToHome()
+                else
+                    navigateToAddMyProfile()
+            }
+        }
+
+        is UiState.Error -> {
+            (signInWithGoogleState as UiState.Error).error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = context.getString(R.string.retry),
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                        if (snackbarResult == SnackbarResult.ActionPerformed)
+                            viewModel.signInWithGoogle()
+                    }
+                }
+            }
+        }
+
+        else -> {}
+    }
 
     SignInContent(
         body = {
             SignInBody(
-                onSignUp = navigateToSignUp,
-                onGoogleSignIn = { /*TODO*/ },
-                onEmailPasswordSignIn = { /*TODO*/ },
+                onSignUp = {
+                    viewModel.clearAllStates()
+                    navigateToSignUp()
+                },
+                onGoogleSignIn = { viewModel.signInWithGoogle() },
+                onEmailPasswordSignIn = {
+                    viewModel.signInWithEmailAndPassword(
+                        emailAddress = emailAddress,
+                        password = password
+                    )
+                },
                 emailAddress = emailAddress,
                 password = password,
                 onEmailAddressChange = { newValue -> emailAddress = newValue },
                 onPasswordChange = { newValue -> password = newValue },
                 onForgotPassword = navigateToResetPassword,
-                modifier = modifier.padding(it)
+                modifier = modifier.padding(it),
+                isEmailPassSignInLoading = signInWithEmailAndPasswordState is UiState.Loading,
+                isGoogleSignInLoading = signInWithGoogleState is UiState.Loading
             )
         },
         snackbarHostState = snackbarHostState,
@@ -255,7 +341,7 @@ private fun SignInBody(
         OutlinedButton(
             shape = MaterialTheme.shapes.medium,
             onClick = onGoogleSignIn,
-            enabled = !isEmailPassSignInLoading,
+            enabled = !isEmailPassSignInLoading and !isEmailPassSignInLoading,
             modifier = Modifier.fillMaxWidth(),
         ) {
             if (isGoogleSignInLoading)
@@ -423,7 +509,8 @@ private fun SignInBody(
             onClick = onEmailPasswordSignIn,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = emailAddress.isEmailValid() and password.isPasswordSecure() and !isEmailPassSignInLoading,
+            enabled = emailAddress.isEmailValid() and password.isPasswordSecure()
+                    and !isEmailPassSignInLoading and !isGoogleSignInLoading,
         ) {
             if (isEmailPassSignInLoading)
                 CircularProgressIndicator()

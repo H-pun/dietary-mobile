@@ -1,4 +1,4 @@
-package dev.cisnux.dietary.presentation.utils
+package dev.cisnux.dietary.utils
 
 import io.ktor.http.HttpStatusCode
 

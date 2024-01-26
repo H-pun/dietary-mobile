@@ -7,7 +7,10 @@ fun String.isEmailValid(): Boolean {
 
 fun String.isPasswordSecure(): Boolean = this.trim().length >= 8
 
-fun String.isUsernameValid(): Boolean = !this.contains(' ')
+fun String.isUsernameValid(): Boolean {
+    val usernameRegex = "^[a-z0-9_]{6,20}\$"
+    return Regex(usernameRegex).matches(this)
+}
 
 fun String.isAgeValid(): Boolean = try {
     val age = this.toInt()
