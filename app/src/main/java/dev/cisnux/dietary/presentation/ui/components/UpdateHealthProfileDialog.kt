@@ -29,8 +29,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.utils.isAgeValid
-import dev.cisnux.dietary.presentation.utils.isHeightOrWeightValid
+import dev.cisnux.dietary.utils.isAgeValid
+import dev.cisnux.dietary.utils.isHeightOrWeightValid
 
 @Preview(showBackground = true)
 @Composable

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.cisnux.dietary.domain.usecases.UserProfileUseCase
-import dev.cisnux.dietary.presentation.utils.asUserProfile
+import dev.cisnux.dietary.utils.asUserProfile
 import dev.cisnux.dietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

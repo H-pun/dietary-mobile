@@ -52,12 +52,12 @@ import dev.cisnux.dietary.presentation.ui.components.BottomBar
 import dev.cisnux.dietary.presentation.ui.components.ListTileProfile
 import dev.cisnux.dietary.presentation.ui.components.MyProfileForm
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.utils.AppDestination
-import dev.cisnux.dietary.presentation.utils.asMyProfile
-import dev.cisnux.dietary.presentation.utils.isAgeValid
-import dev.cisnux.dietary.presentation.utils.isHeightOrWeightValid
-import dev.cisnux.dietary.presentation.utils.isTargetWeightValid
-import dev.cisnux.dietary.presentation.utils.isUsernameValid
+import dev.cisnux.dietary.utils.AppDestination
+import dev.cisnux.dietary.utils.asMyProfile
+import dev.cisnux.dietary.utils.isAgeValid
+import dev.cisnux.dietary.utils.isHeightOrWeightValid
+import dev.cisnux.dietary.utils.isTargetWeightValid
+import dev.cisnux.dietary.utils.isUsernameValid
 
 @Composable
 fun MyProfileScreen(

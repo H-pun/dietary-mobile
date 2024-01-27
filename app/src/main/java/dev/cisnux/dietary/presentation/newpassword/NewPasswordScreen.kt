@@ -46,7 +46,7 @@ import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.utils.isPasswordSecure
+import dev.cisnux.dietary.utils.isPasswordSecure
 
 @Composable
 fun NewPasswordScreen(

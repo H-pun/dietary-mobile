@@ -51,7 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.utils.isEmailValid
+import dev.cisnux.dietary.utils.isEmailValid
 import dev.cisnux.dietary.utils.UiState
 
 @Composable

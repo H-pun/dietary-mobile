@@ -78,7 +78,8 @@
     <string name="height_error_text">Tinggi harus berupa angka dan lebih besar dari 0</string>
     <string name="goal_label">Tujuan</string>
     <string name="target_weight_label">Target Berat</string>
-    <string name="target_weight_placeholder">Masukkan target berat Anda</string>
+    <string name="target_lose_weight_placeholder">Berapa banyak berat badan yang harus diturunkan?</string>
+    <string name="target_gain_weight_placeholder">Berapa banyak berat badan yang harus dinaikan?</string>
     <string name="target_weight_error_text">Target berat harus berupa angka dan lebih besar dari atau sama dengan 0</string>
     <string name="activity_level_label">Tingkat Aktivitas</string>
     <string name="build_profile">Bangun Profil</string>
@@ -92,4 +93,5 @@
     <string name="get_started">Mulai</string>
     <string name="failed_to_took_picture">Gagal mengambil gambar</string>
     <string name="retry">Ulangi</string>
+    <string name="cancel">Batal</string>
 </resources>

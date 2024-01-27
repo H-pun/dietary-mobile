@@ -23,7 +23,7 @@ import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -64,8 +64,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.utils.isEmailValid
-import dev.cisnux.dietary.presentation.utils.isPasswordSecure
+import dev.cisnux.dietary.utils.isEmailValid
+import dev.cisnux.dietary.utils.isPasswordSecure
 import dev.cisnux.dietary.utils.UiState
 
 @Composable
@@ -363,7 +363,7 @@ private fun SignInBody(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Divider(thickness = 2.dp)
+            HorizontalDivider(thickness = 2.dp)
             Surface(color = MaterialTheme.colorScheme.surface) {
                 Text(
                     text = stringResource(R.string.or),

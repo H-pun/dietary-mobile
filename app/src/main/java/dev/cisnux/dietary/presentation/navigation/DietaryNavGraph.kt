@@ -19,13 +19,12 @@ import dev.cisnux.dietary.presentation.home.HomeScreen
 import dev.cisnux.dietary.presentation.landing.LandingScreen
 import dev.cisnux.dietary.presentation.myprofile.MyProfileScreen
 import dev.cisnux.dietary.presentation.newpassword.NewPasswordScreen
-import dev.cisnux.dietary.presentation.report.ReportScreen
 import dev.cisnux.dietary.presentation.resetpassword.ResetPasswordScreen
 import dev.cisnux.dietary.presentation.scannerresult.ScannerResultScreen
 import dev.cisnux.dietary.presentation.signin.SignInScreen
 import dev.cisnux.dietary.presentation.signup.SignUpScreen
 import dev.cisnux.dietary.presentation.splash.SplashScreen
-import dev.cisnux.dietary.presentation.utils.AppDestination
+import dev.cisnux.dietary.utils.AppDestination
 
 @Composable
 fun DietaryNavGraph(
@@ -320,41 +319,6 @@ fun DietaryNavGraph(
             HomeScreen(
                 navigateForBottomNav = navComponentAction.bottomNavigation,
                 onFabFoodScanner = navComponentAction.navigateToFoodScanner
-            )
-        }
-        composable(
-            route = AppDestination.ReportRoute.route,
-            enterTransition = {
-                fadeIn(
-                    animationSpec = tween(
-                        100, easing = LinearEasing
-                    )
-                )
-            },
-            exitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        100, easing = LinearEasing
-                    )
-                )
-            },
-            popEnterTransition = {
-                fadeIn(
-                    animationSpec = tween(
-                        100, easing = LinearEasing
-                    )
-                )
-            },
-            popExitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        100, easing = LinearEasing
-                    )
-                )
-            }
-        ) {
-            ReportScreen(
-                navigateForBottomNav = navComponentAction.bottomNavigation
             )
         }
         composable(

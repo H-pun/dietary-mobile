@@ -11,7 +11,7 @@ import javax.inject.Inject
 class TokenRepositoryImpl @Inject constructor() : TokenRepository {
     override val hasAuthTokenExpired: Flow<Boolean>
         get() = flow {
-            emit(true)
+            emit(false)
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
     override val hasFoodSecretTokenExpired: Flow<Boolean>

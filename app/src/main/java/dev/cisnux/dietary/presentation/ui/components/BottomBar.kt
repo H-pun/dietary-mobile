@@ -10,9 +10,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -20,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.navigation.BottomNavigationItem
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.utils.AppDestination
+import dev.cisnux.dietary.utils.AppDestination
 
 @Preview
 @Composable
@@ -36,6 +34,7 @@ private fun BottomBarPreview() {
 @Composable
 fun BottomBar(
     currentRoute: AppDestination,
+    onSelectedDestination: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     modifier: Modifier = Modifier,
     navigationItems: List<BottomNavigationItem> = listOf(
         BottomNavigationItem(
@@ -45,19 +44,12 @@ fun BottomBar(
             contentDescription = stringResource(id = R.string.home_title)
         ),
         BottomNavigationItem(
-            title = stringResource(id = R.string.report_title),
-            icon = ImageVector.vectorResource(id = R.drawable.ic_report_24dp),
-            destination = AppDestination.ReportRoute,
-            contentDescription = stringResource(id = R.string.report_title)
-        ),
-        BottomNavigationItem(
             title = stringResource(id = R.string.my_profile_title),
             icon = Icons.Rounded.AccountCircle,
             destination = AppDestination.MyProfileRoute,
             contentDescription = stringResource(id = R.string.my_profile_title)
         ),
     ),
-    onSelectedDestination: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
 ) {
     NavigationBar(modifier = modifier) {
         navigationItems.forEach { item ->

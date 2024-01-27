@@ -44,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.7"
+        kotlinCompilerExtensionVersion = "1.5.8"
     }
     packaging {
         resources {
@@ -96,6 +96,12 @@ dependencies {
     debugImplementation(libs.slf4j.simple)
     // monad
     implementation(libs.arrow.core)
+    // shimmer
+    implementation(libs.compose.shimmer)
+    // testing
+    testImplementation(libs.ktor.client.mock)
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 // Allow references to generated code

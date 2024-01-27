@@ -72,7 +72,8 @@
     <string name="trailing_text_cm" translatable="false">cm</string>
     <string name="goal_label">Goal</string>
     <string name="target_weight_label">Weight Target</string>
-    <string name="target_weight_placeholder">Enter your target weight</string>
+    <string name="target_lose_weight_placeholder">How much weight to would you like to lose?</string>
+    <string name="target_gain_weight_placeholder">How much weight to would you like to gain?</string>
     <string name="target_weight_error_text">The weight target must be a number and greater than or equal to 0</string>
     <string name="activity_level_label">Activity Level</string>
     <string name="build_profile">Build Profile</string>
@@ -104,4 +105,7 @@
         <item>Daily activities require intense physical effort such as construction work or regular vigorous exercise</item>
     </string-array>
     <string name="retry">Retry</string>
+    <string name="searchbar_hint" translatable="false">nasi goreng, pizza, nasi padang</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok" translatable="false">OK</string>
 </resources>

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -58,7 +58,7 @@ private fun ScannerResultContentPreview() {
 
 @Composable
 private fun ScannerResultContent(
-    body: @Composable (innerPadding: PaddingValues) -> Unit,
+    body: @Composable (PaddingValues) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -85,7 +85,7 @@ private fun ScannerResultBody(
             content = {
                 Icon(
                     tint = Color.White,
-                    imageVector = Icons.Rounded.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = "back"
                 )
             },

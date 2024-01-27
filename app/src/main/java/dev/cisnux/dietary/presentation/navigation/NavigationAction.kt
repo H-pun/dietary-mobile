@@ -6,13 +6,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import dev.cisnux.dietary.presentation.utils.AppDestination
+import dev.cisnux.dietary.utils.AppDestination
 
 class NavComponentAction(
     navController: NavHostController,
 ) {
     val navigateToFoodScanner: () -> Unit = {
-        navController.navigate(route = AppDestination.FoodScannerRoute.route)
+        navController.navigate(route = AppDestination.FoodScannerRoute.route) {
+            popUpTo(AppDestination.HomeRoute.route) {
+                saveState = true
+            }
+            restoreState = true
+            launchSingleTop = true
+        }
     }
     val navigateToScannerResult: (
         foodPicture: String,

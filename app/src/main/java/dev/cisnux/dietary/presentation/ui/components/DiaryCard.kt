@@ -1,0 +1,144 @@
+package dev.cisnux.dietary.presentation.ui.components
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import coil.compose.SubcomposeAsyncImage
+import com.valentinilk.shimmer.shimmer
+import dev.cisnux.dietary.domain.models.DiaryFood
+import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.presentation.ui.theme.placeholder
+import dev.cisnux.dietary.utils.withDateFormat
+import dev.cisnux.dietary.utils.withTimeFormat
+
+@Preview(showBackground = true)
+@Composable
+private fun DiaryCardPreview() {
+    val food = DiaryFood(
+        id = "1",
+        foodName = "Nasi Padang",
+        date = 1706351552829.withDateFormat(),
+        time = 1706351552829.withTimeFormat(),
+        foodImageUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
+        calorie = 500f,
+    )
+
+    DietaryTheme {
+        DiaryCard(
+            foodName = food.foodName,
+            date = food.date,
+            time = food.time,
+            foodImageUrl = food.foodImageUrl,
+            calorie = food.calorie,
+            onClick = {}
+        )
+    }
+}
+
+@Composable
+fun DiaryCard(
+    foodName: String,
+    date: String,
+    time: String,
+    foodImageUrl: String,
+    calorie: Float,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .clickable(onClick = onClick)
+    ) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            SubcomposeAsyncImage(
+                model = foodImageUrl,
+                error = {
+                    Surface(
+                        color = placeholder,
+                        modifier = Modifier
+                            .size(height = 90.dp, width = 90.dp)
+                            .clip(shape = MaterialTheme.shapes.small)
+                            .shimmer(),
+                        content = {}
+                    )
+                },
+                loading = {
+                    Surface(
+                        color = placeholder,
+                        modifier = Modifier
+                            .size(height = 90.dp, width = 90.dp)
+                            .clip(shape = MaterialTheme.shapes.small)
+                            .shimmer(),
+                        content = {}
+                    )
+                },
+                contentScale = ContentScale.FillBounds,
+                contentDescription = foodName,
+                modifier = modifier
+                    .size(height = 90.dp, width = 90.dp)
+                    .clip(shape = MaterialTheme.shapes.small),
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = foodName,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = "${calorie.toDouble()} kcal",
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                }
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = date,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = time,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.labelMedium,
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Divider(thickness = 1.5.dp)
+    }
+}

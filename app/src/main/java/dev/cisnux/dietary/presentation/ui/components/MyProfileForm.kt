@@ -37,10 +37,10 @@ import androidx.compose.ui.unit.dp
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.addmyprofile.MyProfile
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.utils.isTargetWeightValid
-import dev.cisnux.dietary.presentation.utils.isUsernameValid
+import dev.cisnux.dietary.utils.isTargetWeightValid
+import dev.cisnux.dietary.utils.isUsernameValid
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, locale = "in")
 @Composable
 private fun MyProfileFormPreview() {
     val genders = stringArrayResource(id = R.array.gender)
@@ -262,7 +262,12 @@ fun MyProfileForm(
                 onValueChange = onTargetWeightChange,
                 placeholder = {
                     Text(
-                        text = stringResource(R.string.target_weight_placeholder),
+                        text = stringResource(
+                            when (selectedGoal) {
+                                goals[0] -> R.string.target_lose_weight_placeholder
+                                else -> R.string.target_gain_weight_placeholder
+                            }
+                        ),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
@@ -291,6 +296,7 @@ fun MyProfileForm(
                             painter = painterResource(id = R.drawable.ic_round_error_24dp),
                             contentDescription = null,
                         )
+                    else Text(text = stringResource(R.string.trailing_text_kg))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
