@@ -40,11 +40,11 @@ val UserProfileDetail.asMyProfile: MyProfile
     get() = MyProfile(
         username = username,
         age = age.toString(),
-        weight = weight.toDouble().toString(),
-        height = height.toDouble().toString(),
+        weight = weight.toString(),
+        height = height.toString(),
         gender = gender,
         goal = goal,
-        weightTarget = weightTarget.toDouble().toString(),
+        weightTarget = weightTarget.toString(),
         activityLevel = activityLevel
     )
 

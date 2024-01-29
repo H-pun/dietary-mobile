@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -351,7 +351,7 @@ fun MyProfileForm(
                                     style = MaterialTheme.typography.bodySmall
                                 )
                                 Spacer(modifier = Modifier.height(2.dp))
-                                Divider()
+                                HorizontalDivider()
                                 Spacer(modifier = Modifier.height(2.dp))
                             }
                         },

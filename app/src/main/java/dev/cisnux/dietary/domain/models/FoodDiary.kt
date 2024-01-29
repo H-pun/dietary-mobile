@@ -1,6 +1,6 @@
 package dev.cisnux.dietary.domain.models
 
-data class DiaryFood(
+data class FoodDiary(
     val id: String,
     val foodName: String,
     val date: String,

@@ -1,6 +1,7 @@
 package dev.cisnux.dietary.presentation.foodscanner
 
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,8 +14,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FoodScannerViewModel @Inject constructor(
-    private val fileUseCase: FileUseCase
+    private val fileUseCase: FileUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    val title = checkNotNull(value = savedStateHandle["title"]) as String
+    val foodDiaryCategory = checkNotNull(value = savedStateHandle["foodDiaryCategory"]) as String
+
     private var _cameraFile: MutableStateFlow<File?> = MutableStateFlow(null)
     val cameraFile get() = _cameraFile.asStateFlow()
     private var _galleryFile: MutableStateFlow<File?> = MutableStateFlow(null)

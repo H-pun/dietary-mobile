@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.cisnux.dietary"
-        minSdk = 21
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -102,6 +102,8 @@ dependencies {
     testImplementation(libs.ktor.client.mock)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    // ycharts
+    implementation(libs.yml.charts)
 }
 
 // Allow references to generated code

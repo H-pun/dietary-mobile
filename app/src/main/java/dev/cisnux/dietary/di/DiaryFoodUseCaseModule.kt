@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.cisnux.dietary.domain.usecases.DiaryFoodInteractor
-import dev.cisnux.dietary.domain.usecases.DiaryFoodUseCase
+import dev.cisnux.dietary.domain.usecases.FoodDiaryInteractor
+import dev.cisnux.dietary.domain.usecases.FoodDiaryUseCase
 import javax.inject.Singleton
 
 @Module
@@ -14,5 +14,5 @@ abstract class DiaryFoodUseCaseModule {
 
     @Singleton
     @Binds
-    abstract fun bindDiaryFoodInteractor(foodInteractor: DiaryFoodInteractor): DiaryFoodUseCase
+    abstract fun bindDiaryFoodInteractor(foodInteractor: FoodDiaryInteractor): FoodDiaryUseCase
 }

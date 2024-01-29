@@ -11,8 +11,18 @@ import dev.cisnux.dietary.utils.AppDestination
 class NavComponentAction(
     navController: NavHostController,
 ) {
-    val navigateToFoodScanner: () -> Unit = {
-        navController.navigate(route = AppDestination.FoodScannerRoute.route) {
+    val navigateToFoodScanner: (
+        foodPicture: String, title: String
+    ) -> Unit = { title, foodDiaryCategory ->
+        navController.navigate(
+            route = AppDestination.FoodScannerRoute.createRouteUrl(
+                title = title,
+                foodDiaryCategory = foodDiaryCategory
+            )
+        )
+    }
+    val navigateToAddDiary: () -> Unit = {
+        navController.navigate(route = AppDestination.AddDiaryRoute.route) {
             popUpTo(AppDestination.HomeRoute.route) {
                 saveState = true
             }
@@ -21,9 +31,15 @@ class NavComponentAction(
         }
     }
     val navigateToScannerResult: (
-        foodPicture: String,
-    ) -> Unit = { foodPicture ->
-        navController.navigate(route = AppDestination.ScannerResultRoute.createRouteUrl(foodPicture = foodPicture))
+        foodPicture: String, title: String, foodDiaryCategory: String
+    ) -> Unit = { foodPicture, title, foodDiaryCategory ->
+        navController.navigate(
+            route = AppDestination.ScannerResultRoute.createRouteUrl(
+                foodPicture = foodPicture,
+                title = title,
+                foodDiaryCategory = foodDiaryCategory
+            )
+        )
     }
     val navigateUp: () -> Unit = {
         navController.navigateUp()
@@ -33,6 +49,15 @@ class NavComponentAction(
             popUpTo(navController.graph.findStartDestination().id) {
                 inclusive = true
                 saveState = true
+            }
+            restoreState = true
+            launchSingleTop = true
+        }
+    }
+    val navigateToHomeFromScannerResult: () -> Unit = {
+        navController.navigate(route = AppDestination.HomeRoute.route){
+            popUpTo(AppDestination.AddDiaryRoute.route) {
+                inclusive = true
             }
             restoreState = true
             launchSingleTop = true

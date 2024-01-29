@@ -23,7 +23,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -72,7 +72,7 @@ import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 fun FoodScannerScreen(
     onNavigateUp: () -> Unit,
     onGalleryButton: (launcher: ActivityResultLauncher<Intent>) -> Unit,
-    onScannerResult: (foodPicture: String) -> Unit,
+    onScannerResult: (foodPicture: String, title: String, foodDiaryCategory: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: FoodScannerViewModel = hiltViewModel()
 ) {
@@ -124,7 +124,7 @@ fun FoodScannerScreen(
             ContextCompat.getMainExecutor(context),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    onScannerResult(file.path)
+                    onScannerResult(file.path, viewModel.title, viewModel.foodDiaryCategory)
                     viewModel.clearFileStates()
                 }
 
@@ -137,7 +137,7 @@ fun FoodScannerScreen(
             })
     }
     galleryFile?.let { file ->
-        onScannerResult(file.path)
+        onScannerResult(file.path, viewModel.title, viewModel.foodDiaryCategory)
         viewModel.clearFileStates()
     }
 
@@ -313,7 +313,7 @@ private fun FoodScannerBody(
             content = {
                 Icon(
                     tint = ComposeColor.White,
-                    imageVector = Icons.Rounded.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = "back"
                 )
             },

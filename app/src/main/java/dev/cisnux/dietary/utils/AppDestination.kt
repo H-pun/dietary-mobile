@@ -6,12 +6,19 @@ import androidx.compose.runtime.Immutable
 sealed class AppDestination(val route: String) {
     data object HomeRoute : AppDestination(route = "home")
     data object MyProfileRoute : AppDestination(route = "my_profile")
-    data object FoodScannerRoute : AppDestination(route = "food_scanner")
-    data object ScannerResultRoute :
-        AppDestination(route = "scanner_result?foodPicture={foodPicture}") {
-        fun createRouteUrl(foodPicture: String): String = "scanner_result?foodPicture=$foodPicture"
+    data object FoodScannerRoute :
+        AppDestination(route = "food_scanner?title={title}&foodDiaryCategory={foodDiaryCategory}") {
+        fun createRouteUrl(title: String, foodDiaryCategory: String) =
+            "food_scanner?title=$title&foodDiaryCategory=$foodDiaryCategory"
     }
 
+    data object ScannerResultRoute :
+        AppDestination(route = "scanner_result?foodPicture={foodPicture}&title={title}&foodDiaryCategory={foodDiaryCategory}") {
+        fun createRouteUrl(foodPicture: String, title: String, foodDiaryCategory: String): String =
+            "scanner_result?foodPicture=$foodPicture&title=$title&foodDiaryCategory=$foodDiaryCategory"
+    }
+
+    data object AddDiaryRoute : AppDestination(route = "add_diary")
     data object SignInRoute : AppDestination(route = "sign_in")
     data object SignUpRoute : AppDestination(route = "sign_up")
     data object AddMyProfileRoute : AppDestination(route = "add_my_profile")

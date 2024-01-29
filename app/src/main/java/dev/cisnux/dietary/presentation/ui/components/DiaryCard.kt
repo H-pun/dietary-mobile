@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.valentinilk.shimmer.shimmer
-import dev.cisnux.dietary.domain.models.DiaryFood
+import dev.cisnux.dietary.domain.models.FoodDiary
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.placeholder
 import dev.cisnux.dietary.utils.withDateFormat
@@ -32,7 +32,7 @@ import dev.cisnux.dietary.utils.withTimeFormat
 @Preview(showBackground = true)
 @Composable
 private fun DiaryCardPreview() {
-    val food = DiaryFood(
+    val food = FoodDiary(
         id = "1",
         foodName = "Nasi Padang",
         date = 1706351552829.withDateFormat(),
@@ -119,7 +119,7 @@ fun DiaryCard(
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "${calorie.toDouble()} kcal",
+                        text = "$calorie kcal",
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.labelLarge,
                     )
@@ -139,6 +139,6 @@ fun DiaryCard(
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Divider(thickness = 1.5.dp)
+        HorizontalDivider(thickness = 1.5.dp)
     }
 }

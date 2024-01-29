@@ -108,4 +108,9 @@
     <string name="searchbar_hint" translatable="false">nasi goreng, pizza, nasi padang</string>
     <string name="cancel">Cancel</string>
     <string name="ok" translatable="false">OK</string>
+    <string-array name="food_diary_category">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+    </string-array>
 </resources>

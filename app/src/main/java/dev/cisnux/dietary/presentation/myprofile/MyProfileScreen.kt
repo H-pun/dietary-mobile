@@ -21,6 +21,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -74,7 +75,9 @@ fun MyProfileScreen(
         gender = "Man",
         goal = "Weight Loss",
         weightTarget = 10f,
-        activityLevel = "Very Active"
+        activityLevel = "Very Active",
+        totalCaloriesToday = 200.4772f,
+        bmiDailyCalorie = 400.7291f,
     )
     var isUpdateMyProfileDialogOpen by rememberSaveable {
         mutableStateOf(false)
@@ -84,11 +87,11 @@ fun MyProfileScreen(
             MyProfile(
                 username = userProfileDetail.username,
                 age = userProfileDetail.age.toString(),
-                weight = userProfileDetail.weight.toDouble().toString(),
-                height = userProfileDetail.height.toDouble().toString(),
+                weight = userProfileDetail.weight.toString(),
+                height = userProfileDetail.height.toString(),
                 gender = userProfileDetail.gender,
                 goal = userProfileDetail.goal,
-                weightTarget = userProfileDetail.weightTarget.toDouble().toString(),
+                weightTarget = userProfileDetail.weightTarget.toString(),
                 activityLevel = userProfileDetail.activityLevel
             )
         )
@@ -105,15 +108,25 @@ fun MyProfileScreen(
                 username = userProfileDetail.username,
                 emailAddress = userProfileDetail.emailAddress,
                 age = userProfileDetail.age,
-                weight = userProfileDetail.weight,
-                height = userProfileDetail.height,
+                weight = String.format("%.2f", userProfileDetail.weight),
+                height = String.format("%.2f", userProfileDetail.height),
+                weightTarget = String.format("%.2f", userProfileDetail.weightTarget),
                 gender = userProfileDetail.gender,
                 goal = userProfileDetail.goal,
-                weightTarget = userProfileDetail.weightTarget,
                 activityLevel = userProfileDetail.activityLevel,
                 onEdit = {
                     isUpdateMyProfileDialogOpen = true
                 },
+                dailyCalorieProgress = userProfileDetail.totalCaloriesToday / userProfileDetail.bmiDailyCalorie,
+                totalCaloriesToday = String.format(
+                    "%.2f",
+                    userProfileDetail.totalCaloriesToday
+                ),
+                bmiDailyCalorie = String.format(
+                    "%.2f",
+                    userProfileDetail.bmiDailyCalorie
+                ),
+                isWeightTargetVisible = userProfileDetail.weightTarget != 0f,
                 modifier = modifier.padding(it)
             )
             UpdateMyProfileDialog(
@@ -166,7 +179,9 @@ private fun MyProfileContentPreview() {
         gender = "Man",
         goal = "Weight Loss",
         weightTarget = 10f,
-        activityLevel = "Very Active"
+        activityLevel = "Very Active",
+        totalCaloriesToday = 200.4772f,
+        bmiDailyCalorie = 400.7291f,
     )
     var isUpdateMyProfileDialogOpen by remember {
         mutableStateOf(false)
@@ -189,16 +204,26 @@ private fun MyProfileContentPreview() {
                     username = userProfileDetail.username,
                     emailAddress = userProfileDetail.emailAddress,
                     age = userProfileDetail.age,
-                    weight = userProfileDetail.weight,
-                    height = userProfileDetail.height,
+                    weight = String.format("%.2f", userProfileDetail.weight),
+                    height = String.format("%.2f", userProfileDetail.height),
+                    weightTarget = String.format("%.2f", userProfileDetail.weightTarget),
                     gender = userProfileDetail.gender,
                     goal = userProfileDetail.goal,
-                    weightTarget = userProfileDetail.weightTarget,
                     activityLevel = userProfileDetail.activityLevel,
                     onEdit = {
                         isUpdateMyProfileDialogOpen = true
                     },
-                    modifier = Modifier.padding(it)
+                    modifier = Modifier.padding(it),
+                    isWeightTargetVisible = userProfileDetail.weightTarget != 0f,
+                    totalCaloriesToday = String.format(
+                        "%.2f",
+                        userProfileDetail.totalCaloriesToday
+                    ),
+                    bmiDailyCalorie = String.format(
+                        "%.2f",
+                        userProfileDetail.bmiDailyCalorie
+                    ),
+                    dailyCalorieProgress = userProfileDetail.totalCaloriesToday / userProfileDetail.bmiDailyCalorie
                 )
                 UpdateMyProfileDialog(
                     onSave = { isUpdateMyProfileDialogOpen = false },
@@ -292,13 +317,17 @@ private fun MyProfileBody(
     username: String,
     emailAddress: String,
     age: Int,
-    weight: Float,
-    height: Float,
+    weight: String,
+    height: String,
     gender: String,
     goal: String,
-    weightTarget: Float,
+    weightTarget: String,
     activityLevel: String,
+    totalCaloriesToday: String,
+    bmiDailyCalorie: String,
+    isWeightTargetVisible: Boolean,
     onEdit: () -> Unit,
+    dailyCalorieProgress: Float,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -321,7 +350,7 @@ private fun MyProfileBody(
                     Surface(
                         color = MaterialTheme.colorScheme.tertiaryContainer,
                         modifier = Modifier
-                            .size(90.dp)
+                            .size(80.dp)
                             .clip(CircleShape)
                     ) {}
                     Text(
@@ -355,8 +384,41 @@ private fun MyProfileBody(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(24.dp))
-        Column(modifier = Modifier.padding(start = 6.dp, end = 16.dp)) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth().padding(end = 9.dp),
+        ) {
+            Text(
+                text = "$totalCaloriesToday kcal",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.W600
+            )
+            Text(
+                text = "$bmiDailyCalorie kcal",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.W600
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        LinearProgressIndicator(
+            progress = { dailyCalorieProgress },
+            modifier = Modifier.fillMaxWidth().padding(end = 9.dp),
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = when {
+                dailyCalorieProgress < 1f -> "Keep Going 🔥"
+                dailyCalorieProgress == 1f -> "Congratulation 👏"
+                else -> "You should reduce your calorie intake"
+            },
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.W600,
+            modifier = Modifier.align(Alignment.Start)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Column(modifier = Modifier.padding(start = 6.dp, end = 9.dp)) {
             ListTileProfile(
                 icon = {
                     Icon(
@@ -481,7 +543,7 @@ private fun MyProfileBody(
                     )
                 }
             )
-            if (weightTarget != 0f) {
+            if (isWeightTargetVisible) {
                 Spacer(modifier = Modifier.height(16.dp))
                 ListTileProfile(
                     icon = {

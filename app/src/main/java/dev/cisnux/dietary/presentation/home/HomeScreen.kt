@@ -2,6 +2,7 @@ package dev.cisnux.dietary.presentation.home
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -44,6 +45,8 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,11 +57,13 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -72,7 +77,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
-import dev.cisnux.dietary.domain.models.DiaryFood
+import dev.cisnux.dietary.domain.models.FoodDiary
 import dev.cisnux.dietary.presentation.ui.components.BottomBar
 import dev.cisnux.dietary.presentation.ui.components.DiaryCard
 import dev.cisnux.dietary.presentation.ui.components.DiaryCardShimmer
@@ -86,6 +91,7 @@ import dev.cisnux.dietary.utils.activity
 import dev.cisnux.dietary.utils.withDateFormat
 import dev.cisnux.dietary.utils.withTimeFormat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
@@ -129,69 +135,81 @@ fun HomeScreen(
     }
     val keywordSuggestions by viewModel.keywordSuggestions.collectAsState(initial = listOf())
     var tabState by rememberSaveable { mutableIntStateOf(0) }
-    val diaryFoodState by viewModel.diaryFoodState.collectAsState(initial = UiState.Initialize)
+    val diaryFoodState by viewModel.foodDiaryState.collectAsState(initial = UiState.Initialize)
     val keywordSuggestionState by viewModel.keywordSuggestionState.collectAsState(initial = UiState.Initialize)
-    val diaryFoods by viewModel.diaryFoods.collectAsState(initial = null)
-    val searchedDiaryFoodState by viewModel.searchedDiaryFoodState.collectAsState(initial = UiState.Initialize)
-    val searchedDiaryFoods by viewModel.searchedDiaryFoods.collectAsState(initial = null)
+    val diaryFoods by viewModel.foodDiaries.collectAsState(initial = null)
+    val searchedDiaryFoodState by viewModel.searchedFoodDiaryState.collectAsState(initial = UiState.Initialize)
+    val searchedDiaryFoods by viewModel.searchedFoodDiaries.collectAsState(initial = null)
+
+    Log.d("HomeScreen", searchedDiaryFoodState.toString())
 
     when {
-        diaryFoodState is UiState.Error ->
-            (diaryFoodState as UiState.Error).error?.let { exception ->
-                LaunchedEffect(snackbarHostState) {
-                    exception.message?.let {
-                        val snackbarResult = snackbarHostState.showSnackbar(
-                            message = it,
-                            actionLabel = context.getString(R.string.retry),
-                            withDismissAction = true,
-                            duration = SnackbarDuration.Long
-                        )
-                        if (snackbarResult == SnackbarResult.ActionPerformed)
-                            viewModel.getDiaryFoods()
-                    }
+        diaryFoodState is UiState.Error -> (diaryFoodState as UiState.Error).error?.let { exception ->
+            LaunchedEffect(snackbarHostState) {
+                exception.message?.let {
+                    val snackbarResult = snackbarHostState.showSnackbar(
+                        message = it,
+                        actionLabel = context.getString(R.string.retry),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long
+                    )
+                    if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.updateRefreshDiaryFoods(
+                        true
+                    )
                 }
             }
+        }
 
-        searchedDiaryFoodState is UiState.Error ->
-            (searchedDiaryFoodState as UiState.Error).error?.let { exception ->
-                LaunchedEffect(snackbarHostState) {
-                    exception.message?.let {
-                        val snackbarResult = snackbarHostState.showSnackbar(
-                            message = it,
-                            actionLabel = context.getString(R.string.retry),
-                            withDismissAction = true,
-                            duration = SnackbarDuration.Long
+        searchedDiaryFoodState is UiState.Error -> (searchedDiaryFoodState as UiState.Error).error?.let { exception ->
+            LaunchedEffect(snackbarHostState) {
+                exception.message?.let {
+                    val snackbarResult = snackbarHostState.showSnackbar(
+                        message = it,
+                        actionLabel = context.getString(R.string.retry),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long
+                    )
+                    if (snackbarResult == SnackbarResult.ActionPerformed)
+                        viewModel.updateRefreshSearchedMovies(
+                            true
                         )
-                        if (snackbarResult == SnackbarResult.ActionPerformed)
-                            viewModel.getDiaryFoodsByQuery(searchBarState.query)
-                    }
                 }
             }
+        }
 
-        keywordSuggestionState is UiState.Error ->
-            (keywordSuggestionState as UiState.Error).error?.let { exception ->
-                LaunchedEffect(snackbarHostState) {
-                    exception.message?.let {
-                        val snackbarResult = snackbarHostState.showSnackbar(
-                            message = it,
-                            actionLabel = context.getString(R.string.retry),
-                            withDismissAction = true,
-                            duration = SnackbarDuration.Long
-                        )
-                        if (snackbarResult == SnackbarResult.ActionPerformed)
-                            viewModel.getKeywordSuggestions(searchBarState.query)
-                    }
+        keywordSuggestionState is UiState.Error -> (keywordSuggestionState as UiState.Error).error?.let { exception ->
+            LaunchedEffect(snackbarHostState) {
+                exception.message?.let {
+                    val snackbarResult = snackbarHostState.showSnackbar(
+                        message = it,
+                        actionLabel = context.getString(R.string.retry),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long
+                    )
+                    if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.updateRefreshSuggestionKeywords(
+                        true
+                    )
                 }
             }
+        }
     }
+    val onRefresh = when {
+        searchBarState.active -> viewModel::updateRefreshSuggestionKeywords
+        searchBarState.isSearch -> viewModel::updateRefreshSearchedMovies
+        else -> viewModel::updateRefreshDiaryFoods
+    }
+    val oneTimeRefresh by rememberUpdatedState(onRefresh)
 
+    LaunchedEffect(Unit) {
+        oneTimeRefresh(true)
+    }
 
     HomeContent(
         onSelectedDestination = navigateForBottomNav,
         body = {
             AnimatedVisibility(visible = !searchBarState.isSearch) {
                 HomeBody(
-                    diaryFoods = diaryFoods,
+                    foodDiaries = diaryFoods,
                     onCardTapped = {},
                     modifier = modifier.padding(it),
                     onDateRangeOpen = { openDatePickerDialog = true },
@@ -200,7 +218,7 @@ fun HomeScreen(
                     query = searchBarState.query,
                     onQueryChange = { newValue ->
                         searchBarState = searchBarState.copy(query = newValue)
-                        viewModel.getKeywordSuggestions(query = newValue)
+                        viewModel.updateQuery(newValue)
                     },
                     active = searchBarState.active,
                     onActiveChange = { newValue ->
@@ -215,29 +233,26 @@ fun HomeScreen(
                     tabState = tabState,
                     onTabChange = { index ->
                         tabState = index
-                        viewModel.updateFoodDiary(index)
+                        viewModel.updateFoodDiaryCategory(index)
                     },
                     onSearchChange = { query, isSearch ->
-                        if (query.isNotBlank()) {
-                            searchBarState = searchBarState.copy(
-                                query = query,
-                                isSearch = isSearch,
-                                active = !isSearch
-                            )
-                            viewModel.getDiaryFoodsByQuery(query)
-                        }
+                        searchBarState = searchBarState.copy(
+                            query = query, isSearch = isSearch, active = !isSearch
+                        )
+                        viewModel.updateRefreshSearchedMovies(true)
+                        viewModel.updateQuery(newQuery = query)
                     },
                     isDiaryLoading = diaryFoodState is UiState.Loading || diaryFoodState is UiState.Error
                 )
             }
             AnimatedVisibility(visible = searchBarState.isSearch) {
                 SearchBody(
-                    diaryFoods = searchedDiaryFoods,
+                    foodDiaries = searchedDiaryFoods,
                     onCardTapped = { /*TODO*/ },
                     query = searchBarState.query,
                     onQueryChange = { newValue ->
                         searchBarState = searchBarState.copy(query = newValue)
-                        viewModel.getKeywordSuggestions(query = newValue)
+                        viewModel.updateQuery(newValue)
                     },
                     active = searchBarState.active,
                     onActiveChange = { newValue ->
@@ -250,14 +265,11 @@ fun HomeScreen(
                     },
                     isSearch = searchBarState.isSearch,
                     onSearchChange = { query, isSearch ->
-                        if (query.isNotBlank()) {
-                            searchBarState = searchBarState.copy(
-                                query = query,
-                                isSearch = isSearch,
-                                active = !isSearch
-                            )
-                            viewModel.getDiaryFoodsByQuery(query)
-                        }
+                        searchBarState = searchBarState.copy(
+                            query = query, isSearch = isSearch, active = !isSearch
+                        )
+                        viewModel.updateRefreshSearchedMovies(true)
+                        viewModel.updateQuery(newQuery = query)
                     },
                     isSearchLoading = searchedDiaryFoodState is UiState.Loading || searchedDiaryFoodState is UiState.Error,
                     modifier = modifier.padding(it),
@@ -282,7 +294,9 @@ fun HomeScreen(
                         TextButton(
                             onClick = {
                                 openDatePickerDialog = false
-                                viewModel.updateSelectedDate(datePickerState.selectedDateMillis)
+                                viewModel.updateSelectedDate(
+                                    datePickerState.selectedDateMillis ?: System.currentTimeMillis()
+                                )
                             },
                             enabled = confirmEnabled
                         ) {
@@ -304,6 +318,7 @@ fun HomeScreen(
         },
         shouldBottomBarOpen = !searchBarState.active,
         snackbarHostState = snackbarHostState,
+        onRefresh = { onRefresh(true) },
         onFabFoodScanner = {
             when {
                 ContextCompat.checkSelfPermission(
@@ -334,8 +349,8 @@ private fun HomeContentPreview() {
     var searchBarState by rememberSearchBarState(
         initialQuery = "", initialActive = false, initialSearch = false
     )
-    val diaryFoods = List(10) {
-        DiaryFood(
+    val foodDiaries = List(10) {
+        FoodDiary(
             id = it.toString(),
             foodName = "Nasi Padang",
             date = 1706351552829.withDateFormat(),
@@ -352,8 +367,7 @@ private fun HomeContentPreview() {
     var tabState by rememberSaveable { mutableIntStateOf(0) }
 
     DietaryTheme {
-        HomeContent(
-            onSelectedDestination = { _, _ -> },
+        HomeContent(onSelectedDestination = { _, _ -> },
             body = {
                 HomeBody(
                     query = searchBarState.query,
@@ -370,57 +384,61 @@ private fun HomeContentPreview() {
                     onSearchChange = { _, _ -> },
                     modifier = Modifier.padding(it),
                     onCardTapped = {},
-                    diaryFoods = diaryFoods,
+                    foodDiaries = foodDiaries,
                     tabState = tabState,
                     onTabChange = { index -> tabState = index },
                     onDateRangeOpen = { openDatePickerDialog = true },
                     date = datePickerState.selectedDateMillis?.withDateFormat()
                         ?: System.currentTimeMillis().withDateFormat()
                 )
-                if (openDatePickerDialog)
-                    DatePickerDialog(
-                        onDismissRequest = {
+                if (openDatePickerDialog) DatePickerDialog(onDismissRequest = {
+                    openDatePickerDialog = false
+                }, confirmButton = {
+                    TextButton(
+                        onClick = {
                             openDatePickerDialog = false
-                        },
-                        confirmButton = {
-                            TextButton(
-                                onClick = {
-                                    openDatePickerDialog = false
-                                },
-                                enabled = confirmEnabled
-                            ) {
-                                Text(stringResource(R.string.ok))
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(
-                                onClick = {
-                                    openDatePickerDialog = false
-                                }
-                            ) {
-                                Text(stringResource(R.string.cancel))
-                            }
-                        }
+                        }, enabled = confirmEnabled
                     ) {
-                        DatePicker(state = datePickerState)
+                        Text(stringResource(R.string.ok))
                     }
+                }, dismissButton = {
+                    TextButton(onClick = {
+                        openDatePickerDialog = false
+                    }) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                }) {
+                    DatePicker(state = datePickerState)
+                }
             },
             shouldBottomBarOpen = true,
             snackbarHostState = SnackbarHostState(),
-            onFabFoodScanner = {}
+            onFabFoodScanner = {},
+            onRefresh = {}
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeContent(
     onSelectedDestination: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     body: @Composable (innerPadding: PaddingValues) -> Unit,
     snackbarHostState: SnackbarHostState,
     onFabFoodScanner: () -> Unit,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     shouldBottomBarOpen: Boolean = true
 ) {
+    val state = rememberPullToRefreshState()
+
+    if (state.isRefreshing)
+        LaunchedEffect(true) {
+            delay(300L)
+            onRefresh()
+            state.endRefresh()
+        }
+
     Scaffold(
         bottomBar = {
             AnimatedVisibility(visible = shouldBottomBarOpen) {
@@ -445,14 +463,21 @@ private fun HomeContent(
         },
         modifier = modifier
     ) { innerPadding ->
-        body(innerPadding)
+        Box(Modifier.nestedScroll(state.nestedScrollConnection)) {
+            body(innerPadding)
+            PullToRefreshContainer(
+                modifier = Modifier.align(Alignment.TopCenter),
+                state = state,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
+            )
+        }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HomeBody(
-    diaryFoods: List<DiaryFood>?,
+    foodDiaries: List<FoodDiary>?,
     onCardTapped: () -> Unit,
     query: String,
     onQueryChange: (query: String) -> Unit,
@@ -475,13 +500,9 @@ private fun HomeBody(
         "Dinner" to painterResource(id = R.drawable.ic_dinner_24dp),
     )
     val searchBarPadding by animateDpAsState(
-        if (!active) 75.dp else 0.dp,
-        label = "searchbar_padding"
+        if (!active) 75.dp else 0.dp, label = "searchbar_padding"
     )
-    val pagerState = rememberPagerState(
-        initialPage = 0,
-        pageCount = { tabDiaries.size }
-    )
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabDiaries.size })
 
     LaunchedEffect(pagerState.currentPage) {
         onTabChange(pagerState.currentPage)
@@ -491,8 +512,7 @@ private fun HomeBody(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
             modifier = modifier
@@ -501,7 +521,7 @@ private fun HomeBody(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "View Your Diary Foods:\nTrack Your Foods! \uD83E\uDD58\uD83C\uDF71",
+                text = "View Your Food Diary:\nTrack Your Foods! \uD83E\uDD58\uD83C\uDF71",
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.ExtraBold,
                 textAlign = TextAlign.Start,
@@ -509,50 +529,39 @@ private fun HomeBody(
                 modifier = Modifier.align(Alignment.Start)
             )
             Spacer(modifier = Modifier.height(76.dp))
-            AssistChip(
-                onClick = onDateRangeOpen,
-                label = {
-                    Text(
-                        date,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.DateRange, contentDescription = null)
-                },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = null
-                    )
-                },
-                modifier = Modifier.align(Alignment.Start)
+            AssistChip(onClick = onDateRangeOpen, label = {
+                Text(
+                    date,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }, leadingIcon = {
+                Icon(imageVector = Icons.Default.DateRange, contentDescription = null)
+            }, trailingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.ArrowDropDown, contentDescription = null
+                )
+            }, modifier = Modifier.align(Alignment.Start)
             )
             Spacer(modifier = Modifier.height(8.dp))
             TabRow(selectedTabIndex = tabState, modifier = Modifier.padding(end = 16.dp)) {
                 tabDiaries.forEachIndexed { index, _ ->
-                    Tab(
-                        icon = {
-                            Icon(
-                                painter = tabDiaries[index].second,
-                                contentDescription = tabDiaries[index].first,
-                                tint = if (tabState == index) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        },
-                        selected = tabState == index,
-                        onClick = { onTabChange(index) },
-                        text = {
-                            Text(
-                                text = tabDiaries[index].first,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
-                                color = if (tabState == index) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    )
+                    Tab(icon = {
+                        Icon(
+                            painter = tabDiaries[index].second,
+                            contentDescription = tabDiaries[index].first,
+                            tint = if (tabState == index) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }, selected = tabState == index, onClick = { onTabChange(index) }, text = {
+                        Text(
+                            text = tabDiaries[index].first,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            color = if (tabState == index) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    })
                 }
             }
             HorizontalPager(state = pagerState) {
@@ -570,9 +579,9 @@ private fun HomeBody(
                             }
                         }
                     }
-                    diaryFoods?.let {
+                    foodDiaries?.let {
                         item {
-                            AnimatedVisibility(visible = diaryFoods.isEmpty()) {
+                            AnimatedVisibility(visible = foodDiaries.isEmpty()) {
                                 EmptyContents(
                                     label = "No food added to your diary",
                                     painter = painterResource(id = R.drawable.empty_foods),
@@ -580,11 +589,7 @@ private fun HomeBody(
                                 )
                             }
                         }
-                        items(
-                            diaryFoods,
-                            key = { it.id },
-                            contentType = { it }
-                        ) { diaryFood ->
+                        items(foodDiaries, key = { it.id }, contentType = { it }) { diaryFood ->
                             DiaryCard(
                                 foodName = diaryFood.foodName,
                                 date = diaryFood.date,
@@ -678,8 +683,8 @@ private fun SearchBodyPreview() {
     var searchBarState by rememberSearchBarState(
         initialQuery = "", initialActive = false, initialSearch = false
     )
-    val diaryFoods = List(10) {
-        DiaryFood(
+    val foodDiaries = List(10) {
+        FoodDiary(
             id = it.toString(),
             foodName = "Nasi Padang",
             date = 1706351552829.withDateFormat(),
@@ -691,7 +696,7 @@ private fun SearchBodyPreview() {
 
     DietaryTheme {
         SearchBody(
-            diaryFoods = diaryFoods,
+            foodDiaries = foodDiaries,
             onCardTapped = { /*TODO*/ },
             query = searchBarState.query,
             onQueryChange = { newValue ->
@@ -711,7 +716,7 @@ private fun SearchBodyPreview() {
 
 @Composable
 private fun SearchBody(
-    diaryFoods: List<DiaryFood>?,
+    foodDiaries: List<FoodDiary>?,
     onCardTapped: () -> Unit,
     modifier: Modifier = Modifier,
     query: String,
@@ -725,8 +730,7 @@ private fun SearchBody(
     isSearchLoading: Boolean = false
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         LazyColumn(
             contentPadding = PaddingValues(bottom = 8.dp, start = 16.dp, end = 16.dp),
@@ -744,9 +748,9 @@ private fun SearchBody(
                     }
                 }
             }
-            diaryFoods?.let {
+            foodDiaries?.let {
                 item {
-                    AnimatedVisibility(visible = diaryFoods.isEmpty()) {
+                    AnimatedVisibility(visible = foodDiaries.isEmpty()) {
                         EmptyContents(
                             label = "The food that are you looking not found",
                             painter = painterResource(id = R.drawable.empty_foods),
@@ -754,11 +758,7 @@ private fun SearchBody(
                         )
                     }
                 }
-                items(
-                    diaryFoods,
-                    key = { it.id },
-                    contentType = { it }
-                ) { diaryFood ->
+                items(foodDiaries, key = { it.id }, contentType = { it }) { diaryFood ->
                     DiaryCard(
                         foodName = diaryFood.foodName,
                         date = diaryFood.date,
@@ -779,8 +779,7 @@ private fun SearchBody(
             navigateUp = navigateUp,
             isSearch = isSearch,
             onSearchChange = onSearchChange,
-            modifier = Modifier
-                .animateContentSize()
+            modifier = Modifier.animateContentSize()
         )
     }
 }

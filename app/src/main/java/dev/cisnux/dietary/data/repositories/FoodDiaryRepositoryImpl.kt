@@ -1,6 +1,6 @@
 package dev.cisnux.dietary.data.repositories
 
-import dev.cisnux.dietary.domain.models.DiaryFood
+import dev.cisnux.dietary.domain.models.FoodDiary
 import dev.cisnux.dietary.domain.repositories.FoodRepository
 import dev.cisnux.dietary.utils.withDateFormat
 import dev.cisnux.dietary.utils.withTimeFormat
@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import kotlinx.coroutines.delay
 
-class DiaryFoodRepositoryImpl @Inject constructor() : FoodRepository {
-    private val diaryFoodsBreakfast = List(10) {
-        DiaryFood(
+class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
+    private val foodsBreakfastDiary = List(10) {
+        FoodDiary(
             id = it.toString(),
             foodName = "Mie Ayam",
             date = 1706351552829.withDateFormat(),
@@ -26,8 +26,8 @@ class DiaryFoodRepositoryImpl @Inject constructor() : FoodRepository {
             calorie = 500f
         )
     }
-    private val diaryFoodsLunch = List(10) {
-        DiaryFood(
+    private val foodsLunchDiaries = List(10) {
+        FoodDiary(
             id = it.toString(),
             foodName = "Nasi Padang",
             date = 1706351552829.withDateFormat(),
@@ -36,8 +36,8 @@ class DiaryFoodRepositoryImpl @Inject constructor() : FoodRepository {
             calorie = 300f
         )
     }
-    private val diaryFoodsDinner = List(10) {
-        DiaryFood(
+    private val foodsDinnerDiary = List(10) {
+        FoodDiary(
             id = it.toString(),
             foodName = "Kwetiau",
             date = 1706351552829.withDateFormat(),
@@ -65,27 +65,27 @@ class DiaryFoodRepositoryImpl @Inject constructor() : FoodRepository {
     override fun getDiaryFoodsByDays(
         days: Long,
         category: DiaryFoodCategory
-    ): Flow<UiState<List<DiaryFood>>> = flow {
+    ): Flow<UiState<List<FoodDiary>>> = flow {
         emit(UiState.Loading)
         delay(1500L)
 //        emit(UiState.Error(Failure.BadRequestFailure("No Internet")))
         emit(
             UiState.Success(
                 when (category) {
-                    DiaryFoodCategory.BREAKFAST -> diaryFoodsBreakfast
-                    DiaryFoodCategory.LUNCH -> diaryFoodsLunch
-                    DiaryFoodCategory.DINNER -> diaryFoodsDinner
+                    DiaryFoodCategory.BREAKFAST -> foodsBreakfastDiary
+                    DiaryFoodCategory.LUNCH -> foodsLunchDiaries
+                    DiaryFoodCategory.DINNER -> foodsDinnerDiary
                 }
             )
         )
     }.distinctUntilChanged()
         .flowOn(Dispatchers.IO)
 
-    override fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<DiaryFood>>> = flow {
+    override fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>> = flow {
         emit(UiState.Loading)
         delay(1000L)
-//                emit(UiState.Error(Failure.BadRequestFailure("No Internet")))
-        emit(UiState.Success(listOf()))
+                emit(UiState.Error(Failure.BadRequestFailure("No Internet")))
+//        emit(UiState.Success(listOf()))
 //        emit(UiState.Success(diaryFoodsBreakfast))
     }
 

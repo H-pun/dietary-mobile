@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import dev.cisnux.dietary.presentation.adddiary.AddDiaryScreen
 import dev.cisnux.dietary.presentation.addmyprofile.AddMyProfileScreen
 import dev.cisnux.dietary.presentation.foodscanner.FoodScannerScreen
 import dev.cisnux.dietary.presentation.home.HomeScreen
@@ -318,7 +319,7 @@ fun DietaryNavGraph(
         ) {
             HomeScreen(
                 navigateForBottomNav = navComponentAction.bottomNavigation,
-                onFabFoodScanner = navComponentAction.navigateToFoodScanner
+                onFabFoodScanner = navComponentAction.navigateToAddDiary
             )
         }
         composable(
@@ -358,7 +359,51 @@ fun DietaryNavGraph(
             )
         }
         composable(
+            route = AppDestination.AddDiaryRoute.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            popExitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            }
+        ) {
+            AddDiaryScreen(
+                onNavigateUp = navComponentAction.navigateUp,
+                navigateToFoodScanner = navComponentAction.navigateToFoodScanner
+            )
+        }
+        composable(
             route = AppDestination.FoodScannerRoute.route,
+            arguments = listOf(
+                navArgument(name = "title") {
+                    nullable = false
+                    type = NavType.StringType
+                },
+                navArgument(name = "foodDiaryCategory") {
+                    nullable = false
+                    type = NavType.StringType
+                },
+            ),
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
@@ -399,6 +444,14 @@ fun DietaryNavGraph(
                     nullable = false
                     type = NavType.StringType
                 },
+                navArgument(name = "title") {
+                    nullable = false
+                    type = NavType.StringType
+                },
+                navArgument(name = "foodDiaryCategory") {
+                    nullable = false
+                    type = NavType.StringType
+                },
             ),
             enterTransition = {
                 slideIntoContainer(
@@ -427,7 +480,7 @@ fun DietaryNavGraph(
                 )
             }
         ) {
-            ScannerResultScreen(onNavigateUp = navComponentAction.navigateUp)
+            ScannerResultScreen(onNavigateUp = navComponentAction.navigateToHomeFromScannerResult)
         }
     }
 }

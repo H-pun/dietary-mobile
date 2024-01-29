@@ -110,7 +110,8 @@ fun UpdateHealthProfileDialog(
                         title = {
                             Text(
                                 text = stringResource(id = R.string.health_profile_dialog_title),
-                                style = MaterialTheme.typography.titleLarge
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontWeight = FontWeight.ExtraBold
                             )
                         },
                         actions = {
