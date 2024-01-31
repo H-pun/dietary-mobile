@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,40 +33,44 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.valentinilk.shimmer.shimmer
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.domain.models.Food
-import dev.cisnux.dietary.domain.models.FoodScannerReport
+import dev.cisnux.dietary.domain.models.FoodDiaryResult
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.onSurfaceDark
 import dev.cisnux.dietary.presentation.ui.theme.onSurfaceLight
+import dev.cisnux.dietary.presentation.ui.theme.placeholder
 import dev.cisnux.dietary.presentation.ui.theme.secondaryContainerDark
 import dev.cisnux.dietary.presentation.ui.theme.secondaryContainerLight
 import dev.cisnux.dietary.presentation.ui.theme.surfaceDark
 import dev.cisnux.dietary.presentation.ui.theme.surfaceLight
+import java.io.File
 
 @Composable
 fun ScannerResultScreen(
     onNavigateUp: () -> Unit,
+    foodPicture: File?,
     modifier: Modifier = Modifier,
     viewModel: ScannerResultViewModel = hiltViewModel(),
 ) {
-    val foodPicture = viewModel.foodPicture
-    val foodScannerReport = FoodScannerReport(
-        reportId = "1",
+    val foodDiaryResult = FoodDiaryResult(
+        foodDiaryId = "1",
         totalFoodCalories = 300.24f,
         userDailyBmiCalorie = 525.2f,
         foods = List(5) {
@@ -77,7 +82,8 @@ fun ScannerResultScreen(
                 carbohydrates = 20f,
                 protein = 9.8f,
             )
-        }
+        },
+        questions = listOf()
     )
 
     ScannerResultContent(
@@ -85,9 +91,9 @@ fun ScannerResultScreen(
         navigateUp = onNavigateUp,
         body = {
             ScannerResultBody(
-                totalFoodCalories = foodScannerReport.totalFoodCalories,
-                userDailyBmiCalorie = foodScannerReport.userDailyBmiCalorie,
-                foods = foodScannerReport.foods,
+                totalFoodCalories = foodDiaryResult.totalFoodCalories,
+                userDailyBmiCalorie = foodDiaryResult.userDailyBmiCalorie,
+                foods = foodDiaryResult.foods,
                 modifier = Modifier.padding(it)
             )
         },
@@ -101,8 +107,8 @@ fun ScannerResultScreen(
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
 )
 private fun ScannerResultContentPreview() {
-    val foodScannerReport = FoodScannerReport(
-        reportId = "1",
+    val foodDiaryResult = FoodDiaryResult(
+        foodDiaryId = "1",
         totalFoodCalories = 300.24f,
         userDailyBmiCalorie = 525.2f,
         foods = List(5) {
@@ -114,7 +120,8 @@ private fun ScannerResultContentPreview() {
                 carbohydrates = 20f,
                 protein = 9.8f,
             )
-        }
+        },
+        questions = listOf()
     )
 
     DietaryTheme {
@@ -123,9 +130,9 @@ private fun ScannerResultContentPreview() {
             navigateUp = {},
             body = {
                 ScannerResultBody(
-                    totalFoodCalories = foodScannerReport.totalFoodCalories,
-                    userDailyBmiCalorie = foodScannerReport.userDailyBmiCalorie,
-                    foods = foodScannerReport.foods,
+                    totalFoodCalories = foodDiaryResult.totalFoodCalories,
+                    userDailyBmiCalorie = foodDiaryResult.userDailyBmiCalorie,
+                    foods = foodDiaryResult.foods,
                     modifier = Modifier.padding(it)
                 )
             },
@@ -140,13 +147,14 @@ private fun ScannerResultContent(
     navigateUp: () -> Unit,
     body: @Composable (PaddingValues) -> Unit,
     modifier: Modifier = Modifier,
+    isLoading: Boolean = false
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Food & Side Dishes", color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(R.string.food), color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.ExtraBold
                     )
                 },
@@ -160,21 +168,23 @@ private fun ScannerResultContent(
                     }
                 },
                 actions = {
-                    TooltipBox(
-                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                        tooltip = {
-                            PlainTooltip {
-                                Text(text = "add additional information")
+                    AnimatedVisibility(visible = !isLoading) {
+                        TooltipBox(
+                            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                            tooltip = {
+                                PlainTooltip {
+                                    Text(text = "add additional information")
+                                }
+                            },
+                            state = rememberTooltipState()
+                        ) {
+                            IconButton(onClick = onAdditionalInformation) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_add_circle_outline_24dp),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurface
+                                )
                             }
-                        },
-                        state = rememberTooltipState()
-                    ) {
-                        IconButton(onClick = onAdditionalInformation) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_add_circle_outline_24dp),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
                         }
                     }
                 }
@@ -192,7 +202,6 @@ private fun ScannerResultBody(
     userDailyBmiCalorie: Float,
     foods: List<Food>,
     modifier: Modifier = Modifier,
-    isFoodsLoading: Boolean = false,
 ) {
     val context = LocalContext.current
     val percentage = totalFoodCalories / userDailyBmiCalorie
@@ -266,6 +275,54 @@ private fun ScannerResultBody(
                     carbohydrates = String.format("%.2f", it.carbohydrates),
                     protein = String.format("%.2f", it.protein),
                 )
+            }
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+)
+@Composable
+private fun ScannerResultShimmerPreview() {
+    DietaryTheme {
+        ScannerResultShimmer()
+    }
+}
+
+@Composable
+fun ScannerResultShimmer(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Surface(
+            color = placeholder,
+            modifier = Modifier
+                .size(120.dp)
+                .clip(CircleShape)
+                .shimmer()
+        ) {}
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.padding(start = 16.dp)
+        ) {
+            repeat(8) {
+                Surface(
+                    color = placeholder,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(25.dp)
+                        .shimmer()
+                ) {}
+                Spacer(modifier = Modifier.height(10.dp))
+                HorizontalDivider(thickness = 1.5.dp)
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }

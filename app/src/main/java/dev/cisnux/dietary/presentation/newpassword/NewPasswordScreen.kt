@@ -225,7 +225,7 @@ private fun NewPasswordBody(
             text = stringResource(R.string.new_password_message),
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(

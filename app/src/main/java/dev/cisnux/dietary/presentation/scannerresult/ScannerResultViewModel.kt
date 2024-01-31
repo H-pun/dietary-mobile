@@ -11,7 +11,6 @@ import javax.inject.Inject
 class ScannerResultViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    val foodPicture = checkNotNull(value = savedStateHandle["foodPicture"]) as String
     val title = checkNotNull(value = savedStateHandle["title"]) as String
     val foodDiaryCategory = checkNotNull(value = savedStateHandle["foodDiaryCategory"]) as String
 }

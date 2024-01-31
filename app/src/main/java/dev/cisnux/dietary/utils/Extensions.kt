@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import dev.cisnux.dietary.domain.models.UserProfile
 import dev.cisnux.dietary.domain.models.UserProfileDetail
 import dev.cisnux.dietary.presentation.addmyprofile.MyProfile
+import dev.cisnux.dietary.presentation.ui.components.HealthProfile
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -33,18 +34,6 @@ val MyProfile.asUserProfile: UserProfile
         gender = gender,
         goal = goal,
         weightTarget = weightTarget.toFloat(),
-        activityLevel = activityLevel
-    )
-
-val UserProfileDetail.asMyProfile: MyProfile
-    get() = MyProfile(
-        username = username,
-        age = age.toString(),
-        weight = weight.toString(),
-        height = height.toString(),
-        gender = gender,
-        goal = goal,
-        weightTarget = weightTarget.toString(),
         activityLevel = activityLevel
     )
 
@@ -83,12 +72,14 @@ fun String.isTargetWeightValid(): Boolean = try {
 
 fun Long.withDateFormat(): String {
     val date = Date(this)
-    return DateFormat.getDateInstance(DateFormat.FULL).format(date)
+    val locale = Locale("id", "ID")
+    return DateFormat.getDateInstance(DateFormat.FULL, locale).format(date)
 }
 
 fun Long.withTimeFormat(): String {
     val date = Date(this)
-    return SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT, Locale.getDefault())
+    val locale = Locale("id", "ID")
+    return SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT, locale)
         .format(date)
 }
 

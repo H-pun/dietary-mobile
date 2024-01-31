@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -19,24 +20,33 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -46,6 +56,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.valentinilk.shimmer.shimmer
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.domain.models.UserProfileDetail
 import dev.cisnux.dietary.presentation.addmyprofile.MyProfile
@@ -53,36 +65,64 @@ import dev.cisnux.dietary.presentation.ui.components.BottomBar
 import dev.cisnux.dietary.presentation.ui.components.ListTileProfile
 import dev.cisnux.dietary.presentation.ui.components.MyProfileForm
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.presentation.ui.theme.placeholder
 import dev.cisnux.dietary.utils.AppDestination
-import dev.cisnux.dietary.utils.asMyProfile
+import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.isAgeValid
 import dev.cisnux.dietary.utils.isHeightOrWeightValid
 import dev.cisnux.dietary.utils.isTargetWeightValid
 import dev.cisnux.dietary.utils.isUsernameValid
+import dev.cisnux.dietary.utils.Failure
 
 @Composable
 fun MyProfileScreen(
     navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     navigateToSignIn: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: MyProfileViewModel = hiltViewModel()
 ) {
-    val userProfileDetail = UserProfileDetail(
-        username = "yagamijaeger",
-        emailAddress = "yagami12@gmail.com",
-        age = 40,
-        weight = 50f,
-        height = 170f,
-        gender = "Man",
-        goal = "Weight Loss",
-        weightTarget = 10f,
-        activityLevel = "Very Active",
-        totalCaloriesToday = 200.4772f,
-        bmiDailyCalorie = 400.7291f,
+    val onRefresh by rememberUpdatedState(viewModel::updateRefreshUserProfile)
+
+    LaunchedEffect(Unit) {
+        onRefresh(true)
+    }
+
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
+    val userProfileDetail by viewModel.userProfileDetail.collectAsState(
+        initial = UserProfileDetail(
+            username = "",
+            emailAddress = "",
+            age = 0,
+            weight = 0f,
+            height = 0f,
+            gender = "",
+            goal = "",
+            weightTarget = 0f,
+            activityLevel = "",
+            totalCaloriesToday = 0f,
+            bmiDailyCalorie = 0f,
+        )
     )
+    val userProfileState by viewModel.userProfileState.collectAsState(initial = UiState.Initialize)
+    val updateUserProfileState by viewModel.updateMyProfileState.collectAsState()
     var isUpdateMyProfileDialogOpen by rememberSaveable {
         mutableStateOf(false)
     }
-    var myProfile by rememberSaveable {
+    var myProfile by rememberSaveable(
+        userProfileDetail.username,
+        userProfileDetail.emailAddress,
+        userProfileDetail.age,
+        userProfileDetail.weight,
+        userProfileDetail.height,
+        userProfileDetail.gender,
+        userProfileDetail.goal,
+        userProfileDetail.weightTarget,
+        userProfileDetail.activityLevel,
+        userProfileDetail.totalCaloriesToday,
+        userProfileDetail.bmiDailyCalorie
+    ) {
         mutableStateOf(
             MyProfile(
                 username = userProfileDetail.username,
@@ -100,84 +140,154 @@ fun MyProfileScreen(
     val goals = stringArrayResource(id = R.array.goal)
     val activityLevels = stringArrayResource(id = R.array.activity_level)
     val activityDescriptions = stringArrayResource(id = R.array.activity_description)
+    val context = LocalContext.current
+
+    when {
+        userProfileState is UiState.Error -> {
+            (userProfileState as UiState.Error).error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = context.getString(R.string.retry),
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                        if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.updateRefreshUserProfile(
+                            true
+                        )
+                    }
+                }
+            }
+        }
+
+        updateUserProfileState is UiState.Error -> {
+            (updateUserProfileState as UiState.Error).error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = context.getString(R.string.retry),
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                        if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.updateMyProfile(
+                            myProfile = myProfile
+                        )
+                    }
+                }
+            }
+        }
+    }
+
 
     MyProfileContent(
         onSelectedDestination = navigateForBottomNav,
         body = {
-            MyProfileBody(
-                username = userProfileDetail.username,
-                emailAddress = userProfileDetail.emailAddress,
-                age = userProfileDetail.age,
-                weight = String.format("%.2f", userProfileDetail.weight),
-                height = String.format("%.2f", userProfileDetail.height),
-                weightTarget = String.format("%.2f", userProfileDetail.weightTarget),
-                gender = userProfileDetail.gender,
-                goal = userProfileDetail.goal,
-                activityLevel = userProfileDetail.activityLevel,
-                onEdit = {
-                    isUpdateMyProfileDialogOpen = true
-                },
-                dailyCalorieProgress = userProfileDetail.totalCaloriesToday / userProfileDetail.bmiDailyCalorie,
-                totalCaloriesToday = String.format(
-                    "%.2f",
-                    userProfileDetail.totalCaloriesToday
-                ),
-                bmiDailyCalorie = String.format(
-                    "%.2f",
-                    userProfileDetail.bmiDailyCalorie
-                ),
-                isWeightTargetVisible = userProfileDetail.weightTarget != 0f,
-                modifier = modifier.padding(it)
-            )
-            UpdateMyProfileDialog(
-                onSave = { isUpdateMyProfileDialogOpen = false },
-                onCancel = { isUpdateMyProfileDialogOpen = false },
-                onDismissRequest = { isUpdateMyProfileDialogOpen = false },
-                isDialogOpen = isUpdateMyProfileDialogOpen,
-                username = myProfile.username,
-                age = myProfile.age,
-                weight = myProfile.weight,
-                height = myProfile.height,
-                selectedGender = myProfile.gender,
-                selectedGoal = myProfile.goal,
-                weightTarget = myProfile.weightTarget,
-                selectedActivityLevel = myProfile.activityLevel,
-                genders = genders,
-                activityLevels = activityLevels,
-                goals = goals,
-                activityDescriptions = activityDescriptions,
-                onUsernameChange = { newValue ->
-                    myProfile = myProfile.copy(username = newValue)
-                },
-                onAgeChange = { newValue -> myProfile = myProfile.copy(age = newValue) },
-                onHeightChange = { newValue -> myProfile = myProfile.copy(height = newValue) },
-                onWeightChange = { newValue -> myProfile = myProfile.copy(weight = newValue) },
-                onGenderChange = { newValue -> myProfile = myProfile.copy(gender = newValue) },
-                onGoalChange = { newValue -> myProfile = myProfile.copy(goal = newValue) },
-                onTargetWeightChange = { newValue ->
-                    myProfile = myProfile.copy(weightTarget = newValue)
-                },
-                onActivityLevelChange = { newValue ->
-                    myProfile = myProfile.copy(activityLevel = newValue)
-                },
-            )
+            AnimatedVisibility(
+                visible = userProfileState is UiState.Success ||
+                        (userProfileState is UiState.Error && (userProfileState as UiState.Error).error is Failure.ConnectionFailure
+                                && userProfileDetail.username.isNotBlank())
+            ) {
+                MyProfileBody(
+                    username = userProfileDetail.username,
+                    emailAddress = userProfileDetail.emailAddress,
+                    age = userProfileDetail.age,
+                    weight = String.format("%.2f", userProfileDetail.weight),
+                    height = String.format("%.2f", userProfileDetail.height),
+                    weightTarget = String.format("%.2f", userProfileDetail.weightTarget),
+                    gender = userProfileDetail.gender,
+                    goal = userProfileDetail.goal,
+                    activityLevel = userProfileDetail.activityLevel,
+                    onEdit = {
+                        isUpdateMyProfileDialogOpen = true
+                    },
+                    dailyCalorieProgress = userProfileDetail.totalCaloriesToday / userProfileDetail.bmiDailyCalorie,
+                    totalCaloriesToday = String.format(
+                        "%.2f",
+                        userProfileDetail.totalCaloriesToday
+                    ),
+                    bmiDailyCalorie = String.format(
+                        "%.2f",
+                        userProfileDetail.bmiDailyCalorie
+                    ),
+                    isWeightTargetVisible = userProfileDetail.weightTarget != 0f,
+                    modifier = modifier.padding(it)
+                )
+                UpdateMyProfileDialog(
+                    onSave = {
+                        isUpdateMyProfileDialogOpen = false
+                        viewModel.updateMyProfile(myProfile = myProfile)
+                    },
+                    onCancel = { isUpdateMyProfileDialogOpen = false },
+                    onDismissRequest = { isUpdateMyProfileDialogOpen = false },
+                    isDialogOpen = isUpdateMyProfileDialogOpen,
+                    username = myProfile.username,
+                    age = myProfile.age,
+                    weight = myProfile.weight,
+                    height = myProfile.height,
+                    selectedGender = myProfile.gender,
+                    selectedGoal = myProfile.goal,
+                    weightTarget = myProfile.weightTarget,
+                    selectedActivityLevel = myProfile.activityLevel,
+                    genders = genders,
+                    activityLevels = activityLevels,
+                    goals = goals,
+                    activityDescriptions = activityDescriptions,
+                    onUsernameChange = { newValue ->
+                        myProfile = myProfile.copy(username = newValue)
+                    },
+                    onAgeChange = { newValue -> myProfile = myProfile.copy(age = newValue) },
+                    onHeightChange = { newValue ->
+                        myProfile = myProfile.copy(height = newValue)
+                    },
+                    onWeightChange = { newValue ->
+                        myProfile = myProfile.copy(weight = newValue)
+                    },
+                    onGenderChange = { newValue ->
+                        myProfile = myProfile.copy(gender = newValue)
+                    },
+                    onGoalChange = { newValue ->
+                        myProfile = myProfile.copy(goal = newValue)
+                        if (myProfile.goal == goals[1])
+                            myProfile = myProfile.copy(weightTarget = "0")
+                    },
+                    onTargetWeightChange = { newValue ->
+                        myProfile = myProfile.copy(weightTarget = newValue)
+                    },
+                    onActivityLevelChange = { newValue ->
+                        myProfile = myProfile.copy(activityLevel = newValue)
+                    },
+                )
+            }
+            AnimatedVisibility(
+                visible = userProfileState is UiState.Loading ||
+                        userProfileState is UiState.Error && (userProfileState as UiState.Error).error !is Failure.ConnectionFailure
+                        || userProfileDetail.username.isBlank()
+            ) {
+                MyProfileShimmer(modifier = modifier.padding(it))
+            }
         },
         shouldBottomBarOpen = true,
         onSignOut = navigateToSignIn,
+        snackbarHostState = snackbarHostState
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun MyProfileContentPreview() {
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
     val userProfileDetail = UserProfileDetail(
         username = "yagamijaeger",
         emailAddress = "yagami12@gmail.com",
         age = 40,
         weight = 50f,
         height = 170f,
-        gender = "Man",
-        goal = "Weight Loss",
+        gender = "Pria",
+        goal = "Menurunkan berat badan",
         weightTarget = 10f,
         activityLevel = "Very Active",
         totalCaloriesToday = 200.4772f,
@@ -188,7 +298,16 @@ private fun MyProfileContentPreview() {
     }
     var myProfile by rememberSaveable {
         mutableStateOf(
-            userProfileDetail.asMyProfile
+            MyProfile(
+                username = userProfileDetail.username,
+                age = userProfileDetail.age.toString(),
+                weight = userProfileDetail.weight.toString(),
+                height = userProfileDetail.height.toString(),
+                gender = userProfileDetail.gender,
+                goal = userProfileDetail.goal,
+                weightTarget = userProfileDetail.weightTarget.toString(),
+                activityLevel = userProfileDetail.activityLevel
+            )
         )
     }
     val genders = stringArrayResource(id = R.array.gender)
@@ -264,6 +383,7 @@ private fun MyProfileContentPreview() {
             },
             shouldBottomBarOpen = true,
             onSignOut = {},
+            snackbarHostState = snackbarHostState
         )
     }
 }
@@ -275,6 +395,7 @@ private fun MyProfileContent(
     body: @Composable (innerPadding: PaddingValues) -> Unit,
     shouldBottomBarOpen: Boolean,
     onSignOut: () -> Unit,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -297,6 +418,9 @@ private fun MyProfileContent(
                     }
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         },
         bottomBar = {
             AnimatedVisibility(visible = shouldBottomBarOpen) {
@@ -388,7 +512,9 @@ private fun MyProfileBody(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth().padding(end = 9.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 9.dp),
         ) {
             Text(
                 text = "$totalCaloriesToday kcal",
@@ -404,21 +530,23 @@ private fun MyProfileBody(
         Spacer(modifier = Modifier.height(4.dp))
         LinearProgressIndicator(
             progress = { dailyCalorieProgress },
-            modifier = Modifier.fillMaxWidth().padding(end = 9.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 9.dp),
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = when {
-                dailyCalorieProgress < 1f -> "Keep Going 🔥"
-                dailyCalorieProgress == 1f -> "Congratulation 👏"
-                else -> "You should reduce your calorie intake"
+                dailyCalorieProgress < 1f -> "Teruskan 🔥"
+                dailyCalorieProgress == 1f -> "Selamat 👏"
+                else -> "Kamu harus mengurangi asupan harian mu"
             },
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.W600,
             modifier = Modifier.align(Alignment.Start)
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Column(modifier = Modifier.padding(start = 6.dp, end = 9.dp)) {
+        Column(modifier = Modifier.padding(end = 9.dp)) {
             ListTileProfile(
                 icon = {
                     Icon(
@@ -437,7 +565,7 @@ private fun MyProfileBody(
                 },
                 bodyLabel = {
                     Text(
-                        text = "$age years old",
+                        text = stringResource(R.string.tahun, age),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -462,7 +590,7 @@ private fun MyProfileBody(
                 },
                 bodyLabel = {
                     Text(
-                        text = "$height cm",
+                        text = stringResource(R.string.cm, height),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -487,7 +615,7 @@ private fun MyProfileBody(
                 },
                 bodyLabel = {
                     Text(
-                        text = "$weight kg",
+                        text = stringResource(R.string.kg, weight),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -563,7 +691,7 @@ private fun MyProfileBody(
                     },
                     bodyLabel = {
                         Text(
-                            text = "$weightTarget kg",
+                            text = stringResource(id = R.string.kg, weightTarget),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -596,6 +724,120 @@ private fun MyProfileBody(
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Preview(showBackground = true, device = "spec:parent=pixel_5")
+@Composable
+private fun MyProfileShimmer(
+    modifier: Modifier = Modifier
+) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 7.dp)
+            .verticalScroll(state = scrollState),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row {
+                Surface(
+                    color = placeholder,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(CircleShape)
+                        .shimmer()
+                ) {}
+                Spacer(modifier = Modifier.padding(start = 16.dp))
+                Column(modifier = Modifier.padding(top = 8.dp)) {
+                    Surface(
+                        color = placeholder,
+                        modifier = Modifier
+                            .height(25.dp)
+                            .width(150.dp)
+                            .shimmer()
+                    ) {}
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Surface(
+                        color = placeholder,
+                        modifier = Modifier
+                            .height(25.dp)
+                            .width(100.dp)
+                            .shimmer()
+                    ) {}
+                }
+            }
+            Surface(
+                color = placeholder,
+                modifier = Modifier
+                    .padding(top = 8.dp, end = 9.dp)
+                    .size(24.dp)
+                    .shimmer()
+            ) {}
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 9.dp),
+        ) {
+            Surface(
+                color = placeholder,
+                modifier = Modifier
+                    .height(20.dp)
+                    .width(100.dp)
+                    .shimmer()
+            ) {}
+            Surface(
+                color = placeholder,
+                modifier = Modifier
+                    .height(20.dp)
+                    .width(100.dp)
+                    .shimmer()
+            ) {}
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Surface(
+            color = placeholder,
+            modifier = Modifier
+                .height(4.dp)
+                .fillMaxWidth()
+                .padding(end = 9.dp)
+                .shimmer()
+        ) {}
+        Spacer(modifier = Modifier.height(4.dp))
+        Surface(
+            color = placeholder,
+            modifier = Modifier
+                .height(20.dp)
+                .width(150.dp)
+                .align(Alignment.Start)
+                .shimmer()
+        ) {}
+        Spacer(modifier = Modifier.height(16.dp))
+        Column(modifier = Modifier.padding(end = 9.dp)) {
+            repeat(7) {
+                Surface(
+                    color = placeholder,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(25.dp)
+                        .shimmer()
+                ) {}
+                Spacer(modifier = Modifier.height(8.dp))
+                HorizontalDivider(thickness = 1.5.dp)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
 }

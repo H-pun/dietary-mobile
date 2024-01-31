@@ -13,9 +13,9 @@ sealed class AppDestination(val route: String) {
     }
 
     data object ScannerResultRoute :
-        AppDestination(route = "scanner_result?foodPicture={foodPicture}&title={title}&foodDiaryCategory={foodDiaryCategory}") {
-        fun createRouteUrl(foodPicture: String, title: String, foodDiaryCategory: String): String =
-            "scanner_result?foodPicture=$foodPicture&title=$title&foodDiaryCategory=$foodDiaryCategory"
+        AppDestination(route = "scanner_result?title={title}&foodDiaryCategory={foodDiaryCategory}") {
+        fun createRouteUrl(title: String, foodDiaryCategory: String): String =
+            "scanner_result?&title=$title&foodDiaryCategory=$foodDiaryCategory"
     }
 
     data object AddDiaryRoute : AppDestination(route = "add_diary")

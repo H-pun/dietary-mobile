@@ -23,7 +23,7 @@ import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -519,7 +519,7 @@ private fun SignUpBody(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Divider(thickness = 2.dp)
+            HorizontalDivider(thickness = 2.dp)
             Surface(color = MaterialTheme.colorScheme.surface) {
                 Text(
                     text = stringResource(R.string.or),

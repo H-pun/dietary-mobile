@@ -13,7 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -187,7 +187,8 @@ private fun ResetPasswordLoadingDarkPreview() {
                     modifier = Modifier.padding(it),
                     isVerifyEmailAddressLoading = true
                 )
-            }, snackbarHostState = SnackbarHostState()
+            },
+            snackbarHostState = SnackbarHostState()
         )
     }
 }
@@ -217,7 +218,7 @@ private fun ResetPasswordBody(
             modifier = Modifier.align(Alignment.Start),
         ) {
             Icon(
-                imageVector = Icons.Rounded.ArrowBack,
+                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimary
             )
@@ -239,7 +240,7 @@ private fun ResetPasswordBody(
             text = stringResource(R.string.reset_password_message),
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(

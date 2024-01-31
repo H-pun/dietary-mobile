@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -73,5 +74,5 @@ fun ListTileProfile(
         bodyLabel()
     }
     Spacer(modifier = Modifier.height(8.dp))
-    Divider(color = MaterialTheme.colorScheme.onSurface)
+    HorizontalDivider(thickness = 1.5.dp)
 }

@@ -2,7 +2,6 @@ package dev.cisnux.dietary.presentation.home
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -66,6 +65,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -140,8 +140,6 @@ fun HomeScreen(
     val diaryFoods by viewModel.foodDiaries.collectAsState(initial = null)
     val searchedDiaryFoodState by viewModel.searchedFoodDiaryState.collectAsState(initial = UiState.Initialize)
     val searchedDiaryFoods by viewModel.searchedFoodDiaries.collectAsState(initial = null)
-
-    Log.d("HomeScreen", searchedDiaryFoodState.toString())
 
     when {
         diaryFoodState is UiState.Error -> (diaryFoodState as UiState.Error).error?.let { exception ->
@@ -494,13 +492,14 @@ private fun HomeBody(
     modifier: Modifier = Modifier,
     isDiaryLoading: Boolean = false
 ) {
+    val foodCategories = stringArrayResource(id = R.array.food_diary_category)
     val tabDiaries = listOf(
-        "Breakfast" to painterResource(id = R.drawable.ic_breakfast_24dp),
-        "Lunch" to painterResource(id = R.drawable.ic_lunch_24dp),
-        "Dinner" to painterResource(id = R.drawable.ic_dinner_24dp),
+        foodCategories[0] to painterResource(id = R.drawable.ic_breakfast_24dp),
+        foodCategories[1] to painterResource(id = R.drawable.ic_lunch_24dp),
+        foodCategories[2] to painterResource(id = R.drawable.ic_dinner_24dp),
     )
     val searchBarPadding by animateDpAsState(
-        if (!active) 75.dp else 0.dp, label = "searchbar_padding"
+        if (!active) 72.dp else 0.dp, label = "searchbar_padding"
     )
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabDiaries.size })
 
@@ -521,7 +520,7 @@ private fun HomeBody(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "View Your Food Diary:\nTrack Your Foods! \uD83E\uDD58\uD83C\uDF71",
+                text = stringResource(R.string.diary_display),
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.ExtraBold,
                 textAlign = TextAlign.Start,
@@ -583,7 +582,7 @@ private fun HomeBody(
                         item {
                             AnimatedVisibility(visible = foodDiaries.isEmpty()) {
                                 EmptyContents(
-                                    label = "No food added to your diary",
+                                    label = stringResource(R.string.empty_content_label),
                                     painter = painterResource(id = R.drawable.empty_foods),
                                     contentDescription = "No food added to your diary"
                                 )
@@ -718,7 +717,6 @@ private fun SearchBodyPreview() {
 private fun SearchBody(
     foodDiaries: List<FoodDiary>?,
     onCardTapped: () -> Unit,
-    modifier: Modifier = Modifier,
     query: String,
     onQueryChange: (query: String) -> Unit,
     active: Boolean,
@@ -727,6 +725,7 @@ private fun SearchBody(
     keywordSuggestions: List<String>,
     isSearch: Boolean,
     navigateUp: () -> Unit,
+    modifier: Modifier = Modifier,
     isSearchLoading: Boolean = false
 ) {
     Box(
@@ -752,9 +751,9 @@ private fun SearchBody(
                 item {
                     AnimatedVisibility(visible = foodDiaries.isEmpty()) {
                         EmptyContents(
-                            label = "The food that are you looking not found",
+                            label = stringResource(R.string.empty_content_search),
                             painter = painterResource(id = R.drawable.empty_foods),
-                            contentDescription = "The food that are you looking not found"
+                            contentDescription = stringResource(R.string.empty_content_search)
                         )
                     }
                 }

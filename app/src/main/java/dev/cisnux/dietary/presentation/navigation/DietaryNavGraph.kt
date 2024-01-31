@@ -6,6 +6,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -13,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import dev.cisnux.dietary.presentation.MainViewModel
 import dev.cisnux.dietary.presentation.adddiary.AddDiaryScreen
 import dev.cisnux.dietary.presentation.addmyprofile.AddMyProfileScreen
 import dev.cisnux.dietary.presentation.foodscanner.FoodScannerScreen
@@ -33,7 +37,10 @@ fun DietaryNavGraph(
     navComponentAction: NavComponentAction = rememberNavComponentAction(
         navController = navController,
     ),
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
+    val foodPicture by mainViewModel.foodPicture.collectAsState(initial = null)
+
     NavHost(
         navController = navController,
         startDestination = AppDestination.SplashRoute.route
@@ -433,8 +440,12 @@ fun DietaryNavGraph(
         ) {
             FoodScannerScreen(
                 onNavigateUp = navComponentAction.navigateUp,
-                onScannerResult = navComponentAction.navigateToScannerResult,
-                onGalleryButton = navComponentAction.takePictureFromGallery
+                onScannerResult = { foodPicture, title, foodDiaryCategory ->
+                    mainViewModel.updateFoodPicture(foodPicture)
+                    navComponentAction.navigateToScannerResult(title, foodDiaryCategory)
+                },
+                onGalleryButton = navComponentAction.takePictureFromGallery,
+                navigateToMyProfile = navComponentAction.navigateToMyProfile
             )
         }
         composable(
@@ -480,7 +491,10 @@ fun DietaryNavGraph(
                 )
             }
         ) {
-            ScannerResultScreen(onNavigateUp = navComponentAction.navigateToHomeFromScannerResult)
+            ScannerResultScreen(
+                foodPicture = foodPicture,
+                onNavigateUp = navComponentAction.navigateToHomeFromScannerResult,
+            )
         }
     }
 }

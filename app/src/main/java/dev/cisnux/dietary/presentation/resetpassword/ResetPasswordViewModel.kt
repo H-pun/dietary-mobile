@@ -3,7 +3,6 @@ package dev.cisnux.dietary.presentation.resetpassword
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.cisnux.dietary.domain.models.UserAccount
 import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow

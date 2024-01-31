@@ -142,10 +142,4 @@ class HomeViewModel @Inject constructor(
         query.value = newQuery
         refreshSuggestionKeywords.value = true
     }
-
-//    fun getDiaryFoodsByQuery(query: String) = viewModelScope.launch {
-//        diaryFoodUseCase.getDiaryFoodsByQuery(query).collectLatest {
-//            _searchedDiaryFoodState.value = it
-//        }
-//    }
 }

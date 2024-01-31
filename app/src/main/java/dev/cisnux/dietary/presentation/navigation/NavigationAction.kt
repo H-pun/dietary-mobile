@@ -31,11 +31,10 @@ class NavComponentAction(
         }
     }
     val navigateToScannerResult: (
-        foodPicture: String, title: String, foodDiaryCategory: String
-    ) -> Unit = { foodPicture, title, foodDiaryCategory ->
+        title: String, foodDiaryCategory: String
+    ) -> Unit = { title, foodDiaryCategory ->
         navController.navigate(
             route = AppDestination.ScannerResultRoute.createRouteUrl(
-                foodPicture = foodPicture,
                 title = title,
                 foodDiaryCategory = foodDiaryCategory
             )
@@ -57,6 +56,15 @@ class NavComponentAction(
     val navigateToHomeFromScannerResult: () -> Unit = {
         navController.navigate(route = AppDestination.HomeRoute.route){
             popUpTo(AppDestination.AddDiaryRoute.route) {
+                inclusive = true
+            }
+            restoreState = true
+            launchSingleTop = true
+        }
+    }
+    val navigateToMyProfile: ()->Unit = {
+        navController.navigate(route = AppDestination.MyProfileRoute.route){
+            popUpTo(AppDestination.HomeRoute.route) {
                 inclusive = true
             }
             restoreState = true

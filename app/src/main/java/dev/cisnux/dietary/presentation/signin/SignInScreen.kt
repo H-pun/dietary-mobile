@@ -335,7 +335,7 @@ private fun SignInBody(
         Text(
             text = stringResource(R.string.you_ve_been_missed),
             color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedButton(

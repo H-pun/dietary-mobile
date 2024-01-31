@@ -142,20 +142,20 @@ private fun AddDiaryBody(
             onValueChange = onTitleChange,
             placeholder = {
                 Text(
-                    text = "Enter your food diary's title",
+                    text = stringResource(R.string.title_placeholder),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             label = {
                 Text(
-                    text = "Title",
+                    text = stringResource(R.string.title),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             supportingText = {
                 if (title.isNotEmpty() and title.isBlank())
                     Text(
-                        text = "The title must be not blank",
+                        text = stringResource(R.string.title_error_text),
                         style = MaterialTheme.typography.bodySmall,
                     )
                 else if (isTitleFocused)

@@ -114,6 +114,7 @@ private fun LandingContent(
                     ) {
                         append(stringResource(R.string.dietary))
                     }
+                    append('\n')
                     append(stringResource(R.string.your_diet_s_best_ally))
                 },
                 color = MaterialTheme.colorScheme.onSurface,
@@ -124,7 +125,7 @@ private fun LandingContent(
             Text(
                 text = stringResource(R.string.landing_message),
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -153,7 +154,7 @@ private fun LandingContent(
                     ) {
                         append(stringResource(R.string.terms_of_use_label_button))
                     }
-                    append(' ')
+                    append('\n')
                     append(stringResource(R.string.terms_of_use))
                 },
                 style = MaterialTheme.typography.labelLarge,
