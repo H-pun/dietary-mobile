@@ -75,7 +75,7 @@ class UserProfileRepositoryImpl @Inject constructor() : UserProfileRepository {
 
     override val isUserProfileExist: Flow<Boolean>
         get() = flow {
-            emit(true)
+            emit(false)
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
 }
