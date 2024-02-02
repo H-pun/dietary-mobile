@@ -19,6 +19,7 @@ import androidx.navigation.navDeepLink
 import dev.cisnux.dietary.presentation.MainViewModel
 import dev.cisnux.dietary.presentation.adddiary.AddDiaryScreen
 import dev.cisnux.dietary.presentation.addmyprofile.AddMyProfileScreen
+import dev.cisnux.dietary.presentation.diarydetail.DiaryDetailScreen
 import dev.cisnux.dietary.presentation.foodscanner.FoodScannerScreen
 import dev.cisnux.dietary.presentation.home.HomeScreen
 import dev.cisnux.dietary.presentation.landing.LandingScreen
@@ -326,7 +327,8 @@ fun DietaryNavGraph(
         ) {
             HomeScreen(
                 navigateForBottomNav = navComponentAction.bottomNavigation,
-                onFabFoodScanner = navComponentAction.navigateToAddDiary
+                onFabFoodScanner = navComponentAction.navigateToAddDiary,
+                navigateToDiaryDetail = navComponentAction.navigateToFoodDiaryDetail
             )
         }
         composable(
@@ -400,6 +402,43 @@ fun DietaryNavGraph(
             )
         }
         composable(
+            route = AppDestination.DiaryDetailRoute.route,
+            arguments = listOf(
+                navArgument(name = "foodDiaryId") {
+                    nullable = false
+                    type = NavType.StringType
+                },
+            ),
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            popExitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            }
+        ) {
+            DiaryDetailScreen(navigateUp = navComponentAction.navigateUp)
+        }
+        composable(
             route = AppDestination.FoodScannerRoute.route,
             arguments = listOf(
                 navArgument(name = "title") {
@@ -451,10 +490,6 @@ fun DietaryNavGraph(
         composable(
             route = AppDestination.ScannerResultRoute.route,
             arguments = listOf(
-                navArgument(name = "foodPicture") {
-                    nullable = false
-                    type = NavType.StringType
-                },
                 navArgument(name = "title") {
                     nullable = false
                     type = NavType.StringType

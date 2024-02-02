@@ -14,12 +14,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -98,6 +101,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
+    navigateToDiaryDetail: (foodDiaryId: String) -> Unit,
     onFabFoodScanner: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
@@ -208,7 +212,7 @@ fun HomeScreen(
             AnimatedVisibility(visible = !searchBarState.isSearch) {
                 HomeBody(
                     foodDiaries = diaryFoods,
-                    onCardTapped = {},
+                    onCardTapped = navigateToDiaryDetail,
                     modifier = modifier.padding(it),
                     onDateRangeOpen = { openDatePickerDialog = true },
                     date = datePickerState.selectedDateMillis?.withDateFormat()
@@ -246,7 +250,7 @@ fun HomeScreen(
             AnimatedVisibility(visible = searchBarState.isSearch) {
                 SearchBody(
                     foodDiaries = searchedDiaryFoods,
-                    onCardTapped = { /*TODO*/ },
+                    onCardTapped = navigateToDiaryDetail,
                     query = searchBarState.query,
                     onQueryChange = { newValue ->
                         searchBarState = searchBarState.copy(query = newValue)
@@ -337,7 +341,8 @@ fun HomeScreen(
                     cameraLauncher.launch(Manifest.permission.CAMERA)
                 }
             }
-        })
+        },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -476,7 +481,7 @@ private fun HomeContent(
 @Composable
 private fun HomeBody(
     foodDiaries: List<FoodDiary>?,
-    onCardTapped: () -> Unit,
+    onCardTapped: (foodDiaryId: String) -> Unit,
     query: String,
     onQueryChange: (query: String) -> Unit,
     active: Boolean,
@@ -595,7 +600,7 @@ private fun HomeBody(
                                 time = diaryFood.time,
                                 foodImageUrl = diaryFood.foodImageUrl,
                                 calorie = diaryFood.calorie,
-                                onClick = onCardTapped
+                                onClick = { onCardTapped(diaryFood.id) }
                             )
                         }
                     }
@@ -716,7 +721,7 @@ private fun SearchBodyPreview() {
 @Composable
 private fun SearchBody(
     foodDiaries: List<FoodDiary>?,
-    onCardTapped: () -> Unit,
+    onCardTapped: (foodDiaryId: String) -> Unit,
     query: String,
     onQueryChange: (query: String) -> Unit,
     active: Boolean,
@@ -757,14 +762,14 @@ private fun SearchBody(
                         )
                     }
                 }
-                items(foodDiaries, key = { it.id }, contentType = { it }) { diaryFood ->
+                items(foodDiaries, key = { it.id }, contentType = { it }) { foodDiary ->
                     DiaryCard(
-                        foodName = diaryFood.foodName,
-                        date = diaryFood.date,
-                        time = diaryFood.time,
-                        foodImageUrl = diaryFood.foodImageUrl,
-                        calorie = diaryFood.calorie,
-                        onClick = onCardTapped
+                        foodName = foodDiary.foodName,
+                        date = foodDiary.date,
+                        time = foodDiary.time,
+                        foodImageUrl = foodDiary.foodImageUrl,
+                        calorie = foodDiary.calorie,
+                        onClick = { onCardTapped(foodDiary.id) }
                     )
                 }
             }

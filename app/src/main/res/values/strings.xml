@@ -3,7 +3,7 @@
     <string name="take_photo_button">tangkap gambar</string>
     <string name="gallery_button">Galeri</string>
     <string name="rotate_button">Rotasi</string>
-    <string name="camera_supporting_text">Jaga jarak 30cm dari makanan ke kamera</string>
+    <string name="camera_supporting_text">Pastikan semua makanan tampak di layar. Jaga jarak 30cm dari makanan ke kamera.</string>
     <string name="home_title" translatable="false">Home</string>
     <string name="report_title">Laporan</string>
     <string name="my_profile_title" translatable="false">My Profile</string>
@@ -113,14 +113,34 @@
     <string name="empty_content_search">Makanan yang Anda yang cari tidak dapat ditemukan</string>
     <string name="cm">%1$s cm</string>
     <string name="tahun">%1$s tahun</string>
+    <string name="error_text_number">%1$s harus berupa angka dan lebih besar dari 0</string>
+    <string name="error_text_text">%1$s tidak boleh kosong</string>
     <string name="kg">%1$s kg</string>
     <string name="title">Judul</string>
     <string name="title_error_text">Judul tidak boleh kosong</string>
     <string name="title_placeholder">Masukkan judul diary makanan</string>
     <string name="food">Makanan</string>
+    <string name="calorie">Kalori</string>
+    <string name="kcal">%1$s kcal</string>
+    <string name="fat">Lemak</string>
+    <string name="g">%1$s g</string>
+    <string name="protein">Protein</string>
+    <string name="carbohydrate">Karbohidrat</string>
+    <string name="sugar">Gula</string>
+    <string name="feedback">Feedback</string>
+    <string name="add">Tambah</string>
+    <string name="no">Tidak</string>
+    <string name="status">Status</string>
+    <string name="total_food_calories">Total Kalori Makanan</string>
+    <string name="question">Pertanyaan</string>
     <string-array name="food_diary_category">
         <item>Sarapan</item>
         <item>Makan Siang</item>
         <item>Makan Malam</item>
+    </string-array>
+    <string-array name="food_status_level">
+        <item>boleh dimakan</item>
+        <item>kurang disarankan</item>
+        <item>tidak disarankan</item>
     </string-array>
 </resources>

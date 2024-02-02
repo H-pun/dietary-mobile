@@ -333,13 +333,13 @@ private fun FoodScannerBody(
                         end.linkTo(focusableAnim.end)
                         top.linkTo(focusableAnim.bottom)
                     }
-                    .height(58.dp)
-                    .width(165.dp)
+                    .height(80.dp)
+                    .width(180.dp)
                     .clip(MaterialTheme.shapes.medium)
                     .blur(radius = 2.dp)) {}
             Text(text = stringResource(id = R.string.camera_supporting_text),
                 color = ComposeColor.White,
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .constrainAs(supportingText) {
@@ -348,7 +348,7 @@ private fun FoodScannerBody(
                         top.linkTo(supportingTextContainer.top)
                         bottom.linkTo(supportingTextContainer.bottom)
                     }
-                    .width(150.dp))
+                    .width(170.dp))
         }
         FilledIconButton(onClick = onNavigateUp, colors = IconButtonDefaults.filledIconButtonColors(
             containerColor = ComposeColor.Black.copy(

@@ -46,8 +46,8 @@ class UserProfileRepositoryImpl @Inject constructor() : UserProfileRepository {
             emit(UiState.Loading)
             delay(1000L)
 //            emit(UiState.Error(error = Failure.NotFoundFailure("Userprofile not found")))
-            emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
-//            emit(UiState.Success())
+//            emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
+            emit(UiState.Success())
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
 

@@ -29,6 +29,8 @@ val scrimLight = Color(0xFF000000)
 val inverseSurfaceLight = Color(0xFF2D322C)
 val inverseOnSurfaceLight = Color(0xFFEEF2E9)
 val inversePrimaryLight = Color(0xFF9FD49B)
+val mediumErrorContainerLight = Color(color = 0xFFFAE298)
+val onMediumErrorContainerLight = Color(color = 0xFF473601)
 
 val primaryDark = Color(0xFF9FD49B)
 val onPrimaryDark = Color(0xFF073910)
@@ -59,6 +61,8 @@ val inverseSurfaceDark = Color(0xFFE0E4DB)
 val inverseOnSurfaceDark = Color(0xFF2D322C)
 val inversePrimaryDark = Color(0xFF3A693B)
 val placeholder = Color(color = 0xFF404040)
+val mediumErrorContainerDark = Color(color = 0xFF6F570A)
+val onMediumErrorContainerDark = Color(color = 0xFFFFF0BD)
 
 
 

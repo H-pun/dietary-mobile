@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.utils.isAgeValid
-import dev.cisnux.dietary.utils.isHeightOrWeightValid
+import dev.cisnux.dietary.utils.isFloatNumberValid
 
 @Preview(showBackground = true)
 @Composable
@@ -172,7 +172,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (weight.isNotEmpty() and !weight.isHeightOrWeightValid())
+                if (weight.isNotEmpty() and !weight.isFloatNumberValid())
                     Text(
                         text = stringResource(R.string.weight_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -183,9 +183,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = weight.isNotEmpty() and !weight.isHeightOrWeightValid(),
+            isError = weight.isNotEmpty() and !weight.isFloatNumberValid(),
             trailingIcon = {
-                if (weight.isNotEmpty() and !weight.isHeightOrWeightValid())
+                if (weight.isNotEmpty() and !weight.isFloatNumberValid())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
@@ -226,7 +226,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (height.isNotEmpty() and !height.isHeightOrWeightValid())
+                if (height.isNotEmpty() and !height.isFloatNumberValid())
                     Text(
                         text = stringResource(R.string.height_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -237,9 +237,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = height.isNotEmpty() and !height.isHeightOrWeightValid(),
+            isError = height.isNotEmpty() and !height.isFloatNumberValid(),
             trailingIcon = {
-                if (height.isNotEmpty() and !height.isHeightOrWeightValid())
+                if (height.isNotEmpty() and !height.isFloatNumberValid())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,

@@ -69,7 +69,7 @@ import dev.cisnux.dietary.presentation.ui.theme.placeholder
 import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.isAgeValid
-import dev.cisnux.dietary.utils.isHeightOrWeightValid
+import dev.cisnux.dietary.utils.isFloatNumberValid
 import dev.cisnux.dietary.utils.isTargetWeightValid
 import dev.cisnux.dietary.utils.isUsernameValid
 import dev.cisnux.dietary.utils.Failure
@@ -844,7 +844,7 @@ private fun MyProfileShimmer(
 
 @Preview(showBackground = true, device = "spec:parent=pixel_5,orientation=landscape")
 @Composable
-private fun UpdateHealthProfileDialogPreview() {
+private fun UpdateMyProfileDialogPreview() {
     val genders = stringArrayResource(id = R.array.gender)
     val goals = stringArrayResource(id = R.array.goal)
     val activityLevels = stringArrayResource(id = R.array.activity_level)
@@ -963,7 +963,7 @@ fun UpdateMyProfileDialog(
                             TextButton(
                                 onClick = onSave,
                                 enabled = username.isUsernameValid() and age.isAgeValid()
-                                        and weight.isHeightOrWeightValid() and height.isHeightOrWeightValid()
+                                        and weight.isFloatNumberValid() and height.isFloatNumberValid()
                                         and weightTarget.isTargetWeightValid(),
                             ) {
                                 Text(

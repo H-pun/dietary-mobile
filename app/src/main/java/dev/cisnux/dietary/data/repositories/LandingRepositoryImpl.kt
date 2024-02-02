@@ -11,7 +11,7 @@ import javax.inject.Inject
 class LandingRepositoryImpl @Inject constructor() : LandingRepository {
     override val hasLandingShowed: Flow<Boolean>
         get() = flow {
-            emit(true)
+            emit(false)
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
 }

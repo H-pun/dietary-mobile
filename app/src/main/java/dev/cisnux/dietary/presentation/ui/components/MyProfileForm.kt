@@ -136,7 +136,7 @@ fun MyProfileForm(
     ) {
         OutlinedTextField(
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
+                keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
             ),
             leadingIcon = {

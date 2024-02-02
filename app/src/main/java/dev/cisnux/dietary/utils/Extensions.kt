@@ -3,10 +3,9 @@ package dev.cisnux.dietary.utils
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.appcompat.app.AppCompatActivity
+import dev.cisnux.dietary.domain.models.FoodDiaryDetail
 import dev.cisnux.dietary.domain.models.UserProfile
-import dev.cisnux.dietary.domain.models.UserProfileDetail
 import dev.cisnux.dietary.presentation.addmyprofile.MyProfile
-import dev.cisnux.dietary.presentation.ui.components.HealthProfile
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -56,7 +55,7 @@ fun String.isAgeValid(): Boolean = try {
     false
 }
 
-fun String.isHeightOrWeightValid(): Boolean = try {
+fun String.isFloatNumberValid(): Boolean = try {
     val number = this.toFloat()
     number > 0
 } catch (e: NumberFormatException) {
@@ -91,3 +90,14 @@ val Int.diaryFoodCategory: DiaryFoodCategory
         1 -> DiaryFoodCategory.LUNCH
         else -> DiaryFoodCategory.DINNER
     }
+
+val String.questionType: QuestionType
+    get() = when (this) {
+        "number" -> QuestionType.NUMBER
+        "text" -> QuestionType.TEXT
+        else -> QuestionType.BOOLEAN
+    }
+
+fun FoodDiaryDetail.isQuestionNotEmpty() = foods.any { food ->
+    food.questions?.isNotEmpty() ?: false
+}

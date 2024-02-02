@@ -12,10 +12,16 @@ sealed class AppDestination(val route: String) {
             "food_scanner?title=$title&foodDiaryCategory=$foodDiaryCategory"
     }
 
+    data object DiaryDetailRoute :
+        AppDestination(route = "food_diary/{foodDiaryId}") {
+        fun createRouteUrl(foodDiaryId: String) =
+            "food_diary/$foodDiaryId"
+    }
+
     data object ScannerResultRoute :
         AppDestination(route = "scanner_result?title={title}&foodDiaryCategory={foodDiaryCategory}") {
         fun createRouteUrl(title: String, foodDiaryCategory: String): String =
-            "scanner_result?&title=$title&foodDiaryCategory=$foodDiaryCategory"
+            "scanner_result?title=$title&foodDiaryCategory=$foodDiaryCategory"
     }
 
     data object AddDiaryRoute : AppDestination(route = "add_diary")

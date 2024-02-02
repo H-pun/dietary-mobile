@@ -76,11 +76,11 @@ fun AddDiaryScreen(
 @Composable
 private fun AddDiaryContentPreview() {
     val foodDiaryCategories = stringArrayResource(id = R.array.food_diary_category)
-    var title by rememberSaveable {
-        mutableStateOf("")
-    }
     var selectedFoodDiaryCategory by rememberSaveable {
         mutableStateOf(foodDiaryCategories[0])
+    }
+    var title by rememberSaveable {
+        mutableStateOf("")
     }
 
     DietaryTheme {
@@ -233,7 +233,7 @@ private fun AddDiaryBody(
             shape = MaterialTheme.shapes.medium,
             enabled = title.isNotBlank(),
         ) {
-            Text(text = "Add")
+            Text(text = stringResource(R.string.add))
         }
     }
 }
