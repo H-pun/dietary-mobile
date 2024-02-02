@@ -85,7 +85,7 @@ fun DiaryDetailScreen(
         bottomSheetState = rememberModalBottomSheetState()
     )
     LaunchedEffect(Unit) {
-        scaffoldState.bottomSheetState.partialExpand()
+        scaffoldState.bottomSheetState.expand()
     }
     val snackbarHostState = remember {
         SnackbarHostState()
