@@ -68,9 +68,9 @@ import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.placeholder
 import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.UiState
-import dev.cisnux.dietary.utils.isAgeValid
-import dev.cisnux.dietary.utils.isFloatNumberValid
-import dev.cisnux.dietary.utils.isTargetWeightValid
+import dev.cisnux.dietary.utils.isIntValid
+import dev.cisnux.dietary.utils.isHeightOrWeightValid
+import dev.cisnux.dietary.utils.isFloatValid
 import dev.cisnux.dietary.utils.isUsernameValid
 import dev.cisnux.dietary.utils.Failure
 
@@ -962,9 +962,9 @@ fun UpdateMyProfileDialog(
                         actions = {
                             TextButton(
                                 onClick = onSave,
-                                enabled = username.isUsernameValid() and age.isAgeValid()
-                                        and weight.isFloatNumberValid() and height.isFloatNumberValid()
-                                        and weightTarget.isTargetWeightValid(),
+                                enabled = username.isUsernameValid() and age.isIntValid()
+                                        and weight.isHeightOrWeightValid() and height.isHeightOrWeightValid()
+                                        and weightTarget.isFloatValid(),
                             ) {
                                 Text(
                                     text = stringResource(id = R.string.save),

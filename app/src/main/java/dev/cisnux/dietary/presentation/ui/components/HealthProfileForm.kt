@@ -29,8 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.utils.isAgeValid
-import dev.cisnux.dietary.utils.isFloatNumberValid
+import dev.cisnux.dietary.utils.isIntValid
+import dev.cisnux.dietary.utils.isHeightOrWeightValid
 
 @Preview(showBackground = true)
 @Composable
@@ -119,7 +119,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (age.isNotEmpty() and !age.isAgeValid())
+                if (age.isNotEmpty() and !age.isIntValid())
                     Text(
                         text = stringResource(R.string.age_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -130,9 +130,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = age.isNotEmpty() and !age.isAgeValid(),
+            isError = age.isNotEmpty() and !age.isIntValid(),
             trailingIcon = {
-                if (age.isNotEmpty() and !age.isAgeValid())
+                if (age.isNotEmpty() and !age.isIntValid())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
@@ -172,7 +172,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (weight.isNotEmpty() and !weight.isFloatNumberValid())
+                if (weight.isNotEmpty() and !weight.isHeightOrWeightValid())
                     Text(
                         text = stringResource(R.string.weight_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -183,9 +183,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = weight.isNotEmpty() and !weight.isFloatNumberValid(),
+            isError = weight.isNotEmpty() and !weight.isHeightOrWeightValid(),
             trailingIcon = {
-                if (weight.isNotEmpty() and !weight.isFloatNumberValid())
+                if (weight.isNotEmpty() and !weight.isHeightOrWeightValid())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
@@ -226,7 +226,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (height.isNotEmpty() and !height.isFloatNumberValid())
+                if (height.isNotEmpty() and !height.isHeightOrWeightValid())
                     Text(
                         text = stringResource(R.string.height_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -237,9 +237,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = height.isNotEmpty() and !height.isFloatNumberValid(),
+            isError = height.isNotEmpty() and !height.isHeightOrWeightValid(),
             trailingIcon = {
-                if (height.isNotEmpty() and !height.isFloatNumberValid())
+                if (height.isNotEmpty() and !height.isHeightOrWeightValid())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,

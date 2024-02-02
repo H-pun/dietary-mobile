@@ -48,23 +48,23 @@ fun String.isUsernameValid(): Boolean {
     return Regex(usernameRegex).matches(this)
 }
 
-fun String.isAgeValid(): Boolean = try {
-    val age = this.toInt()
-    age > 0
+fun String.isIntValid(): Boolean = try {
+    val value = this.toInt()
+    value > 0
 } catch (e: NumberFormatException) {
     false
 }
 
-fun String.isFloatNumberValid(): Boolean = try {
+fun String.isHeightOrWeightValid(): Boolean = try {
     val number = this.toFloat()
     number > 0
 } catch (e: NumberFormatException) {
     false
 }
 
-fun String.isTargetWeightValid(): Boolean = try {
-    val targetWeight = this.toFloat()
-    targetWeight >= 0
+fun String.isFloatValid(): Boolean = try {
+    val value = this.toFloat()
+    value >= 0
 } catch (e: NumberFormatException) {
     false
 }
@@ -93,7 +93,8 @@ val Int.diaryFoodCategory: DiaryFoodCategory
 
 val String.questionType: QuestionType
     get() = when (this) {
-        "number" -> QuestionType.NUMBER
+        "float" -> QuestionType.FLOAT
+        "integer" -> QuestionType.INTEGER
         "text" -> QuestionType.TEXT
         else -> QuestionType.BOOLEAN
     }

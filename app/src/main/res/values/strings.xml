@@ -113,7 +113,8 @@
     <string name="empty_content_search">Makanan yang Anda yang cari tidak dapat ditemukan</string>
     <string name="cm">%1$s cm</string>
     <string name="tahun">%1$s tahun</string>
-    <string name="error_text_number">%1$s harus berupa angka dan lebih besar dari 0</string>
+    <string name="error_text_float">%1$s harus berupa angka dan lebih besar dari atau sama dengan 0</string>
+    <string name="error_text_int">%1$s harus bilangan bulat dan lebih besar dari 0</string>
     <string name="error_text_text">%1$s tidak boleh kosong</string>
     <string name="kg">%1$s kg</string>
     <string name="title">Judul</string>

@@ -96,7 +96,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                             id = "2",
                             label = "Gula",
                             question = "Berapa kandungan gula dalam makanan ini?",
-                            type = QuestionType.NUMBER,
+                            type = QuestionType.FLOAT,
                             unit = "g"
                         ),
                     )
@@ -114,7 +114,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                             id = "2",
                             label = "Gula",
                             question = "Berapa kandungan gula dalam makanan ini?",
-                            type = QuestionType.NUMBER,
+                            type = QuestionType.FLOAT,
                             unit = "g"
                         ),
                     )
@@ -142,8 +142,15 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                             id = "2",
                             label = "Gula",
                             question = "Berapa kandungan gula dalam makanan ini?",
-                            type = QuestionType.NUMBER,
+                            type = QuestionType.FLOAT,
                             unit = "g"
+                        ),
+                        Question(
+                            id = "3",
+                            label = "Jumlah",
+                            question = "Berapa jumlah makanan ini?",
+                            type = QuestionType.INTEGER,
+                            unit = null
                         ),
                     )
                 ),

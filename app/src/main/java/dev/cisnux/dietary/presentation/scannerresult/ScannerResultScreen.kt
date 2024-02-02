@@ -74,8 +74,9 @@ import dev.cisnux.dietary.presentation.ui.components.ScannerResultShimmer
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.utils.QuestionType
 import dev.cisnux.dietary.utils.UiState
-import dev.cisnux.dietary.utils.isFloatNumberValid
 import dev.cisnux.dietary.utils.isQuestionNotEmpty
+import dev.cisnux.dietary.utils.isFloatValid
+import dev.cisnux.dietary.utils.isIntValid
 import java.io.File
 
 @Composable
@@ -182,9 +183,11 @@ fun ScannerResultScreen(
                         val isEnable by derivedStateOf {
                             answeredQuestions.all { foodQuestion ->
                                 foodQuestion.all { answeredQuestion ->
-                                    if (answeredQuestion.type == QuestionType.NUMBER)
-                                        answeredQuestion.answer.isFloatNumberValid()
-                                    else answeredQuestion.answer.isNotBlank()
+                                    when (answeredQuestion.type) {
+                                        QuestionType.INTEGER -> answeredQuestion.answer.isIntValid()
+                                        QuestionType.FLOAT -> answeredQuestion.answer.isFloatValid()
+                                        else -> answeredQuestion.answer.isNotBlank()
+                                    }
                                 }
                             }
                         }
@@ -260,7 +263,7 @@ private fun ScannerResultContentPreview() {
                         id = "2",
                         label = "Gula",
                         question = "Berapa kandungan gula dalam makanan ini?",
-                        type = QuestionType.NUMBER,
+                        type = QuestionType.FLOAT,
                         unit = "g"
                     ),
                 )
@@ -278,7 +281,7 @@ private fun ScannerResultContentPreview() {
                         id = "2",
                         label = "Gula",
                         question = "Berapa kandungan gula dalam makanan ini?",
-                        type = QuestionType.NUMBER,
+                        type = QuestionType.FLOAT,
                         unit = "g"
                     ),
                 )
@@ -296,7 +299,7 @@ private fun ScannerResultContentPreview() {
                         id = "2",
                         label = "Gula",
                         question = "Berapa kandungan gula dalam makanan ini?",
-                        type = QuestionType.NUMBER,
+                        type = QuestionType.FLOAT,
                         unit = "g"
                     ),
                 )
@@ -314,7 +317,7 @@ private fun ScannerResultContentPreview() {
                         id = "2",
                         label = "Gula",
                         question = "Berapa kandungan gula dalam makanan ini?",
-                        type = QuestionType.NUMBER,
+                        type = QuestionType.FLOAT,
                         unit = "g"
                     ),
                 )
@@ -545,8 +548,11 @@ private fun QuestionListItem(
         ) {
             List(answeredQuestions.size) { index ->
                 val isNotValid =
-                    if (answeredQuestions[index].type == QuestionType.NUMBER) !answeredQuestions[index].answer.isFloatNumberValid()
-                    else answeredQuestions[index].answer.isBlank()
+                    when (answeredQuestions[index].type) {
+                        QuestionType.INTEGER -> !answeredQuestions[index].answer.isIntValid()
+                        QuestionType.FLOAT -> !answeredQuestions[index].answer.isFloatValid()
+                        else -> answeredQuestions[index].answer.isBlank()
+                    }
 
                 when (answeredQuestions[index].type) {
                     QuestionType.BOOLEAN -> {
@@ -597,11 +603,15 @@ private fun QuestionListItem(
 
                     else -> {
                         val errorText = stringResource(
-                            id = if (answeredQuestions[index].type == QuestionType.NUMBER) R.string.error_text_number
-                            else R.string.error_text_text, answeredQuestions[index].label
+                            id = when (answeredQuestions[index].type) {
+                                QuestionType.FLOAT -> R.string.error_text_float
+                                QuestionType.INTEGER -> R.string.error_text_int
+                                else -> R.string.error_text_text
+                            },
+                            answeredQuestions[index].label
                         )
                         val keyboardType =
-                            if (answeredQuestions[index].type == QuestionType.NUMBER) KeyboardType.Number else KeyboardType.Text
+                            if (answeredQuestions[index].type == QuestionType.BOOLEAN) KeyboardType.Text else KeyboardType.Number
                         val imeAction = ImeAction.Done
 
                         OutlinedTextField(
