@@ -186,7 +186,7 @@ fun DiaryDetailScreen(
                 (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.let { foodDiaryDetail ->
                     ScannerResultBody(
                         totalUserCaloriesToday = foodDiaryDetail.totalUserCaloriesToday,
-                        userDailyBmiCalorie = foodDiaryDetail.maxDailyBmiCalorie,
+                        userDailyBmiCalorie = foodDiaryDetail.maxDailyBmrCalorie,
                         totalFoodCalories = foodDiaryDetail.totalFoodCalories,
                         foods = foodDiaryDetail.foods,
                         status = foodDiaryDetail.status,
@@ -213,7 +213,7 @@ private fun DiaryDetailContentPreview() {
     val foodDiaryDetail = FoodDiaryDetail(
         foodDiaryId = "1",
         totalFoodCalories = 200.4512f,
-        maxDailyBmiCalorie = 800.6798f,
+        maxDailyBmrCalorie = 800.6798f,
         totalUserCaloriesToday = 500.7892f,
         status = "Kurang disarankan",
         feedback = "Terlalu banyak gula",
@@ -278,7 +278,7 @@ private fun DiaryDetailContentPreview() {
             sheetContent = {
                 ScannerResultBody(
                     totalUserCaloriesToday = foodDiaryDetail.totalUserCaloriesToday,
-                    userDailyBmiCalorie = foodDiaryDetail.maxDailyBmiCalorie,
+                    userDailyBmiCalorie = foodDiaryDetail.maxDailyBmrCalorie,
                     totalFoodCalories = foodDiaryDetail.totalFoodCalories,
                     foods = foodDiaryDetail.foods,
                     status = foodDiaryDetail.status,
@@ -379,7 +379,7 @@ fun DiaryDetailBody(
                 positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
                 tooltip = {
                     PlainTooltip {
-                        Text(text = "Hapus\nmakanan", textAlign = TextAlign.Center)
+                        Text(text = "Hapus\nfood diary", textAlign = TextAlign.Center)
                     }
                 },
                 state = rememberTooltipState(),

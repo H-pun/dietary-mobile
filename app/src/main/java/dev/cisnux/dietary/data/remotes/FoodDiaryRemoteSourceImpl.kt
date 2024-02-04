@@ -3,9 +3,9 @@ package dev.cisnux.dietary.data.remotes
 import arrow.core.Either
 import dev.cisnux.dietary.data.remotes.responses.AddedFoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.responses.CommonResponse
-import dev.cisnux.dietary.data.remotes.responses.DiaryQuestionBodyRequest
-import dev.cisnux.dietary.data.remotes.responses.DuplicateFoodDiaryBodyRequest
-import dev.cisnux.dietary.data.remotes.responses.FoodDiaryBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.DiaryQuestionBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.DuplicateFoodDiaryBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.responses.ReportResponse
@@ -13,6 +13,7 @@ import dev.cisnux.dietary.utils.DIETARY_API
 import dev.cisnux.dietary.utils.Failure
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.forms.InputProvider
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
@@ -220,6 +221,28 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 val commonResponse: CommonResponse<List<String>> = response.body()
                 Either.Right(commonResponse.data)
             }
+        } catch (e: UnresolvedAddressException) {
+            Either.Left(Failure.ConnectionFailure())
+        }
+    }
+
+    override suspend fun deleteFoodDiaryById(
+        accessToken: String,
+        id: String
+    ): Either<Exception, Nothing?> = withContext(Dispatchers.IO) {
+        try {
+            val response = client.delete(
+                urlString = "$DIETARY_API/food_diary/$id"
+            ) {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $accessToken")
+                }
+            }
+            val failure = Failure.HTTP_FAILURES[response.status]
+            return@withContext if (failure != null) {
+                Either.Left(failure)
+            } else
+                Either.Right(null)
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
         }

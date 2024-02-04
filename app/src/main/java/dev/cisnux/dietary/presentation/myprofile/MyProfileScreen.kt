@@ -849,7 +849,7 @@ fun UpdateMyProfileDialog(
                         },
                         title = {
                             Text(
-                                text = stringResource(id = R.string.health_profile_dialog_title),
+                                text = stringResource(id = R.string.my_profile_title),
                                 style = MaterialTheme.typography.titleLarge
                             )
                         },

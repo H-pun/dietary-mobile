@@ -149,7 +149,7 @@ fun ScannerResultScreen(
                     (scannerResultState as UiState.Success<FoodDiaryDetail>).data?.let { foodScannerResult ->
                         ScannerResultBody(
                             totalUserCaloriesToday = foodScannerResult.totalUserCaloriesToday,
-                            userDailyBmiCalorie = foodScannerResult.maxDailyBmiCalorie,
+                            userDailyBmiCalorie = foodScannerResult.maxDailyBmrCalorie,
                             foods = foodScannerResult.foods,
                             totalFoodCalories = foodScannerResult.totalFoodCalories,
                             status = foodScannerResult.status,
@@ -238,7 +238,7 @@ private fun ScannerResultContentPreview() {
     val foodDiaryResult = FoodDiaryDetail(
         foodDiaryId = "1",
         totalFoodCalories = 200.4512f,
-        maxDailyBmiCalorie = 800.6798f,
+        maxDailyBmrCalorie = 800.6798f,
         totalUserCaloriesToday = 500.7892f,
         status = "Boleh dimakan",
         feedback = "Terlalu banyak gula",
@@ -332,7 +332,7 @@ private fun ScannerResultContentPreview() {
             body = {
                 ScannerResultBody(
                     totalUserCaloriesToday = foodDiaryResult.totalUserCaloriesToday,
-                    userDailyBmiCalorie = foodDiaryResult.maxDailyBmiCalorie,
+                    userDailyBmiCalorie = foodDiaryResult.maxDailyBmrCalorie,
                     totalFoodCalories = foodDiaryResult.totalFoodCalories,
                     foods = foodDiaryResult.foods,
                     status = foodDiaryResult.status,
@@ -405,7 +405,7 @@ private fun ScannerResultContent(
                             positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
                             tooltip = {
                                 PlainTooltip {
-                                    Text(text = "Hapus\nmakanan", textAlign = TextAlign.Center)
+                                    Text(text = "Hapus\nfood diary", textAlign = TextAlign.Center)
                                 }
                             },
                             state = rememberTooltipState()

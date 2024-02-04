@@ -282,7 +282,7 @@ fun DietaryNavGraph(
                 )
             },
             arguments = listOf(
-                navArgument(name = "token") {
+                navArgument(name = "email_address") {
                     nullable = false
                     type = NavType.StringType
                 },

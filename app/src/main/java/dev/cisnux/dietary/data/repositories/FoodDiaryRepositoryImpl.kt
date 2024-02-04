@@ -76,7 +76,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
         FoodDiaryDetail(
             foodDiaryId = "1",
             totalFoodCalories = 200.4512f,
-            maxDailyBmiCalorie = 800.6798f,
+            maxDailyBmrCalorie = 800.6798f,
             totalUserCaloriesToday = 500.7892f,
             status = "Boleh dimakan",
             feedback = null,
@@ -166,7 +166,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
     private val anotherFoodDiaryDetail = FoodDiaryDetail(
         foodDiaryId = "1",
         totalFoodCalories = 200.4512f,
-        maxDailyBmiCalorie = 800.6798f,
+        maxDailyBmrCalorie = 800.6798f,
         totalUserCaloriesToday = 500.7892f,
         status = "Kurang disarankan",
         feedback = "Terlalu banyak gula",
@@ -221,7 +221,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                 totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
                 label = System.currentTimeMillis().withTimeFormat()
             )
-        }.sortedBy { it.totalFoodCalories }
+        }
     )
 
     private val foodDiaryReportWeek = Report(
@@ -234,7 +234,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                 totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
                 label = System.currentTimeMillis().withShortDateFormat()
             )
-        }.sortedBy { it.totalFoodCalories }
+        }
     )
 
     private val foodDiaryReportMonth = Report(
@@ -247,7 +247,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                 totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
                 label = System.currentTimeMillis().withShortDateFormat()
             )
-        }.sortedBy { it.totalFoodCalories }
+        }
     )
 
 
@@ -316,8 +316,8 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
         emit(UiState.Loading)
         delay(1000L)
         //        emit(UiState.Error(Failure.BadRequestFailure("bad request")))
-        emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
-//        emit(UiState.Success())
+//        emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
+        emit(UiState.Success())
     }.flowOn(Dispatchers.IO)
         .distinctUntilChanged()
 

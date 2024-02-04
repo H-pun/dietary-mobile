@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FoodDiaryReportResponse(
+    // the id of food diary
     val id: String,
     val title: String,
     @SerialName(value = "added_at")

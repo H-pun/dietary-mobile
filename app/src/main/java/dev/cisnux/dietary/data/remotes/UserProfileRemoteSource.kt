@@ -1,7 +1,7 @@
 package dev.cisnux.dietary.data.remotes
 
 import arrow.core.Either
-import dev.cisnux.dietary.data.remotes.responses.UserProfileBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.UserProfileBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.UserProfileDetailResponse
 
 interface UserProfileRemoteSource {

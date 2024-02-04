@@ -2,7 +2,7 @@ package dev.cisnux.dietary.data.remotes
 
 import arrow.core.Either
 import dev.cisnux.dietary.data.remotes.responses.CommonResponse
-import dev.cisnux.dietary.data.remotes.responses.UserProfileBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.UserProfileBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.UserProfileDetailResponse
 import dev.cisnux.dietary.utils.DIETARY_API
 import dev.cisnux.dietary.utils.Failure

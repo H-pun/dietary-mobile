@@ -2,11 +2,10 @@ package dev.cisnux.dietary.data.remotes
 
 import arrow.core.Either
 import dev.cisnux.dietary.data.remotes.responses.AddedFoodDiaryResponse
-import dev.cisnux.dietary.data.remotes.responses.DiaryQuestionBodyRequest
-import dev.cisnux.dietary.data.remotes.responses.DuplicateFoodDiaryBodyRequest
-import dev.cisnux.dietary.data.remotes.responses.FoodDiaryBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.DiaryQuestionBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.DuplicateFoodDiaryBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse
-import dev.cisnux.dietary.data.remotes.responses.FoodDiaryReportResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.responses.ReportResponse
 
@@ -19,4 +18,5 @@ interface FoodDiaryRemoteSource {
     suspend fun getFoodDiaryReports(accessToken: String, category: Int): Either<Exception, ReportResponse>
     // optional
     suspend fun getKeywordSuggestions(accessToken: String, query: String): Either<Exception, List<String>>
+    suspend fun deleteFoodDiaryById(accessToken: String, id: String): Either<Exception, Nothing?>
 }

@@ -13,8 +13,8 @@ data class AddedFoodDiaryResponse(
     val id: String,
     @SerialName(value = "total_user_calories_today")
     val totalUserCaloriesToday: Float,
-    @SerialName(value = "max_daily_bmi_calories")
-    val maxDailyBmiCalorie: Float,
+    @SerialName(value = "max_daily_bmr_calories")
+    val maxDailyBmrCalorie: Float,
     @SerialName(value = "total_food_calories")
     val totalFoodCalories: Float,
     val status: String,
