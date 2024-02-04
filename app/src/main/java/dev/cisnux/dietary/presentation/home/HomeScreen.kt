@@ -545,8 +545,10 @@ private fun HomeBody(
             }, modifier = Modifier.align(Alignment.Start)
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TabRow(selectedTabIndex = tabState, modifier = Modifier.padding(end = 16.dp)) {
-                tabDiaries.forEachIndexed { index, _ ->
+            TabRow(
+                selectedTabIndex = tabState,
+                modifier = Modifier.padding(end = 16.dp)) {
+                List(tabDiaries.size) { index ->
                     Tab(icon = {
                         Icon(
                             painter = tabDiaries[index].second,

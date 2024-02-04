@@ -27,8 +27,6 @@ class UserProfileRepositoryImpl @Inject constructor() : UserProfileRepository {
             goal = "Menurunkan berat badan",
             weightTarget = 10f,
             activityLevel = "Very Active",
-            totalCaloriesToday = 200.4772f,
-            bmiDailyCalorie = 400.7291f,
         )
     )
 

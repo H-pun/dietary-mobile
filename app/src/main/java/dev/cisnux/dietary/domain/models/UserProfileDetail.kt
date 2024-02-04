@@ -10,6 +10,4 @@ data class UserProfileDetail(
     val goal: String,
     val weightTarget: Float = 0f,
     val activityLevel: String,
-    val totalCaloriesToday: Float,
-    val bmiDailyCalorie: Float
 )

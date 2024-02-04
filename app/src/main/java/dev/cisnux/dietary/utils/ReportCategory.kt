@@ -2,6 +2,6 @@ package dev.cisnux.dietary.utils
 
 enum class ReportCategory {
     TODAY,
-    WEEK,
-    MONTH
+    THIS_WEEK,
+    THIS_MONTH
 }

@@ -23,7 +23,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -101,8 +100,6 @@ fun MyProfileScreen(
             goal = "",
             weightTarget = 0f,
             activityLevel = "",
-            totalCaloriesToday = 0f,
-            bmiDailyCalorie = 0f,
         )
     )
     val userProfileState by viewModel.userProfileState.collectAsState(initial = UiState.Initialize)
@@ -120,8 +117,6 @@ fun MyProfileScreen(
         userProfileDetail.goal,
         userProfileDetail.weightTarget,
         userProfileDetail.activityLevel,
-        userProfileDetail.totalCaloriesToday,
-        userProfileDetail.bmiDailyCalorie
     ) {
         mutableStateOf(
             MyProfile(
@@ -202,15 +197,6 @@ fun MyProfileScreen(
                     onEdit = {
                         isUpdateMyProfileDialogOpen = true
                     },
-                    dailyCalorieProgress = userProfileDetail.totalCaloriesToday / userProfileDetail.bmiDailyCalorie,
-                    totalCaloriesToday = String.format(
-                        "%.2f",
-                        userProfileDetail.totalCaloriesToday
-                    ),
-                    bmiDailyCalorie = String.format(
-                        "%.2f",
-                        userProfileDetail.bmiDailyCalorie
-                    ),
                     isWeightTargetVisible = userProfileDetail.weightTarget != 0f,
                     modifier = modifier.padding(it)
                 )
@@ -290,8 +276,6 @@ private fun MyProfileContentPreview() {
         goal = "Menurunkan berat badan",
         weightTarget = 10f,
         activityLevel = "Very Active",
-        totalCaloriesToday = 200.4772f,
-        bmiDailyCalorie = 400.7291f,
     )
     var isUpdateMyProfileDialogOpen by remember {
         mutableStateOf(false)
@@ -334,15 +318,6 @@ private fun MyProfileContentPreview() {
                     },
                     modifier = Modifier.padding(it),
                     isWeightTargetVisible = userProfileDetail.weightTarget != 0f,
-                    totalCaloriesToday = String.format(
-                        "%.2f",
-                        userProfileDetail.totalCaloriesToday
-                    ),
-                    bmiDailyCalorie = String.format(
-                        "%.2f",
-                        userProfileDetail.bmiDailyCalorie
-                    ),
-                    dailyCalorieProgress = userProfileDetail.totalCaloriesToday / userProfileDetail.bmiDailyCalorie
                 )
                 UpdateMyProfileDialog(
                     onSave = { isUpdateMyProfileDialogOpen = false },
@@ -447,11 +422,8 @@ private fun MyProfileBody(
     goal: String,
     weightTarget: String,
     activityLevel: String,
-    totalCaloriesToday: String,
-    bmiDailyCalorie: String,
     isWeightTargetVisible: Boolean,
     onEdit: () -> Unit,
-    dailyCalorieProgress: Float,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -461,7 +433,7 @@ private fun MyProfileBody(
             .fillMaxWidth()
             .padding(start = 16.dp, end = 7.dp)
             .verticalScroll(state = scrollState),
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -508,43 +480,6 @@ private fun MyProfileBody(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 9.dp),
-        ) {
-            Text(
-                text = "$totalCaloriesToday kcal",
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.W600
-            )
-            Text(
-                text = "$bmiDailyCalorie kcal",
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.W600
-            )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        LinearProgressIndicator(
-            progress = { dailyCalorieProgress },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 9.dp),
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = when {
-                dailyCalorieProgress < 1f -> "Teruskan 🔥"
-                dailyCalorieProgress == 1f -> "Selamat 👏"
-                else -> "Kamu harus mengurangi asupan harian mu"
-            },
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.W600,
-            modifier = Modifier.align(Alignment.Start)
-        )
         Spacer(modifier = Modifier.height(16.dp))
         Column(modifier = Modifier.padding(end = 9.dp)) {
             ListTileProfile(
@@ -783,47 +718,6 @@ private fun MyProfileShimmer(
                     .shimmer()
             ) {}
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 9.dp),
-        ) {
-            Surface(
-                color = placeholder,
-                modifier = Modifier
-                    .height(20.dp)
-                    .width(100.dp)
-                    .shimmer()
-            ) {}
-            Surface(
-                color = placeholder,
-                modifier = Modifier
-                    .height(20.dp)
-                    .width(100.dp)
-                    .shimmer()
-            ) {}
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        Surface(
-            color = placeholder,
-            modifier = Modifier
-                .height(4.dp)
-                .fillMaxWidth()
-                .padding(end = 9.dp)
-                .shimmer()
-        ) {}
-        Spacer(modifier = Modifier.height(4.dp))
-        Surface(
-            color = placeholder,
-            modifier = Modifier
-                .height(20.dp)
-                .width(150.dp)
-                .align(Alignment.Start)
-                .shimmer()
-        ) {}
         Spacer(modifier = Modifier.height(16.dp))
         Column(modifier = Modifier.padding(end = 9.dp)) {
             repeat(7) {

@@ -5,7 +5,7 @@
     <string name="rotate_button">Rotasi</string>
     <string name="camera_supporting_text">Pastikan semua makanan tampak di layar. Jaga jarak 30cm dari makanan ke kamera.</string>
     <string name="home_title" translatable="false">Home</string>
-    <string name="report_title">Laporan</string>
+    <string name="report_title">Report</string>
     <string name="my_profile_title" translatable="false">My Profile</string>
     <string name="health_profile_dialog_title">Profil Kesehatan</string>
     <string name="health_profile_dialog_negative_btn">Perbarui</string>
@@ -143,5 +143,10 @@
         <item>boleh dimakan</item>
         <item>kurang disarankan</item>
         <item>tidak disarankan</item>
+    </string-array>
+    <string-array name="report_category">
+        <item>Hari Ini</item>
+        <item>Minggu Ini</item>
+        <item>Bulan Ini</item>
     </string-array>
 </resources>

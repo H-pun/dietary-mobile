@@ -85,7 +85,7 @@ fun Long.withFullDateFormat(): String {
 fun Long.withTimeFormat(): String {
     val date = Date(this)
     val locale = Locale("id", "ID")
-    return SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT, locale)
+    return SimpleDateFormat("HH:mm", locale)
         .format(date)
 }
 
@@ -96,6 +96,13 @@ val Int.foodDiaryCategory: FoodDiaryCategory
         0 -> FoodDiaryCategory.BREAKFAST
         1 -> FoodDiaryCategory.LUNCH
         else -> FoodDiaryCategory.DINNER
+    }
+
+val Int.reportCategory: ReportCategory
+    get() = when(this){
+        0 -> ReportCategory.TODAY
+        1 -> ReportCategory.THIS_WEEK
+        else -> ReportCategory.THIS_MONTH
     }
 
 val String.questionType: QuestionType

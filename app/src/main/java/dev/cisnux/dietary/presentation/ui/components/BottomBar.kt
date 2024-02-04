@@ -10,6 +10,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -36,12 +39,18 @@ fun BottomBar(
     currentRoute: AppDestination,
     onSelectedDestination: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     modifier: Modifier = Modifier,
-    navigationItems: List<BottomNavigationItem> = listOf(
+    navigationItems: List<BottomNavigationItem<*>> = listOf(
         BottomNavigationItem(
             title = stringResource(id = R.string.home_title),
             icon = Icons.Rounded.Home,
             destination = AppDestination.HomeRoute,
             contentDescription = stringResource(id = R.string.home_title)
+        ),
+        BottomNavigationItem(
+            title = stringResource(id = R.string.report_title),
+            icon = painterResource(id = R.drawable.ic_report_24dp),
+            destination = AppDestination.ReportRoute,
+            contentDescription = stringResource(id = R.string.report_title)
         ),
         BottomNavigationItem(
             title = stringResource(id = R.string.my_profile_title),
@@ -61,10 +70,19 @@ fun BottomBar(
                         modifier = Modifier.clearAndSetSemantics {})
                 },
                 icon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = null
-                    )
+                    when (item.icon) {
+                        is ImageVector -> Icon(
+                            imageVector = item.icon,
+                            contentDescription = null
+                        )
+
+                        is Painter ->
+                            Icon(
+                                painter = item.icon,
+                                contentDescription = null
+                            )
+                    }
+
                 },
                 selected = currentRoute.route == item.destination.route,
                 onClick = {

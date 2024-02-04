@@ -155,8 +155,6 @@ fun FoodScannerScreen(
             goal = "",
             weightTarget = 0f,
             activityLevel = "",
-            totalCaloriesToday = 0f,
-            bmiDailyCalorie = 0f,
         )
     )
 

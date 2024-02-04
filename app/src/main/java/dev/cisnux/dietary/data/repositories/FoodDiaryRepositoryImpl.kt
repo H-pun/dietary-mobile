@@ -16,6 +16,7 @@ import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.QuestionType
 import dev.cisnux.dietary.utils.ReportCategory
 import dev.cisnux.dietary.utils.UiState
+import dev.cisnux.dietary.utils.withShortDateFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlin.random.Random
 
 class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
     private val foodsBreakfastDiary = List(10) {
@@ -212,11 +214,11 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
     private val foodDiaryReportToday = Report(
         totalUserCaloriesToday = 500.7892f,
         maxDailyBmiCalorie = 800.6798f,
-        foods = List(5) {
+        foods = List(10) {
             FoodDiaryReport(
                 id = it.toString(),
                 title = "Warter $it",
-                totalFoodCalories = (20.2144f * it) * 0.2.toFloat(),
+                totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
                 label = System.currentTimeMillis().withTimeFormat()
             )
         }.sortedBy { it.totalFoodCalories }
@@ -229,8 +231,8 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
             FoodDiaryReport(
                 id = it.toString(),
                 title = "Warter $it",
-                totalFoodCalories = (20.2144f * it) * 0.2.toFloat(),
-                label = System.currentTimeMillis().withTimeFormat()
+                totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
+                label = System.currentTimeMillis().withShortDateFormat()
             )
         }.sortedBy { it.totalFoodCalories }
     )
@@ -242,8 +244,8 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
             FoodDiaryReport(
                 id = it.toString(),
                 title = "Warter $it",
-                totalFoodCalories = (20.2144f * it) * 0.2.toFloat(),
-                label = System.currentTimeMillis().withTimeFormat()
+                totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
+                label = System.currentTimeMillis().withShortDateFormat()
             )
         }.sortedBy { it.totalFoodCalories }
     )
@@ -351,7 +353,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                 UiState.Success(
                     when (category) {
                         ReportCategory.TODAY -> foodDiaryReportToday
-                        ReportCategory.WEEK -> foodDiaryReportWeek
+                        ReportCategory.THIS_WEEK -> foodDiaryReportWeek
                         else -> foodDiaryReportMonth
                     }
                 )
