@@ -14,15 +14,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -91,7 +88,7 @@ import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.activity
-import dev.cisnux.dietary.utils.withDateFormat
+import dev.cisnux.dietary.utils.withFullDateFormat
 import dev.cisnux.dietary.utils.withTimeFormat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -215,8 +212,8 @@ fun HomeScreen(
                     onCardTapped = navigateToDiaryDetail,
                     modifier = modifier.padding(it),
                     onDateRangeOpen = { openDatePickerDialog = true },
-                    date = datePickerState.selectedDateMillis?.withDateFormat()
-                        ?: System.currentTimeMillis().withDateFormat(),
+                    date = datePickerState.selectedDateMillis?.withFullDateFormat()
+                        ?: System.currentTimeMillis().withFullDateFormat(),
                     query = searchBarState.query,
                     onQueryChange = { newValue ->
                         searchBarState = searchBarState.copy(query = newValue)
@@ -355,11 +352,11 @@ private fun HomeContentPreview() {
     val foodDiaries = List(10) {
         FoodDiary(
             id = it.toString(),
-            foodName = "Nasi Padang",
-            date = 1706351552829.withDateFormat(),
+            title = "Nasi Padang",
+            date = 1706351552829.withFullDateFormat(),
             time = 1706351552829.withTimeFormat(),
-            foodImageUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
-            calorie = 500f
+            foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
+            totalFoodCalories = 500f
         )
     }
     var openDatePickerDialog by remember { mutableStateOf(false) }
@@ -391,8 +388,8 @@ private fun HomeContentPreview() {
                     tabState = tabState,
                     onTabChange = { index -> tabState = index },
                     onDateRangeOpen = { openDatePickerDialog = true },
-                    date = datePickerState.selectedDateMillis?.withDateFormat()
-                        ?: System.currentTimeMillis().withDateFormat()
+                    date = datePickerState.selectedDateMillis?.withFullDateFormat()
+                        ?: System.currentTimeMillis().withFullDateFormat()
                 )
                 if (openDatePickerDialog) DatePickerDialog(onDismissRequest = {
                     openDatePickerDialog = false
@@ -595,11 +592,11 @@ private fun HomeBody(
                         }
                         items(foodDiaries, key = { it.id }, contentType = { it }) { diaryFood ->
                             DiaryCard(
-                                foodName = diaryFood.foodName,
+                                foodName = diaryFood.title,
                                 date = diaryFood.date,
                                 time = diaryFood.time,
-                                foodImageUrl = diaryFood.foodImageUrl,
-                                calorie = diaryFood.calorie,
+                                foodImageUrl = diaryFood.foodPictureUrl,
+                                calorie = diaryFood.totalFoodCalories,
                                 onClick = { onCardTapped(diaryFood.id) }
                             )
                         }
@@ -690,11 +687,11 @@ private fun SearchBodyPreview() {
     val foodDiaries = List(10) {
         FoodDiary(
             id = it.toString(),
-            foodName = "Nasi Padang",
-            date = 1706351552829.withDateFormat(),
+            title = "Nasi Padang",
+            date = 1706351552829.withFullDateFormat(),
             time = 1706351552829.withTimeFormat(),
-            foodImageUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
-            calorie = 500f
+            foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
+            totalFoodCalories = 500f
         )
     }
 
@@ -764,11 +761,11 @@ private fun SearchBody(
                 }
                 items(foodDiaries, key = { it.id }, contentType = { it }) { foodDiary ->
                     DiaryCard(
-                        foodName = foodDiary.foodName,
+                        foodName = foodDiary.title,
                         date = foodDiary.date,
                         time = foodDiary.time,
-                        foodImageUrl = foodDiary.foodImageUrl,
-                        calorie = foodDiary.calorie,
+                        foodImageUrl = foodDiary.foodPictureUrl,
+                        calorie = foodDiary.totalFoodCalories,
                         onClick = { onCardTapped(foodDiary.id) }
                     )
                 }

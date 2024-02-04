@@ -216,7 +216,7 @@ fun ScannerResultBody(
         }
         items(foods, key = { it.id }, contentType = { it }) {
             FoodListItem(
-                foodName = it.foodName,
+                foodName = it.name,
                 calorie = String.format("%.2f", it.calorie),
                 fat = String.format("%.2f", it.fat),
                 carbohydrates = String.format("%.2f", it.carbohydrates),

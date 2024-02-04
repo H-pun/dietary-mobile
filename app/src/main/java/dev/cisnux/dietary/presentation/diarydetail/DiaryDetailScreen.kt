@@ -186,7 +186,7 @@ fun DiaryDetailScreen(
                 (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.let { foodDiaryDetail ->
                     ScannerResultBody(
                         totalUserCaloriesToday = foodDiaryDetail.totalUserCaloriesToday,
-                        userDailyBmiCalorie = foodDiaryDetail.userDailyBmiCalorie,
+                        userDailyBmiCalorie = foodDiaryDetail.maxDailyBmiCalorie,
                         totalFoodCalories = foodDiaryDetail.totalFoodCalories,
                         foods = foodDiaryDetail.foods,
                         status = foodDiaryDetail.status,
@@ -213,7 +213,7 @@ private fun DiaryDetailContentPreview() {
     val foodDiaryDetail = FoodDiaryDetail(
         foodDiaryId = "1",
         totalFoodCalories = 200.4512f,
-        userDailyBmiCalorie = 800.6798f,
+        maxDailyBmiCalorie = 800.6798f,
         totalUserCaloriesToday = 500.7892f,
         status = "Kurang disarankan",
         feedback = "Terlalu banyak gula",
@@ -221,7 +221,7 @@ private fun DiaryDetailContentPreview() {
         foods = listOf(
             Food(
                 id = "1",
-                foodName = "Nasi",
+                name = "Nasi",
                 calorie = 50f,
                 protein = 8f,
                 fat = 2f,
@@ -230,7 +230,7 @@ private fun DiaryDetailContentPreview() {
             ),
             Food(
                 id = "2",
-                foodName = "Ayam Bakar",
+                name = "Ayam Bakar",
                 calorie = 50f,
                 protein = 6f,
                 fat = 10f,
@@ -239,7 +239,7 @@ private fun DiaryDetailContentPreview() {
             ),
             Food(
                 id = "3",
-                foodName = "Tempe Goreng",
+                name = "Tempe Goreng",
                 calorie = 5.8f,
                 protein = 9f,
                 fat = 1f,
@@ -248,7 +248,7 @@ private fun DiaryDetailContentPreview() {
             ),
             Food(
                 id = "4",
-                foodName = "Sayur Kangkung",
+                name = "Sayur Kangkung",
                 calorie = 5.8f,
                 protein = 9f,
                 fat = 0.5f,
@@ -278,7 +278,7 @@ private fun DiaryDetailContentPreview() {
             sheetContent = {
                 ScannerResultBody(
                     totalUserCaloriesToday = foodDiaryDetail.totalUserCaloriesToday,
-                    userDailyBmiCalorie = foodDiaryDetail.userDailyBmiCalorie,
+                    userDailyBmiCalorie = foodDiaryDetail.maxDailyBmiCalorie,
                     totalFoodCalories = foodDiaryDetail.totalFoodCalories,
                     foods = foodDiaryDetail.foods,
                     status = foodDiaryDetail.status,

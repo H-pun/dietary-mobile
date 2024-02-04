@@ -26,7 +26,7 @@ import com.valentinilk.shimmer.shimmer
 import dev.cisnux.dietary.domain.models.FoodDiary
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.placeholder
-import dev.cisnux.dietary.utils.withDateFormat
+import dev.cisnux.dietary.utils.withFullDateFormat
 import dev.cisnux.dietary.utils.withTimeFormat
 
 @Preview(showBackground = true)
@@ -34,20 +34,20 @@ import dev.cisnux.dietary.utils.withTimeFormat
 private fun DiaryCardPreview() {
     val food = FoodDiary(
         id = "1",
-        foodName = "Nasi Padang",
-        date = 1706351552829.withDateFormat(),
+        title = "Nasi Padang",
+        date = 1706351552829.withFullDateFormat(),
         time = 1706351552829.withTimeFormat(),
-        foodImageUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
-        calorie = 500f,
+        foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
+        totalFoodCalories = 500f,
     )
 
     DietaryTheme {
         DiaryCard(
-            foodName = food.foodName,
+            foodName = food.title,
             date = food.date,
             time = food.time,
-            foodImageUrl = food.foodImageUrl,
-            calorie = food.calorie,
+            foodImageUrl = food.foodPictureUrl,
+            calorie = food.totalFoodCalories,
             onClick = {}
         )
     }

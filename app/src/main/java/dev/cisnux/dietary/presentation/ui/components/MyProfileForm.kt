@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.addmyprofile.MyProfile
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.utils.isFloatValid
+import dev.cisnux.dietary.utils.isFloatAnswerValid
 import dev.cisnux.dietary.utils.isUsernameValid
 
 @Preview(showBackground = true, locale = "in")
@@ -278,7 +278,7 @@ fun MyProfileForm(
                     )
                 },
                 supportingText = {
-                    if (weightTarget.isNotEmpty() and !weightTarget.isFloatValid())
+                    if (weightTarget.isNotEmpty() and !weightTarget.isFloatAnswerValid())
                         Text(
                             text = stringResource(R.string.target_weight_error_text),
                             style = MaterialTheme.typography.bodySmall,
@@ -289,9 +289,9 @@ fun MyProfileForm(
                             style = MaterialTheme.typography.bodySmall,
                         )
                 },
-                isError = weightTarget.isNotEmpty() and !weightTarget.isFloatValid(),
+                isError = weightTarget.isNotEmpty() and !weightTarget.isFloatAnswerValid(),
                 trailingIcon = {
-                    if (weightTarget.isNotEmpty() and !weightTarget.isFloatValid())
+                    if (weightTarget.isNotEmpty() and !weightTarget.isFloatAnswerValid())
                         Icon(
                             painter = painterResource(id = R.drawable.ic_round_error_24dp),
                             contentDescription = null,

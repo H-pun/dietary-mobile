@@ -40,9 +40,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.components.MyProfileForm
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.utils.isIntValid
+import dev.cisnux.dietary.utils.isIntAnswerValid
 import dev.cisnux.dietary.utils.isHeightOrWeightValid
-import dev.cisnux.dietary.utils.isFloatValid
+import dev.cisnux.dietary.utils.isFloatAnswerValid
 import dev.cisnux.dietary.utils.isUsernameValid
 import dev.cisnux.dietary.utils.UiState
 
@@ -422,9 +422,9 @@ private fun MyProfileBody(
             onClick = onBuildProfile,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = username.isUsernameValid() and age.isIntValid()
+            enabled = username.isUsernameValid() and age.isIntAnswerValid()
                     and weight.isHeightOrWeightValid() and height.isHeightOrWeightValid()
-                    and weightTarget.isFloatValid() and !isBuildProfileLoading,
+                    and weightTarget.isFloatAnswerValid() and !isBuildProfileLoading,
         ) {
             if (isBuildProfileLoading)
                 CircularProgressIndicator()

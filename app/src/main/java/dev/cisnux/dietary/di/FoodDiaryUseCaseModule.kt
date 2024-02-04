@@ -10,9 +10,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class DiaryFoodUseCaseModule {
+abstract class FoodDiaryUseCaseModule {
 
     @Singleton
     @Binds
-    abstract fun bindDiaryFoodInteractor(foodInteractor: FoodDiaryInteractor): FoodDiaryUseCase
+    abstract fun bindFoodDiaryInteractor(foodDiaryInteractor: FoodDiaryInteractor): FoodDiaryUseCase
 }

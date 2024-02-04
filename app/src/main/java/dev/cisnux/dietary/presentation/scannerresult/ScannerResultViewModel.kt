@@ -60,7 +60,7 @@ class ScannerResultViewModel @Inject constructor(
             foodQuestions = foodQuestions.mapIndexed { index, food ->
                 FoodQuestion(
                     foodId = food.id,
-                    foodName = food.foodName,
+                    foodName = food.name,
                     answers = answeredQuestions[index].map { answeredQuestion ->
                         Answer(
                             questionId = answeredQuestion.questionId,

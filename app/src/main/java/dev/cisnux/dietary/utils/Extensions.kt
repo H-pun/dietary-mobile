@@ -48,7 +48,7 @@ fun String.isUsernameValid(): Boolean {
     return Regex(usernameRegex).matches(this)
 }
 
-fun String.isIntValid(): Boolean = try {
+fun String.isIntAnswerValid(): Boolean = try {
     val value = this.toInt()
     value > 0
 } catch (e: NumberFormatException) {
@@ -62,14 +62,21 @@ fun String.isHeightOrWeightValid(): Boolean = try {
     false
 }
 
-fun String.isFloatValid(): Boolean = try {
+fun String.isFloatAnswerValid(): Boolean = try {
     val value = this.toFloat()
     value >= 0
 } catch (e: NumberFormatException) {
     false
 }
 
-fun Long.withDateFormat(): String {
+fun Long.withShortDateFormat(): String {
+    val date = Date(this)
+    val locale = Locale("id", "ID")
+    val sdf = SimpleDateFormat("dd MMM", locale);
+    return sdf.format(date)
+}
+
+fun Long.withFullDateFormat(): String {
     val date = Date(this)
     val locale = Locale("id", "ID")
     return DateFormat.getDateInstance(DateFormat.FULL, locale).format(date)
@@ -84,11 +91,11 @@ fun Long.withTimeFormat(): String {
 
 val Long.asDays: Long get() = TimeUnit.MILLISECONDS.toDays(this)
 
-val Int.diaryFoodCategory: DiaryFoodCategory
+val Int.foodDiaryCategory: FoodDiaryCategory
     get() = when (this) {
-        0 -> DiaryFoodCategory.BREAKFAST
-        1 -> DiaryFoodCategory.LUNCH
-        else -> DiaryFoodCategory.DINNER
+        0 -> FoodDiaryCategory.BREAKFAST
+        1 -> FoodDiaryCategory.LUNCH
+        else -> FoodDiaryCategory.DINNER
     }
 
 val String.questionType: QuestionType

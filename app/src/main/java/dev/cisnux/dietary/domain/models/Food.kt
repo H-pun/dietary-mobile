@@ -2,7 +2,7 @@ package dev.cisnux.dietary.domain.models
 
 data class Food(
     val id: String,
-    val foodName: String,
+    val name: String,
     val calorie: Float,
     val fat: Float,
     val protein: Float,

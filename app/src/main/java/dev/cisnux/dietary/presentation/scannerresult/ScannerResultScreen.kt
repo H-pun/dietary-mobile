@@ -75,8 +75,8 @@ import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.utils.QuestionType
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.isQuestionNotEmpty
-import dev.cisnux.dietary.utils.isFloatValid
-import dev.cisnux.dietary.utils.isIntValid
+import dev.cisnux.dietary.utils.isFloatAnswerValid
+import dev.cisnux.dietary.utils.isIntAnswerValid
 import java.io.File
 
 @Composable
@@ -149,7 +149,7 @@ fun ScannerResultScreen(
                     (scannerResultState as UiState.Success<FoodDiaryDetail>).data?.let { foodScannerResult ->
                         ScannerResultBody(
                             totalUserCaloriesToday = foodScannerResult.totalUserCaloriesToday,
-                            userDailyBmiCalorie = foodScannerResult.userDailyBmiCalorie,
+                            userDailyBmiCalorie = foodScannerResult.maxDailyBmiCalorie,
                             foods = foodScannerResult.foods,
                             totalFoodCalories = foodScannerResult.totalFoodCalories,
                             status = foodScannerResult.status,
@@ -184,8 +184,8 @@ fun ScannerResultScreen(
                             answeredQuestions.all { foodQuestion ->
                                 foodQuestion.all { answeredQuestion ->
                                     when (answeredQuestion.type) {
-                                        QuestionType.INTEGER -> answeredQuestion.answer.isIntValid()
-                                        QuestionType.FLOAT -> answeredQuestion.answer.isFloatValid()
+                                        QuestionType.INTEGER -> answeredQuestion.answer.isIntAnswerValid()
+                                        QuestionType.FLOAT -> answeredQuestion.answer.isFloatAnswerValid()
                                         else -> answeredQuestion.answer.isNotBlank()
                                     }
                                 }
@@ -238,14 +238,14 @@ private fun ScannerResultContentPreview() {
     val foodDiaryResult = FoodDiaryDetail(
         foodDiaryId = "1",
         totalFoodCalories = 200.4512f,
-        userDailyBmiCalorie = 800.6798f,
+        maxDailyBmiCalorie = 800.6798f,
         totalUserCaloriesToday = 500.7892f,
         status = "Boleh dimakan",
         feedback = "Terlalu banyak gula",
         foods = listOf(
             Food(
                 id = "1",
-                foodName = "Nasi",
+                name = "Nasi",
                 calorie = 50f,
                 protein = 8f,
                 fat = 2f,
@@ -270,7 +270,7 @@ private fun ScannerResultContentPreview() {
             ),
             Food(
                 id = "2",
-                foodName = "Ayam Bakar",
+                name = "Ayam Bakar",
                 calorie = 50f,
                 protein = 6f,
                 fat = 10f,
@@ -288,7 +288,7 @@ private fun ScannerResultContentPreview() {
             ),
             Food(
                 id = "3",
-                foodName = "Tempe Goreng",
+                name = "Tempe Goreng",
                 calorie = 5.8f,
                 protein = 9f,
                 fat = 1f,
@@ -306,7 +306,7 @@ private fun ScannerResultContentPreview() {
             ),
             Food(
                 id = "4",
-                foodName = "Sayur Kangkung",
+                name = "Sayur Kangkung",
                 calorie = 5.8f,
                 protein = 9f,
                 fat = 0.5f,
@@ -332,7 +332,7 @@ private fun ScannerResultContentPreview() {
             body = {
                 ScannerResultBody(
                     totalUserCaloriesToday = foodDiaryResult.totalUserCaloriesToday,
-                    userDailyBmiCalorie = foodDiaryResult.userDailyBmiCalorie,
+                    userDailyBmiCalorie = foodDiaryResult.maxDailyBmiCalorie,
                     totalFoodCalories = foodDiaryResult.totalFoodCalories,
                     foods = foodDiaryResult.foods,
                     status = foodDiaryResult.status,
@@ -496,7 +496,7 @@ private fun QuestionDialog(
                     key = { foods[it].id },
                     contentType = { foods[it] }) { index ->
                     QuestionListItem(
-                        foodName = foods[index].foodName,
+                        foodName = foods[index].name,
                         answeredQuestions = answeredQuestions[index],
                         onAnswerChange = { newValue, answerIndex ->
                             onAnswerChange(newValue, index, answerIndex)
@@ -549,8 +549,8 @@ private fun QuestionListItem(
             List(answeredQuestions.size) { index ->
                 val isNotValid =
                     when (answeredQuestions[index].type) {
-                        QuestionType.INTEGER -> !answeredQuestions[index].answer.isIntValid()
-                        QuestionType.FLOAT -> !answeredQuestions[index].answer.isFloatValid()
+                        QuestionType.INTEGER -> !answeredQuestions[index].answer.isIntAnswerValid()
+                        QuestionType.FLOAT -> !answeredQuestions[index].answer.isFloatAnswerValid()
                         else -> answeredQuestions[index].answer.isBlank()
                     }
 

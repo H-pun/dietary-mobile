@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.cisnux.dietary.domain.usecases.FoodDiaryUseCase
-import dev.cisnux.dietary.utils.DiaryFoodCategory
+import dev.cisnux.dietary.utils.FoodDiaryCategory
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.asDays
-import dev.cisnux.dietary.utils.diaryFoodCategory
+import dev.cisnux.dietary.utils.foodDiaryCategory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,7 +26,7 @@ class HomeViewModel @Inject constructor(
     private val foodDiaryUseCase: FoodDiaryUseCase
 ) : ViewModel() {
     private var selectedDate = MutableStateFlow(System.currentTimeMillis())
-    private var foodDiaryCategory = MutableStateFlow(DiaryFoodCategory.BREAKFAST)
+    private var foodDiaryCategory = MutableStateFlow(FoodDiaryCategory.BREAKFAST)
     private var refreshFoodDiaries = MutableStateFlow(false)
     private var refreshSearchedFoodDiaries = MutableStateFlow(false)
     private var refreshSuggestionKeywords = MutableStateFlow(false)
@@ -122,7 +122,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateFoodDiaryCategory(index: Int) {
-        foodDiaryCategory.value = index.diaryFoodCategory
+        foodDiaryCategory.value = index.foodDiaryCategory
         refreshFoodDiaries.value = true
     }
 
