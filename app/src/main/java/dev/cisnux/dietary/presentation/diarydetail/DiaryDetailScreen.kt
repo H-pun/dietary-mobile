@@ -349,7 +349,7 @@ fun DiaryDetailBody(
                 positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
                 tooltip = {
                     PlainTooltip {
-                        Text(text = "Tambahkan makanan")
+                        Text(text = "Tambahkan food diary")
                     }
                 },
                 state = rememberTooltipState(),
@@ -472,12 +472,12 @@ private fun DuplicateDialog(
                 modifier = modifier.padding(horizontal = 20.dp, vertical = 24.dp)
             ) {
                 Text(
-                    text = "Tambahkan Makanan",
+                    text = "Tambahkan Food Diary",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Pilih kategori makanan yang akan ditambahkan sarapan, makan siang\natau makan malam.",
+                    text = "Pilih kategori food diary yang akan ditambahkan sarapan, makan siang\natau makan malam.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -504,7 +504,7 @@ private fun DuplicateDialog(
                         onValueChange = {},
                         label = {
                             Text(
-                                text = "Category",
+                                text = "Kategori",
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         },
