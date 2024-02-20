@@ -1,8 +1,8 @@
-package dev.cisnux.dietary.domain.usecases
+package dev.cisnux.dietary.data.locals
 
 import kotlinx.coroutines.flow.Flow
 
-interface LandingUseCase {
+interface LandingLocalSource {
     val hasLandingShowed: Flow<Boolean>
     suspend fun updateLandingStatus(hasLandingShowed: Boolean)
 }

@@ -16,9 +16,6 @@ class AuthenticationInteractor @Inject constructor(
     override val hasAuthTokenExpired: Flow<Boolean>
         get() = tokenRepository.hasAuthTokenExpired
 
-    override val hasFoodSecretTokenExpired: Flow<Boolean>
-        get() = tokenRepository.hasFoodSecretTokenExpired
-
     override fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>> =
         authenticationRepository.signInWithEmailAndPassword(userAccount)
 
@@ -33,4 +30,6 @@ class AuthenticationInteractor @Inject constructor(
 
     override fun resetPassword(emailAddress: String): Flow<UiState<Nothing>> =
         authenticationRepository.resetPassword(emailAddress)
+
+    override suspend fun signOut() = tokenRepository.removeTokenState()
 }

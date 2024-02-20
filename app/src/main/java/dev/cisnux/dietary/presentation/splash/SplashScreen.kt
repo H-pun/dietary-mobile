@@ -1,6 +1,7 @@
 package dev.cisnux.dietary.presentation.splash
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,15 +23,16 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.SplashWaitTimeMillis
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
     navigateToLanding: () -> Unit,
-    navigateToSignIn: () -> Unit,
-    navigateToAddMyProfile: () -> Unit,
-    navigateToHome: () -> Unit,
+    navigateToSignIn: (String) -> Unit,
+    navigateToAddMyProfile: (String) -> Unit,
+    navigateToHome: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
@@ -44,13 +46,16 @@ fun SplashScreen(
 
     LaunchedEffect(Unit) {
         delay(SplashWaitTimeMillis)
+        Log.d("SplashScreen", "hasLandingShowed $hasLandingShowed")
+        Log.d("SplashScreen", "hasTokenExpired $hasTokenExpired")
+        Log.d("SplashScreen", "isUserProfileExist $isUserProfileExist")
         if (hasLandingShowed != null && hasTokenExpired != null && isUserProfileExist != null)
             when {
                 !hasLandingShowed!! -> onNavigateToLanding()
-                hasTokenExpired!! -> onNavigateToSignIn()
-                !isUserProfileExist!! -> onNavigateToAddMyProfile()
+                hasTokenExpired!! -> onNavigateToSignIn(AppDestination.SplashRoute.route)
+                !isUserProfileExist!! -> onNavigateToAddMyProfile(AppDestination.SplashRoute.route)
                 else -> {
-                    onNavigateToHome()
+                    onNavigateToHome(AppDestination.SplashRoute.route)
                 }
             }
     }

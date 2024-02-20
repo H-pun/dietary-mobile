@@ -28,7 +28,15 @@ sealed class Failure(override var message: String?) : Exception(message) {
             HttpStatusCode.BadRequest to BadRequestFailure(),
             HttpStatusCode.Unauthorized to UnauthorizedFailure(),
             HttpStatusCode.NotFound to NotFoundFailure(),
-            HttpStatusCode.InternalServerError to ServerFailure()
+            HttpStatusCode.InternalServerError to ServerFailure(),
+            HttpStatusCode.InternalServerError to ServerFailure(),
+            HttpStatusCode.NotImplemented to ServerFailure(),
+            HttpStatusCode.BadGateway to ServerFailure(),
+            HttpStatusCode.ServiceUnavailable to ServerFailure(),
+            HttpStatusCode.GatewayTimeout to ServerFailure(),
+            HttpStatusCode.VersionNotSupported to ServerFailure(),
+            HttpStatusCode.VariantAlsoNegotiates to ServerFailure(),
+            HttpStatusCode.InsufficientStorage to ServerFailure()
         )
     }
 }

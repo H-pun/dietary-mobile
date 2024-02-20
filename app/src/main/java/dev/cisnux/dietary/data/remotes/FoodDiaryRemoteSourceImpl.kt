@@ -30,6 +30,8 @@ import io.ktor.util.network.UnresolvedAddressException
 import io.ktor.utils.io.streams.asInput
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class FoodDiaryRemoteSourceImpl @Inject constructor(
@@ -51,7 +53,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 Either.Left(failure)
             } else {
                 val commonResponse: CommonResponse<List<FoodDiaryResponse>> = response.body()
-                Either.Right(commonResponse.data)
+                Either.Right(commonResponse.data!!)
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
@@ -74,7 +76,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 Either.Left(failure)
             } else {
                 val commonResponse: CommonResponse<FoodDiaryDetailResponse> = response.body()
-                Either.Right(commonResponse.data)
+                Either.Right(commonResponse.data!!)
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
@@ -100,11 +102,14 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                             append(key = "category", foodDiary.category, Headers.build {
                                 append(HttpHeaders.ContentType, "text/plain")
                             })
-                            append(key = "addded_at", foodDiary.addedAt.toString(), Headers.build {
-                                append(HttpHeaders.ContentType, "text/plain")
-                            })
                             append(
-                                key = "food_picture",
+                                key = "adddedAt",
+                                DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(foodDiary.addedAt)),
+                                Headers.build {
+                                    append(HttpHeaders.ContentType, "text/plain")
+                                })
+                            append(
+                                key = "foodPicture",
                                 InputProvider(foodDiary.foodPicture.length()) {
                                     foodDiary.foodPicture.inputStream().asInput()
                                 },
@@ -126,7 +131,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 Either.Left(failure)
             } else {
                 val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
-                Either.Right(commonResponse.data)
+                Either.Right(commonResponse.data!!)
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
@@ -173,7 +178,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 Either.Left(failure)
             } else {
                 val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
-                Either.Right(commonResponse.data)
+                Either.Right(commonResponse.data!!)
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
@@ -196,7 +201,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 Either.Left(failure)
             } else {
                 val commonResponse: CommonResponse<ReportResponse> = response.body()
-                Either.Right(commonResponse.data)
+                Either.Right(commonResponse.data!!)
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
@@ -219,7 +224,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 Either.Left(failure)
             } else {
                 val commonResponse: CommonResponse<List<String>> = response.body()
-                Either.Right(commonResponse.data)
+                Either.Right(commonResponse.data!!)
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())

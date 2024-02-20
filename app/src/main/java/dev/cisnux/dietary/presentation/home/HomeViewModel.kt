@@ -3,6 +3,7 @@ package dev.cisnux.dietary.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.domain.usecases.FoodDiaryUseCase
 import dev.cisnux.dietary.utils.FoodDiaryCategory
 import dev.cisnux.dietary.utils.UiState
@@ -19,11 +20,13 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val foodDiaryUseCase: FoodDiaryUseCase
+    private val foodDiaryUseCase: FoodDiaryUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
 ) : ViewModel() {
     private var selectedDate = MutableStateFlow(System.currentTimeMillis())
     private var foodDiaryCategory = MutableStateFlow(FoodDiaryCategory.BREAKFAST)
@@ -61,17 +64,18 @@ class HomeViewModel @Inject constructor(
     )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val searchedFoodDiaryState = refreshSearchedFoodDiaries.asStateFlow().flatMapMerge { isRefresh ->
-        if (isRefresh)
-            query.asStateFlow().filter { it.isNotBlank() }.flatMapLatest { query ->
-                foodDiaryUseCase.getDiaryFoodsByQuery(query).also {
-                    refreshSearchedFoodDiaries.value = false
+    val searchedFoodDiaryState =
+        refreshSearchedFoodDiaries.asStateFlow().flatMapMerge { isRefresh ->
+            if (isRefresh)
+                query.asStateFlow().filter { it.isNotBlank() }.flatMapLatest { query ->
+                    foodDiaryUseCase.getDiaryFoodsByQuery(query).also {
+                        refreshSearchedFoodDiaries.value = false
+                    }
                 }
-            }
-        else flow { }
-    }.shareIn(
-        scope = viewModelScope, started = SharingStarted.WhileSubscribed()
-    )
+            else flow { }
+        }.shareIn(
+            scope = viewModelScope, started = SharingStarted.WhileSubscribed()
+        )
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val searchedFoodDiaries = searchedFoodDiaryState.mapLatest { state ->
@@ -141,5 +145,9 @@ class HomeViewModel @Inject constructor(
     fun updateQuery(newQuery: String) {
         query.value = newQuery
         refreshSuggestionKeywords.value = true
+    }
+
+    fun signOut() = viewModelScope.launch {
+        authenticationUseCase.signOut()
     }
 }

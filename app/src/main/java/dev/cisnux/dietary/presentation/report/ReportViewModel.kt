@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.cisnux.dietary.domain.models.Report
+import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.domain.usecases.FoodDiaryUseCase
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.reportCategory
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReportViewModel @Inject constructor(
-    private val useCase: FoodDiaryUseCase
+    private val useCase: FoodDiaryUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
 ) : ViewModel() {
     private val _reportState = MutableStateFlow<UiState<Report>>(UiState.Initialize)
     val reportState get() = _reportState.asStateFlow()
@@ -45,5 +47,9 @@ class ReportViewModel @Inject constructor(
         useCase.getFoodDiaryReports(index.reportCategory).collectLatest { uiState ->
             _reportState.value = uiState
         }
+    }
+
+    fun signOut() = viewModelScope.launch {
+        authenticationUseCase.signOut()
     }
 }

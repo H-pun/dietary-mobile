@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface TokenRepository {
     val hasAuthTokenExpired: Flow<Boolean>
-    val hasFoodSecretTokenExpired: Flow<Boolean>
+    suspend fun removeTokenState()
 }

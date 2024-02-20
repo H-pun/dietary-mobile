@@ -25,8 +25,8 @@
     <string name="dummy_gender">Pria</string>
     <string name="dummy_weight" translatable="false">70</string>
     <string-array name="gender">
-        <item>Man</item>
-        <item>Woman</item>
+        <item>Pria</item>
+        <item>Wanita</item>
     </string-array>
     <string name="food_scanner_title" translatable="false">Food Scanner</string>
     <string name="camera_permission_message">Food scanner tidak tersedia karena Anda menolak akses ke kamera. Anda dapat memberikan izin melalui pengaturan</string>

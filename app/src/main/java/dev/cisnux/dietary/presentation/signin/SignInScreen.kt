@@ -64,14 +64,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.isEmailValid
 import dev.cisnux.dietary.utils.isPasswordSecure
 import dev.cisnux.dietary.utils.UiState
 
 @Composable
 fun SignInScreen(
-    navigateToHome: () -> Unit,
-    navigateToAddMyProfile: () -> Unit,
+    navigateToHome: (String) -> Unit,
+    navigateToAddMyProfile: (String) -> Unit,
     navigateToResetPassword: () -> Unit,
     navigateToSignUp: () -> Unit,
     modifier: Modifier = Modifier,
@@ -95,9 +96,9 @@ fun SignInScreen(
             val isUserProfileExist by viewModel.isUserProfileExist.collectAsState(initial = null)
             isUserProfileExist?.let {
                 if (it)
-                    navigateToHome()
+                    navigateToHome(AppDestination.SignInRoute.route)
                 else
-                    navigateToAddMyProfile()
+                    navigateToAddMyProfile(AppDestination.SignInRoute.route)
             }
         }
 
@@ -129,9 +130,9 @@ fun SignInScreen(
             val isUserProfileExist by viewModel.isUserProfileExist.collectAsState(initial = null)
             isUserProfileExist?.let {
                 if (it)
-                    navigateToHome()
+                    navigateToHome(AppDestination.SignInRoute.route)
                 else
-                    navigateToAddMyProfile()
+                    navigateToAddMyProfile(AppDestination.SignInRoute.route)
             }
         }
 

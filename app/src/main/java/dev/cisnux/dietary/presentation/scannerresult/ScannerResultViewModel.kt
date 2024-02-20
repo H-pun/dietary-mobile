@@ -10,6 +10,7 @@ import dev.cisnux.dietary.domain.models.Food
 import dev.cisnux.dietary.domain.models.FoodDiaryQuestion
 import dev.cisnux.dietary.domain.models.FoodQuestion
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
+import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.domain.usecases.FoodDiaryUseCase
 import dev.cisnux.dietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ScannerResultViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val useCase: FoodDiaryUseCase
+    private val useCase: FoodDiaryUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
 ) : ViewModel() {
     private val title = checkNotNull(value = savedStateHandle["title"]) as String
     private val foodDiaryCategory =
@@ -79,5 +81,9 @@ class ScannerResultViewModel @Inject constructor(
                     _scannerResultState.value = uiState
                 }
         }
+    }
+
+    fun signOut() = viewModelScope.launch {
+        authenticationUseCase.signOut()
     }
 }

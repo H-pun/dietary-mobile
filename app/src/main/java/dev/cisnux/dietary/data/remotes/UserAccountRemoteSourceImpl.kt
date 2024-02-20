@@ -4,8 +4,8 @@ import arrow.core.Either
 import dev.cisnux.dietary.data.remotes.responses.CommonResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.NewPasswordBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.ResetPasswordBodyRequest
-import dev.cisnux.dietary.data.remotes.responses.SignInResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.UserAccountBodyRequest
+import dev.cisnux.dietary.data.remotes.responses.AddedUserAccountResponse
 import dev.cisnux.dietary.utils.DIETARY_API
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
@@ -23,21 +23,24 @@ import io.ktor.util.network.UnresolvedAddressException
 class UserAccountRemoteSourceImpl @Inject constructor(
     private val client: HttpClient
 ) : UserAccountRemoteSource {
-    override suspend fun signIn(userAccount: UserAccountBodyRequest): Either<Exception, String> =
+    override suspend fun signIn(userAccount: UserAccountBodyRequest): Either<Exception, AddedUserAccountResponse> =
         withContext(Dispatchers.IO) {
             try {
                 val response = client.post(
-                    urlString = "$DIETARY_API/authentication"
+                    urlString = "$DIETARY_API/user/login"
                 ) {
                     contentType(ContentType.Application.Json)
                     setBody(userAccount)
                 }
                 val failure = Failure.HTTP_FAILURES[response.status]
                 return@withContext if (failure != null) {
-                    Either.Left(failure)
+                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    Either.Left(failure.apply {
+                        message = commonResponse.message
+                    })
                 } else {
-                    val commonResponse: CommonResponse<SignInResponse> = response.body()
-                    Either.Right(commonResponse.data.accessToken)
+                    val commonResponse: CommonResponse<AddedUserAccountResponse> = response.body()
+                    Either.Right(commonResponse.data!!)
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
@@ -48,14 +51,17 @@ class UserAccountRemoteSourceImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             try {
                 val response = client.post(
-                    urlString = "$DIETARY_API/account"
+                    urlString = "$DIETARY_API/user/register"
                 ) {
                     contentType(ContentType.Application.Json)
                     setBody(userAccount)
                 }
                 val failure = Failure.HTTP_FAILURES[response.status]
                 return@withContext if (failure != null) {
-                    Either.Left(failure)
+                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    Either.Left(failure.apply {
+                        message = commonResponse.message
+                    })
                 } else {
                     Either.Right(null)
                 }
@@ -75,7 +81,10 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
                 val failure = Failure.HTTP_FAILURES[response.status]
                 return@withContext if (failure != null) {
-                    Either.Left(failure)
+                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    Either.Left(failure.apply {
+                        message = commonResponse.message
+                    })
                 } else {
                     val commonResponse: CommonResponse<Nothing> = response.body()
                     Either.Right(commonResponse.message)
@@ -98,7 +107,10 @@ class UserAccountRemoteSourceImpl @Inject constructor(
 
                 val failure = Failure.HTTP_FAILURES[response.status]
                 return@withContext if (failure != null) {
-                    Either.Left(failure)
+                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    Either.Left(failure.apply {
+                        message = commonResponse.message
+                    })
                 } else {
                     val commonResponse: CommonResponse<Nothing> = response.body()
                     Either.Right(commonResponse.message)

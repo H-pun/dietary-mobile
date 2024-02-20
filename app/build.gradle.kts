@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.daggerHiltAndroid)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.googleProtobuf)
     id("kotlin-parcelize")
 }
 
@@ -53,6 +54,22 @@ android {
     }
 }
 
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.24.1"
+    }
+
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                create("java") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -89,7 +106,7 @@ dependencies {
     implementation(libs.coil.compose)
     // ktor
     implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.logging)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
@@ -104,6 +121,10 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     // ycharts
     implementation(libs.yml.charts)
+    // datastore
+    implementation(libs.datastore.proto)
+    implementation(libs.datastore.preferences)
+    implementation(libs.protobuf.javalite)
 }
 
 // Allow references to generated code

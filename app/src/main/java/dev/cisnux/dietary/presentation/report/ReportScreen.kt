@@ -59,6 +59,7 @@ import dev.cisnux.dietary.presentation.ui.components.BottomBar
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.placeholder
 import dev.cisnux.dietary.utils.AppDestination
+import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.withShortDateFormat
 import kotlin.random.Random
@@ -66,6 +67,7 @@ import kotlin.random.Random
 @Composable
 fun ReportScreen(
     navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
+    navigateToSignIn: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ReportViewModel = hiltViewModel(),
 ) {
@@ -98,6 +100,10 @@ fun ReportScreen(
                     )
                 }
             }
+            if (exception is Failure.UnauthorizedFailure) {
+                viewModel.signOut()
+                navigateToSignIn(AppDestination.ReportRoute.route)
+            }
         }
     }
 
@@ -107,7 +113,7 @@ fun ReportScreen(
             ReportBody(
                 totalUserCaloriesToday = report?.totalUserCaloriesToday ?: 0f,
                 maxDailyBmiCalorie = report?.maxDailyBmiCalorie ?: 0f,
-                foods = report?.foods?: listOf(),
+                foods = report?.foods ?: listOf(),
                 tabState = tabState,
                 onTabChange = { index ->
                     tabState = index
@@ -340,7 +346,7 @@ private fun ReportBody(
                 modifier = Modifier.fillMaxSize()
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
-                if(!isLoading && foods.isNotEmpty()) {
+                if (!isLoading && foods.isNotEmpty()) {
                     val barData = foods.mapIndexed { index, foodDiaryReport ->
                         BarData(
                             point = Point(index.toFloat(), foodDiaryReport.totalFoodCalories),
@@ -350,17 +356,21 @@ private fun ReportBody(
 
                     val yStepSize = 10
 
-                    val xAxisData = AxisData.Builder().axisLabelColor(MaterialTheme.colorScheme.onSurface)
-                        .axisLineColor(MaterialTheme.colorScheme.onSurface)
-                        .backgroundColor(MaterialTheme.colorScheme.surface).steps(barData.size).axisStepSize(30.dp)
-                        .bottomPadding(40.dp).startDrawPadding(28.dp).endPadding(28.dp)
-                        .labelData { index -> foods[index].label }.build()
+                    val xAxisData =
+                        AxisData.Builder().axisLabelColor(MaterialTheme.colorScheme.onSurface)
+                            .axisLineColor(MaterialTheme.colorScheme.onSurface)
+                            .backgroundColor(MaterialTheme.colorScheme.surface).steps(barData.size)
+                            .axisStepSize(30.dp)
+                            .bottomPadding(40.dp).startDrawPadding(28.dp).endPadding(28.dp)
+                            .labelData { index -> foods[index].label }.build()
 
-                    val yAxisData = AxisData.Builder().axisLabelColor(MaterialTheme.colorScheme.onSurface)
-                        .axisLineColor(MaterialTheme.colorScheme.onSurface)
-                        .backgroundColor(MaterialTheme.colorScheme.surface).steps(yStepSize)
-                        .labelAndAxisLinePadding(20.dp).axisOffset(20.dp)
-                        .labelData { index -> (index * (maxRange / yStepSize)).toString() }.build()
+                    val yAxisData =
+                        AxisData.Builder().axisLabelColor(MaterialTheme.colorScheme.onSurface)
+                            .axisLineColor(MaterialTheme.colorScheme.onSurface)
+                            .backgroundColor(MaterialTheme.colorScheme.surface).steps(yStepSize)
+                            .labelAndAxisLinePadding(20.dp).axisOffset(20.dp)
+                            .labelData { index -> (index * (maxRange / yStepSize)).toString() }
+                            .build()
 
                     val barChartData = BarChartData(
                         chartData = barData,
@@ -387,7 +397,7 @@ private fun ReportBody(
                             .fillMaxWidth(), barChartData = barChartData
                     )
                 }
-                if(isLoading) {
+                if (isLoading) {
                     Row(
                         verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.SpaceBetween,

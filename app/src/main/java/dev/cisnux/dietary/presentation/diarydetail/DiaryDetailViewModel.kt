@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
+import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.domain.usecases.FoodDiaryUseCase
 import dev.cisnux.dietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DiaryDetailViewModel @Inject constructor(
     private val useCase: FoodDiaryUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val foodDiaryId = checkNotNull(value = savedStateHandle["foodDiaryId"]) as String
@@ -51,5 +53,9 @@ class DiaryDetailViewModel @Inject constructor(
         ).collectLatest { uiState ->
             _duplicateState.value = uiState
         }
+    }
+
+    fun signOut() = viewModelScope.launch {
+        authenticationUseCase.signOut()
     }
 }

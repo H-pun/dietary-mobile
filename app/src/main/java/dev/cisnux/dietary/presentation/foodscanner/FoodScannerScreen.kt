@@ -76,6 +76,7 @@ import dev.cisnux.dietary.R
 import dev.cisnux.dietary.domain.models.UserProfileDetail
 import dev.cisnux.dietary.presentation.ui.components.HealthProfileDialog
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.UiState
 import java.io.File
@@ -84,6 +85,7 @@ import java.io.File
 fun FoodScannerScreen(
     onNavigateUp: () -> Unit,
     navigateToMyProfile: () -> Unit,
+    navigateToSignIn: (String) -> Unit,
     onGalleryButton: (launcher: ActivityResultLauncher<Intent>) -> Unit,
     onScannerResult: (foodPicture: File, title: String, foodDiaryCategory: String) -> Unit,
     modifier: Modifier = Modifier,
@@ -140,6 +142,10 @@ fun FoodScannerScreen(
                         true
                     )
                 }
+            }
+            if (exception is Failure.UnauthorizedFailure) {
+                viewModel.signOut()
+                navigateToSignIn(AppDestination.FoodScannerRoute.route)
             }
         }
     }

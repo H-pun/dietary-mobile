@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import dev.cisnux.dietary.utils.Failure
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -99,6 +100,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     navigateToDiaryDetail: (foodDiaryId: String) -> Unit,
+    navigateToSignIn: (String) -> Unit,
     onFabFoodScanner: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
@@ -157,6 +159,10 @@ fun HomeScreen(
                     )
                 }
             }
+            if (exception is Failure.UnauthorizedFailure) {
+                viewModel.signOut()
+                navigateToSignIn(AppDestination.HomeRoute.route)
+            }
         }
 
         searchedDiaryFoodState is UiState.Error -> (searchedDiaryFoodState as UiState.Error).error?.let { exception ->
@@ -174,6 +180,10 @@ fun HomeScreen(
                         )
                 }
             }
+            if (exception is Failure.UnauthorizedFailure){
+                viewModel.signOut()
+                navigateToSignIn(AppDestination.HomeRoute.route)
+            }
         }
 
         keywordSuggestionState is UiState.Error -> (keywordSuggestionState as UiState.Error).error?.let { exception ->
@@ -189,6 +199,10 @@ fun HomeScreen(
                         true
                     )
                 }
+            }
+            if (exception is Failure.UnauthorizedFailure){
+                viewModel.signOut()
+                navigateToSignIn(AppDestination.HomeRoute.route)
             }
         }
     }
@@ -547,7 +561,8 @@ private fun HomeBody(
             Spacer(modifier = Modifier.height(8.dp))
             TabRow(
                 selectedTabIndex = tabState,
-                modifier = Modifier.padding(end = 16.dp)) {
+                modifier = Modifier.padding(end = 16.dp)
+            ) {
                 List(tabDiaries.size) { index ->
                     Tab(icon = {
                         Icon(

@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.domain.usecases.FileUseCase
 import dev.cisnux.dietary.domain.usecases.UserProfileUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class FoodScannerViewModel @Inject constructor(
     private val fileUseCase: FileUseCase,
     private val userProfileUseCase: UserProfileUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     val title = checkNotNull(value = savedStateHandle["title"]) as String
@@ -65,5 +67,9 @@ class FoodScannerViewModel @Inject constructor(
 
     fun updateRefreshUserProfile(isRefresh: Boolean) {
         refreshUserProfile.value = isRefresh
+    }
+
+    fun signOut() = viewModelScope.launch {
+        authenticationUseCase.signOut()
     }
 }

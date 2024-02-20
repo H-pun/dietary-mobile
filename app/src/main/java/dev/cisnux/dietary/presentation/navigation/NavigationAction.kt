@@ -50,14 +50,11 @@ class NavComponentAction(
     val navigateUp: () -> Unit = {
         navController.navigateUp()
     }
-    val navigateToHome: () -> Unit = {
+    val navigateToHome: (currentRoute: String) -> Unit = { currentRoute ->
         navController.navigate(route = AppDestination.HomeRoute.route) {
-            popUpTo(navController.graph.findStartDestination().id) {
+            popUpTo(currentRoute) {
                 inclusive = true
-                saveState = true
             }
-            restoreState = true
-            launchSingleTop = true
         }
     }
     val navigateToHomeFromScannerResult: () -> Unit = {
@@ -91,36 +88,21 @@ class NavComponentAction(
     val navigateToSignUp: () -> Unit = {
         navController.navigate(AppDestination.SignUpRoute.route)
     }
-    val navigateToSignIn: () -> Unit = {
+    val navigateToSignIn: (currentRoute: String) -> Unit = { currentRoute ->
         navController.navigate(route = AppDestination.SignInRoute.route) {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
-            restoreState = true
-            launchSingleTop = true
-        }
-    }
-    val navigateToSignInForSignOut: () -> Unit = {
-        navController.navigate(route = AppDestination.SignInRoute.route) {
-            popUpTo(AppDestination.MyProfileRoute.route) {
+            popUpTo(currentRoute) {
                 inclusive = true
-                saveState = true
             }
-            restoreState = true
-            launchSingleTop = true
         }
     }
     val navigateToResetPassword: () -> Unit = {
         navController.navigate(AppDestination.ResetPasswordRoute.route)
     }
-    val navigateToAddMyProfile: () -> Unit = {
+    val navigateToAddMyProfile: (currentRoute: String) -> Unit = { currentRoute ->
         navController.navigate(route = AppDestination.AddMyProfileRoute.route) {
-            popUpTo(navController.graph.findStartDestination().id) {
+            popUpTo(currentRoute) {
                 inclusive = true
-                saveState = true
             }
-            restoreState = true
-            launchSingleTop = true
         }
     }
     val bottomNavigation: (destination: AppDestination, currentRoute: AppDestination) -> Unit =

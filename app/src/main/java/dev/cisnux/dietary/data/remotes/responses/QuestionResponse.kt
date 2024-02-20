@@ -10,6 +10,7 @@ data class QuestionResponse(
     val question: String,
     // The type of question can be text, integer, float or boolean
     val type: String,
+    val choices: List<String>,
     // e.g. kg or g
     val unit: String? = null,
 )

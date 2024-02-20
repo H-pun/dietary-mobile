@@ -232,7 +232,10 @@ fun DietaryNavGraph(
                 )
             }
         ) {
-            AddMyProfileScreen(navigateToHome = navComponentAction.navigateToHome)
+            AddMyProfileScreen(
+                navigateToHome = navComponentAction.navigateToHome,
+                navigateToSignIn = navComponentAction.navigateToSignIn
+            )
         }
         composable(
             route = AppDestination.SignUpRoute.route,
@@ -329,7 +332,8 @@ fun DietaryNavGraph(
             HomeScreen(
                 navigateForBottomNav = navComponentAction.bottomNavigation,
                 onFabFoodScanner = navComponentAction.navigateToAddDiary,
-                navigateToDiaryDetail = navComponentAction.navigateToFoodDiaryDetail
+                navigateToDiaryDetail = navComponentAction.navigateToFoodDiaryDetail,
+                navigateToSignIn = navComponentAction.navigateToSignIn
             )
         }
         composable(
@@ -365,7 +369,7 @@ fun DietaryNavGraph(
         ) {
             MyProfileScreen(
                 navigateForBottomNav = navComponentAction.bottomNavigation,
-                navigateToSignIn = navComponentAction.navigateToSignInForSignOut
+                navigateToSignIn = navComponentAction.navigateToSignIn
             )
         }
         composable(
@@ -399,7 +403,10 @@ fun DietaryNavGraph(
                 )
             }
         ) {
-           ReportScreen(navigateForBottomNav = navComponentAction.bottomNavigation)
+            ReportScreen(
+                navigateForBottomNav = navComponentAction.bottomNavigation,
+                navigateToSignIn = navComponentAction.navigateToSignIn
+            )
         }
         composable(
             route = AppDestination.AddDiaryRoute.route,
@@ -470,7 +477,10 @@ fun DietaryNavGraph(
                 )
             }
         ) {
-            DiaryDetailScreen(navigateUp = navComponentAction.navigateUp)
+            DiaryDetailScreen(
+                navigateUp = navComponentAction.navigateUp,
+                navigateToSignIn = navComponentAction.navigateToSignIn
+            )
         }
         composable(
             route = AppDestination.FoodScannerRoute.route,
@@ -518,7 +528,8 @@ fun DietaryNavGraph(
                     navComponentAction.navigateToScannerResult(title, foodDiaryCategory)
                 },
                 onGalleryButton = navComponentAction.takePictureFromGallery,
-                navigateToMyProfile = navComponentAction.navigateToMyProfile
+                navigateToMyProfile = navComponentAction.navigateToMyProfile,
+                navigateToSignIn = navComponentAction.navigateToSignIn
             )
         }
         composable(
@@ -563,6 +574,7 @@ fun DietaryNavGraph(
             ScannerResultScreen(
                 foodPicture = foodPicture,
                 onNavigateUp = navComponentAction.navigateToHomeFromScannerResult,
+                navigateToSignIn = navComponentAction.navigateToSignIn
             )
         }
     }

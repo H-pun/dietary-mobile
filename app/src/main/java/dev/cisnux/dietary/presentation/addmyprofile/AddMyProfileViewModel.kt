@@ -3,6 +3,7 @@ package dev.cisnux.dietary.presentation.addmyprofile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.domain.usecases.UserProfileUseCase
 import dev.cisnux.dietary.utils.asUserProfile
 import dev.cisnux.dietary.utils.UiState
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddMyProfileViewModel @Inject constructor(
-    private val userProfileUseCase: UserProfileUseCase
+    private val userProfileUseCase: UserProfileUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
 ) : ViewModel() {
     private val _addMyProfileState: MutableStateFlow<UiState<Nothing>> =
         MutableStateFlow(UiState.Initialize)
@@ -27,5 +29,9 @@ class AddMyProfileViewModel @Inject constructor(
                 _addMyProfileState.value = uiState
             }
         }
+    }
+
+    fun signOut() = viewModelScope.launch {
+        authenticationUseCase.signOut()
     }
 }

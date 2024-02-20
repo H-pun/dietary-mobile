@@ -72,12 +72,15 @@ import dev.cisnux.dietary.domain.models.FoodDiaryDetail
 import dev.cisnux.dietary.presentation.ui.components.ScannerResultBody
 import dev.cisnux.dietary.presentation.ui.components.ScannerResultShimmer
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.utils.AppDestination
+import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryDetailScreen(
     modifier: Modifier = Modifier,
+    navigateToSignIn: (String) -> Unit,
     navigateUp: () -> Unit,
     viewModel: DiaryDetailViewModel = hiltViewModel()
 ) {
@@ -115,6 +118,8 @@ fun DiaryDetailScreen(
                     if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getFoodDiaryDetailById()
                 }
             }
+            if (exception is Failure.UnauthorizedFailure)
+                navigateToSignIn(AppDestination.DiaryDetailRoute.route)
         }
 
         removeState is UiState.Error -> (removeState as UiState.Error).error?.let { exception ->

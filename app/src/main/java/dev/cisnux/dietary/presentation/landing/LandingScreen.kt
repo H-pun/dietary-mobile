@@ -32,17 +32,23 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.utils.AppDestination
 
 @Composable
 fun LandingScreen(
-    navigateToSignIn: () -> Unit,
+    navigateToSignIn: (String) -> Unit,
     navigateToIntroduction: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    landingViewModel: LandingViewModel = hiltViewModel()
 ) {
     LandingContent(
-        navigateToSignIn = navigateToSignIn,
+        navigateToSignIn = {
+            landingViewModel.updateLandingStatus(true)
+            navigateToSignIn(AppDestination.LandingRoute.route)
+        },
         navigateToIntroduction = navigateToIntroduction,
         modifier = modifier
     )

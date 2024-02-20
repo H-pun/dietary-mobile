@@ -2,7 +2,8 @@ package dev.cisnux.dietary.data.remotes
 
 import arrow.core.Either
 import dev.cisnux.dietary.data.remotes.responses.CommonResponse
-import dev.cisnux.dietary.data.remotes.bodyrequests.UserProfileBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.UpdateUserProfileBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.UserProfileDetailResponse
 import dev.cisnux.dietary.utils.DIETARY_API
 import dev.cisnux.dietary.utils.Failure
@@ -26,12 +27,12 @@ class UserProfileRemoteSourceImpl @Inject constructor(
 ) : UserProfileRemoteSource {
     override suspend fun addUserProfile(
         accessToken: String,
-        userProfile: UserProfileBodyRequest
+        userProfile: NewUserProfileBodyRequest
     ): Either<Exception, Nothing?> =
         withContext(Dispatchers.IO) {
             try {
                 val response = client.post(
-                    urlString = "$DIETARY_API/user_profile"
+                    urlString = "$DIETARY_API/user-data"
                 ) {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -41,7 +42,10 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                 }
                 val failure = Failure.HTTP_FAILURES[response.status]
                 return@withContext if (failure != null) {
-                    Either.Left(failure)
+                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    Either.Left(failure.apply {
+                        message = commonResponse.message
+                    })
                 } else Either.Right(null)
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
@@ -50,12 +54,12 @@ class UserProfileRemoteSourceImpl @Inject constructor(
 
     override suspend fun updateUserProfile(
         accessToken: String,
-        userProfile: UserProfileBodyRequest
+        userProfile: UpdateUserProfileBodyRequest
     ): Either<Exception, Nothing?> =
         withContext(Dispatchers.IO) {
             try {
                 val response = client.put(
-                    urlString = "$DIETARY_API/user_profile"
+                    urlString = "$DIETARY_API/user-data"
                 ) {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -65,7 +69,10 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                 }
                 val failure = Failure.HTTP_FAILURES[response.status]
                 return@withContext if (failure != null) {
-                    Either.Left(failure)
+                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    Either.Left(failure.apply {
+                        message = commonResponse.message
+                    })
                 } else Either.Right(null)
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
@@ -73,11 +80,11 @@ class UserProfileRemoteSourceImpl @Inject constructor(
         }
 
 
-    override suspend fun getUserProfile(accessToken: String): Either<Exception, UserProfileDetailResponse> =
+    override suspend fun getUserProfile(accessToken: String, userAccountId: String): Either<Exception, UserProfileDetailResponse> =
         withContext(Dispatchers.IO) {
             try {
                 val response = client.get(
-                    urlString = "$DIETARY_API/user_profile"
+                    urlString = "$DIETARY_API/user-data/$userAccountId"
                 ) {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -85,10 +92,13 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                 }
                 val failure = Failure.HTTP_FAILURES[response.status]
                 return@withContext if (failure != null) {
-                    Either.Left(failure)
+                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    Either.Left(failure.apply {
+                        message = commonResponse.message
+                    })
                 } else {
                     val commonResponse: CommonResponse<UserProfileDetailResponse> = response.body()
-                    Either.Right(commonResponse.data)
+                    Either.Right(commonResponse.data!!)
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())

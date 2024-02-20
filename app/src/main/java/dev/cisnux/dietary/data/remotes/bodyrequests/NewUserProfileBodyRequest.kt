@@ -1,22 +1,22 @@
-package dev.cisnux.dietary.data.remotes.responses
+package dev.cisnux.dietary.data.remotes.bodyrequests
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-// The response of user profile detail
+/**
+ * The body request to add a new user profile
+ * or update user profile.
+ * */
 @Serializable
-data class UserProfileDetailResponse(
+data class NewUserProfileBodyRequest(
     @SerialName("idUser")
     val userAccountId: String,
-    val id: String,
     val username: String,
-    @SerialName("email")
-    val emailAddress: String,
     val age: Int,
     val weight: Float,
     val height: Float,
     val gender: String,
     val goal: String,
     val weightTarget: Float = 0f,
-    val activityLevel: String,
+    val activityLevel: String
 )

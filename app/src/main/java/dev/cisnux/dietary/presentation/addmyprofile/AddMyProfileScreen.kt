@@ -40,6 +40,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.components.MyProfileForm
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.utils.AppDestination
+import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.isIntAnswerValid
 import dev.cisnux.dietary.utils.isHeightOrWeightValid
 import dev.cisnux.dietary.utils.isFloatAnswerValid
@@ -48,7 +50,8 @@ import dev.cisnux.dietary.utils.UiState
 
 @Composable
 fun AddMyProfileScreen(
-    navigateToHome: () -> Unit,
+    navigateToHome: (String) -> Unit,
+    navigateToSignIn: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddMyProfileViewModel = hiltViewModel()
 ) {
@@ -78,7 +81,7 @@ fun AddMyProfileScreen(
 
     when (addMyProfileState) {
         is UiState.Success -> {
-            navigateToHome()
+            navigateToHome(AppDestination.AddMyProfileRoute.route)
         }
 
         is UiState.Error -> {
@@ -94,6 +97,10 @@ fun AddMyProfileScreen(
                         if (snackbarResult == SnackbarResult.ActionPerformed)
                             viewModel.addMyProfile(myProfile)
                     }
+                }
+                if (exception is Failure.UnauthorizedFailure) {
+                    viewModel.signOut()
+                    navigateToSignIn(AppDestination.AddMyProfileRoute.route)
                 }
             }
         }

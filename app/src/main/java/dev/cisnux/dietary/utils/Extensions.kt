@@ -3,7 +3,9 @@ package dev.cisnux.dietary.utils
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.appcompat.app.AppCompatActivity
+import dev.cisnux.dietary.data.remotes.bodyrequests.UserAccountBodyRequest
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
+import dev.cisnux.dietary.domain.models.UserAccount
 import dev.cisnux.dietary.domain.models.UserProfile
 import dev.cisnux.dietary.presentation.addmyprofile.MyProfile
 import java.text.DateFormat
@@ -34,6 +36,12 @@ val MyProfile.asUserProfile: UserProfile
         goal = goal,
         weightTarget = weightTarget.toFloat(),
         activityLevel = activityLevel
+    )
+
+val UserAccount.userAccountBodyRequest
+    get() = UserAccountBodyRequest(
+        emailAddress = emailAddress,
+        password = password
     )
 
 fun String.isEmailValid(): Boolean {
@@ -99,7 +107,7 @@ val Int.foodDiaryCategory: FoodDiaryCategory
     }
 
 val Int.reportCategory: ReportCategory
-    get() = when(this){
+    get() = when (this) {
         0 -> ReportCategory.TODAY
         1 -> ReportCategory.THIS_WEEK
         else -> ReportCategory.THIS_MONTH

@@ -72,11 +72,12 @@ import dev.cisnux.dietary.utils.isHeightOrWeightValid
 import dev.cisnux.dietary.utils.isFloatAnswerValid
 import dev.cisnux.dietary.utils.isUsernameValid
 import dev.cisnux.dietary.utils.Failure
+import okhttp3.internal.wait
 
 @Composable
 fun MyProfileScreen(
     navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
-    navigateToSignIn: () -> Unit,
+    navigateToSignIn: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MyProfileViewModel = hiltViewModel()
 ) {
@@ -153,6 +154,10 @@ fun MyProfileScreen(
                         )
                     }
                 }
+                if (exception is Failure.UnauthorizedFailure) {
+                    viewModel.signOut()
+                    navigateToSignIn(AppDestination.MyProfileRoute.route)
+                }
             }
         }
 
@@ -171,16 +176,24 @@ fun MyProfileScreen(
                         )
                     }
                 }
+                if (exception is Failure.UnauthorizedFailure) {
+                    viewModel.signOut()
+                    navigateToSignIn(AppDestination.MyProfileRoute.route)
+                }
             }
         }
     }
 
 
     MyProfileContent(
+        onSignOut = {
+            viewModel.signOut()
+            navigateToSignIn(AppDestination.MyProfileRoute.route)
+        },
         onSelectedDestination = navigateForBottomNav,
         body = {
             AnimatedVisibility(
-                visible = userProfileState is UiState.Success ||
+                visible = userProfileState is UiState.Success && updateUserProfileState !is UiState.Loading ||
                         (userProfileState is UiState.Error && (userProfileState as UiState.Error).error is Failure.ConnectionFailure
                                 && userProfileDetail.username.isNotBlank())
             ) {
@@ -247,7 +260,7 @@ fun MyProfileScreen(
                 )
             }
             AnimatedVisibility(
-                visible = userProfileState is UiState.Loading ||
+                visible = userProfileState is UiState.Loading || updateUserProfileState is UiState.Loading ||
                         userProfileState is UiState.Error && (userProfileState as UiState.Error).error !is Failure.ConnectionFailure
                         || userProfileDetail.username.isBlank()
             ) {
@@ -255,7 +268,6 @@ fun MyProfileScreen(
             }
         },
         shouldBottomBarOpen = true,
-        onSignOut = navigateToSignIn,
         snackbarHostState = snackbarHostState
     )
 }

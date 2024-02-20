@@ -50,7 +50,7 @@ import dev.cisnux.dietary.utils.isPasswordSecure
 
 @Composable
 fun NewPasswordScreen(
-    navigateToSignIn: () -> Unit,
+    navigateToSignIn: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var password by rememberSaveable {

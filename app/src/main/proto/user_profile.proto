@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "dev.cisnux.dietary";
+option java_multiple_files = true;
+
+message UserProfile {
+  string user_account_id = 1;
+  string id = 2;
+  string username = 3;
+  string email_address = 4;
+  int32 age = 5;
+  float weight = 6;
+  float height = 7;
+  string gender = 8;
+  string goal = 9;
+  float weight_target = 10;
+  string activity_level = 11;
+}

@@ -72,6 +72,8 @@ import dev.cisnux.dietary.domain.models.Question
 import dev.cisnux.dietary.presentation.ui.components.ScannerResultBody
 import dev.cisnux.dietary.presentation.ui.components.ScannerResultShimmer
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.utils.AppDestination
+import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.QuestionType
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.isQuestionNotEmpty
@@ -82,6 +84,7 @@ import java.io.File
 @Composable
 fun ScannerResultScreen(
     onNavigateUp: () -> Unit,
+    navigateToSignIn: (String) -> Unit,
     foodPicture: File?,
     modifier: Modifier = Modifier,
     viewModel: ScannerResultViewModel = hiltViewModel(),
@@ -111,6 +114,10 @@ fun ScannerResultScreen(
                         )
                     }
                 }
+                if (exception is Failure.UnauthorizedFailure) {
+                    viewModel.signOut()
+                    navigateToSignIn(AppDestination.ScannerResultRoute.route)
+                }
             }
         }
 
@@ -124,6 +131,10 @@ fun ScannerResultScreen(
                             duration = SnackbarDuration.Long
                         )
                     }
+                }
+                if (exception is Failure.UnauthorizedFailure) {
+                    viewModel.signOut()
+                    navigateToSignIn(AppDestination.ScannerResultRoute.route)
                 }
             }
         }

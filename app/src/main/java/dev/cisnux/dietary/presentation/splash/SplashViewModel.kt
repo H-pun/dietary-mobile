@@ -17,10 +17,11 @@ class SplashViewModel @Inject constructor(
     userProfileUseCase: UserProfileUseCase,
     landingUseCase: LandingUseCase
 ) : ViewModel() {
-    val hasTokenExpired = authenticationUseCase.hasAuthTokenExpired
-        .combine(authenticationUseCase.hasFoodSecretTokenExpired) { hasAuthTokenExpired, hasFoodSecretTokenExpired ->
-            hasAuthTokenExpired or hasFoodSecretTokenExpired
-        }.stateIn(scope = viewModelScope, initialValue = null, started = SharingStarted.Eagerly)
+    val hasTokenExpired = authenticationUseCase.hasAuthTokenExpired.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = null
+    )
     val isUserProfileExist = userProfileUseCase.isUserProfileExist.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
