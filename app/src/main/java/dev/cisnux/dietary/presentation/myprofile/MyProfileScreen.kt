@@ -210,7 +210,7 @@ fun MyProfileScreen(
                     onEdit = {
                         isUpdateMyProfileDialogOpen = true
                     },
-                    isWeightTargetVisible = userProfileDetail.weightTarget != 0f,
+                    isWeightTargetVisible = userProfileDetail.goal != goals[1],
                     modifier = modifier.padding(it)
                 )
                 UpdateMyProfileDialog(
@@ -249,7 +249,7 @@ fun MyProfileScreen(
                     onGoalChange = { newValue ->
                         myProfile = myProfile.copy(goal = newValue)
                         if (myProfile.goal == goals[1])
-                            myProfile = myProfile.copy(weightTarget = "0")
+                            myProfile = myProfile.copy(weightTarget = 0f.toString())
                     },
                     onTargetWeightChange = { newValue ->
                         myProfile = myProfile.copy(weightTarget = newValue)
