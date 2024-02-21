@@ -180,7 +180,7 @@ fun HomeScreen(
                         )
                 }
             }
-            if (exception is Failure.UnauthorizedFailure){
+            if (exception is Failure.UnauthorizedFailure) {
                 viewModel.signOut()
                 navigateToSignIn(AppDestination.HomeRoute.route)
             }
@@ -200,7 +200,7 @@ fun HomeScreen(
                     )
                 }
             }
-            if (exception is Failure.UnauthorizedFailure){
+            if (exception is Failure.UnauthorizedFailure) {
                 viewModel.signOut()
                 navigateToSignIn(AppDestination.HomeRoute.route)
             }
@@ -583,40 +583,48 @@ private fun HomeBody(
                 }
             }
             HorizontalPager(state = pagerState) {
-                LazyColumn(
-                    contentPadding = PaddingValues(bottom = 8.dp, end = 16.dp),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxHeight()
-                ) {
-                    item {
-                        AnimatedVisibility(visible = isDiaryLoading) {
+                Box {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center)
+                    ) {
+                        AnimatedVisibility(visible = foodDiaries?.isEmpty() == true) {
+                            EmptyContents(
+                                label = stringResource(R.string.empty_content_label),
+                                painter = painterResource(id = R.drawable.empty_foods),
+                                contentDescription = "No food added to your diary",
+                            )
+                        }
+                    }
+                    LazyColumn(
+                        contentPadding = PaddingValues(bottom = 8.dp, end = 16.dp),
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxHeight()
+                    ) {
+                        item {
                             Column {
-                                repeat(6) {
-                                    DiaryCardShimmer()
+                                AnimatedVisibility(visible = isDiaryLoading) {
+                                    Column {
+                                        repeat(6) {
+                                            DiaryCardShimmer()
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-                    foodDiaries?.let {
-                        item {
-                            AnimatedVisibility(visible = foodDiaries.isEmpty()) {
-                                EmptyContents(
-                                    label = stringResource(R.string.empty_content_label),
-                                    painter = painterResource(id = R.drawable.empty_foods),
-                                    contentDescription = "No food added to your diary"
+                        foodDiaries?.let {
+                            items(foodDiaries, key = { it.id }, contentType = { it }) { diaryFood ->
+                                DiaryCard(
+                                    foodName = diaryFood.title,
+                                    date = diaryFood.date,
+                                    time = diaryFood.time,
+                                    foodImageUrl = diaryFood.foodPictureUrl,
+                                    calorie = diaryFood.totalFoodCalories,
+                                    onClick = { onCardTapped(diaryFood.id) }
                                 )
                             }
-                        }
-                        items(foodDiaries, key = { it.id }, contentType = { it }) { diaryFood ->
-                            DiaryCard(
-                                foodName = diaryFood.title,
-                                date = diaryFood.date,
-                                time = diaryFood.time,
-                                foodImageUrl = diaryFood.foodPictureUrl,
-                                calorie = diaryFood.totalFoodCalories,
-                                onClick = { onCardTapped(diaryFood.id) }
-                            )
                         }
                     }
                 }
