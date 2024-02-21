@@ -110,7 +110,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                         Question(
                             id = "2",
                             question = "Berapa kandungan gula dalam makanan ini?",
-                            choices = listOf("Lebih dari 10% kalori harian", "Kurang dari 100% kalori harian")
+                            choices = listOf("Lebih dari 10% kalori harian", "Kurang dari 10% kalori harian")
                         ),
                     )
                 ),
@@ -131,7 +131,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                         Question(
                             id = "2",
                             question = "Berapa kandungan gula dalam makanan ini?",
-                            choices = listOf("Lebih dari 10% kalori harian", "Kurang dari 100% kalori harian")
+                            choices = listOf("Lebih dari 10% kalori harian", "Kurang dari 10% kalori harian")
                         ),
                     )
                 ),
