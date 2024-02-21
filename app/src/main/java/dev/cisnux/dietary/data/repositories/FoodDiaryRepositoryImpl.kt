@@ -296,8 +296,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 Pair(userId, accessToken)
             }.collectLatest {
                 if (it.first != null && it.first?.isNotBlank() == true && it.second != null && it.second?.isNotBlank() == true) {
-                    val time =
-                        DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(System.currentTimeMillis()))
+                    val time = getCurrentDateTimeInISOFormat()
                     Log.d("time", time)
                     foodDiaryRemoteSource.addFoodDiary(
                         accessToken = it.second!!,

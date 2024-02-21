@@ -16,6 +16,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 val Context.activity: AppCompatActivity?
@@ -143,15 +144,14 @@ fun getCurrentDateTimeInISOFormat(): String {
     val currentTimeMillis = System.currentTimeMillis()
 
     // Get the user's time zone
-    val userTimeZone = ZoneId.systemDefault()
+    val userTimeZone = TimeZone.getDefault().toZoneId()
 
     // Convert current time to Instant
     val currentInstant = Instant.ofEpochMilli(currentTimeMillis)
 
-    // Format Instant to ISO Date Time Format in UTC
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    // Format Instant to custom Date Time Format without the offset
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
         .withLocale(Locale.getDefault())
-        .withZone(ZoneId.of("UTC"))
 
-    return currentInstant.atZone(userTimeZone).format(formatter)
+    return formatter.format(currentInstant.atZone(userTimeZone).toLocalDateTime())
 }
