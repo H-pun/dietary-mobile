@@ -585,7 +585,8 @@ private fun HomeBody(
             HorizontalPager(state = pagerState) {
                 LazyColumn(
                     contentPadding = PaddingValues(bottom = 8.dp, end = 16.dp),
-                    verticalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxHeight()
                 ) {
                     item {

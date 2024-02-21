@@ -109,7 +109,7 @@
     <string name="cancel">Batal</string>
     <string name="ok" translatable="false">OK</string>
     <string name="diary_display">Lihat Diary Makanan Anda:\nTrack Makanan Anda! 🥘🍱</string>
-    <string name="empty_content_label">Tidak ada makanan yang ditambahkan ke buku harian Anda\n</string>
+    <string name="empty_content_label">Tidak ada food diary</string>
     <string name="empty_content_search">Makanan yang Anda yang cari tidak dapat ditemukan</string>
     <string name="cm">%1$s cm</string>
     <string name="tahun">%1$s tahun</string>

@@ -6,5 +6,4 @@ data class Answer(
     val questionId: String,
     val question: String,
     val answer: String,
-    val questionType: QuestionType
 )

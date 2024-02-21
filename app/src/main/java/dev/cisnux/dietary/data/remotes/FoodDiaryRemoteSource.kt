@@ -5,12 +5,13 @@ import dev.cisnux.dietary.data.remotes.responses.AddedFoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.DiaryQuestionBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.DuplicateFoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.responses.ReportResponse
 
 interface FoodDiaryRemoteSource {
-    suspend fun getFoodDiaries(accessToken: String, days: Int, category: Int, query: String? = null): Either<Exception, List<FoodDiaryResponse>>
+    suspend fun getFoodDiaries(accessToken: String, getFoodDiaryBodyRequest: GetFoodDiaryBodyRequest): Either<Exception, List<FoodDiaryResponse>>
     suspend fun getFoodDiaryById(accessToken: String, id: String): Either<Exception, FoodDiaryDetailResponse>
     suspend fun addFoodDiary(accessToken: String, foodDiary: FoodDiaryBodyRequest): Either<Exception, AddedFoodDiaryResponse>
     suspend fun duplicateFoodDiary(accessToken: String, duplicateFoodDiary: DuplicateFoodDiaryBodyRequest): Either<Exception, Nothing?>

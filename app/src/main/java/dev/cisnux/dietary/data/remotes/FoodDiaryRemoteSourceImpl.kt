@@ -1,16 +1,24 @@
 package dev.cisnux.dietary.data.remotes
 
+import android.util.Log
 import arrow.core.Either
 import dev.cisnux.dietary.data.remotes.responses.AddedFoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.responses.CommonResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.DiaryQuestionBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.DuplicateFoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
+import dev.cisnux.dietary.data.remotes.responses.DetectedFoodResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryResponse
+import dev.cisnux.dietary.data.remotes.responses.QuestionResponse
 import dev.cisnux.dietary.data.remotes.responses.ReportResponse
+import dev.cisnux.dietary.domain.models.Food
+import dev.cisnux.dietary.domain.models.FoodDiaryDetail
+import dev.cisnux.dietary.domain.models.Question
 import dev.cisnux.dietary.utils.DIETARY_API
 import dev.cisnux.dietary.utils.Failure
+import dev.cisnux.dietary.utils.QuestionType
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -38,19 +46,23 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
     private val client: HttpClient
 ) : FoodDiaryRemoteSource {
     override suspend fun getFoodDiaries(
-        accessToken: String, days: Int, category: Int, query: String?
+        accessToken: String,  getFoodDiaryBodyRequest: GetFoodDiaryBodyRequest
     ): Either<Exception, List<FoodDiaryResponse>> = withContext(Dispatchers.IO) {
         try {
             val response =
-                client.get(urlString = query?.let { "$DIETARY_API/food_diary?days=$days&category=$category&query=$query" }
-                    ?: "$DIETARY_API/food_diary?days=$days&category=$category") {
+                client.get(urlString = "$DIETARY_API/food-diary/list") {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
                     }
+                    contentType(ContentType.Application.Json)
+//                    setBody(getFoodDiaryBodyRequest)
                 }
             val failure = Failure.HTTP_FAILURES[response.status]
             return@withContext if (failure != null) {
-                Either.Left(failure)
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                Either.Left(failure.apply {
+                    message = commonResponse.message
+                })
             } else {
                 val commonResponse: CommonResponse<List<FoodDiaryResponse>> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -65,7 +77,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
     ): Either<Exception, FoodDiaryDetailResponse> = withContext(Dispatchers.IO) {
         try {
             val response = client.get(
-                urlString = "$DIETARY_API/food_diary/$id"
+                urlString = "$DIETARY_API/food-diary/$id"
             ) {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -73,7 +85,10 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
             val failure = Failure.HTTP_FAILURES[response.status]
             return@withContext if (failure != null) {
-                Either.Left(failure)
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                Either.Left(failure.apply {
+                    message = commonResponse.message
+                })
             } else {
                 val commonResponse: CommonResponse<FoodDiaryDetailResponse> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -86,9 +101,10 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
     override suspend fun addFoodDiary(
         accessToken: String, foodDiary: FoodDiaryBodyRequest
     ): Either<Exception, AddedFoodDiaryResponse> = withContext(Dispatchers.IO) {
+        Log.d("foodDiary", foodDiary.toString())
         try {
             val response = client.post(
-                urlString = "$DIETARY_API/food_diary"
+                urlString = "$DIETARY_API/food-diary"
             ) {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -96,20 +112,24 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 setBody(
                     MultiPartFormDataContent(
                         parts = formData {
-                            append(key = "title", foodDiary.title, Headers.build {
+                            append(key = "IdUser", foodDiary.userAccountId, Headers.build {
                                 append(HttpHeaders.ContentType, "text/plain")
                             })
-                            append(key = "category", foodDiary.category, Headers.build {
+                            append(key = "Title", foodDiary.title, Headers.build {
+                                append(HttpHeaders.ContentType, "text/plain")
+                            })
+                            append(key = "Category", foodDiary.category, Headers.build {
                                 append(HttpHeaders.ContentType, "text/plain")
                             })
                             append(
-                                key = "adddedAt",
-                                DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(foodDiary.addedAt)),
+                                key = "AdddedAt",
+                                foodDiary.addedAt,
+//                                "2024-02-21T00:58:52.144Z",
                                 Headers.build {
                                     append(HttpHeaders.ContentType, "text/plain")
                                 })
                             append(
-                                key = "foodPicture",
+                                key = "File",
                                 InputProvider(foodDiary.foodPicture.length()) {
                                     foodDiary.foodPicture.inputStream().asInput()
                                 },
@@ -128,10 +148,23 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
             val failure = Failure.HTTP_FAILURES[response.status]
             return@withContext if (failure != null) {
-                Either.Left(failure)
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                Either.Left(failure.apply {
+                    message = commonResponse.message
+                })
             } else {
-                val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
-                Either.Right(commonResponse.data!!)
+//                val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
+                val addedFoodDiaryResponse = AddedFoodDiaryResponse(
+                    id = "1",
+                    totalFoodCalories = 200.4512f,
+                    maxDailyBmrCalorie = 800.6798f,
+                    totalUserCaloriesToday = 500.7892f,
+                    status = "Boleh dimakan",
+                    feedback = null,
+                    foods = listOf()
+                )
+//                Either.Right(commonResponse.data!!)
+                Either.Right(addedFoodDiaryResponse)
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
@@ -153,7 +186,10 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
             val failure = Failure.HTTP_FAILURES[response.status]
             return@withContext if (failure != null) {
-                Either.Left(failure)
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                Either.Left(failure.apply {
+                    message = commonResponse.message
+                })
             } else Either.Right(null)
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
@@ -175,7 +211,10 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
             val failure = Failure.HTTP_FAILURES[response.status]
             return@withContext if (failure != null) {
-                Either.Left(failure)
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                Either.Left(failure.apply {
+                    message = commonResponse.message
+                })
             } else {
                 val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -198,7 +237,10 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
             val failure = Failure.HTTP_FAILURES[response.status]
             return@withContext if (failure != null) {
-                Either.Left(failure)
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                Either.Left(failure.apply {
+                    message = commonResponse.message
+                })
             } else {
                 val commonResponse: CommonResponse<ReportResponse> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -221,7 +263,10 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
             val failure = Failure.HTTP_FAILURES[response.status]
             return@withContext if (failure != null) {
-                Either.Left(failure)
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                Either.Left(failure.apply {
+                    message = commonResponse.message
+                })
             } else {
                 val commonResponse: CommonResponse<List<String>> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -245,7 +290,10 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
             val failure = Failure.HTTP_FAILURES[response.status]
             return@withContext if (failure != null) {
-                Either.Left(failure)
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                Either.Left(failure.apply {
+                    message = commonResponse.message
+                })
             } else
                 Either.Right(null)
         } catch (e: UnresolvedAddressException) {

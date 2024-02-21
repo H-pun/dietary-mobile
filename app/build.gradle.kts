@@ -125,6 +125,8 @@ dependencies {
     implementation(libs.datastore.proto)
     implementation(libs.datastore.preferences)
     implementation(libs.protobuf.javalite)
+    // kotlinx datetime
+    implementation(libs.kotlinx.datetime)
 }
 
 // Allow references to generated code

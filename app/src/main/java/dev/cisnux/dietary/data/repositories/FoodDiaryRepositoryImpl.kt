@@ -1,5 +1,10 @@
 package dev.cisnux.dietary.data.repositories
 
+import android.util.Log
+import dev.cisnux.dietary.data.locals.UserAccountLocalSource
+import dev.cisnux.dietary.data.remotes.FoodDiaryRemoteSource
+import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
 import dev.cisnux.dietary.domain.models.AddFoodDiary
 import dev.cisnux.dietary.domain.models.Food
 import dev.cisnux.dietary.domain.models.FoodDiary
@@ -9,13 +14,15 @@ import dev.cisnux.dietary.domain.models.FoodDiaryReport
 import dev.cisnux.dietary.domain.models.Question
 import dev.cisnux.dietary.domain.models.Report
 import dev.cisnux.dietary.domain.repositories.FoodRepository
+import dev.cisnux.dietary.utils.DIETARY_API
 import dev.cisnux.dietary.utils.withFullDateFormat
 import dev.cisnux.dietary.utils.withTimeFormat
 import dev.cisnux.dietary.utils.FoodDiaryCategory
-import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.QuestionType
 import dev.cisnux.dietary.utils.ReportCategory
 import dev.cisnux.dietary.utils.UiState
+import dev.cisnux.dietary.utils.convertISOToMillis
+import dev.cisnux.dietary.utils.getCurrentDateTimeInISOFormat
 import dev.cisnux.dietary.utils.withShortDateFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -25,37 +32,26 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.datetime.toLocalTime
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
-class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
+class FoodDiaryRepositoryImpl @Inject constructor(
+    private val foodDiaryRemoteSource: FoodDiaryRemoteSource,
+    private val userAccountLocalSource: UserAccountLocalSource
+) : FoodRepository {
     private val foodsBreakfastDiary = List(10) {
         FoodDiary(
             id = it.toString(),
             title = "Mie Ayam",
-            date = 1706351552829.withFullDateFormat(),
-            time = 1706351552829.withTimeFormat(),
+            date = "Senin, 21 Feb",
+            time = "18:20",
             foodPictureUrl = "https://allofresh.id/blog/wp-content/uploads/2023/08/cara-membuat-mie-ayam-4.jpg",
             totalFoodCalories = 500f
-        )
-    }
-    private val foodsLunchDiaries = List(10) {
-        FoodDiary(
-            id = it.toString(),
-            title = "Nasi Padang",
-            date = 1706351552829.withFullDateFormat(),
-            time = 1706351552829.withTimeFormat(),
-            foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
-            totalFoodCalories = 300f
-        )
-    }
-    private val foodsDinnerDiary = List(10) {
-        FoodDiary(
-            id = it.toString(),
-            title = "Kwetiau",
-            date = 1706351552829.withFullDateFormat(),
-            time = 1706351552829.withTimeFormat(),
-            foodPictureUrl = "https://img-global.cpcdn.com/recipes/e79696c6cc7f385b/680x482cq70/kwetiau-goreng-simple-dan-tips-merebus-kwetiau-beras-foto-resep-utama.jpg",
-            totalFoodCalories = 200f
         )
     }
     private val keywordSuggestions = listOf(
@@ -92,17 +88,8 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                     questions = listOf(
                         Question(
                             id = "1",
-                            label = "Minyak",
-                            question = "Apakah makanan digoreng dengan minyak berkali-kali?",
-                            type = QuestionType.BOOLEAN,
-                            unit = null
-                        ),
-                        Question(
-                            id = "2",
-                            label = "Gula",
-                            question = "Berapa kandungan gula dalam makanan ini?",
-                            type = QuestionType.FLOAT,
-                            unit = "g"
+                            question = "Apakah ini nasi putih?",
+                            choices = listOf("Iya", "Tidak")
                         ),
                     )
                 ),
@@ -116,23 +103,37 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                     sugar = null,
                     questions = listOf(
                         Question(
+                            id = "1",
+                            question = "Apakah digoreng?",
+                            choices = listOf("Ya", "Tidak")
+                        ),
+                        Question(
                             id = "2",
-                            label = "Gula",
                             question = "Berapa kandungan gula dalam makanan ini?",
-                            type = QuestionType.FLOAT,
-                            unit = "g"
+                            choices = listOf("Lebih dari 10% kalori harian", "Kurang dari 100% kalori harian")
                         ),
                     )
                 ),
                 Food(
                     id = "3",
-                    name = "Tempe Goreng",
+                    name = "Tempe",
                     calorie = 5.8f,
                     protein = 9f,
                     fat = 1f,
                     carbohydrates = 8.3f,
                     sugar = 0f,
-                    questions = null
+                    questions = listOf(
+                        Question(
+                            id = "1",
+                            question = "Apakah digoreng?",
+                            choices = listOf("Ya", "Tidak")
+                        ),
+                        Question(
+                            id = "2",
+                            question = "Berapa kandungan gula dalam makanan ini?",
+                            choices = listOf("Lebih dari 10% kalori harian", "Kurang dari 100% kalori harian")
+                        ),
+                    )
                 ),
                 Food(
                     id = "4",
@@ -142,22 +143,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                     fat = 0.5f,
                     carbohydrates = 8.3f,
                     sugar = 0f,
-                    questions = listOf(
-                        Question(
-                            id = "2",
-                            label = "Gula",
-                            question = "Berapa kandungan gula dalam makanan ini?",
-                            type = QuestionType.FLOAT,
-                            unit = "g"
-                        ),
-                        Question(
-                            id = "3",
-                            label = "Jumlah",
-                            question = "Berapa jumlah makanan ini?",
-                            type = QuestionType.INTEGER,
-                            unit = null
-                        ),
-                    )
+                    questions = null
                 ),
             )
         )
@@ -219,7 +205,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                 id = it.toString(),
                 title = "Warter $it",
                 totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
-                label = System.currentTimeMillis().withTimeFormat()
+                label = "18 Feb"
             )
         }
     )
@@ -232,7 +218,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                 id = it.toString(),
                 title = "Warter $it",
                 totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
-                label = System.currentTimeMillis().withShortDateFormat()
+                label = "17 Feb"
             )
         }
     )
@@ -245,7 +231,7 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
                 id = it.toString(),
                 title = "Warter $it",
                 totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
-                label = System.currentTimeMillis().withShortDateFormat()
+                label = "2020"
             )
         }
     )
@@ -254,19 +240,36 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
     override fun getDiaryFoodsByDays(
         days: Long,
         category: FoodDiaryCategory
-    ): Flow<UiState<List<FoodDiary>>> = flow {
-        emit(UiState.Loading)
-        delay(1500L)
-//        emit(UiState.Error(Failure.BadRequestFailure("bad request")))
-        emit(
-            UiState.Success(
-                when (category) {
-                    FoodDiaryCategory.BREAKFAST -> foodsBreakfastDiary
-                    FoodDiaryCategory.LUNCH -> foodsLunchDiaries
-                    FoodDiaryCategory.DINNER -> foodsDinnerDiary
-                }
-            )
-        )
+    ): Flow<UiState<List<FoodDiary>>> = channelFlow {
+        send(UiState.Loading)
+        delay(1000L)
+        userAccountLocalSource.accessToken.collectLatest { accessToken ->
+            accessToken?.let {
+                foodDiaryRemoteSource.getFoodDiaries(
+                    accessToken = it,
+                    getFoodDiaryBodyRequest = GetFoodDiaryBodyRequest(
+                        days = days,
+                        category = category.value,
+                    )
+                ).fold(
+                    ifLeft = { exception ->
+                        send(UiState.Error(exception))
+                    },
+                    ifRight = { foodDiaries ->
+                        send(UiState.Success(foodDiaries.map { foodDiary ->
+                            FoodDiary(
+                                id = foodDiary.id,
+                                title = foodDiary.title,
+                                date = convertISOToMillis(foodDiary.addedAt).withFullDateFormat(),
+                                time = convertISOToMillis(foodDiary.addedAt).withTimeFormat(),
+                                foodPictureUrl = "$DIETARY_API/upload/${foodDiary.filePath}",
+                                totalFoodCalories = foodDiary.totalFoodCalories
+                            )
+                        }))
+                    }
+                )
+            }
+        }
     }.distinctUntilChanged()
         .flowOn(Dispatchers.IO)
 
@@ -285,14 +288,38 @@ class FoodDiaryRepositoryImpl @Inject constructor() : FoodRepository {
     }.flowOn(Dispatchers.IO)
         .distinctUntilChanged()
 
-    override fun addFoodDiary(addFoodDiary: AddFoodDiary): Flow<UiState<FoodDiaryDetail>> = flow {
-        emit(UiState.Loading)
-        delay(1000L)
-        emit(UiState.Success(foodDiaryDetail.value))
-        //        emit(UiState.Error(Failure.BadRequestFailure("bad request")))
-//                            emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
-    }.flowOn(Dispatchers.IO)
-        .distinctUntilChanged()
+    override fun addFoodDiary(addFoodDiary: AddFoodDiary): Flow<UiState<FoodDiaryDetail>> =
+        channelFlow {
+            send(UiState.Loading)
+            delay(1000L)
+            userAccountLocalSource.userId.combine(userAccountLocalSource.accessToken) { userId, accessToken ->
+                Pair(userId, accessToken)
+            }.collectLatest {
+                if (it.first != null && it.first?.isNotBlank() == true && it.second != null && it.second?.isNotBlank() == true) {
+                    val time =
+                        DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(System.currentTimeMillis()))
+                    Log.d("time", time)
+                    foodDiaryRemoteSource.addFoodDiary(
+                        accessToken = it.second!!,
+                        foodDiary = FoodDiaryBodyRequest(
+                            title = addFoodDiary.title,
+                            category = addFoodDiary.category,
+                            foodPicture = addFoodDiary.foodPicture,
+                            userAccountId = it.first!!,
+                            addedAt = time
+                        )
+                    ).fold(
+                        ifLeft = { exception ->
+                            send(UiState.Error(exception))
+                        },
+                        ifRight = {
+                            send(UiState.Success(foodDiaryDetail.value))
+                        }
+                    )
+                }
+            }
+        }.flowOn(Dispatchers.IO)
+            .distinctUntilChanged()
 
     override fun updateFoodDiaryBaseOnAnsweredQuestion(foodDiaryQuestion: FoodDiaryQuestion): Flow<UiState<FoodDiaryDetail>> =
         flow {

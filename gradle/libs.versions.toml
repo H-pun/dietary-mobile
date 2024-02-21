@@ -26,6 +26,7 @@ ycharts = "2.1.0"
 datastore = "1.0.0"
 protobuf = "0.9.4"
 protobufJavalite = "4.26.0-RC2"
+kotlinXDateTime = "0.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -67,6 +68,7 @@ yml-charts = { group = "co.yml", name = "ycharts", version.ref = "ycharts" }
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 datastore-proto = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 protobuf-javalite = { group = "com.google.protobuf", name = "protobuf-javalite", version.ref = "protobufJavalite" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinXDateTime" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

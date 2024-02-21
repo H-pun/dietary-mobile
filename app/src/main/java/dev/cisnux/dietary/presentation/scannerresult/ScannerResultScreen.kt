@@ -1,13 +1,16 @@
 package dev.cisnux.dietary.presentation.scannerresult
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -15,7 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -31,6 +37,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TooltipBox
@@ -52,6 +59,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
@@ -180,10 +188,8 @@ fun ScannerResultScreen(
                                                 AnsweredQuestion(
                                                     questionId = question.id,
                                                     question = question.question,
-                                                    type = question.type,
-                                                    label = question.label,
                                                     answer = "",
-                                                    unit = question.unit
+                                                    choices = question.choices
                                                 )
                                             }?.toTypedArray() ?: arrayOf()
                                         mutableStateListOf(*answers)
@@ -194,11 +200,7 @@ fun ScannerResultScreen(
                         val isEnable by derivedStateOf {
                             answeredQuestions.all { foodQuestion ->
                                 foodQuestion.all { answeredQuestion ->
-                                    when (answeredQuestion.type) {
-                                        QuestionType.INTEGER -> answeredQuestion.answer.isIntAnswerValid()
-                                        QuestionType.FLOAT -> answeredQuestion.answer.isFloatAnswerValid()
-                                        else -> answeredQuestion.answer.isNotBlank()
-                                    }
+                                    answeredQuestion.answer.isNotBlank()
                                 }
                             }
                         }
@@ -265,17 +267,8 @@ private fun ScannerResultContentPreview() {
                 questions = listOf(
                     Question(
                         id = "1",
-                        label = "Minyak",
-                        question = "Apakah makan digoreng dengan minyak berkali-kali?",
-                        type = QuestionType.BOOLEAN,
-                        unit = null
-                    ),
-                    Question(
-                        id = "2",
-                        label = "Gula",
-                        question = "Berapa kandungan gula dalam makanan ini?",
-                        type = QuestionType.FLOAT,
-                        unit = "g"
+                        question = "Apakah ini nasi putih?",
+                        choices = listOf("Iya", "Tidak")
                     ),
                 )
             ),
@@ -289,17 +282,23 @@ private fun ScannerResultContentPreview() {
                 sugar = null,
                 questions = listOf(
                     Question(
+                        id = "1",
+                        question = "Apakah digoreng?",
+                        choices = listOf("Ya", "Tidak")
+                    ),
+                    Question(
                         id = "2",
-                        label = "Gula",
                         question = "Berapa kandungan gula dalam makanan ini?",
-                        type = QuestionType.FLOAT,
-                        unit = "g"
+                        choices = listOf(
+                            "Lebih dari 10% kalori harian",
+                            "Kurang dari 100% kalori harian"
+                        )
                     ),
                 )
             ),
             Food(
                 id = "3",
-                name = "Tempe Goreng",
+                name = "Tempe",
                 calorie = 5.8f,
                 protein = 9f,
                 fat = 1f,
@@ -307,11 +306,17 @@ private fun ScannerResultContentPreview() {
                 sugar = 0f,
                 questions = listOf(
                     Question(
+                        id = "1",
+                        question = "Apakah digoreng?",
+                        choices = listOf("Ya", "Tidak")
+                    ),
+                    Question(
                         id = "2",
-                        label = "Gula",
                         question = "Berapa kandungan gula dalam makanan ini?",
-                        type = QuestionType.FLOAT,
-                        unit = "g"
+                        choices = listOf(
+                            "Lebih dari 10% kalori harian",
+                            "Kurang dari 100% kalori harian"
+                        )
                     ),
                 )
             ),
@@ -323,17 +328,9 @@ private fun ScannerResultContentPreview() {
                 fat = 0.5f,
                 carbohydrates = 8.3f,
                 sugar = 0f,
-                questions = listOf(
-                    Question(
-                        id = "2",
-                        label = "Gula",
-                        question = "Berapa kandungan gula dalam makanan ini?",
-                        type = QuestionType.FLOAT,
-                        unit = "g"
-                    ),
-                )
+                questions = null
             ),
-        )
+        ),
     )
 
     DietaryTheme {
@@ -500,19 +497,39 @@ private fun QuestionDialog(
         ) { paddingValues ->
             LazyColumn(
                 contentPadding = paddingValues,
+                verticalArrangement = Arrangement.Bottom,
                 modifier = Modifier
-                    .consumeWindowInsets(paddingValues)
+                    .fillMaxSize()
             ) {
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
                 items(count = foods.size,
                     key = { foods[it].id },
                     contentType = { foods[it] }) { index ->
-                    QuestionListItem(
-                        foodName = foods[index].name,
-                        answeredQuestions = answeredQuestions[index],
-                        onAnswerChange = { newValue, answerIndex ->
-                            onAnswerChange(newValue, index, answerIndex)
-                        },
-                    )
+                    if (index != 0) {
+                        val prevIndex = index - 1
+                        val isNotBlank = answeredQuestions[prevIndex].all { it.answer.isNotBlank() }
+                        Log.d("isNotBlank", isNotBlank.toString())
+                        Log.d("isNotBlank", answeredQuestions[prevIndex][0].toString())
+                        AnimatedVisibility(visible = isNotBlank) {
+                            QuestionListItem(
+                                foodName = foods[index].name,
+                                answeredQuestions = answeredQuestions[index],
+                                onAnswerChange = { newValue, answerIndex ->
+                                    onAnswerChange(newValue, index, answerIndex)
+                                },
+                            )
+                        }
+                    } else {
+                        QuestionListItem(
+                            foodName = foods[index].name,
+                            answeredQuestions = answeredQuestions[index],
+                            onAnswerChange = { newValue, answerIndex ->
+                                onAnswerChange(newValue, index, answerIndex)
+                            },
+                        )
+                    }
                 }
             }
         }
@@ -557,126 +574,96 @@ private fun QuestionListItem(
                 .padding(start = 26.dp)
                 .fillMaxWidth()
         ) {
-            List(answeredQuestions.size) { index ->
-                val isNotValid =
-                    when (answeredQuestions[index].type) {
-                        QuestionType.INTEGER -> !answeredQuestions[index].answer.isIntAnswerValid()
-                        QuestionType.FLOAT -> !answeredQuestions[index].answer.isFloatAnswerValid()
-                        else -> answeredQuestions[index].answer.isBlank()
-                    }
-
-                when (answeredQuestions[index].type) {
-                    QuestionType.BOOLEAN -> {
-                        var state by rememberSaveable { mutableStateOf(true) }
-
-                        LaunchedEffect(state) {
-                            onAnswerChange(state.toString(), index)
+            val size by remember {
+                derivedStateOf {
+                    answeredQuestions
+                        .filter { it.answer.isNotBlank() }
+                        .size
+                        .let {
+                            if (it < answeredQuestions.size)
+                                it + 1
+                            else
+                                it
                         }
-
-                        Column {
+                }
+            }
+            Log.d("size", size.toString())
+            List(size) { index ->
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Surface(
+                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            shape = MaterialTheme.shapes.extraLarge.copy(
+                                topStart = CornerSize(2.dp),
+                                bottomEnd = CornerSize(2.dp)
+                            ),
+                        ) {
                             Text(
                                 text = answeredQuestions[index].question,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurface
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                             )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Row(
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.selectableGroup()
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LazyRow {
+                        items(
+                            answeredQuestions[index].choices,
+                            key = { it },
+                            contentType = { it }) {
+                            Surface(
+                                color = MaterialTheme.colorScheme.tertiaryContainer,
+                                shape = MaterialTheme.shapes.extraLarge,
+                                modifier = Modifier
+                                    .clip(MaterialTheme.shapes.extraLarge)
+                                    .clickable {
+                                        onAnswerChange(it, index)
+                                    }
                             ) {
-                                RadioButton(
-                                    selected = state,
-                                    onClick = { state = true },
-                                )
                                 Text(
-                                    text = stringResource(id = R.string.yes),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onSurface
+                                    text = it,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                                 )
                             }
+                            Spacer(modifier = Modifier.width(4.dp))
+                        }
+                    }
+                    AnimatedVisibility(visible = answeredQuestions[index].answer.isNotBlank()) {
+                        Column {
+                            Spacer(modifier = Modifier.height(8.dp))
                             Row(
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End
                             ) {
-                                RadioButton(
-                                    selected = !state,
-                                    onClick = { state = false },
-                                )
-                                Text(
-                                    text = stringResource(R.string.no),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
+                                Surface(
+                                    color = MaterialTheme.colorScheme.primaryContainer,
+                                    shape = MaterialTheme.shapes.extraLarge.copy(
+                                        topEnd = CornerSize(2.dp),
+                                        bottomStart = CornerSize(2.dp)
+                                    ),
+                                ) {
+                                    Text(
+                                        text = answeredQuestions[index].answer,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                        modifier = Modifier.padding(
+                                            horizontal = 16.dp,
+                                            vertical = 8.dp
+                                        )
+                                    )
+                                }
                             }
                         }
                     }
-
-                    else -> {
-                        val errorText = stringResource(
-                            id = when (answeredQuestions[index].type) {
-                                QuestionType.FLOAT -> R.string.error_text_float
-                                QuestionType.INTEGER -> R.string.error_text_int
-                                else -> R.string.error_text_text
-                            },
-                            answeredQuestions[index].label
-                        )
-                        val keyboardType =
-                            if (answeredQuestions[index].type == QuestionType.BOOLEAN) KeyboardType.Text else KeyboardType.Number
-                        val imeAction = ImeAction.Done
-
-                        OutlinedTextField(
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = keyboardType, imeAction = imeAction
-                            ),
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_question_mark_24dp),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            },
-                            value = answeredQuestions[index].answer,
-                            singleLine = true,
-                            onValueChange = { onAnswerChange(it, index) },
-                            placeholder = {
-                                Text(
-                                    text = answeredQuestions[index].question,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            },
-                            label = {
-                                Text(
-                                    text = answeredQuestions[index].label,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            },
-                            supportingText = {
-                                if (answeredQuestions[index].answer.isNotEmpty() and isNotValid) Text(
-                                    text = errorText,
-                                    style = MaterialTheme.typography.bodySmall,
-                                )
-                                else if (focuses[index]) Text(
-                                    text = stringResource(R.string.supporting_text_required),
-                                    style = MaterialTheme.typography.bodySmall,
-                                )
-                            },
-                            isError = answeredQuestions[index].answer.isNotEmpty() and isNotValid,
-                            trailingIcon = {
-                                if (answeredQuestions[index].answer.isNotEmpty() and isNotValid) Icon(
-                                    painter = painterResource(id = R.drawable.ic_round_error_24dp),
-                                    contentDescription = null,
-                                )
-                                else answeredQuestions[index].unit?.let { Text(text = it) }
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .onFocusChanged {
-                                    focuses[index] = it.isFocused
-                                }
-                                .imePadding(),
-                        )
-                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }

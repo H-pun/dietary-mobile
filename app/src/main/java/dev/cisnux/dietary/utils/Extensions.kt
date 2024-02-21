@@ -10,6 +10,10 @@ import dev.cisnux.dietary.domain.models.UserProfile
 import dev.cisnux.dietary.presentation.addmyprofile.MyProfile
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -123,4 +127,31 @@ val String.questionType: QuestionType
 
 fun FoodDiaryDetail.isQuestionNotEmpty() = foods.any { food ->
     food.questions?.isNotEmpty() ?: false
+}
+
+fun convertISOToMillis(isoDateTime: String): Long {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    val parsedDateTime = LocalDateTime.parse(isoDateTime, formatter)
+
+    // Convert LocalDateTime to milliseconds
+    val millis = parsedDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+    return millis
+}
+
+fun getCurrentDateTimeInISOFormat(): String {
+    val currentTimeMillis = System.currentTimeMillis()
+
+    // Get the user's time zone
+    val userTimeZone = ZoneId.systemDefault()
+
+    // Convert current time to Instant
+    val currentInstant = Instant.ofEpochMilli(currentTimeMillis)
+
+    // Format Instant to ISO Date Time Format in UTC
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        .withLocale(Locale.getDefault())
+        .withZone(ZoneId.of("UTC"))
+
+    return currentInstant.atZone(userTimeZone).format(formatter)
 }

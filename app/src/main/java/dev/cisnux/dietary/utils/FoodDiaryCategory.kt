@@ -1,7 +1,7 @@
 package dev.cisnux.dietary.utils
 
-enum class FoodDiaryCategory {
-    BREAKFAST,
-    LUNCH,
-    DINNER
+enum class FoodDiaryCategory(val value: String) {
+    BREAKFAST("sarapan"),
+    LUNCH("makan siang"),
+    DINNER("makan malam")
 }

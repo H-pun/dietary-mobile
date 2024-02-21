@@ -7,9 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AnsweredQuestion(
     val questionId: String,
-    val label: String,
     val question: String,
-    val type: QuestionType,
-    val unit: String?,
     var answer: String,
+    val choices: List<String>
 ) : Parcelable

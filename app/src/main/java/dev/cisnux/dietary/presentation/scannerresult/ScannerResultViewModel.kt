@@ -68,7 +68,6 @@ class ScannerResultViewModel @Inject constructor(
                             questionId = answeredQuestion.questionId,
                             question = answeredQuestion.question,
                             answer = answeredQuestion.answer,
-                            questionType = answeredQuestion.type
                         )
                     }
                 )
