@@ -1,5 +1,6 @@
 [versions]
 agp = "8.2.2"
+cameraMlkitVision = "1.4.0-alpha04"
 kotlin = "1.9.22"
 coreKtx = "1.12.0"
 junit = "4.13.2"
@@ -27,8 +28,11 @@ datastore = "1.0.0"
 protobuf = "0.9.4"
 protobufJavalite = "4.26.0-RC2"
 kotlinXDateTime = "0.5.0"
+mlkitObjectDetection = "17.0.1"
+mlkitBarcodeScanning = "17.0.2"
 
 [libraries]
+androidx-camera-mlkit-vision-v140alpha04 = { module = "androidx.camera:camera-mlkit-vision", version.ref = "cameraMlkitVision" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -69,6 +73,8 @@ datastore-preferences = { group = "androidx.datastore", name = "datastore-prefer
 datastore-proto = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 protobuf-javalite = { group = "com.google.protobuf", name = "protobuf-javalite", version.ref = "protobufJavalite" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinXDateTime" }
+mlkit-objects-detection = { group = "com.google.mlkit", name = "object-detection", version.ref = "mlkitObjectDetection" }
+mlkit-barcode = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkitBarcodeScanning" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

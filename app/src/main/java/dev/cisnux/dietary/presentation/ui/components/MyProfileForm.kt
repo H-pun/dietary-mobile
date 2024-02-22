@@ -343,12 +343,12 @@ fun MyProfileForm(
                             Column {
                                 Text(
                                     selectedOption,
-                                    style = MaterialTheme.typography.titleSmall,
+                                    style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
                                     activityDescriptions[index],
-                                    style = MaterialTheme.typography.bodySmall
+                                    style = MaterialTheme.typography.bodyMedium
                                 )
                                 Spacer(modifier = Modifier.height(2.dp))
                                 HorizontalDivider()

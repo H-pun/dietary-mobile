@@ -203,9 +203,9 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         foods = List(10) {
             FoodDiaryReport(
                 id = it.toString(),
-                title = "Warter $it",
+                title = "Warteg $it",
                 totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
-                label = "18 Feb"
+                label = System.currentTimeMillis().withTimeFormat()
             )
         }
     )

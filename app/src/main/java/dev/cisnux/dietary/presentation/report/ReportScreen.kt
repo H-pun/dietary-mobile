@@ -278,13 +278,6 @@ private fun ReportBody(
                     color = placeholder,
                     modifier = Modifier
                         .height(16.dp)
-                        .width(80.dp)
-                        .shimmer()
-                ) {}
-                Surface(
-                    color = placeholder,
-                    modifier = Modifier
-                        .height(16.dp)
                         .width(100.dp)
                         .shimmer()
                 ) {}

@@ -1,8 +1,11 @@
 package dev.cisnux.dietary.presentation.foodscanner
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.net.Uri
+import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -13,10 +16,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +30,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
@@ -54,6 +60,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.toComposeIntRect
+import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.graphics.Color as ComposeColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -72,6 +84,11 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.objects.ObjectDetection
+import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.domain.models.UserProfileDetail
 import dev.cisnux.dietary.presentation.ui.components.HealthProfileDialog
@@ -80,7 +97,10 @@ import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.UiState
 import java.io.File
+import kotlin.math.PI
 
+
+@SuppressLint("ClickableViewAccessibility")
 @Composable
 fun FoodScannerScreen(
     onNavigateUp: () -> Unit,
@@ -93,8 +113,34 @@ fun FoodScannerScreen(
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+    val scanner = ObjectDetection.getClient(
+        ObjectDetectorOptions.Builder()
+            .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
+            .build()
+    )
+    val rect = remember {
+        mutableStateOf(Rect())
+    }
     val cameraController = remember {
-        LifecycleCameraController(context)
+        LifecycleCameraController(context).apply {
+            isTapToFocusEnabled = true
+            setImageAnalysisAnalyzer(
+                ContextCompat.getMainExecutor(
+                    context
+                ),
+                MlKitAnalyzer(
+                    listOf(scanner),
+                    CameraController.COORDINATE_SYSTEM_VIEW_REFERENCED,
+                    ContextCompat.getMainExecutor(context)
+                ) { mlResult ->
+                    mlResult?.getValue(scanner)?.let {
+                        if (it.isNotEmpty())
+                            rect.value = it[0].boundingBox
+                    }
+                }
+            )
+            bindToLifecycle(lifecycleOwner)
+        }
     }
     val lottieComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(resId = R.raw.focusable_anim))
     var isBackCamera by rememberSaveable {
@@ -203,27 +249,40 @@ fun FoodScannerScreen(
                 },
                 onRotateButton = { isBackCamera = !isBackCamera },
                 cameraPreview = {
-                    AndroidView(factory = { context ->
-                        cameraController.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-                        cameraController.isTapToFocusEnabled
-                        cameraController.setEnabledUseCases(CameraController.IMAGE_CAPTURE)
-                        cameraController.bindToLifecycle(lifecycleOwner)
-                        PreviewView(context).apply {
-                            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                            setBackgroundColor(Color.BLACK)
-                            scaleType = PreviewView.ScaleType.FILL_START
-                            controller = cameraController
+                    AndroidView(
+                        factory = { context ->
+                            PreviewView(context).apply {
+                                layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                                setBackgroundColor(Color.BLACK)
+                                scaleType = PreviewView.ScaleType.FILL_START
+                                controller = cameraController
+                            }
+                        },
+                        update = { preview ->
+                            preview.controller?.cameraSelector =
+                                if (isBackCamera) CameraSelector.DEFAULT_BACK_CAMERA
+                                else CameraSelector.DEFAULT_FRONT_CAMERA
+                        },
+                        modifier = Modifier.drawWithContent {
+                            drawContent()
+                            if (rect.value.top != 0) {
+                                val composeRect = rect.value.toComposeRect()
+                                drawRoundRect(
+                                    color = ComposeColor.White,
+                                    topLeft = rect.value.toComposeRect().topLeft,
+                                    cornerRadius = CornerRadius(
+                                        x = composeRect.size.width.dp.toPx(),
+                                        y = composeRect.size.height.dp.toPx(),
+                                    ),
+                                    style = Stroke(width = 2.dp.toPx()),
+                                    size = composeRect.size
+                                )
+                            }
                         }
-                    }, update = { preview ->
-                        preview.controller?.cameraSelector =
-                            if (isBackCamera) CameraSelector.DEFAULT_BACK_CAMERA
-                            else CameraSelector.DEFAULT_FRONT_CAMERA
-                    })
+                    )
                 },
                 modifier = modifier.padding(it),
-                isLoading = (userProfileState is UiState.Loading ||
-                        userProfileState is UiState.Error && (userProfileState as UiState.Error).error !is Failure.ConnectionFailure)
-                        || userProfileDetail.username.isBlank()
+                isLoading = (userProfileState is UiState.Loading || userProfileState is UiState.Error && (userProfileState as UiState.Error).error !is Failure.ConnectionFailure) || userProfileDetail.username.isBlank()
             )
             HealthProfileDialog(
                 onUpdate = {
@@ -319,23 +378,37 @@ private fun FoodScannerBody(
                 content = cameraPreview,
                 color = ComposeColor.Black
             )
-            LottieAnimation(composition = lottieComposition,
-                iterations = LottieConstants.IterateForever,
-                modifier = Modifier
-                    .constrainAs(focusableAnim) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .height(220.dp)
-                    .width(205.dp))
+//            Canvas(modifier = Modifier.fillMaxSize()) {
+//                drawRoundRect(
+//                    color = ComposeColor.White,
+//                    cornerRadius = CornerRadius(
+//                        x = 205.dp.toPx(),
+//                        y = radius.dp.toPx(),
+//                    ),
+//                    style = Stroke(width = 2.dp.toPx()),
+//                    size = Size(
+//                        height = 220.dp.toPx(),
+//                        width = 205.dp.toPx(),
+//                    )
+//                )
+//            }
+//            LottieAnimation(composition = lottieComposition,
+//                iterations = LottieConstants.IterateForever,
+//                modifier = Modifier
+//                    .constrainAs(focusableAnim) {
+//                        top.linkTo(parent.top)
+//                        start.linkTo(parent.start)
+//                        end.linkTo(parent.end)
+//                        bottom.linkTo(parent.bottom)
+//                    }
+//                    .height(220.dp)
+//                    .width(205.dp))
             Surface(color = ComposeColor.Black.copy(alpha = 0.4f),
                 modifier = Modifier
                     .constrainAs(supportingTextContainer) {
-                        start.linkTo(focusableAnim.start)
-                        end.linkTo(focusableAnim.end)
-                        top.linkTo(focusableAnim.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(buttonContainer.top, margin = 8.dp)
                     }
                     .height(80.dp)
                     .width(180.dp)
@@ -392,8 +465,7 @@ private fun FoodScannerBody(
                     fontWeight = FontWeight.Bold,
                 )
             }
-            IconButton(
-                onClick = onCaptureByCamera,
+            IconButton(onClick = onCaptureByCamera,
                 modifier = Modifier.constrainAs(takePictureButton) {
                     top.linkTo(buttonContainer.top)
                     start.linkTo(buttonContainer.start)
@@ -422,3 +494,4 @@ private fun FoodScannerBody(
         }
     }
 }
+

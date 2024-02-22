@@ -124,7 +124,6 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                             append(
                                 key = "AddedAt",
                                 foodDiary.addedAt,
-//                                "2024-02-21T00:58:52.144Z",
                                 Headers.build {
                                     append(HttpHeaders.ContentType, "text/plain")
                                 })
