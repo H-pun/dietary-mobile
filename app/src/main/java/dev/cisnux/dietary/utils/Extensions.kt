@@ -2,6 +2,7 @@ package dev.cisnux.dietary.utils
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import dev.cisnux.dietary.data.remotes.bodyrequests.UserAccountBodyRequest
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
@@ -154,4 +155,15 @@ fun getCurrentDateTimeInISOFormat(): String {
         .withLocale(Locale.getDefault())
 
     return formatter.format(currentInstant.atZone(userTimeZone).toLocalDateTime())
+}
+
+inline fun View.afterMeasured(crossinline block: () -> Unit) {
+    if (measuredWidth > 0 && measuredHeight > 0)
+        block()
+    else
+        viewTreeObserver.addOnGlobalLayoutListener {
+            if (measuredWidth > 0 && measuredHeight > 0) {
+                block()
+            }
+        }
 }

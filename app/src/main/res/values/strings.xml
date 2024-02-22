@@ -3,7 +3,7 @@
     <string name="take_photo_button">tangkap gambar</string>
     <string name="gallery_button">Galeri</string>
     <string name="rotate_button">Rotasi</string>
-    <string name="camera_supporting_text">Pastikan semua makanan tampak di layar. Jaga jarak 30cm dari makanan ke kamera.</string>
+    <string name="camera_supporting_text">Pastikan semua makanan berada dalam lingkaran</string>
     <string name="home_title" translatable="false">Home</string>
     <string name="report_title">Report</string>
     <string name="my_profile_title" translatable="false">My Profile</string>

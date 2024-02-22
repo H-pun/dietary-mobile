@@ -125,12 +125,6 @@ dependencies {
     implementation(libs.datastore.proto)
     implementation(libs.datastore.preferences)
     implementation(libs.protobuf.javalite)
-    // kotlinx datetime
-    implementation(libs.kotlinx.datetime)
-    // mlkit object detection
-    implementation(libs.mlkit.objects.detection)
-    implementation(libs.mlkit.barcode)
-    implementation(libs.androidx.camera.mlkit.vision.v140alpha04)
 }
 
 // Allow references to generated code
