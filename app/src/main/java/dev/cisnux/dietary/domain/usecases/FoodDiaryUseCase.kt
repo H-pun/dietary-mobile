@@ -21,10 +21,6 @@ interface FoodDiaryUseCase {
     ): Flow<UiState<FoodDiaryDetail>>
 
     fun deleteFoodDiaryById(foodDiaryId: String): Flow<UiState<Nothing>>
-    fun duplicateFoodDiaryById(
-        foodDiaryId: String,
-        foodDiaryCategory: String
-    ): Flow<UiState<Nothing>>
 
     fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<Report>>
 }

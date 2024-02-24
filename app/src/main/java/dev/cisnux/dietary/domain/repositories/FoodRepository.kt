@@ -18,6 +18,5 @@ interface FoodRepository {
     fun updateFoodDiaryBaseOnAnsweredQuestion(foodDiaryQuestion: FoodDiaryQuestion): Flow<UiState<FoodDiaryDetail>>
     fun deleteFoodDiaryById(foodDiaryId: String): Flow<UiState<Nothing>>
     fun getFoodDiaryDetailById(foodDiaryId: String): Flow<UiState<FoodDiaryDetail>>
-    fun duplicateFoodDiaryById(foodDiaryId: String, foodDiaryCategory: String): Flow<UiState<Nothing>>
     fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<Report>>
 }

@@ -14,7 +14,6 @@ interface FoodDiaryRemoteSource {
     suspend fun getFoodDiaries(accessToken: String, getFoodDiaryBodyRequest: GetFoodDiaryBodyRequest): Either<Exception, List<FoodDiaryResponse>>
     suspend fun getFoodDiaryById(accessToken: String, id: String): Either<Exception, FoodDiaryDetailResponse>
     suspend fun addFoodDiary(accessToken: String, foodDiary: FoodDiaryBodyRequest): Either<Exception, AddedFoodDiaryResponse>
-    suspend fun duplicateFoodDiary(accessToken: String, duplicateFoodDiary: DuplicateFoodDiaryBodyRequest): Either<Exception, Nothing?>
     suspend fun updateFoodDiaryByQuestions(accessToken: String, foodDiaryQuestion: DiaryQuestionBodyRequest): Either<Exception, AddedFoodDiaryResponse>
     suspend fun getFoodDiaryReports(accessToken: String, category: Int): Either<Exception, ReportResponse>
     // optional

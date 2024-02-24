@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "580334026911",
+    "project_id": "dietary-f1812",
+    "storage_bucket": "dietary-f1812.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580334026911:android:b63de26dd53e28297aa2aa",
+        "android_client_info": {
+          "package_name": "dev.cisnux.dietary"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYeH_yRGDq6zDwhPsiER_7y_HGWULOPZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

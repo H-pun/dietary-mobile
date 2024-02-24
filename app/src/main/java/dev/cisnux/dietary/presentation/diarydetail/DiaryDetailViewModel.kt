@@ -26,7 +26,6 @@ class DiaryDetailViewModel @Inject constructor(
     val foodDiaryDetailState get() = _foodDiaryDetailState.asStateFlow()
     private val _duplicateState =
         MutableStateFlow<UiState<FoodDiaryDetail>>(UiState.Initialize)
-    val duplicateState get() = _duplicateState.asStateFlow()
     private val _removeState = MutableStateFlow<UiState<Nothing>>(UiState.Initialize)
     val removeState get() = _removeState.asStateFlow()
 
@@ -43,15 +42,6 @@ class DiaryDetailViewModel @Inject constructor(
     fun deleteFoodDiaryById() = viewModelScope.launch {
         useCase.deleteFoodDiaryById(foodDiaryId = foodDiaryId).collectLatest { uiState ->
             _removeState.value = uiState
-        }
-    }
-
-    fun duplicateDiaryById(foodDiaryCategory: String) = viewModelScope.launch {
-        useCase.duplicateFoodDiaryById(
-            foodDiaryId = foodDiaryId,
-            foodDiaryCategory = foodDiaryCategory
-        ).collectLatest { uiState ->
-            _duplicateState.value = uiState
         }
     }
 

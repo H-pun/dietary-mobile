@@ -3,6 +3,7 @@ package dev.cisnux.dietary.data.repositories
 import android.util.Log
 import dev.cisnux.dietary.data.locals.UserAccountLocalSource
 import dev.cisnux.dietary.data.remotes.FoodDiaryRemoteSource
+import dev.cisnux.dietary.data.remotes.ImageRemoteSource
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
 import dev.cisnux.dietary.domain.models.AddFoodDiary
@@ -39,7 +40,8 @@ import kotlin.random.Random
 
 class FoodDiaryRepositoryImpl @Inject constructor(
     private val foodDiaryRemoteSource: FoodDiaryRemoteSource,
-    private val userAccountLocalSource: UserAccountLocalSource
+    private val userAccountLocalSource: UserAccountLocalSource,
+    private val imageRemoteSource: ImageRemoteSource,
 ) : FoodRepository {
     private val foodsBreakfastDiary = List(10) {
         FoodDiary(
@@ -107,7 +109,10 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                         Question(
                             id = "2",
                             question = "Berapa kandungan gula dalam makanan ini?",
-                            choices = listOf("Lebih dari 10% kalori harian", "Kurang dari 10% kalori harian")
+                            choices = listOf(
+                                "Lebih dari 10% kalori harian",
+                                "Kurang dari 10% kalori harian"
+                            )
                         ),
                     )
                 ),
@@ -128,7 +133,10 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                         Question(
                             id = "2",
                             question = "Berapa kandungan gula dalam makanan ini?",
-                            choices = listOf("Lebih dari 10% kalori harian", "Kurang dari 10% kalori harian")
+                            choices = listOf(
+                                "Lebih dari 10% kalori harian",
+                                "Kurang dari 10% kalori harian"
+                            )
                         ),
                     )
                 ),
@@ -254,12 +262,13 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                     },
                     ifRight = { foodDiaries ->
                         send(UiState.Success(foodDiaries.map { foodDiary ->
+                            val imageUrl = imageRemoteSource.getFoodDiaryImageById(foodDiary.id)
                             FoodDiary(
                                 id = foodDiary.id,
                                 title = foodDiary.title,
                                 date = convertISOToMillis(foodDiary.addedAt).withFullDateFormat(),
                                 time = convertISOToMillis(foodDiary.addedAt).withTimeFormat(),
-                                foodPictureUrl = "$DIETARY_API/upload/${foodDiary.filePath}",
+                                foodPictureUrl = imageUrl,
                                 totalFoodCalories = foodDiary.totalFoodCalories
                             )
                         }))
@@ -294,7 +303,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             }.collectLatest {
                 if (it.first != null && it.first?.isNotBlank() == true && it.second != null && it.second?.isNotBlank() == true) {
                     val time = getCurrentDateTimeInISOFormat()
-                    Log.d("time", time)
                     foodDiaryRemoteSource.addFoodDiary(
                         accessToken = it.second!!,
                         foodDiary = FoodDiaryBodyRequest(
@@ -308,7 +316,11 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                         ifLeft = { exception ->
                             send(UiState.Error(exception))
                         },
-                        ifRight = {
+                        ifRight = { addedFoodDiary ->
+                            imageRemoteSource.addFoodDiaryImage(
+                                addedFoodDiary.id,
+                                addFoodDiary.foodPicture
+                            )
                             send(UiState.Success(foodDiaryDetail.value))
                         }
                     )
@@ -353,18 +365,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
 //                            emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
-
-    override fun duplicateFoodDiaryById(
-        foodDiaryId: String,
-        foodDiaryCategory: String
-    ): Flow<UiState<Nothing>> = flow {
-        emit(UiState.Loading)
-        delay(1000L)
-        //        emit(UiState.Error(Failure.BadRequestFailure("bad request")))
-//        emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
-        emit(UiState.Success())
-    }.flowOn(Dispatchers.IO)
-        .distinctUntilChanged()
 
     override fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<Report>> =
         flow {

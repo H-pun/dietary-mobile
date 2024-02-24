@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="dev.cisnux.dietary" />
+                  <option name="mobileSdkAppId" value="1:580334026911:android:b63de26dd53e28297aa2aa" />
+                  <option name="projectId" value="dietary-f1812" />
+                  <option name="projectNumber" value="580334026911" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

@@ -94,15 +94,7 @@ fun DiaryDetailScreen(
         SnackbarHostState()
     }
     val foodDiaryDetailState by viewModel.foodDiaryDetailState.collectAsState()
-    val duplicateState by viewModel.duplicateState.collectAsState()
     val removeState by viewModel.removeState.collectAsState()
-    var isDuplicateDialogOpen by rememberSaveable {
-        mutableStateOf(false)
-    }
-    val foodDiaryCategories = stringArrayResource(id = R.array.food_diary_category)
-    var selectedFoodDiaryCategory by rememberSaveable {
-        mutableStateOf(foodDiaryCategories[0])
-    }
     val context = LocalContext.current
 
     when {
@@ -137,23 +129,7 @@ fun DiaryDetailScreen(
             }
         }
 
-        duplicateState is UiState.Error -> (duplicateState as UiState.Error).error?.let { exception ->
-            LaunchedEffect(snackbarHostState) {
-                exception.message?.let {
-                    val snackbarResult = snackbarHostState.showSnackbar(
-                        message = it,
-                        actionLabel = context.getString(R.string.retry),
-                        withDismissAction = true,
-                        duration = SnackbarDuration.Long
-                    )
-                    if (snackbarResult == SnackbarResult.ActionPerformed)
-                        viewModel.duplicateDiaryById(foodDiaryCategory = selectedFoodDiaryCategory)
-                }
-            }
-        }
-
         removeState is UiState.Success -> navigateUp()
-        duplicateState is UiState.Success -> navigateUp()
     }
 
     DiaryDetailContent(
@@ -164,26 +140,10 @@ fun DiaryDetailScreen(
                     (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.foodPicture
                 else null,
                 onNavigateUp = navigateUp,
-                onDuplicate = { isDuplicateDialogOpen = true },
                 onRemove = viewModel::deleteFoodDiaryById,
                 modifier = Modifier.padding(it),
                 isRemoveVisible = foodDiaryDetailState is UiState.Success,
-                isDuplicateVisible = foodDiaryDetailState is UiState.Success,
                 isRemoveEnable = removeState !is UiState.Loading,
-                isDuplicateEnable = duplicateState !is UiState.Loading,
-            )
-
-            DuplicateDialog(
-                selectedFoodDiaryCategory = selectedFoodDiaryCategory,
-                onFoodDiaryCategoryChange = { newValue -> selectedFoodDiaryCategory = newValue },
-                foodDiaryCategories = foodDiaryCategories,
-                onDone = {
-                    isDuplicateDialogOpen = false
-                    viewModel.duplicateDiaryById(foodDiaryCategory = selectedFoodDiaryCategory)
-                },
-                onCancel = { isDuplicateDialogOpen = false },
-                isDialogOpen = isDuplicateDialogOpen,
-                onDismissRequest = { isDuplicateDialogOpen = false },
             )
         },
         sheetContent = {
@@ -274,7 +234,6 @@ private fun DiaryDetailContentPreview() {
                     DiaryDetailBody(
                         foodPicture = foodPicture,
                         onNavigateUp = { /*TODO*/ },
-                        onDuplicate = { /*TODO*/ },
                         onRemove = { /*TODO*/ },
                         modifier = Modifier.padding(it)
                     )
@@ -300,12 +259,9 @@ private fun DiaryDetailContentPreview() {
 fun DiaryDetailBody(
     foodPicture: String?,
     onNavigateUp: () -> Unit,
-    onDuplicate: () -> Unit,
     onRemove: () -> Unit,
     modifier: Modifier = Modifier,
-    isDuplicateEnable: Boolean = true,
     isRemoveEnable: Boolean = true,
-    isDuplicateVisible: Boolean = true,
     isRemoveVisible: Boolean = true
 ) {
     Box(modifier = modifier) {
@@ -343,36 +299,6 @@ fun DiaryDetailBody(
                 contentDescription = null,
                 tint = Color.White,
             )
-        }
-        AnimatedVisibility(
-            visible = isDuplicateVisible,
-            modifier = modifier
-                .padding(top = 12.dp, end = 64.dp)
-                .align(Alignment.TopEnd)
-        ) {
-            TooltipBox(
-                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                tooltip = {
-                    PlainTooltip {
-                        Text(text = "Tambahkan food diary")
-                    }
-                },
-                state = rememberTooltipState(),
-            ) {
-                FilledIconButton(
-                    onClick = onDuplicate,
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = Color.Black.copy(alpha = 0.5f)
-                    ),
-                    enabled = isDuplicateEnable
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.AddCircle,
-                        contentDescription = null,
-                        tint = Color.White,
-                    )
-                }
-            }
         }
         AnimatedVisibility(
             visible = isRemoveVisible,
@@ -424,138 +350,5 @@ private fun DiaryDetailContent(
         sheetPeekHeight = 160.dp,
     ) {
         body(it)
-    }
-}
-
-
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
-)
-@Composable
-private fun DuplicateDialogPreview() {
-    val foodDiaryCategories = stringArrayResource(id = R.array.food_diary_category)
-    var selectedFoodDiaryCategory by rememberSaveable {
-        mutableStateOf(foodDiaryCategories[0])
-    }
-
-    DietaryTheme {
-        DuplicateDialog(
-            onCancel = { /*TODO*/ },
-            onDone = { /*TODO*/ },
-            onDismissRequest = { /*TODO*/ },
-            isDialogOpen = true,
-            foodDiaryCategories = foodDiaryCategories,
-            onFoodDiaryCategoryChange = { newValue ->
-                selectedFoodDiaryCategory = newValue
-            },
-            selectedFoodDiaryCategory = selectedFoodDiaryCategory
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DuplicateDialog(
-    selectedFoodDiaryCategory: String,
-    onFoodDiaryCategoryChange: (String) -> Unit,
-    foodDiaryCategories: Array<String>,
-    onCancel: () -> Unit,
-    onDone: () -> Unit,
-    onDismissRequest: () -> Unit,
-    isDialogOpen: Boolean,
-    modifier: Modifier = Modifier,
-) {
-    var isFoodDiaryCategoryExpanded by rememberSaveable { mutableStateOf(false) }
-
-    if (isDialogOpen) Dialog(onDismissRequest = onDismissRequest) {
-        Surface(
-            color = MaterialTheme.colorScheme.surface,
-            modifier = Modifier.clip(MaterialTheme.shapes.extraLarge)
-        ) {
-            Column(
-                modifier = modifier.padding(horizontal = 20.dp, vertical = 24.dp)
-            ) {
-                Text(
-                    text = "Tambahkan Food Diary",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "Pilih kategori food diary yang akan ditambahkan sarapan, makan siang\natau makan malam.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                ExposedDropdownMenuBox(
-                    expanded = isFoodDiaryCategoryExpanded,
-                    onExpandedChange = { isFoodDiaryCategoryExpanded = it },
-                ) {
-                    OutlinedTextField(
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(
-                                    id = when (selectedFoodDiaryCategory) {
-                                        foodDiaryCategories[0] -> R.drawable.ic_breakfast_24dp
-                                        foodDiaryCategories[1] -> R.drawable.ic_lunch_24dp
-                                        else -> R.drawable.ic_dinner_24dp
-                                    }
-                                ),
-                                contentDescription = null,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        },
-                        value = selectedFoodDiaryCategory,
-                        onValueChange = {},
-                        label = {
-                            Text(
-                                text = "Kategori",
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isFoodDiaryCategoryExpanded) },
-                        readOnly = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .menuAnchor(),
-                    )
-                    ExposedDropdownMenu(
-                        expanded = isFoodDiaryCategoryExpanded,
-                        onDismissRequest = { isFoodDiaryCategoryExpanded = false },
-                    ) {
-                        foodDiaryCategories.forEach { selectedOption ->
-                            DropdownMenuItem(
-                                text = { Text(selectedOption) },
-                                onClick = {
-                                    onFoodDiaryCategoryChange(selectedOption)
-                                    isFoodDiaryCategoryExpanded = false
-                                },
-                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TextButton(onClick = onCancel) {
-                        Text(
-                            text = "Batal",
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    TextButton(onClick = onDone) {
-                        Text(
-                            text = stringResource(id = R.string.add),
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    }
-                }
-            }
-        }
     }
 }

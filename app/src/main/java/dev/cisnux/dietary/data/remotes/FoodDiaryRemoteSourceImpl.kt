@@ -152,9 +152,9 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                     message = commonResponse.message
                 })
             } else {
-//                val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
+                val commonResponse: CommonResponse<String> = response.body()
                 val addedFoodDiaryResponse = AddedFoodDiaryResponse(
-                    id = "1",
+                    id = commonResponse.data!!,
                     totalFoodCalories = 200.4512f,
                     maxDailyBmrCalorie = 800.6798f,
                     totalUserCaloriesToday = 500.7892f,
@@ -165,31 +165,6 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
 //                Either.Right(commonResponse.data!!)
                 Either.Right(addedFoodDiaryResponse)
             }
-        } catch (e: UnresolvedAddressException) {
-            Either.Left(Failure.ConnectionFailure())
-        }
-    }
-
-    override suspend fun duplicateFoodDiary(
-        accessToken: String, duplicateFoodDiary: DuplicateFoodDiaryBodyRequest
-    ): Either<Exception, Nothing?> = withContext(Dispatchers.IO) {
-        try {
-            val response = client.post(
-                urlString = "$DIETARY_API/food_diary?is_duplicate=true"
-            ) {
-                headers {
-                    append(HttpHeaders.Authorization, "Bearer $accessToken")
-                }
-                contentType(ContentType.Application.Json)
-                setBody(duplicateFoodDiary)
-            }
-            val failure = Failure.HTTP_FAILURES[response.status]
-            return@withContext if (failure != null) {
-                val commonResponse: CommonResponse<Nothing> = response.body()
-                Either.Left(failure.apply {
-                    message = commonResponse.message
-                })
-            } else Either.Right(null)
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
         }

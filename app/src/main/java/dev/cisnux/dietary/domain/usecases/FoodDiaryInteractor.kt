@@ -27,13 +27,6 @@ class FoodDiaryInteractor @Inject constructor(
         foodRepository.updateFoodDiaryBaseOnAnsweredQuestion(foodDiaryQuestion)
 
     override fun deleteFoodDiaryById(foodDiaryId: String): Flow<UiState<Nothing>> = foodRepository.deleteFoodDiaryById(foodDiaryId)
-    override fun duplicateFoodDiaryById(
-        foodDiaryId: String,
-        foodDiaryCategory: String
-    ): Flow<UiState<Nothing>> = foodRepository.duplicateFoodDiaryById(
-        foodDiaryId,
-        foodDiaryCategory
-    )
 
     override fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<Report>> =
         foodRepository.getFoodDiaryReports(category)
