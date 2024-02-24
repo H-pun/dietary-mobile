@@ -5,6 +5,6 @@ data class FoodDiary(
     val title: String,
     val date: String,
     val time: String,
-    val foodPictureUrl: String,
+    val foodPictureUrl: String?,
     val totalFoodCalories: Float,
 )

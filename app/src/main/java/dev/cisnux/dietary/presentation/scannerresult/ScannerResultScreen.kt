@@ -2,6 +2,7 @@ package dev.cisnux.dietary.presentation.scannerresult
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -238,8 +239,14 @@ fun ScannerResultScreen(
         isRemoveVisible = scannerResultState is UiState.Success,
         isRemoveEnable = removeState !is UiState.Loading,
         isQuestionEnable = scannerResultState !is UiState.Loading,
+        isBackVisible = scannerResultState !is UiState.Loading,
         snackbarHostState = snackbarHostState
     )
+
+    BackHandler {
+        if (scannerResultState !is UiState.Loading)
+            onNavigateUp()
+    }
 }
 
 @Composable
@@ -364,6 +371,7 @@ private fun ScannerResultContent(
     body: @Composable (PaddingValues) -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
+    isBackVisible: Boolean = true,
     isQuestionVisible: Boolean = true,
     isRemoveVisible: Boolean = true,
     isRemoveEnable: Boolean = true,
@@ -380,12 +388,14 @@ private fun ScannerResultContent(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = navigateUp) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
+                    AnimatedVisibility(visible = isBackVisible) {
+                        IconButton(onClick = navigateUp) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                 },
                 actions = {
@@ -543,10 +553,6 @@ private fun QuestionListItem(
     onAnswerChange: (newAnswer: String, index: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val focuses = remember {
-        mutableStateListOf(*answeredQuestions.map { false }.toTypedArray())
-    }
-
     Column(Modifier.padding(horizontal = 16.dp)) {
         Row(
             modifier = modifier.fillMaxWidth(),

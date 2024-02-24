@@ -515,7 +515,7 @@ private fun HomeBody(
         foodCategories[2] to painterResource(id = R.drawable.ic_dinner_24dp),
     )
     val searchBarPadding by animateDpAsState(
-        if (!active) 72.dp else 0.dp, label = "searchbar_padding"
+        if (!active) 76.dp else 0.dp, label = "searchbar_padding"
     )
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabDiaries.size })
 

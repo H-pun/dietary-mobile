@@ -58,7 +58,7 @@ fun DiaryCard(
     foodName: String,
     date: String,
     time: String,
-    foodImageUrl: String,
+    foodImageUrl: String?,
     calorie: Float,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -74,33 +74,42 @@ fun DiaryCard(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            SubcomposeAsyncImage(
-                model = foodImageUrl,
-                error = {
-                    Surface(
-                        color = placeholder,
-                        modifier = Modifier
-                            .size(height = 90.dp, width = 90.dp)
-                            .clip(shape = MaterialTheme.shapes.small)
-                            .shimmer(),
-                        content = {}
-                    )
-                },
-                loading = {
-                    Surface(
-                        color = placeholder,
-                        modifier = Modifier
-                            .size(height = 90.dp, width = 90.dp)
-                            .clip(shape = MaterialTheme.shapes.small)
-                            .shimmer(),
-                        content = {}
-                    )
-                },
-                contentScale = ContentScale.FillBounds,
-                contentDescription = foodName,
-                modifier = modifier
+            foodImageUrl?.let {
+                SubcomposeAsyncImage(
+                    model = foodImageUrl,
+                    error = {
+                        Surface(
+                            color = placeholder,
+                            modifier = Modifier
+                                .size(height = 90.dp, width = 90.dp)
+                                .clip(shape = MaterialTheme.shapes.small)
+                                .shimmer(),
+                            content = {}
+                        )
+                    },
+                    loading = {
+                        Surface(
+                            color = placeholder,
+                            modifier = Modifier
+                                .size(height = 90.dp, width = 90.dp)
+                                .clip(shape = MaterialTheme.shapes.small)
+                                .shimmer(),
+                            content = {}
+                        )
+                    },
+                    contentScale = ContentScale.FillBounds,
+                    contentDescription = foodName,
+                    modifier = modifier
+                        .size(height = 90.dp, width = 90.dp)
+                        .clip(shape = MaterialTheme.shapes.small),
+                )
+            } ?: Surface(
+                color = placeholder,
+                modifier = Modifier
                     .size(height = 90.dp, width = 90.dp)
-                    .clip(shape = MaterialTheme.shapes.small),
+                    .clip(shape = MaterialTheme.shapes.small)
+                    .shimmer(),
+                content = {}
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column(
