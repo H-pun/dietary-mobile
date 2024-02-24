@@ -1,6 +1,5 @@
 package dev.cisnux.dietary.data.remotes
 
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.FirebaseStorage
 import dev.cisnux.dietary.utils.PATH
 import kotlinx.coroutines.Dispatchers
