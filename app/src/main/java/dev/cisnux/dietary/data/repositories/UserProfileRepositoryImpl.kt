@@ -85,14 +85,11 @@ class UserProfileRepositoryImpl @Inject constructor(
                     ).fold(
                         ifLeft = { exception -> send(UiState.Error(exception)) },
                         ifRight = { userProfile ->
-                            Log.d(
-                                UserProfileRepositoryImpl::class.simpleName,
-                                userProfile.toString()
-                            )
                             userProfileLocalSource.updateUserProfile(userProfile)
                             send(UiState.Success(null))
                         }
                     )
+                else send(UiState.Error(Failure.UnauthorizedFailure()))
             }
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)

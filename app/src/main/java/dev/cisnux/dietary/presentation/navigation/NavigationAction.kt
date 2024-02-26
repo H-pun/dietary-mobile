@@ -22,13 +22,7 @@ class NavComponentAction(
         )
     }
     val navigateToAddDiary: () -> Unit = {
-        navController.navigate(route = AppDestination.AddDiaryRoute.route) {
-            popUpTo(AppDestination.HomeRoute.route) {
-                saveState = true
-            }
-            restoreState = true
-            launchSingleTop = true
-        }
+        navController.navigate(route = AppDestination.AddDiaryRoute.route)
     }
     val navigateToFoodDiaryDetail: (foodDiaryId: String) -> Unit = { foodDiaryId ->
         navController.navigate(
@@ -62,8 +56,6 @@ class NavComponentAction(
             popUpTo(AppDestination.AddDiaryRoute.route) {
                 inclusive = true
             }
-            restoreState = true
-            launchSingleTop = true
         }
     }
     val navigateToMyProfile: () -> Unit = {
@@ -71,18 +63,13 @@ class NavComponentAction(
             popUpTo(AppDestination.HomeRoute.route) {
                 inclusive = true
             }
-            restoreState = true
-            launchSingleTop = true
         }
     }
     val navigateToLanding: () -> Unit = {
         navController.navigate(route = AppDestination.LandingRoute.route) {
             popUpTo(navController.graph.findStartDestination().id) {
                 inclusive = true
-                saveState = true
             }
-            restoreState = true
-            launchSingleTop = true
         }
     }
     val navigateToSignUp: () -> Unit = {
@@ -93,6 +80,15 @@ class NavComponentAction(
             popUpTo(currentRoute) {
                 inclusive = true
             }
+        }
+    }
+    val navigateToSignOut: () -> Unit = {
+        navController.navigate(route = AppDestination.SignInRoute.route) {
+            popUpTo(AppDestination.MyProfileRoute.route) {
+                inclusive = true
+            }
+            launchSingleTop = true
+            restoreState = true
         }
     }
     val navigateToResetPassword: () -> Unit = {

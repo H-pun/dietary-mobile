@@ -72,12 +72,11 @@ import dev.cisnux.dietary.utils.isHeightOrWeightValid
 import dev.cisnux.dietary.utils.isFloatAnswerValid
 import dev.cisnux.dietary.utils.isUsernameValid
 import dev.cisnux.dietary.utils.Failure
-import okhttp3.internal.wait
 
 @Composable
 fun MyProfileScreen(
     navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
-    navigateToSignIn: (String) -> Unit,
+    navigateToSignIn: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MyProfileViewModel = hiltViewModel()
 ) {
@@ -156,7 +155,7 @@ fun MyProfileScreen(
                 }
                 if (exception is Failure.UnauthorizedFailure) {
                     viewModel.signOut()
-                    navigateToSignIn(AppDestination.MyProfileRoute.route)
+                    navigateToSignIn()
                 }
             }
         }
@@ -178,7 +177,7 @@ fun MyProfileScreen(
                 }
                 if (exception is Failure.UnauthorizedFailure) {
                     viewModel.signOut()
-                    navigateToSignIn(AppDestination.MyProfileRoute.route)
+                    navigateToSignIn()
                 }
             }
         }
@@ -188,7 +187,7 @@ fun MyProfileScreen(
     MyProfileContent(
         onSignOut = {
             viewModel.signOut()
-            navigateToSignIn(AppDestination.MyProfileRoute.route)
+            navigateToSignIn()
         },
         onSelectedDestination = navigateForBottomNav,
         body = {

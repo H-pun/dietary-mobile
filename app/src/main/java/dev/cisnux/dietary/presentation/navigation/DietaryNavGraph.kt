@@ -369,7 +369,7 @@ fun DietaryNavGraph(
         ) {
             MyProfileScreen(
                 navigateForBottomNav = navComponentAction.bottomNavigation,
-                navigateToSignIn = navComponentAction.navigateToSignIn
+                navigateToSignIn = navComponentAction.navigateToSignOut
             )
         }
         composable(

@@ -65,6 +65,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.utils.AppDestination
+import dev.cisnux.dietary.utils.AuthenticationState
 import dev.cisnux.dietary.utils.isEmailValid
 import dev.cisnux.dietary.utils.isPasswordSecure
 import dev.cisnux.dietary.utils.UiState
@@ -93,13 +94,16 @@ fun SignInScreen(
 
     when (signInWithEmailAndPasswordState) {
         is UiState.Success -> {
-            val isUserProfileExist by viewModel.isUserProfileExist.collectAsState(initial = null)
-            isUserProfileExist?.let {
-                if (it)
-                    navigateToHome(AppDestination.SignInRoute.route)
-                else
-                    navigateToAddMyProfile(AppDestination.SignInRoute.route)
+            val authenticationState by viewModel.authenticationState.collectAsState()
+            when (authenticationState) {
+                AuthenticationState.HAS_NOT_USER_PROFILE -> navigateToAddMyProfile(AppDestination.SignInRoute.route)
+                AuthenticationState.HAS_SIGNED_IN_AND_USER_PROFILE -> navigateToHome(AppDestination.SignInRoute.route)
+                else -> {}
             }
+//            if (it)
+//                navigateToHome(AppDestination.SignInRoute.route)
+//            else
+//                navigateToAddMyProfile(AppDestination.SignInRoute.route)
         }
 
         is UiState.Error -> {

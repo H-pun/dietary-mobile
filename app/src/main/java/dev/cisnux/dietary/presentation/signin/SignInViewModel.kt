@@ -6,12 +6,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.cisnux.dietary.domain.models.UserAccount
 import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.domain.usecases.UserProfileUseCase
+import dev.cisnux.dietary.utils.AuthenticationState
 import dev.cisnux.dietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +31,11 @@ class SignInViewModel @Inject constructor(
     val isUserProfileExist = userProfileUseCase.isUserProfileExist.shareIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
+    )
+    val authenticationState = authenticationUseCase.authenticationState.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = AuthenticationState.INITIALIZE
     )
 
     fun signInWithEmailAndPassword(emailAddress: String, password: String) {

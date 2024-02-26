@@ -6,14 +6,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.domain.usecases.LandingUseCase
 import dev.cisnux.dietary.domain.usecases.UserProfileUseCase
+import dev.cisnux.dietary.utils.AuthenticationState
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    authenticationUseCase: AuthenticationUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
     userProfileUseCase: UserProfileUseCase,
     landingUseCase: LandingUseCase
 ) : ViewModel() {
@@ -32,4 +33,13 @@ class SplashViewModel @Inject constructor(
         initialValue = null,
         started = SharingStarted.Eagerly
     )
+    val authenticationState = authenticationUseCase.authenticationState.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = AuthenticationState.INITIALIZE
+    )
+
+    fun signOut() = viewModelScope.launch {
+        authenticationUseCase.signOut()
+    }
 }

@@ -24,6 +24,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.utils.AppDestination
+import dev.cisnux.dietary.utils.AuthenticationState
 import dev.cisnux.dietary.utils.SplashWaitTimeMillis
 import kotlinx.coroutines.delay
 
@@ -43,21 +44,44 @@ fun SplashScreen(
     val hasTokenExpired by viewModel.hasTokenExpired.collectAsState()
     val isUserProfileExist by viewModel.isUserProfileExist.collectAsState()
     val hasLandingShowed by viewModel.hasLandingShowed.collectAsState()
+    val authenticationState by viewModel.authenticationState.collectAsState()
 
     LaunchedEffect(Unit) {
         delay(SplashWaitTimeMillis)
         Log.d("SplashScreen", "hasLandingShowed $hasLandingShowed")
         Log.d("SplashScreen", "hasTokenExpired $hasTokenExpired")
         Log.d("SplashScreen", "isUserProfileExist $isUserProfileExist")
-        if (hasLandingShowed != null && hasTokenExpired != null && isUserProfileExist != null)
+//        if (hasLandingShowed != null && hasTokenExpired != null && isUserProfileExist != null)
+//            when {
+//                !hasLandingShowed!! -> onNavigateToLanding()
+//                hasTokenExpired!! -> onNavigateToSignIn(AppDestination.SplashRoute.route)
+//                !isUserProfileExist!! -> onNavigateToAddMyProfile(AppDestination.SplashRoute.route)
+//                else -> {
+//                    onNavigateToHome(AppDestination.SplashRoute.route)
+//                }
+//            }
+        hasLandingShowed?.let { hasLandingShowed ->
             when {
-                !hasLandingShowed!! -> onNavigateToLanding()
-                hasTokenExpired!! -> onNavigateToSignIn(AppDestination.SplashRoute.route)
-                !isUserProfileExist!! -> onNavigateToAddMyProfile(AppDestination.SplashRoute.route)
-                else -> {
-                    onNavigateToHome(AppDestination.SplashRoute.route)
+                !hasLandingShowed -> onNavigateToLanding()
+                authenticationState == AuthenticationState.HAS_NOT_SIGNED_IN -> {
+                    viewModel.signOut()
+                    onNavigateToSignIn(AppDestination.SplashRoute.route)
                 }
+
+                authenticationState == AuthenticationState.HAS_NOT_USER_PROFILE -> onNavigateToAddMyProfile(
+                    AppDestination.SplashRoute.route
+                )
+
+                authenticationState == AuthenticationState.UNKNOWN -> {
+                    viewModel.signOut()
+                    onNavigateToSignIn(AppDestination.SplashRoute.route)
+                }
+
+                authenticationState == AuthenticationState.HAS_SIGNED_IN_AND_USER_PROFILE -> onNavigateToHome(
+                    AppDestination.SplashRoute.route
+                )
             }
+        }
     }
 
     val lottieComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading_anim))
@@ -66,7 +90,8 @@ fun SplashScreen(
 }
 
 @Preview(
-    showBackground = true, name = "light",
+    showBackground = true,
+    name = "light",
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
     wallpaper = Wallpapers.NONE
 )
@@ -80,9 +105,11 @@ private fun SplashContentPreview() {
 }
 
 @Preview(
-    showBackground = true, name = "dark",
+    showBackground = true,
+    name = "dark",
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
-    wallpaper = Wallpapers.NONE, device = "spec:parent=pixel_7_pro,orientation=landscape"
+    wallpaper = Wallpapers.NONE,
+    device = "spec:parent=pixel_7_pro,orientation=landscape"
 )
 @Composable
 private fun SplashContentDarkPreview() {
@@ -97,8 +124,7 @@ private fun SplashContentDarkPreview() {
 private fun SplashContent(lottieComposition: LottieComposition?, modifier: Modifier = Modifier) {
     Scaffold {
         Box(
-            contentAlignment = Alignment.Center,
-            modifier = modifier
+            contentAlignment = Alignment.Center, modifier = modifier
                 .fillMaxSize()
                 .padding(it)
         ) {
