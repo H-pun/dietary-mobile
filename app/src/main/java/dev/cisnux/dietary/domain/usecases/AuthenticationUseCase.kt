@@ -6,7 +6,6 @@ import dev.cisnux.dietary.utils.UiState
 import kotlinx.coroutines.flow.Flow
 
 interface AuthenticationUseCase {
-    val hasAuthTokenExpired: Flow<Boolean>
     val authenticationState: Flow<AuthenticationState>
     fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
     fun signInWithGoogle(): Flow<UiState<Nothing>>

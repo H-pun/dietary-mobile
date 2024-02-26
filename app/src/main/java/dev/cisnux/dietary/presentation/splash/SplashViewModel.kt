@@ -15,19 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
-    userProfileUseCase: UserProfileUseCase,
     landingUseCase: LandingUseCase
 ) : ViewModel() {
-    val hasTokenExpired = authenticationUseCase.hasAuthTokenExpired.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = null
-    )
-    val isUserProfileExist = userProfileUseCase.isUserProfileExist.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = null
-    )
     val hasLandingShowed = landingUseCase.hasLandingShowed.stateIn(
         scope = viewModelScope,
         initialValue = null,

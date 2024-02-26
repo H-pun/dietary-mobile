@@ -100,10 +100,6 @@ fun SignInScreen(
                 AuthenticationState.HAS_SIGNED_IN_AND_USER_PROFILE -> navigateToHome(AppDestination.SignInRoute.route)
                 else -> {}
             }
-//            if (it)
-//                navigateToHome(AppDestination.SignInRoute.route)
-//            else
-//                navigateToAddMyProfile(AppDestination.SignInRoute.route)
         }
 
         is UiState.Error -> {

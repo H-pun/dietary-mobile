@@ -2,7 +2,6 @@ package dev.cisnux.dietary.domain.usecases
 
 import dev.cisnux.dietary.domain.models.UserAccount
 import dev.cisnux.dietary.domain.repositories.AuthenticationRepository
-import dev.cisnux.dietary.domain.repositories.TokenRepository
 import dev.cisnux.dietary.domain.repositories.UserProfileRepository
 import dev.cisnux.dietary.utils.AuthenticationState
 import dev.cisnux.dietary.utils.UiState
@@ -14,12 +13,9 @@ import dev.cisnux.dietary.utils.Failure
 
 @ExperimentalCoroutinesApi
 class AuthenticationInteractor @Inject constructor(
-    private val tokenRepository: TokenRepository,
     private val authenticationRepository: AuthenticationRepository,
     private val userProfileRepository: UserProfileRepository,
 ) : AuthenticationUseCase {
-    override val hasAuthTokenExpired: Flow<Boolean>
-        get() = tokenRepository.hasAuthTokenExpired
     override val authenticationState: Flow<AuthenticationState>
         get() = userProfileRepository.getUserProfile().map { uiSate ->
             when (uiSate) {
@@ -49,5 +45,5 @@ class AuthenticationInteractor @Inject constructor(
     override fun resetPassword(emailAddress: String): Flow<UiState<Nothing>> =
         authenticationRepository.resetPassword(emailAddress)
 
-    override suspend fun signOut() = tokenRepository.removeTokenState()
+    override suspend fun signOut() = authenticationRepository.signOut()
 }

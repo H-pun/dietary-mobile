@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -80,4 +81,9 @@ class AuthenticationRepositoryImpl @Inject constructor(
             emit(UiState.Success())
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
+
+    override suspend fun signOut() = withContext(Dispatchers.IO) {
+        userAccountLocalSource.updateAccessToken("")
+        userAccountLocalSource.updateUserId("")
+    }
 }

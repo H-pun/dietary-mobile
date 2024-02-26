@@ -10,4 +10,5 @@ interface AuthenticationRepository {
     fun signUpWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
     fun signUpWithGoogle(): Flow<UiState<Nothing>>
     fun resetPassword(emailAddress: String): Flow<UiState<Nothing>>
+    suspend fun signOut()
 }

@@ -1,7 +1,6 @@
 package dev.cisnux.dietary.presentation.splash
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -41,25 +40,11 @@ fun SplashScreen(
     val onNavigateToSignIn by rememberUpdatedState(navigateToSignIn)
     val onNavigateToAddMyProfile by rememberUpdatedState(navigateToAddMyProfile)
     val onNavigateToHome by rememberUpdatedState(navigateToHome)
-    val hasTokenExpired by viewModel.hasTokenExpired.collectAsState()
-    val isUserProfileExist by viewModel.isUserProfileExist.collectAsState()
     val hasLandingShowed by viewModel.hasLandingShowed.collectAsState()
     val authenticationState by viewModel.authenticationState.collectAsState()
 
     LaunchedEffect(Unit) {
         delay(SplashWaitTimeMillis)
-        Log.d("SplashScreen", "hasLandingShowed $hasLandingShowed")
-        Log.d("SplashScreen", "hasTokenExpired $hasTokenExpired")
-        Log.d("SplashScreen", "isUserProfileExist $isUserProfileExist")
-//        if (hasLandingShowed != null && hasTokenExpired != null && isUserProfileExist != null)
-//            when {
-//                !hasLandingShowed!! -> onNavigateToLanding()
-//                hasTokenExpired!! -> onNavigateToSignIn(AppDestination.SplashRoute.route)
-//                !isUserProfileExist!! -> onNavigateToAddMyProfile(AppDestination.SplashRoute.route)
-//                else -> {
-//                    onNavigateToHome(AppDestination.SplashRoute.route)
-//                }
-//            }
         hasLandingShowed?.let { hasLandingShowed ->
             when {
                 !hasLandingShowed -> onNavigateToLanding()
