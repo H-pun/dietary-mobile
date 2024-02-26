@@ -28,7 +28,7 @@ class TokenRepositoryImpl @Inject constructor(
                         accessToken = it.second!!
                     ).fold(
                         ifLeft = { exception ->
-                            if (exception !is Failure.NotFoundFailure)
+                            if (exception is Failure.UnauthorizedFailure)
                                 send(true)
                             else send(false)
                         },

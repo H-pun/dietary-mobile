@@ -155,6 +155,7 @@ class UserProfileRepositoryImpl @Inject constructor(
                         ifLeft = { exception ->
                             if (exception is Failure.NotFoundFailure)
                                 send(false)
+                            else send(true)
                         },
                         ifRight = { userProfile ->
                             userProfileLocalSource.updateUserProfile(userProfile)
