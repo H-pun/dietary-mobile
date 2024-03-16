@@ -9,15 +9,14 @@ import dev.cisnux.dietary.domain.models.FoodDiaryDetail
 import dev.cisnux.dietary.domain.models.UserAccount
 import dev.cisnux.dietary.domain.models.UserProfile
 import dev.cisnux.dietary.presentation.addmyprofile.MyProfile
-import java.text.DateFormat
-import java.text.SimpleDateFormat
+import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Date
 import java.util.Locale
-import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 val Context.activity: AppCompatActivity?
@@ -46,8 +45,7 @@ val MyProfile.asUserProfile: UserProfile
 
 val UserAccount.userAccountBodyRequest
     get() = UserAccountBodyRequest(
-        emailAddress = emailAddress,
-        password = password
+        emailAddress = emailAddress, password = password
     )
 
 fun String.isEmailValid(): Boolean {
@@ -83,24 +81,32 @@ fun String.isFloatAnswerValid(): Boolean = try {
     false
 }
 
-fun Long.withShortDateFormat(): String {
-    val date = Date(this)
+fun Instant.dateAndMonth(): String {
     val locale = Locale("id", "ID")
-    val sdf = SimpleDateFormat("dd MMM", locale);
-    return sdf.format(date)
+    val clock = Clock.fixed(this, ZoneId.systemDefault())
+    val localDate = LocalDate.now(clock)
+    return DateTimeFormatter.ofPattern("dd MMMM", locale).format(localDate)
 }
 
-fun Long.withFullDateFormat(): String {
-    val date = Date(this)
+fun Instant.dayDateMonth(): String {
     val locale = Locale("id", "ID")
-    return DateFormat.getDateInstance(DateFormat.FULL, locale).format(date)
+    val clock = Clock.fixed(this, ZoneId.systemDefault())
+    val localDate = LocalDate.now(clock)
+    return DateTimeFormatter.ofPattern("EEEE, dd", locale).format(localDate)
 }
 
-fun Long.withTimeFormat(): String {
-    val date = Date(this)
+fun Instant.dayDateMonthYear(): String {
     val locale = Locale("id", "ID")
-    return SimpleDateFormat("HH:mm", locale)
-        .format(date)
+    val clock = Clock.fixed(this, ZoneId.systemDefault())
+    val localDate = LocalDate.now(clock)
+    return DateTimeFormatter.ofPattern("EEEE, dd MMM yyyy", locale).format(localDate)
+}
+
+fun Instant.hoursAndMinutes(): String {
+    val locale = Locale("id", "ID")
+    val clock = Clock.fixed(this, ZoneId.systemDefault())
+    val localTime = LocalTime.now(clock)
+    return DateTimeFormatter.ofPattern("HH:mm", locale).format(localTime)
 }
 
 val Long.asDays: Long get() = TimeUnit.MILLISECONDS.toDays(this)
@@ -131,39 +137,41 @@ fun FoodDiaryDetail.isQuestionNotEmpty() = foods.any { food ->
     food.questions?.isNotEmpty() ?: false
 }
 
-fun convertISOToMillis(isoDateTime: String): Long {
+fun convertISOToInstant(isoDateTime: String): Instant {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     val parsedDateTime = LocalDateTime.parse(isoDateTime, formatter)
 
     // Convert LocalDateTime to milliseconds
-    val millis = parsedDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-
-    return millis
+    return parsedDateTime.atZone(ZoneId.systemDefault()).toInstant()
 }
 
 fun getCurrentDateTimeInISOFormat(): String {
-    val currentTimeMillis = System.currentTimeMillis()
-
-    // Get the user's time zone
-    val userTimeZone = TimeZone.getDefault().toZoneId()
-
     // Convert current time to Instant
-    val currentInstant = Instant.ofEpochMilli(currentTimeMillis)
+    val currentInstant = Clock.systemDefaultZone()
 
     // Format Instant to custom Date Time Format without the offset
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
-        .withLocale(Locale.getDefault())
+    val formatter =
+        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withLocale(Locale.getDefault())
 
-    return formatter.format(currentInstant.atZone(userTimeZone).toLocalDateTime())
+    return formatter.format(LocalDateTime.now(currentInstant))
 }
 
+val Instant.currentLocalDateTimeInBasicISOFormat: String
+    get() {
+        // Convert current time to Instant
+        val currentInstant = Clock.fixed(this, ZoneId.systemDefault())
+
+        // Format Instant to custom Date Time Format without the offset
+        val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+
+        return formatter.format(LocalDateTime.now(currentInstant))
+    }
+
 inline fun View.afterMeasured(crossinline block: () -> Unit) {
-    if (measuredWidth > 0 && measuredHeight > 0)
-        block()
-    else
-        viewTreeObserver.addOnGlobalLayoutListener {
-            if (measuredWidth > 0 && measuredHeight > 0) {
-                block()
-            }
+    if (measuredWidth > 0 && measuredHeight > 0) block()
+    else viewTreeObserver.addOnGlobalLayoutListener {
+        if (measuredWidth > 0 && measuredHeight > 0) {
+            block()
         }
+    }
 }

@@ -8,6 +8,7 @@ import dev.cisnux.dietary.domain.usecases.FoodDiaryUseCase
 import dev.cisnux.dietary.utils.FoodDiaryCategory
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.asDays
+import dev.cisnux.dietary.utils.currentLocalDateTimeInBasicISOFormat
 import dev.cisnux.dietary.utils.foodDiaryCategory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,7 +30,7 @@ class HomeViewModel @Inject constructor(
     private val foodDiaryUseCase: FoodDiaryUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
 ) : ViewModel() {
-    private var selectedDate = MutableStateFlow(System.currentTimeMillis())
+    private var selectedDate = MutableStateFlow(Instant.now())
     private var foodDiaryCategory = MutableStateFlow(FoodDiaryCategory.BREAKFAST)
     private var refreshFoodDiaries = MutableStateFlow(false)
     private var refreshSearchedFoodDiaries = MutableStateFlow(false)
@@ -40,9 +42,12 @@ class HomeViewModel @Inject constructor(
         if (isRefresh) {
             selectedDate.asStateFlow()
                 .combine(foodDiaryCategory.asStateFlow()) { selectedDate, diaryFoodCategory ->
-                    Pair(selectedDate.asDays, diaryFoodCategory)
+                    Pair(selectedDate, diaryFoodCategory)
                 }.flatMapLatest {
-                    foodDiaryUseCase.getDiaryFoodsByDays(days = it.first, category = it.second)
+                    foodDiaryUseCase.getDiaryFoodsByDays(
+                        date = it.first.currentLocalDateTimeInBasicISOFormat,
+                        category = it.second
+                    )
                         .also {
                             refreshFoodDiaries.value = false
                         }
@@ -120,7 +125,7 @@ class HomeViewModel @Inject constructor(
         )
 
 
-    fun updateSelectedDate(dateTimeMillis: Long = System.currentTimeMillis()) {
+    fun updateSelectedDate(dateTimeMillis: Instant) {
         selectedDate.value = dateTimeMillis
         refreshFoodDiaries.value = true
     }

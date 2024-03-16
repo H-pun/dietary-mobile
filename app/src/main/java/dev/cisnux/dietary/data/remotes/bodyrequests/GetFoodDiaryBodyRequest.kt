@@ -1,10 +1,8 @@
 package dev.cisnux.dietary.data.remotes.bodyrequests
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class GetFoodDiaryBodyRequest(
-    val days: Long,
+    val userId: String,
+    val date: String,
     val category: String,
     val query: String? = null
 )

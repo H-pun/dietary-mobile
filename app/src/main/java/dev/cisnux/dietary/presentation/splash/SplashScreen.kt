@@ -57,14 +57,14 @@ fun SplashScreen(
                     AppDestination.SplashRoute.route
                 )
 
-                authenticationState == AuthenticationState.UNKNOWN -> {
-                    viewModel.signOut()
-                    onNavigateToSignIn(AppDestination.SplashRoute.route)
-                }
-
                 authenticationState == AuthenticationState.HAS_SIGNED_IN_AND_USER_PROFILE -> onNavigateToHome(
                     AppDestination.SplashRoute.route
                 )
+
+                else -> {
+                    viewModel.signOut()
+                    onNavigateToSignIn(AppDestination.SplashRoute.route)
+                }
             }
         }
     }

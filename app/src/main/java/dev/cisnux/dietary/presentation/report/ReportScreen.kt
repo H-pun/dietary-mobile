@@ -61,7 +61,8 @@ import dev.cisnux.dietary.presentation.ui.theme.placeholder
 import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.UiState
-import dev.cisnux.dietary.utils.withShortDateFormat
+import dev.cisnux.dietary.utils.dateAndMonth
+import java.time.Instant
 import kotlin.random.Random
 
 @Composable
@@ -148,7 +149,7 @@ private fun ReportContentPreview() {
                             id = index.toString(),
                             title = "Warteg $it",
                             totalFoodCalories = Random.nextDouble(50.0, 500.0).toFloat(),
-                            label = System.currentTimeMillis().withShortDateFormat()
+                            label = Instant.now().dateAndMonth()
                         )
                     },
                     tabState = tabState,
@@ -354,6 +355,7 @@ private fun ReportBody(
                             .axisLineColor(MaterialTheme.colorScheme.onSurface)
                             .backgroundColor(MaterialTheme.colorScheme.surface).steps(barData.size)
                             .axisStepSize(30.dp)
+                            .axisLabelAngle(20f)
                             .bottomPadding(40.dp).startDrawPadding(28.dp).endPadding(28.dp)
                             .labelData { index -> foods[index].label }.build()
 

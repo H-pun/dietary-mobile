@@ -26,8 +26,9 @@ import com.valentinilk.shimmer.shimmer
 import dev.cisnux.dietary.domain.models.FoodDiary
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.placeholder
-import dev.cisnux.dietary.utils.withFullDateFormat
-import dev.cisnux.dietary.utils.withTimeFormat
+import dev.cisnux.dietary.utils.dayDateMonthYear
+import dev.cisnux.dietary.utils.hoursAndMinutes
+import java.time.Instant
 
 @Preview(showBackground = true)
 @Composable
@@ -35,8 +36,8 @@ private fun DiaryCardPreview() {
     val food = FoodDiary(
         id = "1",
         title = "Nasi Padang",
-        date = 1706351552829.withFullDateFormat(),
-        time = 1706351552829.withTimeFormat(),
+        date = Instant.now().dayDateMonthYear(),
+        time = Instant.now().hoursAndMinutes(),
         foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
         totalFoodCalories = 500f,
     )

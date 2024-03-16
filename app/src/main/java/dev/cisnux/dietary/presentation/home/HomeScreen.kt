@@ -89,11 +89,12 @@ import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.activity
-import dev.cisnux.dietary.utils.withFullDateFormat
-import dev.cisnux.dietary.utils.withTimeFormat
+import dev.cisnux.dietary.utils.dayDateMonthYear
+import dev.cisnux.dietary.utils.hoursAndMinutes
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
 @Composable
@@ -226,8 +227,11 @@ fun HomeScreen(
                     onCardTapped = navigateToDiaryDetail,
                     modifier = modifier.padding(it),
                     onDateRangeOpen = { openDatePickerDialog = true },
-                    date = datePickerState.selectedDateMillis?.withFullDateFormat()
-                        ?: System.currentTimeMillis().withFullDateFormat(),
+                    date = datePickerState.selectedDateMillis?.let { millis ->
+                        Instant.ofEpochMilli(
+                            millis
+                        )?.dayDateMonthYear()
+                    } ?: Instant.now().dayDateMonthYear(),
                     query = searchBarState.query,
                     onQueryChange = { newValue ->
                         searchBarState = searchBarState.copy(query = newValue)
@@ -308,7 +312,11 @@ fun HomeScreen(
                             onClick = {
                                 openDatePickerDialog = false
                                 viewModel.updateSelectedDate(
-                                    datePickerState.selectedDateMillis ?: System.currentTimeMillis()
+                                    datePickerState.selectedDateMillis?.let { millis ->
+                                        Instant.ofEpochMilli(
+                                            millis
+                                        )
+                                    } ?: Instant.now()
                                 )
                             },
                             enabled = confirmEnabled
@@ -367,8 +375,8 @@ private fun HomeContentPreview() {
         FoodDiary(
             id = it.toString(),
             title = "Nasi Padang",
-            date = 1706351552829.withFullDateFormat(),
-            time = 1706351552829.withTimeFormat(),
+            date = Instant.now().dayDateMonthYear(),
+            time = Instant.now().hoursAndMinutes(),
             foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
             totalFoodCalories = 500f
         )
@@ -402,8 +410,11 @@ private fun HomeContentPreview() {
                     tabState = tabState,
                     onTabChange = { index -> tabState = index },
                     onDateRangeOpen = { openDatePickerDialog = true },
-                    date = datePickerState.selectedDateMillis?.withFullDateFormat()
-                        ?: System.currentTimeMillis().withFullDateFormat()
+                    date = datePickerState.selectedDateMillis?.let { millis ->
+                        Instant.ofEpochMilli(
+                            millis
+                        )?.dayDateMonthYear()
+                    } ?: Instant.now().dayDateMonthYear()
                 )
                 if (openDatePickerDialog) DatePickerDialog(onDismissRequest = {
                     openDatePickerDialog = false
@@ -714,8 +725,8 @@ private fun SearchBodyPreview() {
         FoodDiary(
             id = it.toString(),
             title = "Nasi Padang",
-            date = 1706351552829.withFullDateFormat(),
-            time = 1706351552829.withTimeFormat(),
+            date = Instant.now().dayDateMonthYear(),
+            time = Instant.now().hoursAndMinutes(),
             foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
             totalFoodCalories = 500f
         )

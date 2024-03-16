@@ -11,12 +11,36 @@ import dev.cisnux.dietary.data.remotes.responses.FoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.responses.ReportResponse
 
 interface FoodDiaryRemoteSource {
-    suspend fun getFoodDiaries(accessToken: String, getFoodDiaryBodyRequest: GetFoodDiaryBodyRequest): Either<Exception, List<FoodDiaryResponse>>
-    suspend fun getFoodDiaryById(accessToken: String, id: String): Either<Exception, FoodDiaryDetailResponse>
-    suspend fun addFoodDiary(accessToken: String, foodDiary: FoodDiaryBodyRequest): Either<Exception, AddedFoodDiaryResponse>
-    suspend fun updateFoodDiaryByQuestions(accessToken: String, foodDiaryQuestion: DiaryQuestionBodyRequest): Either<Exception, AddedFoodDiaryResponse>
-    suspend fun getFoodDiaryReports(accessToken: String, category: Int): Either<Exception, ReportResponse>
+    suspend fun getFoodDiaries(
+        accessToken: String,
+        getFoodDiaryBodyRequest: GetFoodDiaryBodyRequest
+    ): Either<Exception, List<FoodDiaryResponse>>
+
+    suspend fun getFoodDiaryById(
+        accessToken: String,
+        id: String
+    ): Either<Exception, FoodDiaryDetailResponse>
+
+    suspend fun addFoodDiary(
+        accessToken: String,
+        foodDiary: FoodDiaryBodyRequest
+    ): Either<Exception, AddedFoodDiaryResponse>
+
+    suspend fun updateFoodDiaryByQuestions(
+        accessToken: String,
+        foodDiaryQuestion: DiaryQuestionBodyRequest
+    ): Either<Exception, AddedFoodDiaryResponse>
+
+    suspend fun getFoodDiaryReports(
+        accessToken: String,
+        category: Int
+    ): Either<Exception, ReportResponse>
+
     // optional
-    suspend fun getKeywordSuggestions(accessToken: String, query: String): Either<Exception, List<String>>
+    suspend fun getKeywordSuggestions(
+        accessToken: String,
+        query: String
+    ): Either<Exception, List<String>>
+
     suspend fun deleteFoodDiaryById(accessToken: String, id: String): Either<Exception, Nothing?>
 }

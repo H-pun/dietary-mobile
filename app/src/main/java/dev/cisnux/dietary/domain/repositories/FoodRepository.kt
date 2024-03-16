@@ -11,7 +11,7 @@ import dev.cisnux.dietary.utils.UiState
 import kotlinx.coroutines.flow.Flow
 
 interface FoodRepository {
-    fun getDiaryFoodsByDays(days: Long, category: FoodDiaryCategory): Flow<UiState<List<FoodDiary>>>
+    fun getDiaryFoodsByDays(date: String, category: FoodDiaryCategory): Flow<UiState<List<FoodDiary>>>
     fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>>
     fun getKeywordSuggestionsByQuery(query: String): Flow<UiState<List<String>>>
     fun addFoodDiary(addFoodDiary: AddFoodDiary): Flow<UiState<FoodDiaryDetail>>

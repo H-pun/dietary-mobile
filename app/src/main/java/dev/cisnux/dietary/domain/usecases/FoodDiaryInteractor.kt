@@ -15,8 +15,8 @@ import javax.inject.Inject
 class FoodDiaryInteractor @Inject constructor(
     private val foodRepository: FoodRepository
 ) : FoodDiaryUseCase {
-    override fun getDiaryFoodsByDays(days: Long, category: FoodDiaryCategory): Flow<UiState<List<FoodDiary>>> =
-        foodRepository.getDiaryFoodsByDays(days, category)
+    override fun getDiaryFoodsByDays(date: String, category: FoodDiaryCategory): Flow<UiState<List<FoodDiary>>> =
+        foodRepository.getDiaryFoodsByDays(date, category)
 
     override fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>> = foodRepository.getDiaryFoodsByQuery(query)
     override fun getKeywordSuggestionsByQuery(query: String): Flow<UiState<List<String>>> = foodRepository.getKeywordSuggestionsByQuery(query)

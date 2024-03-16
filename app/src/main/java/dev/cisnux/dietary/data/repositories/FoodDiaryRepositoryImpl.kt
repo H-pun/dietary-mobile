@@ -1,6 +1,5 @@
 package dev.cisnux.dietary.data.repositories
 
-import android.util.Log
 import dev.cisnux.dietary.data.locals.UserAccountLocalSource
 import dev.cisnux.dietary.data.remotes.FoodDiaryRemoteSource
 import dev.cisnux.dietary.data.remotes.ImageRemoteSource
@@ -15,16 +14,15 @@ import dev.cisnux.dietary.domain.models.FoodDiaryReport
 import dev.cisnux.dietary.domain.models.Question
 import dev.cisnux.dietary.domain.models.Report
 import dev.cisnux.dietary.domain.repositories.FoodRepository
-import dev.cisnux.dietary.utils.DIETARY_API
-import dev.cisnux.dietary.utils.withFullDateFormat
-import dev.cisnux.dietary.utils.withTimeFormat
+import dev.cisnux.dietary.utils.dayDateMonthYear
+import dev.cisnux.dietary.utils.hoursAndMinutes
 import dev.cisnux.dietary.utils.FoodDiaryCategory
-import dev.cisnux.dietary.utils.QuestionType
 import dev.cisnux.dietary.utils.ReportCategory
 import dev.cisnux.dietary.utils.UiState
-import dev.cisnux.dietary.utils.convertISOToMillis
+import dev.cisnux.dietary.utils.convertISOToInstant
+import dev.cisnux.dietary.utils.dateAndMonth
+import dev.cisnux.dietary.utils.dayDateMonth
 import dev.cisnux.dietary.utils.getCurrentDateTimeInISOFormat
-import dev.cisnux.dietary.utils.withShortDateFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -36,6 +34,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import java.time.Instant
 import kotlin.random.Random
 
 class FoodDiaryRepositoryImpl @Inject constructor(
@@ -210,7 +209,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 id = it.toString(),
                 title = "Warteg $it",
                 totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
-                label = System.currentTimeMillis().withTimeFormat()
+                label = Instant.now().hoursAndMinutes()
             )
         }
     )
@@ -223,7 +222,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 id = it.toString(),
                 title = "Warter $it",
                 totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
-                label = "17 Feb"
+                label = Instant.now().dayDateMonth()
             )
         }
     )
@@ -236,24 +235,27 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 id = it.toString(),
                 title = "Warter $it",
                 totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
-                label = "2020"
+                label = Instant.now().dateAndMonth()
             )
         }
     )
 
 
     override fun getDiaryFoodsByDays(
-        days: Long,
+        date: String,
         category: FoodDiaryCategory
     ): Flow<UiState<List<FoodDiary>>> = channelFlow {
         send(UiState.Loading)
         delay(1000L)
-        userAccountLocalSource.accessToken.collectLatest { accessToken ->
-            accessToken?.let {
+        userAccountLocalSource.userId.combine(userAccountLocalSource.accessToken) { userId, accessToken ->
+            Pair(userId, accessToken)
+        }.collectLatest { item ->
+            if (item.first != null && item.first?.isNotBlank() == true && item.second != null && item.second?.isNotBlank() == true) {
                 foodDiaryRemoteSource.getFoodDiaries(
-                    accessToken = it,
+                    accessToken = item.second!!,
                     getFoodDiaryBodyRequest = GetFoodDiaryBodyRequest(
-                        days = days,
+                        userId = item.first!!,
+                        date = date,
                         category = category.value,
                     )
                 ).fold(
@@ -266,8 +268,8 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                             FoodDiary(
                                 id = foodDiary.id,
                                 title = foodDiary.title,
-                                date = convertISOToMillis(foodDiary.addedAt).withFullDateFormat(),
-                                time = convertISOToMillis(foodDiary.addedAt).withTimeFormat(),
+                                date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
+                                time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
                                 foodPictureUrl = imageUrl,
                                 totalFoodCalories = foodDiary.totalFoodCalories
                             )
@@ -300,32 +302,33 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             delay(1000L)
             userAccountLocalSource.userId.combine(userAccountLocalSource.accessToken) { userId, accessToken ->
                 Pair(userId, accessToken)
-            }.collectLatest {
-                if (it.first != null && it.first?.isNotBlank() == true && it.second != null && it.second?.isNotBlank() == true) {
-                    val time = getCurrentDateTimeInISOFormat()
-                    foodDiaryRemoteSource.addFoodDiary(
-                        accessToken = it.second!!,
-                        foodDiary = FoodDiaryBodyRequest(
-                            title = addFoodDiary.title,
-                            category = addFoodDiary.category,
-                            foodPicture = addFoodDiary.foodPicture,
-                            userAccountId = it.first!!,
-                            addedAt = time
-                        )
-                    ).fold(
-                        ifLeft = { exception ->
-                            send(UiState.Error(exception))
-                        },
-                        ifRight = { addedFoodDiary ->
-                            imageRemoteSource.addFoodDiaryImage(
-                                addedFoodDiary.id,
-                                addFoodDiary.foodPicture
-                            )
-                            send(UiState.Success(foodDiaryDetail.value))
-                        }
-                    )
-                }
             }
+                .collectLatest {
+                    if (it.first != null && it.first?.isNotBlank() == true && it.second != null && it.second?.isNotBlank() == true) {
+                        val addedAt = getCurrentDateTimeInISOFormat()
+                        foodDiaryRemoteSource.addFoodDiary(
+                            accessToken = it.second!!,
+                            foodDiary = FoodDiaryBodyRequest(
+                                title = addFoodDiary.title,
+                                category = addFoodDiary.category,
+                                foodPicture = addFoodDiary.foodPicture,
+                                userAccountId = it.first!!,
+                                addedAt = addedAt
+                            )
+                        ).fold(
+                            ifLeft = { exception ->
+                                send(UiState.Error(exception))
+                            },
+                            ifRight = { addedFoodDiary ->
+                                imageRemoteSource.addFoodDiaryImage(
+                                    addedFoodDiary.id,
+                                    addFoodDiary.foodPicture
+                                )
+                                send(UiState.Success(foodDiaryDetail.value))
+                            }
+                        )
+                    }
+                }
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 

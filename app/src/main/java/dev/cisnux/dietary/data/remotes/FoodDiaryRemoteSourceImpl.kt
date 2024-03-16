@@ -5,20 +5,13 @@ import arrow.core.Either
 import dev.cisnux.dietary.data.remotes.responses.AddedFoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.responses.CommonResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.DiaryQuestionBodyRequest
-import dev.cisnux.dietary.data.remotes.bodyrequests.DuplicateFoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
-import dev.cisnux.dietary.data.remotes.responses.DetectedFoodResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryResponse
-import dev.cisnux.dietary.data.remotes.responses.QuestionResponse
 import dev.cisnux.dietary.data.remotes.responses.ReportResponse
-import dev.cisnux.dietary.domain.models.Food
-import dev.cisnux.dietary.domain.models.FoodDiaryDetail
-import dev.cisnux.dietary.domain.models.Question
 import dev.cisnux.dietary.utils.DIETARY_API
 import dev.cisnux.dietary.utils.Failure
-import dev.cisnux.dietary.utils.QuestionType
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -38,19 +31,17 @@ import io.ktor.util.network.UnresolvedAddressException
 import io.ktor.utils.io.streams.asInput
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class FoodDiaryRemoteSourceImpl @Inject constructor(
     private val client: HttpClient
 ) : FoodDiaryRemoteSource {
     override suspend fun getFoodDiaries(
-        accessToken: String,  getFoodDiaryBodyRequest: GetFoodDiaryBodyRequest
+        accessToken: String, getFoodDiaryBodyRequest: GetFoodDiaryBodyRequest
     ): Either<Exception, List<FoodDiaryResponse>> = withContext(Dispatchers.IO) {
         try {
             val response =
-                client.get(urlString = "$DIETARY_API/food-diary/list") {
+                client.get(urlString = "$DIETARY_API/food-diary/user?idUser=${getFoodDiaryBodyRequest.userId}&date=${getFoodDiaryBodyRequest.date}") {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
                     }
