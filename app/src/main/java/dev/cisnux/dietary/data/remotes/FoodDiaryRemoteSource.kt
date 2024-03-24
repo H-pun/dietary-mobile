@@ -3,7 +3,6 @@ package dev.cisnux.dietary.data.remotes
 import arrow.core.Either
 import dev.cisnux.dietary.data.remotes.responses.AddedFoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.DiaryQuestionBodyRequest
-import dev.cisnux.dietary.data.remotes.bodyrequests.DuplicateFoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse

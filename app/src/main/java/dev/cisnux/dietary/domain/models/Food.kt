@@ -8,5 +8,6 @@ data class Food(
     val protein: Float,
     val carbohydrates: Float,
     val sugar: Float?,
-    val questions: List<Question>? = null
+    val questions: List<Question>? = null,
+    val bound: Bound,
 )

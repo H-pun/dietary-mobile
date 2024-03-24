@@ -67,6 +67,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import dev.cisnux.dietary.R
+import dev.cisnux.dietary.domain.models.Bound
 import dev.cisnux.dietary.domain.models.Food
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
 import dev.cisnux.dietary.presentation.ui.components.ScannerResultBody
@@ -192,6 +193,7 @@ private fun DiaryDetailContentPreview() {
                 fat = 2f,
                 carbohydrates = 4.3f,
                 sugar = 8.7f,
+                bound = Bound(x = 0.0, y = 0.0)
             ),
             Food(
                 id = "2",
@@ -201,6 +203,7 @@ private fun DiaryDetailContentPreview() {
                 fat = 10f,
                 carbohydrates = 8.3f,
                 sugar = null,
+                bound = Bound(x = 0.0, y = 0.0)
             ),
             Food(
                 id = "3",
@@ -210,6 +213,7 @@ private fun DiaryDetailContentPreview() {
                 fat = 1f,
                 carbohydrates = 8.3f,
                 sugar = 0f,
+                bound = Bound(x = 0.0, y = 0.0)
             ),
             Food(
                 id = "4",
@@ -219,6 +223,7 @@ private fun DiaryDetailContentPreview() {
                 fat = 0.5f,
                 carbohydrates = 8.3f,
                 sugar = 0f,
+                bound = Bound(x = 0.0, y = 0.0)
             ),
         )
     )

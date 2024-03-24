@@ -6,6 +6,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -64,9 +65,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
+import dev.cisnux.dietary.domain.models.Bound
 import dev.cisnux.dietary.domain.models.Food
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
 import dev.cisnux.dietary.domain.models.Question
+import dev.cisnux.dietary.presentation.ui.components.EmptyContents
 import dev.cisnux.dietary.presentation.ui.components.ScannerResultBody
 import dev.cisnux.dietary.presentation.ui.components.ScannerResultShimmer
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
@@ -153,7 +156,7 @@ fun ScannerResultScreen(
             when (scannerResultState) {
                 is UiState.Success -> {
                     (scannerResultState as UiState.Success<FoodDiaryDetail>).data?.let { foodScannerResult ->
-                        AnimatedVisibility(visible = !isQuestionDialogOpen) {
+                        AnimatedVisibility(visible = !isQuestionDialogOpen && foodScannerResult.foods.isNotEmpty()) {
                             ScannerResultBody(
                                 totalUserCaloriesToday = foodScannerResult.totalUserCaloriesToday,
                                 userDailyBmiCalorie = foodScannerResult.maxDailyBmrCalorie,
@@ -164,6 +167,17 @@ fun ScannerResultScreen(
                                 modifier = Modifier.padding(it)
                             )
                         }
+
+                        AnimatedVisibility(visible = !isQuestionDialogOpen && foodScannerResult.foods.isEmpty()) {
+                            Box(contentAlignment = Alignment.Center) {
+                                EmptyContents(
+                                    label = "Tidak ada makanan yang terdeteksi",
+                                    painter = painterResource(id = R.drawable.empty_foods),
+                                    contentDescription = "No food added to your diary",
+                                )
+                            }
+                        }
+                        
 
                         val foodQuestions =
                             foodScannerResult.foods.filter { food -> food.questions?.isNotEmpty() == true }
@@ -187,8 +201,8 @@ fun ScannerResultScreen(
                         }
 
                         val isEnable by derivedStateOf {
-                            answeredQuestions.all { foodQuestion ->
-                                foodQuestion.all { answeredQuestion ->
+                            answeredQuestions.any { foodQuestion ->
+                                foodQuestion.any { answeredQuestion ->
                                     answeredQuestion.answer.isNotBlank()
                                 }
                             }
@@ -259,6 +273,7 @@ private fun ScannerResultContentPreview() {
                 fat = 2f,
                 carbohydrates = 4.3f,
                 sugar = 8.7f,
+                bound = Bound(.0, .0),
                 questions = listOf(
                     Question(
                         id = "1",
@@ -275,6 +290,7 @@ private fun ScannerResultContentPreview() {
                 fat = 10f,
                 carbohydrates = 8.3f,
                 sugar = null,
+                bound = Bound(.0, .0),
                 questions = listOf(
                     Question(
                         id = "1",
@@ -297,6 +313,7 @@ private fun ScannerResultContentPreview() {
                 calorie = 5.8f,
                 protein = 9f,
                 fat = 1f,
+                bound = Bound(.0, .0),
                 carbohydrates = 8.3f,
                 sugar = 0f,
                 questions = listOf(
@@ -323,7 +340,8 @@ private fun ScannerResultContentPreview() {
                 fat = 0.5f,
                 carbohydrates = 8.3f,
                 sugar = 0f,
-                questions = null
+                questions = null,
+                bound = Bound(.0, .0),
             ),
         ),
     )
@@ -447,6 +465,7 @@ private fun QuestionDialog(
     isEnable: Boolean,
     modifier: Modifier = Modifier
 ) {
+    Log.d("ScannerResultScreen", isDialogOpen.toString())
     if (isDialogOpen) Dialog(
         onDismissRequest = onDismissRequest,
         properties = DialogProperties(
@@ -503,8 +522,9 @@ private fun QuestionDialog(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 items(count = foods.size,
-                    key = { foods[it].id },
-                    contentType = { foods[it] }) { index ->
+//                    key = { foods[it].id },
+                    contentType = { foods[it] }
+                ) { index ->
                     if (index != 0) {
                         val prevIndex = index - 1
                         val isNotBlank = answeredQuestions[prevIndex].all { it.answer.isNotBlank() }
@@ -607,8 +627,9 @@ private fun QuestionListItem(
                     LazyRow {
                         items(
                             answeredQuestions[index].choices,
-                            key = { it },
-                            contentType = { it }) {
+//                            key = { it },
+                            contentType = { it }
+                        ) {
                             Surface(
                                 color = MaterialTheme.colorScheme.tertiaryContainer,
                                 shape = MaterialTheme.shapes.extraLarge,
