@@ -84,7 +84,12 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                     fat = 2f,
                     carbohydrates = 4.3f,
                     sugar = 8.7f,
-                    bound = Bound(x = 0.0, y = 0.0),
+                    bound = Bound(
+                        x = 404.0,
+                        y = 75.0,
+                        width = 411.0,
+                        height = 308.0
+                    ),
                     questions = listOf(
                         Question(
                             id = "1",
@@ -101,7 +106,12 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                     fat = 10f,
                     carbohydrates = 8.3f,
                     sugar = null,
-                    bound = Bound(x = 0.0, y = 0.0),
+                    bound = Bound(
+                        x = 404.0,
+                        y = 75.0,
+                        width = 411.0,
+                        height = 308.0
+                    ),
                     questions = listOf(
                         Question(
                             id = "1",
@@ -126,7 +136,12 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                     fat = 1f,
                     carbohydrates = 8.3f,
                     sugar = 0f,
-                    bound = Bound(x = 0.0, y = 0.0),
+                    bound = Bound(
+                        x = 404.0,
+                        y = 75.0,
+                        width = 411.0,
+                        height = 308.0
+                    ),
                     questions = listOf(
                         Question(
                             id = "1",
@@ -152,7 +167,12 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                     carbohydrates = 8.3f,
                     sugar = 0f,
                     questions = null,
-                    bound = Bound(x = 0.0, y = 0.0),
+                    bound = Bound(
+                        x = 404.0,
+                        y = 75.0,
+                        width = 411.0,
+                        height = 308.0
+                    ),
                 ),
             )
         )
@@ -175,7 +195,12 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 fat = 2f,
                 carbohydrates = 4.3f,
                 sugar = 8.7f,
-                bound = Bound(x = 0.0, y = 0.0),
+                bound = Bound(
+                    x = 404.0,
+                    y = 75.0,
+                    width = 411.0,
+                    height = 308.0
+                ),
             ),
             Food(
                 id = "2",
@@ -185,7 +210,12 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 fat = 10f,
                 carbohydrates = 8.3f,
                 sugar = null,
-                bound = Bound(x = 0.0, y = 0.0),
+                bound = Bound(
+                    x = 404.0,
+                    y = 75.0,
+                    width = 411.0,
+                    height = 308.0
+                ),
             ),
             Food(
                 id = "3",
@@ -195,7 +225,12 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 fat = 1f,
                 carbohydrates = 8.3f,
                 sugar = 0f,
-                bound = Bound(x = 0.0, y = 0.0),
+                bound = Bound(
+                    x = 404.0,
+                    y = 75.0,
+                    width = 411.0,
+                    height = 308.0
+                ),
             ),
             Food(
                 id = "4",
@@ -205,7 +240,12 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 fat = 0.5f,
                 carbohydrates = 8.3f,
                 sugar = 0f,
-                bound = Bound(x = 0.0, y = 0.0),
+                bound = Bound(
+                    x = 404.0,
+                    y = 75.0,
+                    width = 411.0,
+                    height = 308.0
+                ),
             ),
         )
     )
@@ -345,10 +385,13 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                             status = "Kurang disarankan",
                                             feedback = "Terlalu banyak gula",
                                             foods = addedFoodDiary.foods.map { detectedFoodResponse ->
+                                                val (x, y, width, height) = detectedFoodResponse.bound
                                                 Food(
                                                     bound = Bound(
-                                                        detectedFoodResponse.bound.x,
-                                                        detectedFoodResponse.bound.y
+                                                        x = x,
+                                                        y = y,
+                                                        width = width,
+                                                        height = height
                                                     ),
                                                     calorie = detectedFoodResponse.calorie,
                                                     fat = detectedFoodResponse.fat,

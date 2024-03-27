@@ -273,7 +273,12 @@ private fun ScannerResultContentPreview() {
                 fat = 2f,
                 carbohydrates = 4.3f,
                 sugar = 8.7f,
-                bound = Bound(.0, .0),
+                bound = Bound(
+                    x = 404.0,
+                    y = 75.0,
+                    width = 411.0,
+                    height = 308.0
+                ),
                 questions = listOf(
                     Question(
                         id = "1",
@@ -290,7 +295,12 @@ private fun ScannerResultContentPreview() {
                 fat = 10f,
                 carbohydrates = 8.3f,
                 sugar = null,
-                bound = Bound(.0, .0),
+                bound = Bound(
+                    x = 404.0,
+                    y = 75.0,
+                    width = 411.0,
+                    height = 308.0
+                ),
                 questions = listOf(
                     Question(
                         id = "1",
@@ -313,7 +323,12 @@ private fun ScannerResultContentPreview() {
                 calorie = 5.8f,
                 protein = 9f,
                 fat = 1f,
-                bound = Bound(.0, .0),
+                bound = Bound(
+                    x = 404.0,
+                    y = 75.0,
+                    width = 411.0,
+                    height = 308.0
+                ),
                 carbohydrates = 8.3f,
                 sugar = 0f,
                 questions = listOf(
@@ -341,7 +356,12 @@ private fun ScannerResultContentPreview() {
                 carbohydrates = 8.3f,
                 sugar = 0f,
                 questions = null,
-                bound = Bound(.0, .0),
+                bound = Bound(
+                    x = 404.0,
+                    y = 75.0,
+                    width = 411.0,
+                    height = 308.0
+                ),
             ),
         ),
     )
