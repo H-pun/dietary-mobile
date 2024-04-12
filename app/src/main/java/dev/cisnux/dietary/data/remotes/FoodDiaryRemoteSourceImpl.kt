@@ -7,7 +7,6 @@ import dev.cisnux.dietary.data.remotes.responses.CommonResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.DiaryQuestionBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
-import dev.cisnux.dietary.data.remotes.responses.DetectedFoodResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.responses.PredictedResponse
@@ -34,6 +33,7 @@ import io.ktor.utils.io.streams.asInput
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import java.io.File
 import javax.inject.Inject
 
 class FoodDiaryRemoteSourceImpl @Inject constructor(
@@ -49,7 +49,6 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
                     }
                     contentType(ContentType.Application.Json)
-//                    setBody(getFoodDiaryBodyRequest)
                 }
             val failure = Failure.HTTP_FAILURES[response.status]
             return@withContext if (failure != null) {
@@ -143,7 +142,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
             val predictedFoodDiary = async {
                 client.post(
-                    urlString = "$DIETARY_API/food-diary/predict"
+                    urlString = "$DIETARY_API/food/predict"
                 ) {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -181,7 +180,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
 
             val predictedFailure = Failure.HTTP_FAILURES[predictedFoodDiary.await().status]
             if (predictedFailure != null) {
-                val commonResponse: CommonResponse<Nothing> = addedFoodDiary.await().body()
+                val commonResponse: CommonResponse<Nothing> = predictedFoodDiary.await().body()
                 return@withContext Either.Left(predictedFailure.apply {
                     message = commonResponse.message
                 })
@@ -198,17 +197,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 totalUserCaloriesToday = 500.7892f,
                 status = "Boleh dimakan",
                 feedback = null,
-                foods = predictedCommonResponse.data?.foods?.map {
-                    DetectedFoodResponse(
-                        id = it.foodInformationResponse.id,
-                        name = it.foodInformationResponse.name,
-                        bound = it.bound,
-                        calorie = 0f,
-                        fat = 0f,
-                        protein = 0f,
-                        carbohydrates = 0f
-                    )
-                } ?: listOf()
+                foods = listOf()
             )
 
             return@withContext Either.Right(addedFoodDiaryResponse)
@@ -216,6 +205,56 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             Either.Left(Failure.ConnectionFailure())
         }
     }
+
+    override suspend fun predictFoods(
+        accessToken: String,
+        foodPicture: File
+    ): Either<Exception, PredictedResponse> =
+        withContext(Dispatchers.IO){
+            try {
+                val response = client.post(
+                    urlString = "$DIETARY_API/food/predict"
+                ) {
+                    headers {
+                        append(HttpHeaders.Authorization, "Bearer $accessToken")
+                    }
+                    setBody(
+                        MultiPartFormDataContent(
+                            parts = formData {
+                                append(
+                                    key = "imgFile",
+                                    InputProvider(foodPicture.length()) {
+                                        foodPicture.inputStream().asInput()
+                                    },
+                                    Headers.build {
+                                        append(HttpHeaders.ContentType, "image/jpg")
+                                        append(
+                                            HttpHeaders.ContentDisposition,
+                                            "filename=${foodPicture.name}"
+                                        )
+                                    }
+                                )
+                            },
+                            boundary = "WebAppBoundary"
+                        )
+                    )
+                }
+
+                val failure = Failure.HTTP_FAILURES[response.status]
+                return@withContext if (failure != null) {
+                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    Either.Left(failure.apply {
+                        message = commonResponse.message
+                    })
+                } else {
+                    val commonResponse: CommonResponse<PredictedResponse> = response.body()
+                    Either.Right(commonResponse.data!!)
+                }
+            } catch (e: UnresolvedAddressException) {
+                Either.Left(Failure.ConnectionFailure())
+            }
+        }
+
 
     override suspend fun updateFoodDiaryByQuestions(
         accessToken: String, foodDiaryQuestion: DiaryQuestionBodyRequest

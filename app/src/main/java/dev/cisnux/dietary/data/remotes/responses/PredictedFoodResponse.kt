@@ -5,8 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PredictedFoodResponse(
-    @SerialName("class")
-    val foodInformationResponse: FoodInformationResponse,
-    @SerialName("bounds")
-    val bound: BoundResponse
+    val foodDetail: PredictedFoodDetailResponse,
+    @SerialName("predictResult")
+    val bounds: BoundResponses
 )

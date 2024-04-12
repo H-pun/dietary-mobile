@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.time.Instant
 import javax.inject.Inject
 
 class FileRepositoryImpl @Inject constructor(
@@ -17,7 +18,7 @@ class FileRepositoryImpl @Inject constructor(
 ) : FileRepository {
     override suspend fun createFile(): File = withContext(Dispatchers.IO) {
         val storageDir: File? = application.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        File.createTempFile(System.currentTimeMillis().toString(), ".jpg", storageDir)
+        File.createTempFile(Instant.now().toEpochMilli().toString(), ".jpg", storageDir)
     }
 
     override suspend fun fileFromUri(image: Uri): File = withContext(Dispatchers.IO) {

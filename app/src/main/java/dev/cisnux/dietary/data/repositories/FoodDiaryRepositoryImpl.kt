@@ -12,12 +12,14 @@ import dev.cisnux.dietary.domain.models.FoodDiary
 import dev.cisnux.dietary.domain.models.FoodDiaryQuestion
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
 import dev.cisnux.dietary.domain.models.FoodDiaryReport
+import dev.cisnux.dietary.domain.models.PredictedFood
 import dev.cisnux.dietary.domain.models.Question
 import dev.cisnux.dietary.domain.models.Report
 import dev.cisnux.dietary.domain.repositories.FoodRepository
 import dev.cisnux.dietary.utils.dayDateMonthYear
 import dev.cisnux.dietary.utils.hoursAndMinutes
 import dev.cisnux.dietary.utils.FoodDiaryCategory
+import dev.cisnux.dietary.utils.IMAGE_LOCATION
 import dev.cisnux.dietary.utils.ReportCategory
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.convertISOToInstant
@@ -35,6 +37,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import java.io.File
 import java.time.Instant
 import kotlin.random.Random
 
@@ -53,6 +56,45 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             totalFoodCalories = 500f
         )
     }
+    private val questions = listOf(
+        listOf(
+            Question(
+                id = "1",
+                question = "Apakah ini nasi putih?",
+                choices = listOf("Iya", "Tidak")
+            ),
+        ),
+        listOf(
+            Question(
+                id = "1",
+                question = "Apakah digoreng?",
+                choices = listOf("Ya", "Tidak")
+            ),
+            Question(
+                id = "2",
+                question = "Berapa kandungan gula dalam makanan ini?",
+                choices = listOf(
+                    "Lebih dari 10% kalori harian",
+                    "Kurang dari 10% kalori harian"
+                )
+            ),
+        ),
+        listOf(
+            Question(
+                id = "1",
+                question = "Apakah digoreng?",
+                choices = listOf("Ya", "Tidak")
+            ),
+            Question(
+                id = "2",
+                question = "Berapa kandungan gula dalam makanan ini?",
+                choices = listOf(
+                    "Lebih dari 10% kalori harian",
+                    "Kurang dari 10% kalori harian"
+                )
+            ),
+        )
+    )
     private val keywordSuggestions = listOf(
         "Kwetiau",
         "McDonald Burger",
@@ -313,13 +355,13 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                     },
                     ifRight = { foodDiaries ->
                         send(UiState.Success(foodDiaries.map { foodDiary ->
-                            val imageUrl = imageRemoteSource.getFoodDiaryImageById(foodDiary.id)
+//                            val imageUrl = imageRemoteSource.getFoodDiaryImageById(foodDiary.id)
                             FoodDiary(
                                 id = foodDiary.id,
                                 title = foodDiary.title,
                                 date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
                                 time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
-                                foodPictureUrl = imageUrl,
+                                foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
                                 totalFoodCalories = foodDiary.totalFoodCalories
                             )
                         }))
@@ -404,6 +446,42 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                             })
                                     )
                                 )
+                            }
+                        )
+                    }
+                }
+        }.flowOn(Dispatchers.IO)
+            .distinctUntilChanged()
+
+    override fun predictFood(foodPicture: File): Flow<UiState<List<PredictedFood>>> =
+        channelFlow {
+            send(UiState.Loading)
+            userAccountLocalSource.accessToken
+                .collectLatest { accessToken ->
+                    accessToken?.let {
+                        foodDiaryRemoteSource.predictFoods(accessToken, foodPicture).fold(
+                            ifLeft = { exception ->
+                                send(UiState.Error(exception))
+                            },
+                            ifRight = {
+                                send(UiState.Success(it.foods.map { predictedFoodResponse ->
+                                    PredictedFood(
+                                        id = predictedFoodResponse.foodDetail.id,
+                                        name = predictedFoodResponse.foodDetail.name,
+                                        bound = Bound(
+                                            x = predictedFoodResponse.bounds.bound.x,
+                                            y = predictedFoodResponse.bounds.bound.y,
+                                            height = predictedFoodResponse.bounds.bound.height,
+                                            width = predictedFoodResponse.bounds.bound.width,
+                                        ),
+                                        questions = questions[
+                                            Random.nextInt(
+                                                from = 0,
+                                                until = 2
+                                            )
+                                        ]
+                                    )
+                                }))
                             }
                         )
                     }

@@ -25,9 +25,10 @@ import dev.cisnux.dietary.presentation.home.HomeScreen
 import dev.cisnux.dietary.presentation.landing.LandingScreen
 import dev.cisnux.dietary.presentation.myprofile.MyProfileScreen
 import dev.cisnux.dietary.presentation.newpassword.NewPasswordScreen
+import dev.cisnux.dietary.presentation.predictedresult.PredictedResultScreen
 import dev.cisnux.dietary.presentation.report.ReportScreen
 import dev.cisnux.dietary.presentation.resetpassword.ResetPasswordScreen
-import dev.cisnux.dietary.presentation.scannerresult.ScannerResultScreen
+import dev.cisnux.dietary.presentation.scannerresult.AddedDietaryScreen
 import dev.cisnux.dietary.presentation.signin.SignInScreen
 import dev.cisnux.dietary.presentation.signup.SignUpScreen
 import dev.cisnux.dietary.presentation.splash.SplashScreen
@@ -331,7 +332,7 @@ fun DietaryNavGraph(
         ) {
             HomeScreen(
                 navigateForBottomNav = navComponentAction.bottomNavigation,
-                onFabFoodScanner = navComponentAction.navigateToAddDiary,
+                onFabFoodScanner = navComponentAction.navigateToFoodScanner,
                 navigateToDiaryDetail = navComponentAction.navigateToFoodDiaryDetail,
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )
@@ -484,16 +485,6 @@ fun DietaryNavGraph(
         }
         composable(
             route = AppDestination.FoodScannerRoute.route,
-            arguments = listOf(
-                navArgument(name = "title") {
-                    nullable = false
-                    type = NavType.StringType
-                },
-                navArgument(name = "foodDiaryCategory") {
-                    nullable = false
-                    type = NavType.StringType
-                },
-            ),
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
@@ -523,17 +514,51 @@ fun DietaryNavGraph(
         ) {
             FoodScannerScreen(
                 onNavigateUp = navComponentAction.navigateUp,
-                onScannerResult = { foodPicture, title, foodDiaryCategory ->
+                onScannerResult = { foodPicture ->
                     mainViewModel.updateFoodPicture(foodPicture)
-                    navComponentAction.navigateToScannerResult(title, foodDiaryCategory)
+                    navComponentAction.navigateToPredictResult()
                 },
                 onGalleryButton = navComponentAction.takePictureFromGallery,
-                navigateToMyProfile = navComponentAction.navigateToMyProfile,
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )
         }
         composable(
-            route = AppDestination.ScannerResultRoute.route,
+            route = AppDestination.PredictedResultRoute.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            popExitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            }
+        ) {
+            PredictedResultScreen(
+                onNavigateUp = navComponentAction.navigateUp,
+                foodPicture = foodPicture,
+                navigateToSignIn = navComponentAction.navigateToSignIn
+            )
+        }
+        composable(
+            route = AppDestination.AddedDietaryRoute.route,
             arguments = listOf(
                 navArgument(name = "title") {
                     nullable = false
@@ -571,7 +596,7 @@ fun DietaryNavGraph(
                 )
             }
         ) {
-            ScannerResultScreen(
+            AddedDietaryScreen(
                 foodPicture = foodPicture,
                 onNavigateUp = navComponentAction.navigateToHomeFromScannerResult,
                 navigateToSignIn = navComponentAction.navigateToSignIn

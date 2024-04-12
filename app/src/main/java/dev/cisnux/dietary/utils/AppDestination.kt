@@ -7,11 +7,8 @@ sealed class AppDestination(val route: String) {
     data object HomeRoute : AppDestination(route = "home")
     data object ReportRoute : AppDestination(route = "report")
     data object MyProfileRoute : AppDestination(route = "my_profile")
-    data object FoodScannerRoute :
-        AppDestination(route = "food_scanner?title={title}&foodDiaryCategory={foodDiaryCategory}") {
-        fun createRouteUrl(title: String, foodDiaryCategory: String) =
-            "food_scanner?title=$title&foodDiaryCategory=$foodDiaryCategory"
-    }
+
+    data object FoodScannerRoute : AppDestination(route = "food_scanner")
 
     data object DiaryDetailRoute :
         AppDestination(route = "food_diary/{foodDiaryId}") {
@@ -19,13 +16,14 @@ sealed class AppDestination(val route: String) {
             "food_diary/$foodDiaryId"
     }
 
-    data object ScannerResultRoute :
-        AppDestination(route = "scanner_result?title={title}&foodDiaryCategory={foodDiaryCategory}") {
+    data object AddedDietaryRoute :
+        AppDestination(route = "added_dietary?title={title}&foodDiaryCategory={foodDiaryCategory}") {
         fun createRouteUrl(title: String, foodDiaryCategory: String): String =
-            "scanner_result?title=$title&foodDiaryCategory=$foodDiaryCategory"
+            "added_dietary?title=$title&foodDiaryCategory=$foodDiaryCategory"
     }
 
     data object AddDiaryRoute : AppDestination(route = "add_diary")
+    data object PredictedResultRoute : AppDestination(route = "predicted_result")
     data object SignInRoute : AppDestination(route = "sign_in")
     data object SignUpRoute : AppDestination(route = "sign_up")
     data object AddMyProfileRoute : AppDestination(route = "add_my_profile")

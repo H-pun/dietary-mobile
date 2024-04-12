@@ -7,7 +7,9 @@ import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryResponse
+import dev.cisnux.dietary.data.remotes.responses.PredictedResponse
 import dev.cisnux.dietary.data.remotes.responses.ReportResponse
+import java.io.File
 
 interface FoodDiaryRemoteSource {
     suspend fun getFoodDiaries(
@@ -24,6 +26,11 @@ interface FoodDiaryRemoteSource {
         accessToken: String,
         foodDiary: FoodDiaryBodyRequest
     ): Either<Exception, AddedFoodDiaryResponse>
+
+    suspend fun predictFoods(
+        accessToken: String,
+        foodPicture: File
+    ): Either<Exception, PredictedResponse>
 
     suspend fun updateFoodDiaryByQuestions(
         accessToken: String,

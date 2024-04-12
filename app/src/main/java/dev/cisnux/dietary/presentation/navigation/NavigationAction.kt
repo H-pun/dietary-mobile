@@ -11,18 +11,13 @@ import dev.cisnux.dietary.utils.AppDestination
 class NavComponentAction(
     navController: NavHostController,
 ) {
-    val navigateToFoodScanner: (
-        foodPicture: String, title: String
-    ) -> Unit = { title, foodDiaryCategory ->
+    val navigateToFoodScanner: () -> Unit = {
         navController.navigate(
-            route = AppDestination.FoodScannerRoute.createRouteUrl(
-                title = title,
-                foodDiaryCategory = foodDiaryCategory
-            )
+            route = AppDestination.FoodScannerRoute.route
         )
     }
-    val navigateToAddDiary: () -> Unit = {
-        navController.navigate(route = AppDestination.AddDiaryRoute.route)
+    val navigateToPredictResult: () -> Unit = {
+        navController.navigate(route = AppDestination.PredictedResultRoute.route)
     }
     val navigateToFoodDiaryDetail: (foodDiaryId: String) -> Unit = { foodDiaryId ->
         navController.navigate(
@@ -35,7 +30,7 @@ class NavComponentAction(
         title: String, foodDiaryCategory: String
     ) -> Unit = { title, foodDiaryCategory ->
         navController.navigate(
-            route = AppDestination.ScannerResultRoute.createRouteUrl(
+            route = AppDestination.AddedDietaryRoute.createRouteUrl(
                 title = title,
                 foodDiaryCategory = foodDiaryCategory
             )
@@ -53,7 +48,7 @@ class NavComponentAction(
     }
     val navigateToHomeFromScannerResult: () -> Unit = {
         navController.navigate(route = AppDestination.HomeRoute.route) {
-            popUpTo(AppDestination.AddDiaryRoute.route) {
+            popUpTo(AppDestination.PredictedResultRoute.route) {
                 inclusive = true
             }
         }

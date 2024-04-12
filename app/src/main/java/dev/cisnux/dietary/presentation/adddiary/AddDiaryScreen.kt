@@ -1,13 +1,26 @@
 package dev.cisnux.dietary.presentation.adddiary
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imeNestedScroll
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.safeGesturesPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
@@ -15,6 +28,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +58,7 @@ import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 @Composable
 fun AddDiaryScreen(
     onNavigateUp: () -> Unit,
-    navigateToFoodScanner: (String, String) -> Unit
+    navigateToFoodScanner: () -> Unit
 ) {
     val foodDiaryCategories = stringArrayResource(id = R.array.food_diary_category)
     var title by rememberSaveable {
@@ -64,8 +78,10 @@ fun AddDiaryScreen(
                     selectedFoodDiaryCategory = newValue
                 },
                 foodDiaryCategories = foodDiaryCategories,
-                onSave = { navigateToFoodScanner(title, selectedFoodDiaryCategory) },
-                modifier = Modifier.padding(it)
+                onSave = { navigateToFoodScanner() },
+                modifier = Modifier
+                    .consumeWindowInsets(it)
+                    .padding(it)
             )
         },
         onNavigateUp = onNavigateUp
@@ -122,7 +138,8 @@ private fun AddDiaryBody(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp)
     ) {
         OutlinedTextField(
@@ -226,19 +243,10 @@ private fun AddDiaryBody(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = onSave,
-            modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.medium,
-            enabled = title.isNotBlank(),
-        ) {
-            Text(text = stringResource(R.string.add))
-        }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun AddDiaryContent(
     body: @Composable (PaddingValues) -> Unit,
@@ -266,7 +274,6 @@ fun AddDiaryContent(
                 }
             )
         },
-        modifier = modifier,
     ) {
         body(it)
     }

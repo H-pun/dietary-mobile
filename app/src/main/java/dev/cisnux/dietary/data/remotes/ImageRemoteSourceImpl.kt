@@ -20,7 +20,7 @@ class ImageRemoteSourceImpl @Inject constructor(
 
     override suspend fun getFoodDiaryImageById(foodDiaryId: String): String? =
         withContext(Dispatchers.IO) {
-            val storageRef = storage.reference.child("$PATH/$foodDiaryId.jpg")
+            val storageRef = storage.reference.child("$PATH/$foodDiaryId.jpeg")
             try {
                 val url = storageRef.downloadUrl.await()
                 url.toString()

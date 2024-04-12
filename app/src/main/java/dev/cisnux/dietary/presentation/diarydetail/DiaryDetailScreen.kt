@@ -66,7 +66,7 @@ import dev.cisnux.dietary.R
 import dev.cisnux.dietary.domain.models.Bound
 import dev.cisnux.dietary.domain.models.Food
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
-import dev.cisnux.dietary.presentation.ui.components.ScannerResultBody
+import dev.cisnux.dietary.presentation.ui.components.AddedDietaryBody
 import dev.cisnux.dietary.presentation.ui.components.ScannerResultShimmer
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.Typography
@@ -134,7 +134,7 @@ fun DiaryDetailScreen(
         snackbarHostState = snackbarHostState,
         body = {
             DiaryDetailBody(
-                foodPicture = if (foodDiaryDetailState is UiState.Success)
+                foodPictures = if (foodDiaryDetailState is UiState.Success)
                     (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.foodPicture
                 else null,
                 onNavigateUp = navigateUp,
@@ -147,7 +147,7 @@ fun DiaryDetailScreen(
         sheetContent = {
             AnimatedVisibility(foodDiaryDetailState is UiState.Success) {
                 (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.let { foodDiaryDetail ->
-                    ScannerResultBody(
+                    AddedDietaryBody(
                         totalUserCaloriesToday = foodDiaryDetail.totalUserCaloriesToday,
                         userDailyBmiCalorie = foodDiaryDetail.maxDailyBmrCalorie,
                         totalFoodCalories = foodDiaryDetail.totalFoodCalories,
@@ -258,7 +258,7 @@ private fun DiaryDetailContentPreview() {
             body = {
                 foodDiaryDetail.foodPicture?.let { foodPicture ->
                     DiaryDetailBody(
-                        foodPicture = foodPicture,
+                        foodPictures = foodPicture,
                         onNavigateUp = { /*TODO*/ },
                         onRemove = { /*TODO*/ },
                         modifier = Modifier.padding(it)
@@ -266,7 +266,7 @@ private fun DiaryDetailContentPreview() {
                 }
             },
             sheetContent = {
-                ScannerResultBody(
+                AddedDietaryBody(
                     totalUserCaloriesToday = foodDiaryDetail.totalUserCaloriesToday,
                     userDailyBmiCalorie = foodDiaryDetail.maxDailyBmrCalorie,
                     totalFoodCalories = foodDiaryDetail.totalFoodCalories,
@@ -342,7 +342,7 @@ private fun DiaryDetailContentBoundsPreview() {
             body = {
                 foodDiaryDetail.foodPicture?.let { foodPicture ->
                     DiaryDetailBody(
-                        foodPicture = foodPicture,
+                        foodPictures = foodPicture,
                         onNavigateUp = { /*TODO*/ },
                         onRemove = { /*TODO*/ },
                         modifier = Modifier.padding(it),
@@ -351,7 +351,7 @@ private fun DiaryDetailContentBoundsPreview() {
                 }
             },
             sheetContent = {
-                ScannerResultBody(
+                AddedDietaryBody(
                     totalUserCaloriesToday = foodDiaryDetail.totalUserCaloriesToday,
                     userDailyBmiCalorie = foodDiaryDetail.maxDailyBmrCalorie,
                     totalFoodCalories = foodDiaryDetail.totalFoodCalories,
@@ -368,7 +368,7 @@ private fun DiaryDetailContentBoundsPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryDetailBody(
-    foodPicture: String?,
+    foodPictures: String?,
     onNavigateUp: () -> Unit,
     onRemove: () -> Unit,
     modifier: Modifier = Modifier,
@@ -378,7 +378,7 @@ fun DiaryDetailBody(
 ) {
     Box(modifier = modifier) {
         AnimatedVisibility(
-            visible = foodPicture == null, modifier = modifier
+            visible = foodPictures == null, modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize()
         ) {
@@ -388,7 +388,7 @@ fun DiaryDetailBody(
                 CircularProgressIndicator(modifier = Modifier.size(48.dp))
             }
         }
-        AnimatedVisibility(visible = foodPicture != null) {
+        AnimatedVisibility(visible = foodPictures != null) {
             var scale by remember { mutableFloatStateOf(1f) }
             var rotation by remember { mutableFloatStateOf(0f) }
             var offset by remember { mutableStateOf(Offset.Zero) }
@@ -415,7 +415,7 @@ fun DiaryDetailBody(
             ) {
                 val textMeasurer = rememberTextMeasurer()
                 SubcomposeAsyncImage(
-                    model = foodPicture,
+                    model = foodPictures,
                     contentScale = ContentScale.Fit,
                     contentDescription = null,
                     modifier = Modifier

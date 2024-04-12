@@ -2,22 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="DiaryDetailContentBoundsPreview">
-        <State />
-      </entry>
-      <entry key="DiaryDetailContentPreview">
-        <State />
-      </entry>
-      <entry key="ScannerResultContentPreview">
-        <State />
-      </entry>
-      <entry key="SignUpContentDarkPreview - light">
-        <State />
-      </entry>
-      <entry key="SignUpContentPreview - light">
-        <State />
-      </entry>
-      <entry key="app">
+      <entry key="Dietary">
         <State />
       </entry>
     </value>

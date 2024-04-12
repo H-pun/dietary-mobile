@@ -1,17 +1,21 @@
 package dev.cisnux.dietary.presentation.foodscanner
 
 import android.net.Uri
-import androidx.lifecycle.SavedStateHandle
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.cisnux.dietary.domain.models.PredictedFood
 import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.domain.usecases.FileUseCase
+import dev.cisnux.dietary.domain.usecases.FoodDiaryUseCase
 import dev.cisnux.dietary.domain.usecases.UserProfileUseCase
+import dev.cisnux.dietary.utils.UiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
@@ -24,16 +28,15 @@ class FoodScannerViewModel @Inject constructor(
     private val fileUseCase: FileUseCase,
     private val userProfileUseCase: UserProfileUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
-    savedStateHandle: SavedStateHandle,
+    private val foodDiaryUseCase: FoodDiaryUseCase,
 ) : ViewModel() {
-    val title = checkNotNull(value = savedStateHandle["title"]) as String
-    val foodDiaryCategory = checkNotNull(value = savedStateHandle["foodDiaryCategory"]) as String
-
     val userProfileDetail = userProfileUseCase.userProfileDetail.shareIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed()
     )
     private val refreshUserProfile = MutableStateFlow(false)
+    private var _currentFileState = MutableStateFlow<File?>(null)
+    val currentFileState get() = _currentFileState.asStateFlow()
 
     private var _cameraFile: MutableStateFlow<File?> = MutableStateFlow(null)
     val cameraFile get() = _cameraFile.asStateFlow()
@@ -48,9 +51,14 @@ class FoodScannerViewModel @Inject constructor(
         _galleryFile.value = fileUseCase.fileFromUri(image = image)
     }
 
-    fun clearFileStates() {
+    fun clearCameraStates() {
         _cameraFile.value = null
         _galleryFile.value = null
+    }
+
+    fun resetPredictedStates() {
+        _currentFileState.value = null
+        _predictedResultState.value = UiState.Initialize
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -65,11 +73,27 @@ class FoodScannerViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed()
     )
 
+    private val _predictedResultState =
+        MutableStateFlow<UiState<List<PredictedFood>>>(UiState.Initialize)
+    val predictedResultState get() = _predictedResultState.asStateFlow()
+
+    fun predictFoods(foodPicture: File) = viewModelScope.launch {
+        _currentFileState.value = foodPicture
+        foodDiaryUseCase.predictFoods(foodPicture).collectLatest { uiState ->
+            _predictedResultState.value = uiState
+            Log.d(FoodScannerViewModel::class.toString(), _predictedResultState.toString())
+        }
+    }
+
     fun updateRefreshUserProfile(isRefresh: Boolean) {
         refreshUserProfile.value = isRefresh
     }
 
     fun signOut() = viewModelScope.launch {
         authenticationUseCase.signOut()
+    }
+
+    fun updateCurrentFileState(file: File) {
+        _currentFileState.value = file
     }
 }
