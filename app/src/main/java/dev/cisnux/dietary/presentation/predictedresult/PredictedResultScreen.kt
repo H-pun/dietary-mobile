@@ -81,8 +81,8 @@ import coil.request.ImageRequest
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.domain.models.Bound
 import dev.cisnux.dietary.domain.models.PredictedFood
-import dev.cisnux.dietary.presentation.scannerresult.AnsweredQuestion
-import dev.cisnux.dietary.presentation.scannerresult.QuestionListItem
+import dev.cisnux.dietary.presentation.diary.AnsweredQuestion
+import dev.cisnux.dietary.presentation.diary.QuestionListItem
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.Typography
 import dev.cisnux.dietary.utils.AppDestination

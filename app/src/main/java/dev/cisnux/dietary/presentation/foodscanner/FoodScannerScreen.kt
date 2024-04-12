@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
-import android.widget.Space
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -31,7 +30,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,17 +40,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,7 +55,6 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -68,7 +62,6 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -76,12 +69,9 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -96,7 +86,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
@@ -138,8 +127,8 @@ import coil.request.ImageRequest
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.domain.models.Bound
 import dev.cisnux.dietary.domain.models.PredictedFood
-import dev.cisnux.dietary.presentation.scannerresult.AnsweredQuestion
-import dev.cisnux.dietary.presentation.scannerresult.QuestionListItem
+import dev.cisnux.dietary.presentation.diary.AnsweredQuestion
+import dev.cisnux.dietary.presentation.diary.QuestionListItem
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.Typography
 import dev.cisnux.dietary.utils.AppDestination
@@ -155,7 +144,7 @@ fun FoodScannerScreen(
     onNavigateUp: () -> Unit,
     navigateToSignIn: (String) -> Unit,
     onGalleryButton: (launcher: ActivityResultLauncher<Intent>) -> Unit,
-    onScannerResult: (foodPicture: File) -> Unit,
+    navigateToAddedDietary: (String, String, File) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: FoodScannerViewModel = hiltViewModel()
 ) {
@@ -387,9 +376,15 @@ fun FoodScannerScreen(
                     isQuestionDialogOpen = foods.any { predictedFood ->
                         predictedFood.questions.isNotEmpty()
                     }
-//                    if (!isQuestionDialogOpen){
-//                        // TODO: Something
-//                    }
+                    if (!isQuestionDialogOpen) {
+                        currentFileState?.let { currentFileState ->
+                            navigateToAddedDietary(
+                                title,
+                                selectedFoodDiaryCategory,
+                                currentFileState
+                            )
+                        }
+                    }
                 },
                 modifier = Modifier.padding(it),
                 foods = foods,
@@ -399,6 +394,13 @@ fun FoodScannerScreen(
             QuestionDialog(
                 onSave = {
                     isQuestionDialogOpen = false
+                    currentFileState?.let { currentFileState ->
+                        navigateToAddedDietary(
+                            title,
+                            selectedFoodDiaryCategory,
+                            currentFileState
+                        )
+                    }
                 },
                 onCancel = {
                     isQuestionDialogOpen = false

@@ -26,7 +26,7 @@ class NavComponentAction(
             )
         )
     }
-    val navigateToScannerResult: (
+    val navigateToAddedDietary: (
         title: String, foodDiaryCategory: String
     ) -> Unit = { title, foodDiaryCategory ->
         navController.navigate(

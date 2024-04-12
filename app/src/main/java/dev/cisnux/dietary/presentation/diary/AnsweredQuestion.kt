@@ -1,7 +1,6 @@
-package dev.cisnux.dietary.presentation.scannerresult
+package dev.cisnux.dietary.presentation.diary
 
 import android.os.Parcelable
-import dev.cisnux.dietary.utils.QuestionType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

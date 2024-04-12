@@ -1,4 +1,4 @@
-package dev.cisnux.dietary.presentation.scannerresult
+package dev.cisnux.dietary.presentation.diary
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

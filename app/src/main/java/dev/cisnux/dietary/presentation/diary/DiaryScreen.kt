@@ -1,4 +1,4 @@
-package dev.cisnux.dietary.presentation.scannerresult
+package dev.cisnux.dietary.presentation.diary
 
 import android.content.res.Configuration
 import android.util.Log
@@ -80,7 +80,7 @@ import dev.cisnux.dietary.utils.isQuestionNotEmpty
 import java.io.File
 
 @Composable
-fun AddedDietaryScreen(
+fun DiaryScreen(
     onNavigateUp: () -> Unit,
     navigateToSignIn: (String) -> Unit,
     foodPicture: File?,
@@ -142,7 +142,7 @@ fun AddedDietaryScreen(
         }
     }
 
-    ScannerResultContent(
+    DiaryContent(
         onQuestion = { isQuestionDialogOpen = true },
         onRemove = {
             if (scannerResultState is UiState.Success) {
@@ -156,7 +156,7 @@ fun AddedDietaryScreen(
             when (scannerResultState) {
                 is UiState.Success -> {
                     (scannerResultState as UiState.Success<FoodDiaryDetail>).data?.let { foodScannerResult ->
-                        AnimatedVisibility(visible = !isQuestionDialogOpen && foodScannerResult.foods.isNotEmpty()) {
+                        AnimatedVisibility(visible = foodScannerResult.foods.isNotEmpty()) {
                             AddedDietaryBody(
                                 totalUserCaloriesToday = foodScannerResult.totalUserCaloriesToday,
                                 userDailyBmiCalorie = foodScannerResult.maxDailyBmrCalorie,
@@ -168,7 +168,7 @@ fun AddedDietaryScreen(
                             )
                         }
 
-                        AnimatedVisibility(visible = !isQuestionDialogOpen && foodScannerResult.foods.isEmpty()) {
+                        AnimatedVisibility(visible = foodScannerResult.foods.isEmpty()) {
                             Box(contentAlignment = Alignment.Center) {
                                 EmptyContents(
                                     label = "Tidak ada makanan yang terdeteksi",
@@ -177,59 +177,59 @@ fun AddedDietaryScreen(
                                 )
                             }
                         }
-                        
 
-                        val foodQuestions =
-                            foodScannerResult.foods.filter { food -> food.questions?.isNotEmpty() == true }
 
-                        val answeredQuestions = remember {
-                            mutableStateListOf(
-                                *foodQuestions
-                                    .map { food ->
-                                        val answers =
-                                            food.questions?.map { question ->
-                                                AnsweredQuestion(
-                                                    questionId = question.id,
-                                                    question = question.question,
-                                                    answer = "",
-                                                    choices = question.choices
-                                                )
-                                            }?.toTypedArray() ?: arrayOf()
-                                        mutableStateListOf(*answers)
-                                    }.toTypedArray()
-                            )
-                        }
-
-                        val isEnable by remember {
-                            derivedStateOf {
-                                answeredQuestions.any { foodQuestion ->
-                                    foodQuestion.any { answeredQuestion ->
-                                        answeredQuestion.answer.isNotBlank()
-                                    }
-                                }
-                            }
-                        }
-
-                        QuestionDialog(
-                            onSave = {
-                                isQuestionDialogOpen = false
-                                viewModel.updateFoodDiaryBaseOnQuestion(
-                                    foodDiaryDetail = foodScannerResult,
-                                    foodQuestions = foodQuestions,
-                                    answeredQuestions = answeredQuestions
-                                )
-                            },
-                            onCancel = { isQuestionDialogOpen = false },
-                            isDialogOpen = isQuestionDialogOpen,
-                            onDismissRequest = { isQuestionDialogOpen = false },
-                            foods = foodQuestions,
-                            isEnable = isEnable,
-                            answeredQuestions = answeredQuestions,
-                            onAnswerChange = { newAnswer, foodIndex, answerIndex ->
-                                answeredQuestions[foodIndex][answerIndex] =
-                                    answeredQuestions[foodIndex][answerIndex].copy(answer = newAnswer)
-                            },
-                        )
+//                        val foodQuestions =
+//                            foodScannerResult.foods.filter { food -> food.questions?.isNotEmpty() == true }
+//
+//                        val answeredQuestions = remember {
+//                            mutableStateListOf(
+//                                *foodQuestions
+//                                    .map { food ->
+//                                        val answers =
+//                                            food.questions?.map { question ->
+//                                                AnsweredQuestion(
+//                                                    questionId = question.id,
+//                                                    question = question.question,
+//                                                    answer = "",
+//                                                    choices = question.choices
+//                                                )
+//                                            }?.toTypedArray() ?: arrayOf()
+//                                        mutableStateListOf(*answers)
+//                                    }.toTypedArray()
+//                            )
+//                        }
+//
+//                        val isEnable by remember {
+//                            derivedStateOf {
+//                                answeredQuestions.any { foodQuestion ->
+//                                    foodQuestion.any { answeredQuestion ->
+//                                        answeredQuestion.answer.isNotBlank()
+//                                    }
+//                                }
+//                            }
+//                        }
+//
+//                        QuestionDialog(
+//                            onSave = {
+//                                isQuestionDialogOpen = false
+//                                viewModel.updateFoodDiaryBaseOnQuestion(
+//                                    foodDiaryDetail = foodScannerResult,
+//                                    foodQuestions = foodQuestions,
+//                                    answeredQuestions = answeredQuestions
+//                                )
+//                            },
+//                            onCancel = { isQuestionDialogOpen = false },
+//                            isDialogOpen = isQuestionDialogOpen,
+//                            onDismissRequest = { isQuestionDialogOpen = false },
+//                            foods = foodQuestions,
+//                            isEnable = isEnable,
+//                            answeredQuestions = answeredQuestions,
+//                            onAnswerChange = { newAnswer, foodIndex, answerIndex ->
+//                                answeredQuestions[foodIndex][answerIndex] =
+//                                    answeredQuestions[foodIndex][answerIndex].copy(answer = newAnswer)
+//                            },
+//                        )
                     }
                 }
 
@@ -258,7 +258,7 @@ fun AddedDietaryScreen(
     showBackground = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
 )
-private fun ScannerResultContentPreview() {
+private fun DiaryContentPreview() {
     val foodDiaryResult = FoodDiaryDetail(
         foodDiaryId = "1",
         totalFoodCalories = 200.4512f,
@@ -369,7 +369,7 @@ private fun ScannerResultContentPreview() {
     )
 
     DietaryTheme {
-        ScannerResultContent(
+        DiaryContent(
             onQuestion = {},
             navigateUp = {},
             body = {
@@ -392,7 +392,7 @@ private fun ScannerResultContentPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ScannerResultContent(
+private fun DiaryContent(
     onQuestion: () -> Unit,
     onRemove: () -> Unit,
     navigateUp: () -> Unit,
@@ -427,25 +427,25 @@ private fun ScannerResultContent(
                     }
                 },
                 actions = {
-                    AnimatedVisibility(visible = isQuestionVisible) {
-                        TooltipBox(
-                            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                            tooltip = {
-                                PlainTooltip {
-                                    Text(text = "Tambahkan informasi")
-                                }
-                            },
-                            state = rememberTooltipState()
-                        ) {
-                            IconButton(onClick = onQuestion, enabled = isQuestionEnable) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_question_exchange_24dp),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        }
-                    }
+//                    AnimatedVisibility(visible = isQuestionVisible) {
+//                        TooltipBox(
+//                            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+//                            tooltip = {
+//                                PlainTooltip {
+//                                    Text(text = "Tambahkan informasi")
+//                                }
+//                            },
+//                            state = rememberTooltipState()
+//                        ) {
+//                            IconButton(onClick = onQuestion, enabled = isQuestionEnable) {
+//                                Icon(
+//                                    painter = painterResource(id = R.drawable.ic_question_exchange_24dp),
+//                                    contentDescription = null,
+//                                    tint = MaterialTheme.colorScheme.onSurface
+//                                )
+//                            }
+//                        }
+//                    }
                     AnimatedVisibility(visible = isRemoveVisible) {
                         TooltipBox(
                             positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),

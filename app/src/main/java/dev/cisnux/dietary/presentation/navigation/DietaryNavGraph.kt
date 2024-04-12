@@ -28,7 +28,7 @@ import dev.cisnux.dietary.presentation.newpassword.NewPasswordScreen
 import dev.cisnux.dietary.presentation.predictedresult.PredictedResultScreen
 import dev.cisnux.dietary.presentation.report.ReportScreen
 import dev.cisnux.dietary.presentation.resetpassword.ResetPasswordScreen
-import dev.cisnux.dietary.presentation.scannerresult.AddedDietaryScreen
+import dev.cisnux.dietary.presentation.diary.DiaryScreen
 import dev.cisnux.dietary.presentation.signin.SignInScreen
 import dev.cisnux.dietary.presentation.signup.SignUpScreen
 import dev.cisnux.dietary.presentation.splash.SplashScreen
@@ -514,9 +514,9 @@ fun DietaryNavGraph(
         ) {
             FoodScannerScreen(
                 onNavigateUp = navComponentAction.navigateUp,
-                onScannerResult = { foodPicture ->
-                    mainViewModel.updateFoodPicture(foodPicture)
-                    navComponentAction.navigateToPredictResult()
+                navigateToAddedDietary = { title, category, foodPictures ->
+                    mainViewModel.updateFoodPicture(foodPictures)
+                    navComponentAction.navigateToAddedDietary(title, category)
                 },
                 onGalleryButton = navComponentAction.takePictureFromGallery,
                 navigateToSignIn = navComponentAction.navigateToSignIn
@@ -596,7 +596,7 @@ fun DietaryNavGraph(
                 )
             }
         ) {
-            AddedDietaryScreen(
+            DiaryScreen(
                 foodPicture = foodPicture,
                 onNavigateUp = navComponentAction.navigateToHomeFromScannerResult,
                 navigateToSignIn = navComponentAction.navigateToSignIn

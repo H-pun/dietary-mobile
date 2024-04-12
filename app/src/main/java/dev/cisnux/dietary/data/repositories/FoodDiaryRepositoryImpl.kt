@@ -1,5 +1,6 @@
 package dev.cisnux.dietary.data.repositories
 
+import android.util.Log
 import dev.cisnux.dietary.data.locals.UserAccountLocalSource
 import dev.cisnux.dietary.data.remotes.FoodDiaryRemoteSource
 import dev.cisnux.dietary.data.remotes.ImageRemoteSource
@@ -415,35 +416,9 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                     addedFoodDiary.id,
                                     addFoodDiary.foodPicture
                                 )
-                                val imageUrl =
-                                    imageRemoteSource.getFoodDiaryImageById(addedFoodDiary.id)
                                 send(
                                     UiState.Success(
-                                        FoodDiaryDetail(foodDiaryId = addedFoodDiary.id,
-                                            foodPicture = imageUrl,
-                                            totalFoodCalories = addedFoodDiary.totalFoodCalories,
-                                            totalUserCaloriesToday = addedFoodDiary.totalUserCaloriesToday,
-                                            maxDailyBmrCalorie = addedFoodDiary.maxDailyBmrCalorie,
-                                            status = "Kurang disarankan",
-                                            feedback = "Terlalu banyak gula",
-                                            foods = addedFoodDiary.foods.map { detectedFoodResponse ->
-                                                val (x, y, width, height) = detectedFoodResponse.bound
-                                                Food(
-                                                    bound = Bound(
-                                                        x = x,
-                                                        y = y,
-                                                        width = width,
-                                                        height = height
-                                                    ),
-                                                    calorie = detectedFoodResponse.calorie,
-                                                    fat = detectedFoodResponse.fat,
-                                                    id = detectedFoodResponse.id.toString(),
-                                                    name = detectedFoodResponse.name,
-                                                    carbohydrates = detectedFoodResponse.carbohydrates,
-                                                    protein = detectedFoodResponse.protein,
-                                                    sugar = detectedFoodResponse.sugar
-                                                )
-                                            })
+                                        foodDiaryDetail.value
                                     )
                                 )
                             }
