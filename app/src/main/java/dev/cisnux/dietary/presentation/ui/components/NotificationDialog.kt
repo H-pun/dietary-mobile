@@ -147,6 +147,8 @@ fun NotificationDialog(
                     }
                 )
             }
+
+            else -> sendNotification()
         }
     } else sendNotification()
 }

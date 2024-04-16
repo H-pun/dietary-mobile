@@ -800,7 +800,6 @@ private fun AddDiaryDialog(
                     modifier = Modifier
                         .padding(it)
                         .padding(horizontal = 16.dp)
-                        .fillMaxSize()
                 ) {
                     OutlinedTextField(
                         keyboardOptions = KeyboardOptions(
