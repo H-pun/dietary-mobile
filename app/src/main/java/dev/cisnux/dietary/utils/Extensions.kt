@@ -2,6 +2,8 @@ package dev.cisnux.dietary.utils
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.os.Build
+import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import dev.cisnux.dietary.data.remotes.bodyrequests.UserAccountBodyRequest
@@ -30,6 +32,13 @@ val Context.activity: AppCompatActivity?
         }
         return null
     }
+
+val Context.isDevModeActive: Boolean
+    get() = Settings.Secure.getInt(
+        this.contentResolver,
+        Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
+        0
+    ) != 0
 
 val MyProfile.asUserProfile: UserProfile
     get() = UserProfile(
@@ -175,3 +184,8 @@ inline fun View.afterMeasured(crossinline block: () -> Unit) {
         }
     }
 }
+
+fun String.isHttps(): Boolean =
+    Regex("^https://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?:[/?#][^ \\t\\n\\r]*|\$)").matches(
+        input = this
+    )
