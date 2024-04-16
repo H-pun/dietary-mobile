@@ -1,11 +1,11 @@
 package dev.cisnux.dietary.data.remotes
 
 import arrow.core.Either
+import dev.cisnux.dietary.data.locals.BaseApiUrlLocalSource
 import dev.cisnux.dietary.data.remotes.responses.CommonResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.UpdateUserProfileBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.UserProfileDetailResponse
-import dev.cisnux.dietary.utils.DIETARY_API
 import dev.cisnux.dietary.utils.Failure
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -19,11 +19,15 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class UserProfileRemoteSourceImpl @Inject constructor(
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val baseApiUrlLocalSource: BaseApiUrlLocalSource
 ) : UserProfileRemoteSource {
     override suspend fun addUserProfile(
         accessToken: String,
@@ -31,8 +35,9 @@ class UserProfileRemoteSourceImpl @Inject constructor(
     ): Either<Exception, Nothing?> =
         withContext(Dispatchers.IO) {
             try {
+                val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.post(
-                    urlString = "$DIETARY_API/user-data"
+                    urlString = "$baseUrl/user-data"
                 ) {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -58,8 +63,9 @@ class UserProfileRemoteSourceImpl @Inject constructor(
     ): Either<Exception, Nothing?> =
         withContext(Dispatchers.IO) {
             try {
+                val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.put(
-                    urlString = "$DIETARY_API/user-data"
+                    urlString = "$baseUrl/user-data"
                 ) {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -83,8 +89,9 @@ class UserProfileRemoteSourceImpl @Inject constructor(
     override suspend fun getUserProfile(accessToken: String, userAccountId: String): Either<Exception, UserProfileDetailResponse> =
         withContext(Dispatchers.IO) {
             try {
+                val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.get(
-                    urlString = "$DIETARY_API/user-data/$userAccountId"
+                    urlString = "$baseUrl/user-data/$userAccountId"
                 ) {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")

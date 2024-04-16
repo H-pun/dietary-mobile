@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,18 +32,22 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.utils.isHttps
 
 @Composable
-fun DevModeScreen() {
+fun DevModeScreen(
+    devModeViewModel: DevModeViewModel = hiltViewModel()
+) {
     val snackbarHostState = remember {
         SnackbarHostState()
 
     }
-    var baseUrl by remember {
-        mutableStateOf("")
+    val currentBaseUrl by devModeViewModel.baseUrl.collectAsState()
+    var baseUrl by remember(currentBaseUrl) {
+        mutableStateOf(currentBaseUrl)
     }
 
     DevModeContent(
@@ -50,6 +55,7 @@ fun DevModeScreen() {
         baseUrl = baseUrl,
         onBaseUrlChanged = { newValue ->
             baseUrl = newValue
+            devModeViewModel.updateBaseUrl(baseUrl = newValue)
         }
     )
 }

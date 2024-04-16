@@ -5,9 +5,12 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -19,6 +22,7 @@ import androidx.navigation.navDeepLink
 import dev.cisnux.dietary.presentation.MainViewModel
 import dev.cisnux.dietary.presentation.adddiary.AddDiaryScreen
 import dev.cisnux.dietary.presentation.addmyprofile.AddMyProfileScreen
+import dev.cisnux.dietary.presentation.devmode.DevModeScreen
 import dev.cisnux.dietary.presentation.diarydetail.DiaryDetailScreen
 import dev.cisnux.dietary.presentation.foodscanner.FoodScannerScreen
 import dev.cisnux.dietary.presentation.home.HomeScreen
@@ -32,6 +36,7 @@ import dev.cisnux.dietary.presentation.diary.DiaryScreen
 import dev.cisnux.dietary.presentation.signin.SignInScreen
 import dev.cisnux.dietary.presentation.signup.SignUpScreen
 import dev.cisnux.dietary.presentation.splash.SplashScreen
+import dev.cisnux.dietary.presentation.ui.components.NotificationDialog
 import dev.cisnux.dietary.utils.AppDestination
 
 @Composable
@@ -43,6 +48,10 @@ fun DietaryNavGraph(
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
     val foodPicture by mainViewModel.foodPicture.collectAsState(initial = null)
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
+    NotificationDialog(snackbarHostState = snackbarHostState)
 
     NavHost(
         navController = navController,
@@ -601,6 +610,42 @@ fun DietaryNavGraph(
                 onNavigateUp = navComponentAction.navigateToHomeFromScannerResult,
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )
+        }
+        composable(
+            route = AppDestination.DevModeRoute.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            popExitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            },
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = AppDestination.DevModeRoute.deepLinkPattern
+                },
+            ),
+        ) {
+            DevModeScreen()
         }
     }
 }

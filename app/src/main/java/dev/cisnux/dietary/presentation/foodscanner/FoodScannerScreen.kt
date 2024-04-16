@@ -38,10 +38,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -795,7 +793,6 @@ private fun AddDiaryDialog(
                 modifier = modifier,
             ) {
                 var isFoodDiaryCategoryExpanded by rememberSaveable { mutableStateOf(false) }
-                val scrollState = rememberScrollState()
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -803,7 +800,6 @@ private fun AddDiaryDialog(
                     modifier = Modifier
                         .padding(it)
                         .padding(horizontal = 16.dp)
-                        .verticalScroll(scrollState)
                         .fillMaxSize()
                 ) {
                     OutlinedTextField(

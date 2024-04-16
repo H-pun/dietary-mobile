@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import java.io.File
 
 interface FoodRepository {
+    val baseUrl: Flow<String>
     fun getDiaryFoodsByDays(date: String, category: FoodDiaryCategory): Flow<UiState<List<FoodDiary>>>
     fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>>
     fun getKeywordSuggestionsByQuery(query: String): Flow<UiState<List<String>>>
@@ -22,4 +23,5 @@ interface FoodRepository {
     fun deleteFoodDiaryById(foodDiaryId: String): Flow<UiState<Nothing>>
     fun getFoodDiaryDetailById(foodDiaryId: String): Flow<UiState<FoodDiaryDetail>>
     fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<Report>>
+    suspend fun updateBaseUrlApi(baseUrl: String)
 }

@@ -1,7 +1,7 @@
 package dev.cisnux.dietary.data.remotes
 
-import android.util.Log
 import arrow.core.Either
+import dev.cisnux.dietary.data.locals.BaseApiUrlLocalSource
 import dev.cisnux.dietary.data.remotes.responses.AddedFoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.responses.CommonResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.DiaryQuestionBodyRequest
@@ -11,7 +11,6 @@ import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryResponse
 import dev.cisnux.dietary.data.remotes.responses.PredictedResponse
 import dev.cisnux.dietary.data.remotes.responses.ReportResponse
-import dev.cisnux.dietary.utils.DIETARY_API
 import dev.cisnux.dietary.utils.Failure
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -31,20 +30,24 @@ import io.ktor.http.contentType
 import io.ktor.util.network.UnresolvedAddressException
 import io.ktor.utils.io.streams.asInput
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
 class FoodDiaryRemoteSourceImpl @Inject constructor(
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val baseApiUrlLocalSource: BaseApiUrlLocalSource
 ) : FoodDiaryRemoteSource {
     override suspend fun getFoodDiaries(
         accessToken: String, getFoodDiaryBodyRequest: GetFoodDiaryBodyRequest
     ): Either<Exception, List<FoodDiaryResponse>> = withContext(Dispatchers.IO) {
         try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
             val response =
-                client.get(urlString = "$DIETARY_API/food-diary/user?idUser=${getFoodDiaryBodyRequest.userId}&date=${getFoodDiaryBodyRequest.date}") {
+                client.get(urlString = "$baseUrl/food-diary/user?idUser=${getFoodDiaryBodyRequest.userId}&date=${getFoodDiaryBodyRequest.date}") {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
                     }
@@ -69,8 +72,9 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
         accessToken: String, id: String
     ): Either<Exception, FoodDiaryDetailResponse> = withContext(Dispatchers.IO) {
         try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
             val response = client.get(
-                urlString = "$DIETARY_API/food-diary/$id"
+                urlString = "$baseUrl/food-diary/$id"
             ) {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -94,113 +98,62 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
     override suspend fun addFoodDiary(
         accessToken: String, foodDiary: FoodDiaryBodyRequest
     ): Either<Exception, AddedFoodDiaryResponse> = withContext(Dispatchers.IO) {
-        Log.d("foodDiary", foodDiary.toString())
         try {
-            val addedFoodDiary = async {
-                client.post(
-                    urlString = "$DIETARY_API/food-diary"
-                ) {
-                    headers {
-                        append(HttpHeaders.Authorization, "Bearer $accessToken")
-                    }
-                    setBody(
-                        MultiPartFormDataContent(
-                            parts = formData {
-                                append(key = "IdUser", foodDiary.userAccountId, Headers.build {
-                                    append(HttpHeaders.ContentType, "text/plain")
-                                })
-                                append(key = "Title", foodDiary.title, Headers.build {
-                                    append(HttpHeaders.ContentType, "text/plain")
-                                })
-                                append(key = "Category", foodDiary.category, Headers.build {
-                                    append(HttpHeaders.ContentType, "text/plain")
-                                })
-                                append(
-                                    key = "AddedAt",
-                                    foodDiary.addedAt,
-                                    Headers.build {
-                                        append(HttpHeaders.ContentType, "text/plain")
-                                    })
-                                append(
-                                    key = "File",
-                                    InputProvider(foodDiary.foodPicture.length()) {
-                                        foodDiary.foodPicture.inputStream().asInput()
-                                    },
-                                    Headers.build {
-                                        append(HttpHeaders.ContentType, "image/jpg")
-                                        append(
-                                            HttpHeaders.ContentDisposition,
-                                            "filename=${foodDiary.foodPicture.name}"
-                                        )
-                                    }
-                                )
-                            },
-                            boundary = "WebAppBoundary"
-                        )
-                    )
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
+            val response =  client.post(
+                urlString = "$baseUrl/food-diary"
+            ) {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $accessToken")
                 }
-            }
-            val predictedFoodDiary = async {
-                client.post(
-                    urlString = "$DIETARY_API/food/predict"
-                ) {
-                    headers {
-                        append(HttpHeaders.Authorization, "Bearer $accessToken")
-                    }
-                    setBody(
-                        MultiPartFormDataContent(
-                            parts = formData {
-                                append(
-                                    key = "imgFile",
-                                    InputProvider(foodDiary.foodPicture.length()) {
-                                        foodDiary.foodPicture.inputStream().asInput()
-                                    },
-                                    Headers.build {
-                                        append(HttpHeaders.ContentType, "image/jpg")
-                                        append(
-                                            HttpHeaders.ContentDisposition,
-                                            "filename=${foodDiary.foodPicture.name}"
-                                        )
-                                    }
-                                )
-                            },
-                            boundary = "WebAppBoundary"
-                        )
+                setBody(
+                    MultiPartFormDataContent(
+                        parts = formData {
+                            append(key = "IdUser", foodDiary.userAccountId, Headers.build {
+                                append(HttpHeaders.ContentType, "text/plain")
+                            })
+                            append(key = "Title", foodDiary.title, Headers.build {
+                                append(HttpHeaders.ContentType, "text/plain")
+                            })
+                            append(key = "Category", foodDiary.category, Headers.build {
+                                append(HttpHeaders.ContentType, "text/plain")
+                            })
+                            append(
+                                key = "AddedAt",
+                                foodDiary.addedAt,
+                                Headers.build {
+                                    append(HttpHeaders.ContentType, "text/plain")
+                                })
+                            append(
+                                key = "File",
+                                InputProvider(foodDiary.foodPicture.length()) {
+                                    foodDiary.foodPicture.inputStream().asInput()
+                                },
+                                Headers.build {
+                                    append(HttpHeaders.ContentType, "image/jpg")
+                                    append(
+                                        HttpHeaders.ContentDisposition,
+                                        "filename=${foodDiary.foodPicture.name}"
+                                    )
+                                }
+                            )
+                        },
+                        boundary = "WebAppBoundary"
                     )
-                }
+                )
             }
 
-            val addedFailure = Failure.HTTP_FAILURES[addedFoodDiary.await().status]
-            if (addedFailure != null) {
-                val commonResponse: CommonResponse<Nothing> = addedFoodDiary.await().body()
-                return@withContext Either.Left(addedFailure.apply {
+            val failure = Failure.HTTP_FAILURES[response.status]
+
+            return@withContext if (failure != null) {
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                Either.Left(failure.apply {
                     message = commonResponse.message
                 })
+            } else {
+                val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
+                Either.Right(commonResponse.data!!)
             }
-
-            val predictedFailure = Failure.HTTP_FAILURES[predictedFoodDiary.await().status]
-            if (predictedFailure != null) {
-                val commonResponse: CommonResponse<Nothing> = predictedFoodDiary.await().body()
-                return@withContext Either.Left(predictedFailure.apply {
-                    message = commonResponse.message
-                })
-            }
-
-
-            val addedCommonResponse: CommonResponse<String> = addedFoodDiary.await().body()
-            val predictedCommonResponse: CommonResponse<PredictedResponse> =
-                predictedFoodDiary.await().body()
-            val addedFoodDiaryResponse = AddedFoodDiaryResponse(
-                id = addedCommonResponse.data!!,
-                totalFoodCalories = 200.4512f,
-                maxDailyBmrCalorie = 800.6798f,
-                totalUserCaloriesToday = 500.7892f,
-                status = "Boleh dimakan",
-                feedback = null,
-                foods = listOf()
-            )
-
-            return@withContext Either.Right(addedFoodDiaryResponse)
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
         }
@@ -210,10 +163,11 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
         accessToken: String,
         foodPicture: File
     ): Either<Exception, PredictedResponse> =
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             try {
+                val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.post(
-                    urlString = "$DIETARY_API/food/predict"
+                    urlString = "$baseUrl/food/predict"
                 ) {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -260,8 +214,9 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
         accessToken: String, foodDiaryQuestion: DiaryQuestionBodyRequest
     ): Either<Exception, AddedFoodDiaryResponse> = withContext(Dispatchers.IO) {
         try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
             val response = client.put(
-                urlString = "$DIETARY_API/food_diary"
+                urlString = "$baseUrl/food_diary"
             ) {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -288,8 +243,9 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
         accessToken: String, category: Int
     ): Either<Exception, ReportResponse> = withContext(Dispatchers.IO) {
         try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
             val response = client.get(
-                urlString = "$DIETARY_API/report?category=$category"
+                urlString = "$baseUrl/report?category=$category"
             ) {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -314,8 +270,9 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
         accessToken: String, query: String
     ): Either<Exception, List<String>> = withContext(Dispatchers.IO) {
         try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
             val response = client.get(
-                urlString = "$DIETARY_API/keyword?query=$query"
+                urlString = "$baseUrl/keyword?query=$query"
             ) {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -341,8 +298,9 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
         id: String
     ): Either<Exception, Nothing?> = withContext(Dispatchers.IO) {
         try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
             val response = client.delete(
-                urlString = "$DIETARY_API/food_diary/$id"
+                urlString = "$baseUrl/food_diary/$id"
             ) {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $accessToken")

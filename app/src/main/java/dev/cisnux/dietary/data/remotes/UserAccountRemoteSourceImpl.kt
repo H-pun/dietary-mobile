@@ -1,12 +1,12 @@
 package dev.cisnux.dietary.data.remotes
 
 import arrow.core.Either
+import dev.cisnux.dietary.data.locals.BaseApiUrlLocalSource
 import dev.cisnux.dietary.data.remotes.responses.CommonResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.NewPasswordBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.ResetPasswordBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.UserAccountBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.AddedUserAccountResponse
-import dev.cisnux.dietary.utils.DIETARY_API
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
 import kotlinx.coroutines.Dispatchers
@@ -19,15 +19,19 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.util.network.UnresolvedAddressException
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 
 class UserAccountRemoteSourceImpl @Inject constructor(
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val baseApiUrlLocalSource: BaseApiUrlLocalSource
 ) : UserAccountRemoteSource {
     override suspend fun signIn(userAccount: UserAccountBodyRequest): Either<Exception, AddedUserAccountResponse> =
         withContext(Dispatchers.IO) {
             try {
+                val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.post(
-                    urlString = "$DIETARY_API/user/login"
+                    urlString = "$baseUrl/user/login"
                 ) {
                     contentType(ContentType.Application.Json)
                     setBody(userAccount)
@@ -50,8 +54,9 @@ class UserAccountRemoteSourceImpl @Inject constructor(
     override suspend fun signUp(userAccount: UserAccountBodyRequest): Either<Exception, Nothing?> =
         withContext(Dispatchers.IO) {
             try {
+                val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.post(
-                    urlString = "$DIETARY_API/user/register"
+                    urlString = "$baseUrl/user/register"
                 ) {
                     contentType(ContentType.Application.Json)
                     setBody(userAccount)
@@ -73,8 +78,9 @@ class UserAccountRemoteSourceImpl @Inject constructor(
     override suspend fun resetPassword(resetPassword: ResetPasswordBodyRequest): Either<Exception, String?> =
         withContext(Dispatchers.IO) {
             try {
+                val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.post(
-                    urlString = "$DIETARY_API/password"
+                    urlString = "$baseUrl/password"
                 ){
                     contentType(ContentType.Application.Json)
                     setBody(resetPassword)
@@ -98,8 +104,9 @@ class UserAccountRemoteSourceImpl @Inject constructor(
     override suspend fun newPassword(newPassword: NewPasswordBodyRequest): Either<Exception, String?> =
         withContext(Dispatchers.IO) {
             try {
+                val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.put(
-                    urlString = "$DIETARY_API/password"
+                    urlString = "$baseUrl/password"
                 ){
                     contentType(ContentType.Application.Json)
                     setBody(newPassword)

@@ -26,4 +26,7 @@ interface FoodDiaryUseCase {
 
     fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<Report>>
     fun predictFoods(foodPicture: File): Flow<UiState<List<PredictedFood>>>
+
+    val baseUrl: Flow<String>
+    suspend fun updateBaseUrlApi(baseUrl: String)
 }

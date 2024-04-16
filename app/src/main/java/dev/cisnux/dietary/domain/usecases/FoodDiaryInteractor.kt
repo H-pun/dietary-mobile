@@ -46,4 +46,9 @@ class FoodDiaryInteractor @Inject constructor(
 
     override fun predictFoods(foodPicture: File): Flow<UiState<List<PredictedFood>>> =
         foodRepository.predictFood(foodPicture)
+
+    override val baseUrl: Flow<String>
+        get() = foodRepository.baseUrl
+
+    override suspend fun updateBaseUrlApi(baseUrl: String) = foodRepository.updateBaseUrlApi(baseUrl = baseUrl)
 }

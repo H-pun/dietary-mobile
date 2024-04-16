@@ -34,6 +34,11 @@ sealed class AppDestination(val route: String) {
         fun createDeepLinkUrl(emailAddress: String): String =
             "new_password?email_address$emailAddress"
     }
+    data object DevModeRoute:
+        AppDestination(route = "dev_mode"){
+            val deepLinkPattern = "https://www.dietary.xyz/$route"
+            fun createDeepLink() = "dev_mode"
+        }
 
     data object SplashRoute : AppDestination(route = "splash")
     data object LandingRoute : AppDestination(route = "landing")

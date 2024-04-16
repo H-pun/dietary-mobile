@@ -1,6 +1,6 @@
 package dev.cisnux.dietary.data.repositories
 
-import android.util.Log
+import dev.cisnux.dietary.data.locals.BaseApiUrlLocalSource
 import dev.cisnux.dietary.data.locals.UserAccountLocalSource
 import dev.cisnux.dietary.data.remotes.FoodDiaryRemoteSource
 import dev.cisnux.dietary.data.remotes.ImageRemoteSource
@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.Instant
 import kotlin.random.Random
@@ -46,6 +47,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
     private val foodDiaryRemoteSource: FoodDiaryRemoteSource,
     private val userAccountLocalSource: UserAccountLocalSource,
     private val imageRemoteSource: ImageRemoteSource,
+    private val baseApiUrlLocalSource: BaseApiUrlLocalSource
 ) : FoodRepository {
     private val foodsBreakfastDiary = List(10) {
         FoodDiary(
@@ -331,6 +333,8 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             )
         }
     )
+    override val baseUrl: Flow<String>
+        get() = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO)
 
 
     override fun getDiaryFoodsByDays(
@@ -518,4 +522,8 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             )
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
+
+    override suspend fun updateBaseUrlApi(baseUrl: String) = withContext(Dispatchers.IO){
+        baseApiUrlLocalSource.updateBaseApiUrl(baseApiUrl = baseUrl)
+    }
 }
