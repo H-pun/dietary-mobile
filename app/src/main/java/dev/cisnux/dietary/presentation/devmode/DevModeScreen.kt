@@ -56,7 +56,7 @@ fun DevModeScreen(
         onBaseUrlChanged = { newValue ->
             baseUrl = newValue
             devModeViewModel.updateBaseUrl(baseUrl = newValue)
-        }
+        },
     )
 }
 
@@ -90,11 +90,6 @@ private fun DevModeContent(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.AddCircle, contentDescription = null)
-            }
-        }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
