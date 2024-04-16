@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import dev.cisnux.dietary.R
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.utils.isHttps
-import dev.cisnux.dietary.utils.isIntAnswerValid
 
 @Composable
 fun DevModeScreen() {
