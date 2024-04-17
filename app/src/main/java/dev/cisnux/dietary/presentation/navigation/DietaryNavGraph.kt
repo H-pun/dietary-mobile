@@ -5,7 +5,6 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -645,7 +644,7 @@ fun DietaryNavGraph(
                 },
             ),
         ) {
-            DevModeScreen()
+            DevModeScreen(navigateUp = navComponentAction.navigateUp)
         }
     }
 }

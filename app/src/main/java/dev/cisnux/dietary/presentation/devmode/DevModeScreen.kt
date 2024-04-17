@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -36,7 +39,8 @@ import dev.cisnux.dietary.utils.isHttps
 
 @Composable
 fun DevModeScreen(
-    devModeViewModel: DevModeViewModel = hiltViewModel()
+    navigateUp: () -> Unit,
+    devModeViewModel: DevModeViewModel = hiltViewModel(),
 ) {
     val snackbarHostState = remember {
         SnackbarHostState()
@@ -52,8 +56,13 @@ fun DevModeScreen(
         baseUrl = baseUrl,
         onBaseUrlChanged = { newValue ->
             baseUrl = newValue
-            devModeViewModel.updateBaseUrl(baseUrl = newValue)
         },
+        onSave = {
+            devModeViewModel.updateBaseUrl(baseUrl = baseUrl)
+                .invokeOnCompletion {
+                    navigateUp()
+                }
+        }
     )
 }
 
@@ -78,6 +87,7 @@ private fun DevModeContent(
     modifier: Modifier = Modifier,
     baseUrl: String = "",
     onBaseUrlChanged: (String) -> Unit = {},
+    onSave: () -> Unit = {},
 ) {
     var isBaseUrlFocused by rememberSaveable {
         mutableStateOf(false)
@@ -87,6 +97,14 @@ private fun DevModeContent(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                if (baseUrl.isHttps())
+                    onSave()
+            }) {
+                Icon(imageVector = Icons.Default.AddCircle, contentDescription = null)
+            }
+        }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
