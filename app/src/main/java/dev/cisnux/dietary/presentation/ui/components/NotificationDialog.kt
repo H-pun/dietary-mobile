@@ -148,7 +148,13 @@ fun NotificationDialog(
                 )
             }
 
-            else -> sendNotification()
+            else -> {
+                if (context.isDevModeActive)
+                    sendNotification()
+            }
         }
-    } else sendNotification()
+    } else {
+        if (context.isDevModeActive)
+            sendNotification()
+    }
 }
