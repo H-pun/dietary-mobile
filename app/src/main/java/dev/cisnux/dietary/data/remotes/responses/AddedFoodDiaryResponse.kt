@@ -14,7 +14,7 @@ data class AddedFoodDiaryResponse(
     val maxDailyBmrCalorie: Float,
     val totalFoodCalories: Float,
     val status: String,
-    val feedback: String? = null,
+    val feedback: List<String>,
     // the foods which was detected
     val foods: List<DetectedFoodResponse>,
 )

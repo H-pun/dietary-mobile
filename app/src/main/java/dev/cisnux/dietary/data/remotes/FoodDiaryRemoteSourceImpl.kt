@@ -160,8 +160,18 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 } ?: Either.Left(Exception(commonResponse.message))
                 failure
             } else {
-                val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
-                Either.Right(commonResponse.data!!)
+//                val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
+//                Either.Right(commonResponse.data!!)
+                val addedFoodDiaryResponse = AddedFoodDiaryResponse(
+                    id = "",
+                    totalFoodCalories = 0f,
+                    maxDailyBmrCalorie = 0f,
+                    totalUserCaloriesToday = 0f,
+                    feedback = listOf(),
+                    foods = listOf(),
+                    status = "",
+                )
+                Either.Right(addedFoodDiaryResponse)
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())

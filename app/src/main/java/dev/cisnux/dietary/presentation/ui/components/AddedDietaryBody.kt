@@ -173,7 +173,7 @@ fun AddedDietaryBody(
                         verticalAlignment = Alignment.Top,
                     ) {
                         Text(
-                            text = stringResource(R.string.feedback),
+                            text = stringResource(R.string.feedbacks),
                             fontWeight = FontWeight.SemiBold,
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onSurface,
