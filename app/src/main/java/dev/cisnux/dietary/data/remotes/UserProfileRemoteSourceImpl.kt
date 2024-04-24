@@ -17,6 +17,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -45,12 +46,15 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                     contentType(ContentType.Application.Json)
                     setBody(userProfile)
                 }
-                val failure = Failure.HTTP_FAILURES[response.status]
-                return@withContext if (failure != null) {
+                val isSuccess = response.status.isSuccess()
+                return@withContext if (!isSuccess) {
                     val commonResponse: CommonResponse<Nothing> = response.body()
-                    Either.Left(failure.apply {
-                        message = commonResponse.message
-                    })
+                    val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                        Either.Left(it.apply {
+                            message = commonResponse.message
+                        })
+                    } ?: Either.Left(Exception(commonResponse.message))
+                    failure
                 } else Either.Right(null)
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
@@ -73,12 +77,15 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                     contentType(ContentType.Application.Json)
                     setBody(userProfile)
                 }
-                val failure = Failure.HTTP_FAILURES[response.status]
-                return@withContext if (failure != null) {
+                val isSuccess = response.status.isSuccess()
+                return@withContext if (!isSuccess) {
                     val commonResponse: CommonResponse<Nothing> = response.body()
-                    Either.Left(failure.apply {
-                        message = commonResponse.message
-                    })
+                    val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                        Either.Left(it.apply {
+                            message = commonResponse.message
+                        })
+                    } ?: Either.Left(Exception(commonResponse.message))
+                    failure
                 } else Either.Right(null)
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
@@ -97,12 +104,15 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
                     }
                 }
-                val failure = Failure.HTTP_FAILURES[response.status]
-                return@withContext if (failure != null) {
+                val isSuccess = response.status.isSuccess()
+                return@withContext if (!isSuccess) {
                     val commonResponse: CommonResponse<Nothing> = response.body()
-                    Either.Left(failure.apply {
-                        message = commonResponse.message
-                    })
+                    val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                        Either.Left(it.apply {
+                            message = commonResponse.message
+                        })
+                    } ?: Either.Left(Exception(commonResponse.message))
+                    failure
                 } else {
                     val commonResponse: CommonResponse<UserProfileDetailResponse> = response.body()
                     Either.Right(commonResponse.data!!)

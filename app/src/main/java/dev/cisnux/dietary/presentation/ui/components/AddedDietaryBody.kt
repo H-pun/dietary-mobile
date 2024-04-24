@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -48,7 +49,7 @@ fun AddedDietaryBody(
     userDailyBmiCalorie: Float,
     totalFoodCalories: Float,
     foods: List<Food>,
-    feedback: String?,
+    feedbacks: List<String>,
     status: String,
     modifier: Modifier = Modifier,
 ) {
@@ -165,31 +166,38 @@ fun AddedDietaryBody(
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     HorizontalDivider(thickness = 1.5.dp)
-                    feedback?.let { feedback ->
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.Top,
+                    ) {
+                        Text(
+                            text = stringResource(R.string.feedback),
+                            fontWeight = FontWeight.SemiBold,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                        Column(
+                            horizontalAlignment = Alignment.End,
+                            verticalArrangement = Arrangement.Top,
+                            modifier = Modifier.fillMaxSize()
                         ) {
-                            Text(
-                                text = stringResource(R.string.feedback),
-                                fontWeight = FontWeight.SemiBold,
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = feedback,
-                                fontWeight = FontWeight.Light,
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.width(130.dp),
-                                textAlign = TextAlign.End
-                            )
+                            feedbacks.forEach { feedback ->
+                                Text(
+                                    text = "✧ $feedback",
+                                    fontWeight = FontWeight.Light,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.width(150.dp),
+                                    textAlign = TextAlign.Start
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
                         }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        HorizontalDivider(thickness = 1.5.dp)
                     }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    HorizontalDivider(thickness = 1.5.dp)
                     Spacer(modifier = Modifier.height(10.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),

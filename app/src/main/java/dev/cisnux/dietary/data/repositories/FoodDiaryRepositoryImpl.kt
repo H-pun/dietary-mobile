@@ -119,7 +119,11 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             maxDailyBmrCalorie = 800.6798f,
             totalUserCaloriesToday = 500.7892f,
             status = "Boleh dimakan",
-            feedback = null,
+            feedbacks = listOf(
+                "Terlalu berminyak",
+                "Terlalu banyak gula",
+                "Kurang protein",
+            ),
             foods = listOf(
                 Food(
                     id = "1",
@@ -229,7 +233,11 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         maxDailyBmrCalorie = 800.6798f,
         totalUserCaloriesToday = 500.7892f,
         status = "Kurang disarankan",
-        feedback = "Terlalu banyak gula",
+        feedbacks = listOf(
+            "Terlalu berminyak",
+            "Terlalu banyak gula",
+            "Kurang protein",
+        ),
         foodPicture = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
         foods = listOf(
             Food(
@@ -416,10 +424,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                 send(UiState.Error(exception))
                             },
                             ifRight = { addedFoodDiary ->
-                                imageRemoteSource.addFoodDiaryImage(
-                                    addedFoodDiary.id,
-                                    addFoodDiary.foodPicture
-                                )
                                 send(
                                     UiState.Success(
                                         foodDiaryDetail.value
@@ -474,7 +478,11 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             delay(1000L)
             emit(UiState.Success(foodDiaryDetail.value.copy(
                 status = "Kurang disarankan",
-                feedback = "Terlalu banyak gula",
+                feedbacks = listOf(
+                    "Terlalu berminyak",
+                    "Terlalu banyak gula",
+                    "Kurang protein",
+                ),
                 foods = foodDiaryDetail.value.foods.map {
                     it.copy(
                         questions = null

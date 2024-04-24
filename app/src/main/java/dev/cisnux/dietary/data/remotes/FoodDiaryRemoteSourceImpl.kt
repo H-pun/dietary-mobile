@@ -27,6 +27,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import io.ktor.util.network.UnresolvedAddressException
 import io.ktor.utils.io.streams.asInput
 import kotlinx.coroutines.Dispatchers
@@ -53,12 +54,15 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                     }
                     contentType(ContentType.Application.Json)
                 }
-            val failure = Failure.HTTP_FAILURES[response.status]
-            return@withContext if (failure != null) {
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
                 val commonResponse: CommonResponse<Nothing> = response.body()
-                Either.Left(failure.apply {
-                    message = commonResponse.message
-                })
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse.message
+                    })
+                } ?: Either.Left(Exception(commonResponse.message))
+                failure
             } else {
                 val commonResponse: CommonResponse<List<FoodDiaryResponse>> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -80,12 +84,15 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
                 }
             }
-            val failure = Failure.HTTP_FAILURES[response.status]
-            return@withContext if (failure != null) {
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
                 val commonResponse: CommonResponse<Nothing> = response.body()
-                Either.Left(failure.apply {
-                    message = commonResponse.message
-                })
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse.message
+                    })
+                } ?: Either.Left(Exception(commonResponse.message))
+                failure
             } else {
                 val commonResponse: CommonResponse<FoodDiaryDetailResponse> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -100,7 +107,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
     ): Either<Exception, AddedFoodDiaryResponse> = withContext(Dispatchers.IO) {
         try {
             val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
-            val response =  client.post(
+            val response = client.post(
                 urlString = "$baseUrl/food-diary"
             ) {
                 headers {
@@ -143,13 +150,15 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 )
             }
 
-            val failure = Failure.HTTP_FAILURES[response.status]
-
-            return@withContext if (failure != null) {
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
                 val commonResponse: CommonResponse<Nothing> = response.body()
-                Either.Left(failure.apply {
-                    message = commonResponse.message
-                })
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse.message
+                    })
+                } ?: Either.Left(Exception(commonResponse.message))
+                failure
             } else {
                 val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -194,12 +203,15 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                     )
                 }
 
-                val failure = Failure.HTTP_FAILURES[response.status]
-                return@withContext if (failure != null) {
+                val isSuccess = response.status.isSuccess()
+                return@withContext if (!isSuccess) {
                     val commonResponse: CommonResponse<Nothing> = response.body()
-                    Either.Left(failure.apply {
-                        message = commonResponse.message
-                    })
+                    val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                        Either.Left(it.apply {
+                            message = commonResponse.message
+                        })
+                    } ?: Either.Left(Exception(commonResponse.message))
+                    failure
                 } else {
                     val commonResponse: CommonResponse<PredictedResponse> = response.body()
                     Either.Right(commonResponse.data!!)
@@ -224,12 +236,15 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 contentType(ContentType.Application.Json)
                 setBody(foodDiaryQuestion)
             }
-            val failure = Failure.HTTP_FAILURES[response.status]
-            return@withContext if (failure != null) {
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
                 val commonResponse: CommonResponse<Nothing> = response.body()
-                Either.Left(failure.apply {
-                    message = commonResponse.message
-                })
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse.message
+                    })
+                } ?: Either.Left(Exception(commonResponse.message))
+                failure
             } else {
                 val commonResponse: CommonResponse<AddedFoodDiaryResponse> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -251,12 +266,15 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
                 }
             }
-            val failure = Failure.HTTP_FAILURES[response.status]
-            return@withContext if (failure != null) {
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
                 val commonResponse: CommonResponse<Nothing> = response.body()
-                Either.Left(failure.apply {
-                    message = commonResponse.message
-                })
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse.message
+                    })
+                } ?: Either.Left(Exception(commonResponse.message))
+                failure
             } else {
                 val commonResponse: CommonResponse<ReportResponse> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -278,12 +296,15 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
                 }
             }
-            val failure = Failure.HTTP_FAILURES[response.status]
-            return@withContext if (failure != null) {
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
                 val commonResponse: CommonResponse<Nothing> = response.body()
-                Either.Left(failure.apply {
-                    message = commonResponse.message
-                })
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse.message
+                    })
+                } ?: Either.Left(Exception(commonResponse.message))
+                failure
             } else {
                 val commonResponse: CommonResponse<List<String>> = response.body()
                 Either.Right(commonResponse.data!!)
@@ -306,12 +327,15 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
                 }
             }
-            val failure = Failure.HTTP_FAILURES[response.status]
-            return@withContext if (failure != null) {
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
                 val commonResponse: CommonResponse<Nothing> = response.body()
-                Either.Left(failure.apply {
-                    message = commonResponse.message
-                })
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse.message
+                    })
+                } ?: Either.Left(Exception(commonResponse.message))
+                failure
             } else
                 Either.Right(null)
         } catch (e: UnresolvedAddressException) {

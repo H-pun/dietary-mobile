@@ -7,6 +7,6 @@ data class FoodDiaryDetail(
     val maxDailyBmrCalorie: Float,
     val status: String,
     val foodPicture: String? = null,
-    val feedback: String?,
+    val feedbacks: List<String>,
     val foods: List<Food>,
 )

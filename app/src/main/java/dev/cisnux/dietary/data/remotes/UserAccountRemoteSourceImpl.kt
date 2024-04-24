@@ -18,6 +18,7 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
@@ -36,12 +37,16 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                     contentType(ContentType.Application.Json)
                     setBody(userAccount)
                 }
-                val failure = Failure.HTTP_FAILURES[response.status]
-                return@withContext if (failure != null) {
+
+                val isSuccess = response.status.isSuccess()
+                return@withContext if (!isSuccess) {
                     val commonResponse: CommonResponse<Nothing> = response.body()
-                    Either.Left(failure.apply {
-                        message = commonResponse.message
-                    })
+                    val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                        Either.Left(it.apply {
+                            message = commonResponse.message
+                        })
+                    } ?: Either.Left(Exception(commonResponse.message))
+                    failure
                 } else {
                     val commonResponse: CommonResponse<AddedUserAccountResponse> = response.body()
                     Either.Right(commonResponse.data!!)
@@ -61,12 +66,16 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                     contentType(ContentType.Application.Json)
                     setBody(userAccount)
                 }
-                val failure = Failure.HTTP_FAILURES[response.status]
-                return@withContext if (failure != null) {
+
+                val isSuccess = response.status.isSuccess()
+                return@withContext if (!isSuccess) {
                     val commonResponse: CommonResponse<Nothing> = response.body()
-                    Either.Left(failure.apply {
-                        message = commonResponse.message
-                    })
+                    val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                        Either.Left(it.apply {
+                            message = commonResponse.message
+                        })
+                    } ?: Either.Left(Exception(commonResponse.message))
+                    failure
                 } else {
                     Either.Right(null)
                 }
@@ -81,16 +90,20 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.post(
                     urlString = "$baseUrl/password"
-                ){
+                ) {
                     contentType(ContentType.Application.Json)
                     setBody(resetPassword)
                 }
-                val failure = Failure.HTTP_FAILURES[response.status]
-                return@withContext if (failure != null) {
+
+                val isSuccess = response.status.isSuccess()
+                return@withContext if (!isSuccess) {
                     val commonResponse: CommonResponse<Nothing> = response.body()
-                    Either.Left(failure.apply {
-                        message = commonResponse.message
-                    })
+                    val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                        Either.Left(it.apply {
+                            message = commonResponse.message
+                        })
+                    } ?: Either.Left(Exception(commonResponse.message))
+                    failure
                 } else {
                     val commonResponse: CommonResponse<Nothing> = response.body()
                     Either.Right(commonResponse.message)
@@ -107,17 +120,20 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.put(
                     urlString = "$baseUrl/password"
-                ){
+                ) {
                     contentType(ContentType.Application.Json)
                     setBody(newPassword)
                 }
 
-                val failure = Failure.HTTP_FAILURES[response.status]
-                return@withContext if (failure != null) {
+                val isSuccess = response.status.isSuccess()
+                return@withContext if (!isSuccess) {
                     val commonResponse: CommonResponse<Nothing> = response.body()
-                    Either.Left(failure.apply {
-                        message = commonResponse.message
-                    })
+                    val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                        Either.Left(it.apply {
+                            message = commonResponse.message
+                        })
+                    } ?: Either.Left(Exception(commonResponse.message))
+                    failure
                 } else {
                     val commonResponse: CommonResponse<Nothing> = response.body()
                     Either.Right(commonResponse.message)

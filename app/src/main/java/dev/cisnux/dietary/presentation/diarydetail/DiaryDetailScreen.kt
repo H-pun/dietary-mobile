@@ -153,7 +153,7 @@ fun DiaryDetailScreen(
                         totalFoodCalories = foodDiaryDetail.totalFoodCalories,
                         foods = foodDiaryDetail.foods,
                         status = foodDiaryDetail.status,
-                        feedback = foodDiaryDetail.feedback,
+                        feedbacks = foodDiaryDetail.feedbacks,
                     )
                 }
             }
@@ -179,7 +179,11 @@ private fun DiaryDetailContentPreview() {
         maxDailyBmrCalorie = 800.6798f,
         totalUserCaloriesToday = 500.7892f,
         status = "Kurang disarankan",
-        feedback = "Terlalu banyak gula",
+        feedbacks = listOf(
+            "Terlalu berminyak",
+            "Terlalu banyak gula",
+            "Kurang protein",
+        ),
         foodPicture = "https://firebasestorage.googleapis.com/v0/b/dietary-f1812.appspot.com/o/images%2FWhatsApp%20Image%202024-03-26%20at%2019.30.43.jpeg?alt=media&token=e89da25b-baa6-481b-b4d0-cb7c9504e759",
         foods = listOf(
             Food(
@@ -272,7 +276,7 @@ private fun DiaryDetailContentPreview() {
                     totalFoodCalories = foodDiaryDetail.totalFoodCalories,
                     foods = foodDiaryDetail.foods,
                     status = foodDiaryDetail.status,
-                    feedback = foodDiaryDetail.feedback,
+                    feedbacks = foodDiaryDetail.feedbacks,
                 )
             },
             bottomSheetScaffoldState = scaffoldState
@@ -293,7 +297,11 @@ private fun DiaryDetailContentBoundsPreview() {
         maxDailyBmrCalorie = 800.6798f,
         totalUserCaloriesToday = 500.7892f,
         status = "Kurang disarankan",
-        feedback = "Terlalu banyak gula",
+        feedbacks = listOf(
+            "Terlalu berminyak",
+            "Terlalu banyak gula",
+            "Kurang protein",
+        ),
         foodPicture = "https://firebasestorage.googleapis.com/v0/b/dietary-f1812.appspot.com/o/images%2FWhatsApp%20Image%202024-03-26%20at%2019.30.43.jpeg?alt=media&token=e89da25b-baa6-481b-b4d0-cb7c9504e759",
         foods = listOf(
             Food(
@@ -357,7 +365,7 @@ private fun DiaryDetailContentBoundsPreview() {
                     totalFoodCalories = foodDiaryDetail.totalFoodCalories,
                     foods = foodDiaryDetail.foods,
                     status = foodDiaryDetail.status,
-                    feedback = foodDiaryDetail.feedback,
+                    feedbacks = foodDiaryDetail.feedbacks,
                 )
             },
             bottomSheetScaffoldState = scaffoldState
