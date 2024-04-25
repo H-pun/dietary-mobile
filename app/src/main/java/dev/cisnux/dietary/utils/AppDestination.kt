@@ -16,14 +16,10 @@ sealed class AppDestination(val route: String) {
             "food_diary/$foodDiaryId"
     }
 
-    data object AddedDietaryRoute :
-        AppDestination(route = "added_dietary?title={title}&foodDiaryCategory={foodDiaryCategory}") {
-        fun createRouteUrl(title: String, foodDiaryCategory: String): String =
-            "added_dietary?title=$title&foodDiaryCategory=$foodDiaryCategory"
+    data object DiaryRoute : AppDestination(route = "diary?title={title}&foodDiaryCategory={foodDiaryCategory}") {
+            fun createRouteUrl(title: String, foodDiaryCategory: String): String =
+                "diary?title=$title&foodDiaryCategory=$foodDiaryCategory"
     }
-
-    data object AddDiaryRoute : AppDestination(route = "add_diary")
-    data object PredictedResultRoute : AppDestination(route = "predicted_result")
     data object SignInRoute : AppDestination(route = "sign_in")
     data object SignUpRoute : AppDestination(route = "sign_up")
     data object AddMyProfileRoute : AppDestination(route = "add_my_profile")

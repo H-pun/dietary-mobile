@@ -13,6 +13,7 @@ import dev.cisnux.dietary.domain.models.FoodDiary
 import dev.cisnux.dietary.domain.models.FoodDiaryQuestion
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
 import dev.cisnux.dietary.domain.models.FoodDiaryReport
+import dev.cisnux.dietary.domain.models.Option
 import dev.cisnux.dietary.domain.models.PredictedFood
 import dev.cisnux.dietary.domain.models.Question
 import dev.cisnux.dietary.domain.models.Report
@@ -59,45 +60,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             totalFoodCalories = 500f
         )
     }
-    private val questions = listOf(
-        listOf(
-            Question(
-                id = "1",
-                question = "Apakah ini nasi putih?",
-                choices = listOf("Iya", "Tidak")
-            ),
-        ),
-        listOf(
-            Question(
-                id = "1",
-                question = "Apakah digoreng?",
-                choices = listOf("Ya", "Tidak")
-            ),
-            Question(
-                id = "2",
-                question = "Berapa kandungan gula dalam makanan ini?",
-                choices = listOf(
-                    "Lebih dari 10% kalori harian",
-                    "Kurang dari 10% kalori harian"
-                )
-            ),
-        ),
-        listOf(
-            Question(
-                id = "1",
-                question = "Apakah digoreng?",
-                choices = listOf("Ya", "Tidak")
-            ),
-            Question(
-                id = "2",
-                question = "Berapa kandungan gula dalam makanan ini?",
-                choices = listOf(
-                    "Lebih dari 10% kalori harian",
-                    "Kurang dari 10% kalori harian"
-                )
-            ),
-        )
-    )
     private val keywordSuggestions = listOf(
         "Kwetiau",
         "McDonald Burger",
@@ -140,11 +102,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                         height = 308.0
                     ),
                     questions = listOf(
-                        Question(
-                            id = "1",
-                            question = "Apakah ini nasi putih?",
-                            choices = listOf("Iya", "Tidak")
-                        ),
                     )
                 ),
                 Food(
@@ -162,19 +119,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                         height = 308.0
                     ),
                     questions = listOf(
-                        Question(
-                            id = "1",
-                            question = "Apakah digoreng?",
-                            choices = listOf("Ya", "Tidak")
-                        ),
-                        Question(
-                            id = "2",
-                            question = "Berapa kandungan gula dalam makanan ini?",
-                            choices = listOf(
-                                "Lebih dari 10% kalori harian",
-                                "Kurang dari 10% kalori harian"
-                            )
-                        ),
                     )
                 ),
                 Food(
@@ -192,19 +136,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                         height = 308.0
                     ),
                     questions = listOf(
-                        Question(
-                            id = "1",
-                            question = "Apakah digoreng?",
-                            choices = listOf("Ya", "Tidak")
-                        ),
-                        Question(
-                            id = "2",
-                            question = "Berapa kandungan gula dalam makanan ini?",
-                            choices = listOf(
-                                "Lebih dari 10% kalori harian",
-                                "Kurang dari 10% kalori harian"
-                            )
-                        ),
                     )
                 ),
                 Food(
@@ -457,12 +388,18 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                             height = predictedFoodResponse.bounds.bound.height,
                                             width = predictedFoodResponse.bounds.bound.width,
                                         ),
-                                        questions = questions[
-                                            Random.nextInt(
-                                                from = 0,
-                                                until = 2
-                                            )
-                                        ]
+                                        questions = predictedFoodResponse.foodDetail.questions.map { questionResponse ->
+                                            Question(
+                                                id = questionResponse.id,
+                                                question = questionResponse.question,
+                                                options = questionResponse.options.map { optionResponse ->
+                                                    Option(
+                                                        id = optionResponse.id,
+                                                        answer = optionResponse.answer,
+                                                        reference = optionResponse.reference
+                                                    )
+                                                })
+                                        }
                                     )
                                 }))
                             }
@@ -531,7 +468,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 
-    override suspend fun updateBaseUrlApi(baseUrl: String) = withContext(Dispatchers.IO){
+    override suspend fun updateBaseUrlApi(baseUrl: String) = withContext(Dispatchers.IO) {
         baseApiUrlLocalSource.updateBaseApiUrl(baseApiUrl = baseUrl)
     }
 }

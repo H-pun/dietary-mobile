@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class QuestionResponse(
     val id: String,
     val question: String,
-    val choices: List<String>,
+    val options: List<OptionResponse>,
 )

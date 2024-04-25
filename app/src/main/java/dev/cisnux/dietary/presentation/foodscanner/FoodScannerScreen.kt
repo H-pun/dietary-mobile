@@ -24,12 +24,14 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +40,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -126,7 +131,6 @@ import dev.cisnux.dietary.R
 import dev.cisnux.dietary.domain.models.Bound
 import dev.cisnux.dietary.domain.models.PredictedFood
 import dev.cisnux.dietary.presentation.diary.AnsweredQuestion
-import dev.cisnux.dietary.presentation.diary.QuestionListItem
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.Typography
 import dev.cisnux.dietary.utils.AppDestination
@@ -208,7 +212,7 @@ fun FoodScannerScreen(
                                 questionId = question.id,
                                 question = question.question,
                                 answer = "",
-                                choices = question.choices
+                                choices = question.options.map { option -> option.answer }
                             )
                         }.toTypedArray()
                     mutableStateListOf(*answers)
@@ -1079,4 +1083,134 @@ private fun PredictedResultDialog(
                 }
             }
         }
+}
+
+@Composable
+fun QuestionListItem(
+    foodName: String,
+    answeredQuestions: List<AnsweredQuestion>,
+    onAnswerChange: (newAnswer: String, index: Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(Modifier.padding(horizontal = 16.dp)) {
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = "✧",
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = foodName,
+                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = modifier
+                .padding(start = 26.dp)
+                .fillMaxWidth()
+        ) {
+            val size by remember {
+                derivedStateOf {
+                    answeredQuestions
+                        .filter { it.answer.isNotBlank() }
+                        .size
+                        .let {
+                            if (it < answeredQuestions.size)
+                                it + 1
+                            else
+                                it
+                        }
+                }
+            }
+            List(size) { index ->
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Surface(
+                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            shape = MaterialTheme.shapes.extraLarge.copy(
+                                topStart = CornerSize(2.dp),
+                                bottomEnd = CornerSize(2.dp)
+                            ),
+                        ) {
+                            Text(
+                                text = answeredQuestions[index].question,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LazyRow {
+                        items(
+                            answeredQuestions[index].choices,
+//                            key = { it },
+                            contentType = { it }
+                        ) {
+                            Surface(
+                                color = MaterialTheme.colorScheme.tertiaryContainer,
+                                shape = MaterialTheme.shapes.extraLarge,
+                                modifier = Modifier
+                                    .clip(MaterialTheme.shapes.extraLarge)
+                                    .clickable {
+                                        onAnswerChange(it, index)
+                                    }
+                            ) {
+                                Text(
+                                    text = it,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(4.dp))
+                        }
+                    }
+                    AnimatedVisibility(visible = answeredQuestions[index].answer.isNotBlank()) {
+                        Column {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                Surface(
+                                    color = MaterialTheme.colorScheme.primaryContainer,
+                                    shape = MaterialTheme.shapes.extraLarge.copy(
+                                        topEnd = CornerSize(2.dp),
+                                        bottomStart = CornerSize(2.dp)
+                                    ),
+                                ) {
+                                    Text(
+                                        text = answeredQuestions[index].answer,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                        modifier = Modifier.padding(
+                                            horizontal = 16.dp,
+                                            vertical = 8.dp
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+        }
+    }
 }

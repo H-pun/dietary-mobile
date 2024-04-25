@@ -7,4 +7,5 @@ import kotlinx.serialization.Serializable
 data class PredictedFoodDetailResponse(
     val id: String,
     val name: String,
+    val questions: List<QuestionResponse>
 )

@@ -19,7 +19,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import dev.cisnux.dietary.presentation.MainViewModel
-import dev.cisnux.dietary.presentation.adddiary.AddDiaryScreen
 import dev.cisnux.dietary.presentation.addmyprofile.AddMyProfileScreen
 import dev.cisnux.dietary.presentation.devmode.DevModeScreen
 import dev.cisnux.dietary.presentation.diarydetail.DiaryDetailScreen
@@ -28,7 +27,6 @@ import dev.cisnux.dietary.presentation.home.HomeScreen
 import dev.cisnux.dietary.presentation.landing.LandingScreen
 import dev.cisnux.dietary.presentation.myprofile.MyProfileScreen
 import dev.cisnux.dietary.presentation.newpassword.NewPasswordScreen
-import dev.cisnux.dietary.presentation.predictedresult.PredictedResultScreen
 import dev.cisnux.dietary.presentation.report.ReportScreen
 import dev.cisnux.dietary.presentation.resetpassword.ResetPasswordScreen
 import dev.cisnux.dietary.presentation.diary.DiaryScreen
@@ -418,40 +416,6 @@ fun DietaryNavGraph(
             )
         }
         composable(
-            route = AppDestination.AddDiaryRoute.route,
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
-                )
-            },
-            exitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        300, easing = LinearEasing
-                    )
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
-                )
-            },
-            popExitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        300, easing = LinearEasing
-                    )
-                )
-            }
-        ) {
-            AddDiaryScreen(
-                onNavigateUp = navComponentAction.navigateUp,
-                navigateToFoodScanner = navComponentAction.navigateToFoodScanner
-            )
-        }
-        composable(
             route = AppDestination.DiaryDetailRoute.route,
             arguments = listOf(
                 navArgument(name = "foodDiaryId") {
@@ -524,49 +488,14 @@ fun DietaryNavGraph(
                 onNavigateUp = navComponentAction.navigateUp,
                 navigateToAddedDietary = { title, category, foodPictures ->
                     mainViewModel.updateFoodPicture(foodPictures)
-                    navComponentAction.navigateToAddedDietary(title, category)
+                    navComponentAction.navigateToDiary(title, category)
                 },
                 onGalleryButton = navComponentAction.takePictureFromGallery,
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )
         }
         composable(
-            route = AppDestination.PredictedResultRoute.route,
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
-                )
-            },
-            exitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        300, easing = LinearEasing
-                    )
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
-                )
-            },
-            popExitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        300, easing = LinearEasing
-                    )
-                )
-            }
-        ) {
-            PredictedResultScreen(
-                onNavigateUp = navComponentAction.navigateUp,
-                foodPicture = foodPicture,
-                navigateToSignIn = navComponentAction.navigateToSignIn
-            )
-        }
-        composable(
-            route = AppDestination.AddedDietaryRoute.route,
+            route = AppDestination.DiaryRoute.route,
             arguments = listOf(
                 navArgument(name = "title") {
                     nullable = false
@@ -606,7 +535,7 @@ fun DietaryNavGraph(
         ) {
             DiaryScreen(
                 foodPicture = foodPicture,
-                onNavigateUp = navComponentAction.navigateToHomeFromScannerResult,
+                onNavigateUp = navComponentAction.navigateToHomeFromDiary,
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )
         }
