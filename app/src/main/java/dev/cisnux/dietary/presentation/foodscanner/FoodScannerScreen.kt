@@ -46,18 +46,17 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -74,7 +73,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -131,6 +131,7 @@ import dev.cisnux.dietary.R
 import dev.cisnux.dietary.domain.models.Bound
 import dev.cisnux.dietary.domain.models.PredictedFood
 import dev.cisnux.dietary.presentation.diary.AnsweredQuestion
+import dev.cisnux.dietary.presentation.ui.components.FoodListItem
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
 import dev.cisnux.dietary.presentation.ui.theme.Typography
 import dev.cisnux.dietary.utils.AppDestination
@@ -723,7 +724,12 @@ private fun PredictedResultDialogPreview() {
                         y = 75.0,
                         width = 411.0,
                         height = 308.0
-                    )
+                    ),
+                    calories = 8.3f,
+                    fat = 8.3f,
+                    protein = 8.3f,
+                    carbohydrates = 8.3f,
+                    sugar = null,
                 ),
                 PredictedFood(
                     id = "2",
@@ -733,7 +739,12 @@ private fun PredictedResultDialogPreview() {
                         y = 275.0,
                         width = 434.0,
                         height = 277.0
-                    )
+                    ),
+                    calories = 8.3f,
+                    fat = 8.3f,
+                    protein = 8.3f,
+                    carbohydrates = 8.3f,
+                    sugar = null,
                 ),
             ),
             snackbarHostState = SnackbarHostState()
@@ -913,6 +924,7 @@ private fun AddDiaryDialog(
         }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PredictedResultDialog(
     onCancel: () -> Unit,
@@ -922,10 +934,16 @@ private fun PredictedResultDialog(
     onQuestionDialog: () -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    isAddDietaryFabVisible: Boolean = false,
-    onAddDiaryFab: () -> Unit = {},
     foods: List<PredictedFood> = listOf(),
 ) {
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberModalBottomSheetState()
+    )
+
+    LaunchedEffect(Unit) {
+        scaffoldState.bottomSheetState.expand()
+    }
+
     if (isDialogOpen)
         Dialog(
             onDismissRequest = onDismissRequest,
@@ -934,16 +952,43 @@ private fun PredictedResultDialog(
                 dismissOnBackPress = true,
             ),
         ) {
-            Scaffold(
+            BottomSheetScaffold(
                 modifier = modifier,
                 snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-                floatingActionButton = {
-                    AnimatedVisibility(visible = isAddDietaryFabVisible) {
-                        FloatingActionButton(onClick = onAddDiaryFab) {
-                            Icon(imageVector = Icons.Rounded.AddCircle, contentDescription = null)
+                sheetContent = {
+                    LazyColumn(
+                        contentPadding = PaddingValues(horizontal = 16.dp), modifier = modifier
+                    ) {
+                        items(foods,
+                            key = { it.id },
+                            contentType = { it }) {
+                            Column {
+                                FoodListItem(
+                                    foodName = it.name,
+                                    calorie = String.format("%.2f", it.calories),
+                                    fat = String.format("%.2f", it.fat),
+                                    carbohydrates = String.format("%.2f", it.carbohydrates),
+                                    protein = String.format("%.2f", it.protein),
+                                    sugar = it.sugar?.let { sugar -> String.format("%.2f", sugar) },
+                                    feedbacks = it.feedbacks
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+                        }
+
+                        item {
+                           Button(
+                                onClick = onQuestionDialog,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(text = "Lanjutkan")
+                            }
                         }
                     }
+
                 },
+                scaffoldState = scaffoldState,
+                sheetPeekHeight = 160.dp,
             ) {
                 Box(modifier = modifier.fillMaxSize()) {
                     AnimatedVisibility(
@@ -1042,48 +1087,26 @@ private fun PredictedResultDialog(
                             )
                         }
                     }
-                    FilledTonalButton(
+                    FilledIconButton(
                         onClick = onCancel,
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            containerColor = ComposeColor.Black.copy(alpha = 0.5f)
+                        ),
                         modifier = Modifier
-                            .padding(bottom = 12.dp, start = 12.dp)
-                            .align(Alignment.BottomStart)
+                            .padding(start = 12.dp, top = 12.dp)
+                            .align(Alignment.TopStart),
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Refresh,
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = null,
+                            tint = ComposeColor.White,
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        VerticalDivider(
-                            thickness = 1.5.dp,
-                            modifier = Modifier.height(20.dp),
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "Retake")
-                    }
-                    FilledTonalButton(
-                        onClick = onQuestionDialog,
-                        modifier = Modifier
-                            .padding(bottom = 12.dp, end = 12.dp)
-                            .align(Alignment.BottomEnd)
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                            contentDescription = null,
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        VerticalDivider(
-                            thickness = 1.5.dp,
-                            modifier = Modifier.height(20.dp),
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "Lanjutkan")
                     }
                 }
             }
         }
 }
+
 
 @Composable
 fun QuestionListItem(

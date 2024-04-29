@@ -4,5 +4,11 @@ data class PredictedFood(
     val id: String,
     val name: String,
     val bound: Bound,
-    val questions: List<Question> = listOf()
+    val calories: Float,
+    val fat: Float,
+    val protein: Float,
+    val carbohydrates: Float,
+    val sugar: Float?,
+    val questions: List<Question> = listOf(),
+    val feedbacks: List<String> = listOf(),
 )

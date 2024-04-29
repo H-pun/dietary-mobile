@@ -24,7 +24,7 @@ class FileRepositoryImpl @Inject constructor(
     override suspend fun fileFromUri(image: Uri): File = withContext(Dispatchers.IO) {
         val contentResolver = application.contentResolver
         val storageDir: File? = application.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val file = File.createTempFile(System.currentTimeMillis().toString(), ".jpg", storageDir)
+        val file = File.createTempFile(Instant.now().toEpochMilli().toString(), ".jpg", storageDir)
 
         val inputStream = contentResolver.openInputStream(image) as InputStream
         val outputStream = FileOutputStream(file)

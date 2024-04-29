@@ -22,6 +22,11 @@ class AuthenticationRepositoryImpl @Inject constructor(
     private val userAccountRemoteSource: UserAccountRemoteSource,
     private val userAccountLocalSource: UserAccountLocalSource,
 ) : AuthenticationRepository {
+    override val accessToken: Flow<String?>
+        get() = userAccountLocalSource.accessToken
+    override val userId: Flow<String?>
+        get() = userAccountLocalSource.userId
+
     override fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>> =
         channelFlow {
             send(UiState.Loading)

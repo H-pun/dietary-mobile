@@ -7,21 +7,32 @@ import dev.cisnux.dietary.domain.models.FoodDiaryDetail
 import dev.cisnux.dietary.domain.models.PredictedFood
 import dev.cisnux.dietary.domain.models.Report
 import dev.cisnux.dietary.domain.repositories.FoodRepository
+import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.FoodDiaryCategory
 import dev.cisnux.dietary.utils.ReportCategory
 import dev.cisnux.dietary.utils.UiState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import java.io.File
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class FoodDiaryInteractor @Inject constructor(
-    private val foodRepository: FoodRepository
+    private val foodRepository: FoodRepository,
+    private val authenticationUseCase: AuthenticationUseCase
 ) : FoodDiaryUseCase {
     override fun getDiaryFoodsByDays(
-        date: String,
-        category: FoodDiaryCategory
+        date: String, category: FoodDiaryCategory
     ): Flow<UiState<List<FoodDiary>>> =
-        foodRepository.getDiaryFoodsByDays(date, category)
+        authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
+            it?.let {
+                foodRepository.getDiaryFoodsByDays(
+                    userId = it.first, accessToken = it.second, date = date, category = category
+                )
+            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
+        }
 
     override fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>> =
         foodRepository.getDiaryFoodsByQuery(query)
@@ -30,7 +41,13 @@ class FoodDiaryInteractor @Inject constructor(
         foodRepository.getKeywordSuggestionsByQuery(query)
 
     override fun addFoodDiary(addFoodDiary: AddFoodDiary): Flow<UiState<FoodDiaryDetail>> =
-        foodRepository.addFoodDiary(addFoodDiary)
+        authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
+            it?.let {
+                foodRepository.addFoodDiary(
+                    userId = it.first, accessToken = it.second, addFoodDiary = addFoodDiary
+                )
+            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
+        }
 
     override fun getFoodDiaryDetailById(foodDiaryId: String): Flow<UiState<FoodDiaryDetail>> =
         foodRepository.getFoodDiaryDetailById(foodDiaryId)
@@ -45,10 +62,15 @@ class FoodDiaryInteractor @Inject constructor(
         foodRepository.getFoodDiaryReports(category)
 
     override fun predictFoods(foodPicture: File): Flow<UiState<List<PredictedFood>>> =
-        foodRepository.predictFood(foodPicture)
+        authenticationUseCase.accessToken.flatMapLatest {
+            it?.let { accessToken ->
+                foodRepository.predictFood(accessToken = accessToken, foodPicture = foodPicture)
+            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
+        }
 
     override val baseUrl: Flow<String>
         get() = foodRepository.baseUrl
 
-    override suspend fun updateBaseUrlApi(baseUrl: String) = foodRepository.updateBaseUrlApi(baseUrl = baseUrl)
+    override suspend fun updateBaseUrlApi(baseUrl: String) =
+        foodRepository.updateBaseUrlApi(baseUrl = baseUrl)
 }

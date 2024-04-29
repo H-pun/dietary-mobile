@@ -1,9 +1,7 @@
 package dev.cisnux.dietary.data.repositories
 
 import dev.cisnux.dietary.data.locals.BaseApiUrlLocalSource
-import dev.cisnux.dietary.data.locals.UserAccountLocalSource
 import dev.cisnux.dietary.data.remotes.FoodDiaryRemoteSource
-import dev.cisnux.dietary.data.remotes.ImageRemoteSource
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
 import dev.cisnux.dietary.domain.models.AddFoodDiary
@@ -37,8 +35,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.Instant
@@ -46,8 +42,6 @@ import kotlin.random.Random
 
 class FoodDiaryRepositoryImpl @Inject constructor(
     private val foodDiaryRemoteSource: FoodDiaryRemoteSource,
-    private val userAccountLocalSource: UserAccountLocalSource,
-    private val imageRemoteSource: ImageRemoteSource,
     private val baseApiUrlLocalSource: BaseApiUrlLocalSource
 ) : FoodRepository {
     private val foodsBreakfastDiary = List(10) {
@@ -277,42 +271,37 @@ class FoodDiaryRepositoryImpl @Inject constructor(
 
 
     override fun getDiaryFoodsByDays(
+        accessToken: String,
+        userId: String,
         date: String,
         category: FoodDiaryCategory
     ): Flow<UiState<List<FoodDiary>>> = channelFlow {
         send(UiState.Loading)
         delay(1000L)
-        userAccountLocalSource.userId.combine(userAccountLocalSource.accessToken) { userId, accessToken ->
-            Pair(userId, accessToken)
-        }.collectLatest { item ->
-            if (item.first != null && item.first?.isNotBlank() == true && item.second != null && item.second?.isNotBlank() == true) {
-                foodDiaryRemoteSource.getFoodDiaries(
-                    accessToken = item.second!!,
-                    getFoodDiaryBodyRequest = GetFoodDiaryBodyRequest(
-                        userId = item.first!!,
-                        date = date,
-                        category = category.value,
+        foodDiaryRemoteSource.getFoodDiaries(
+            accessToken = accessToken,
+            getFoodDiaryBodyRequest = GetFoodDiaryBodyRequest(
+                userId = userId,
+                date = date,
+                category = category.value,
+            )
+        ).fold(
+            ifLeft = { exception ->
+                send(UiState.Error(exception))
+            },
+            ifRight = { foodDiaries ->
+                send(UiState.Success(foodDiaries.map { foodDiary ->
+                    FoodDiary(
+                        id = foodDiary.id,
+                        title = foodDiary.title,
+                        date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
+                        time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
+                        foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
+                        totalFoodCalories = foodDiary.totalFoodCalories
                     )
-                ).fold(
-                    ifLeft = { exception ->
-                        send(UiState.Error(exception))
-                    },
-                    ifRight = { foodDiaries ->
-                        send(UiState.Success(foodDiaries.map { foodDiary ->
-//                            val imageUrl = imageRemoteSource.getFoodDiaryImageById(foodDiary.id)
-                            FoodDiary(
-                                id = foodDiary.id,
-                                title = foodDiary.title,
-                                date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
-                                time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
-                                foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
-                                totalFoodCalories = foodDiary.totalFoodCalories
-                            )
-                        }))
-                    }
-                )
+                }))
             }
-        }
+        )
     }.distinctUntilChanged()
         .flowOn(Dispatchers.IO)
 
@@ -331,81 +320,87 @@ class FoodDiaryRepositoryImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
         .distinctUntilChanged()
 
-    override fun addFoodDiary(addFoodDiary: AddFoodDiary): Flow<UiState<FoodDiaryDetail>> =
-        channelFlow {
-            send(UiState.Loading)
+    override fun addFoodDiary(
+        accessToken: String,
+        userId: String,
+        addFoodDiary: AddFoodDiary
+    ): Flow<UiState<FoodDiaryDetail>> =
+        flow {
+            emit(UiState.Loading)
             delay(1000L)
-            userAccountLocalSource.userId.combine(userAccountLocalSource.accessToken) { userId, accessToken ->
-                Pair(userId, accessToken)
-            }
-                .collectLatest {
-                    if (it.first != null && it.first?.isNotBlank() == true && it.second != null && it.second?.isNotBlank() == true) {
-                        val addedAt = getCurrentDateTimeInISOFormat()
-                        foodDiaryRemoteSource.addFoodDiary(
-                            accessToken = it.second!!,
-                            foodDiary = FoodDiaryBodyRequest(
-                                title = addFoodDiary.title,
-                                category = addFoodDiary.category,
-                                foodPicture = addFoodDiary.foodPicture,
-                                userAccountId = it.first!!,
-                                addedAt = addedAt
-                            )
-                        ).fold(
-                            ifLeft = { exception ->
-                                send(UiState.Error(exception))
-                            },
-                            ifRight = { addedFoodDiary ->
-                                send(
-                                    UiState.Success(
-                                        foodDiaryDetail.value
-                                    )
-                                )
-                            }
+            val addedAt = getCurrentDateTimeInISOFormat()
+            foodDiaryRemoteSource.addFoodDiary(
+                accessToken = accessToken,
+                foodDiary = FoodDiaryBodyRequest(
+                    title = addFoodDiary.title,
+                    category = addFoodDiary.category,
+                    foodPicture = addFoodDiary.foodPicture,
+                    userAccountId = userId,
+                    addedAt = addedAt
+                )
+            ).fold(
+                ifLeft = { exception ->
+                    emit(UiState.Error(exception))
+                },
+                ifRight = { addedFoodDiary ->
+                    emit(
+                        UiState.Success(
+                            foodDiaryDetail.value
                         )
-                    }
+                    )
                 }
+            )
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 
-    override fun predictFood(foodPicture: File): Flow<UiState<List<PredictedFood>>> =
-        channelFlow {
-            send(UiState.Loading)
-            userAccountLocalSource.accessToken
-                .collectLatest { accessToken ->
-                    accessToken?.let {
-                        foodDiaryRemoteSource.predictFoods(accessToken, foodPicture).fold(
-                            ifLeft = { exception ->
-                                send(UiState.Error(exception))
-                            },
-                            ifRight = {
-                                send(UiState.Success(it.foods.map { predictedFoodResponse ->
-                                    PredictedFood(
-                                        id = predictedFoodResponse.foodDetail.id,
-                                        name = predictedFoodResponse.foodDetail.name,
-                                        bound = Bound(
-                                            x = predictedFoodResponse.bounds.bound.x,
-                                            y = predictedFoodResponse.bounds.bound.y,
-                                            height = predictedFoodResponse.bounds.bound.height,
-                                            width = predictedFoodResponse.bounds.bound.width,
-                                        ),
-                                        questions = predictedFoodResponse.foodDetail.questions.map { questionResponse ->
-                                            Question(
-                                                id = questionResponse.id,
-                                                question = questionResponse.question,
-                                                options = questionResponse.options.map { optionResponse ->
-                                                    Option(
-                                                        id = optionResponse.id,
-                                                        answer = optionResponse.answer,
-                                                        reference = optionResponse.reference
-                                                    )
-                                                })
-                                        }
-                                    )
-                                }))
-                            }
-                        )
-                    }
+    override fun predictFood(
+        accessToken: String,
+        foodPicture: File
+    ): Flow<UiState<List<PredictedFood>>> =
+        flow {
+            emit(UiState.Loading)
+            foodDiaryRemoteSource.predictFoods(accessToken, foodPicture).fold(
+                ifLeft = { exception ->
+                    emit(UiState.Error(exception))
+                },
+                ifRight = {
+                    emit(UiState.Success(it.foods.map { predictedFoodResponse ->
+                        val serving = predictedFoodResponse.foodDetail.serving.first { servingResponse ->
+                            servingResponse.metricServingAmount == 100
+                        }
+                        PredictedFood(
+                            id = predictedFoodResponse.foodDetail.id,
+                            name = predictedFoodResponse.foodDetail.name,
+                            bound = Bound(
+                                x = predictedFoodResponse.bounds.bound.x,
+                                y = predictedFoodResponse.bounds.bound.y,
+                                height = predictedFoodResponse.bounds.bound.height,
+                                width = predictedFoodResponse.bounds.bound.width,
+                            ),
+                            questions = predictedFoodResponse.foodDetail.questions.filter { questionResponse -> questionResponse.type == "food" }
+                                .map { questionResponse ->
+                                    Question(
+                                        id = questionResponse.id,
+                                        question = questionResponse.question,
+                                        options = questionResponse.options.map { optionResponse ->
+                                            Option(
+                                                id = optionResponse.id,
+                                                answer = optionResponse.answer,
+                                                reference = optionResponse.reference
+                                            )
+                                        })
+                                },
+                            calories = serving.calories,
+                            carbohydrates = serving.carbohydrate,
+                            protein = serving.protein,
+                            fat = serving.fat,
+                            sugar = serving.sugar,
+                            feedbacks = predictedFoodResponse.foodDetail.questions.filter { questionResponse -> questionResponse.type == "information" }
+                                .map { questionResponse -> questionResponse.question },
+                            )
+                    }))
                 }
+            )
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 

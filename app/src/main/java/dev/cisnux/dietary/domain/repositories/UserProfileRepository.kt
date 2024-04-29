@@ -6,10 +6,14 @@ import dev.cisnux.dietary.utils.UiState
 import kotlinx.coroutines.flow.Flow
 
 interface UserProfileRepository {
-    fun addUserProfile(userProfile: UserProfile): Flow<UiState<Nothing>>
-    fun getUserProfile(): Flow<UiState<Nothing>>
-    fun updateUserProfile(userProfile: UserProfile): Flow<UiState<Nothing>>
+    fun addUserProfile(
+        accessToken: String,
+        userId: String,
+        userProfile: UserProfile
+    ): Flow<UiState<Nothing>>
+
+    fun getUserProfile(accessToken: String, userId: String): Flow<UiState<Nothing>>
+    fun updateUserProfile(accessToken: String, userProfile: UserProfile): Flow<UiState<Nothing>>
 
     val userProfileDetail: Flow<UserProfileDetail>
-    val isUserProfileExist: Flow<Boolean>
 }

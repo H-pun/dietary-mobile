@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.cisnux.dietary.R
@@ -45,6 +46,11 @@ private fun FoodListItemPreview() {
             carbohydrates = String.format("%.2f", 20f),
             protein = String.format("%.2f", 9.8f),
             sugar = String.format("%.2f", 9.8f),
+            feedbacks = listOf(
+                "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+                "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+                "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+            )
         )
     }
 }
@@ -58,31 +64,48 @@ fun FoodListItem(
     protein: String,
     carbohydrates: String,
     sugar: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    feedbacks: List<String> = listOf()
 ) {
-    var isExpanded by rememberSaveable {
+    var isContentExpanded by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var isNoteExpanded by rememberSaveable {
         mutableStateOf(false)
     }
 
     Surface {
         Column {
+            Text(
+                text = "✧ $foodName (100 g)",
+                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
             Row(
-                modifier = modifier.fillMaxWidth().clickable { isExpanded = !isExpanded },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = modifier
+                    .fillMaxWidth()
             ) {
-                Text(
-                    text = foodName,
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                IconButton(onClick = { isExpanded = !isExpanded }) {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                Spacer(modifier = Modifier.width(16.dp))
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .clickable { isContentExpanded = !isContentExpanded },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = "Kandungan",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    IconButton(onClick = { isContentExpanded = !isContentExpanded }) {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isContentExpanded)
+                    }
                 }
+                HorizontalDivider(thickness = 1.5.dp)
             }
-            HorizontalDivider(thickness = 1.5.dp)
-            AnimatedVisibility(visible = isExpanded) {
+            AnimatedVisibility(visible = isContentExpanded) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -98,7 +121,6 @@ fun FoodListItem(
                         ) {
                             Text(
                                 text = stringResource(R.string.calorie),
-                                fontWeight = FontWeight.SemiBold,
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -119,7 +141,6 @@ fun FoodListItem(
                         ) {
                             Text(
                                 text = stringResource(R.string.fat),
-                                fontWeight = FontWeight.SemiBold,
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -140,7 +161,6 @@ fun FoodListItem(
                         ) {
                             Text(
                                 text = stringResource(R.string.protein),
-                                fontWeight = FontWeight.SemiBold,
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -161,7 +181,6 @@ fun FoodListItem(
                         ) {
                             Text(
                                 text = stringResource(R.string.carbohydrate),
-                                fontWeight = FontWeight.SemiBold,
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -183,7 +202,6 @@ fun FoodListItem(
                             ) {
                                 Text(
                                     text = stringResource(R.string.sugar),
-                                    fontWeight = FontWeight.SemiBold,
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
@@ -194,6 +212,52 @@ fun FoodListItem(
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            HorizontalDivider(thickness = 1.5.dp)
+                        }
+                    }
+                }
+            }
+            if (feedbacks.isNotEmpty())
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                ) {
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Row(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .clickable { isNoteExpanded = !isNoteExpanded },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.feedbacks),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        IconButton(onClick = { isNoteExpanded = !isNoteExpanded }) {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isContentExpanded)
+                        }
+                    }
+                    HorizontalDivider(thickness = 1.5.dp)
+                }
+            AnimatedVisibility(visible = isNoteExpanded) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Spacer(modifier = Modifier.width(30.dp))
+                    Column {
+                        feedbacks.forEach { note ->
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(
+                                text = note,
+                                textAlign = TextAlign.Start,
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
                             Spacer(modifier = Modifier.height(10.dp))
                             HorizontalDivider(thickness = 1.5.dp)
                         }
