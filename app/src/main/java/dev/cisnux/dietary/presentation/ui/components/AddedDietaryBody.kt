@@ -64,6 +64,9 @@ fun AddedDietaryBody(
     maxDailyProtein: Float,
     maxDailyFat: Float,
     totalFoodCalories: Float,
+    totalFoodCarbohydrate: Float,
+    totalFoodProtein: Float,
+    totalFoodFat: Float,
     foods: List<Food>,
     modifier: Modifier = Modifier,
     bottomContent: @Composable () -> Unit = {},
@@ -433,7 +436,7 @@ fun AddedDietaryBody(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = String.format(locale, "%.2f g", totalFoodCalories),
+                    text = String.format(locale, "%.2f g", totalFoodCarbohydrate),
                     fontWeight = FontWeight.Light,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface
@@ -454,7 +457,7 @@ fun AddedDietaryBody(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = String.format(locale, "%.2f g", totalFoodCalories),
+                    text = String.format(locale, "%.2f g", totalFoodProtein),
                     fontWeight = FontWeight.Light,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface
@@ -475,7 +478,7 @@ fun AddedDietaryBody(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = String.format(locale, "%.2f g", totalFoodCalories),
+                    text = String.format(locale, "%.2f g", totalFoodFat),
                     fontWeight = FontWeight.Light,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface

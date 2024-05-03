@@ -125,6 +125,7 @@ import dev.cisnux.dietary.domain.models.Food
 import dev.cisnux.dietary.presentation.ui.components.AddedDiaryShimmer
 import dev.cisnux.dietary.presentation.ui.components.AddedDietaryBody
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.presentation.ui.theme.surfaceDark
 import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.UiState
@@ -401,7 +402,7 @@ fun FoodScannerScreen(
                             title = title,
                             category = selectedFoodDiaryCategory,
                             foodPicture = foodNutrition!!.image as File,
-                            totalProtein = foodNutrition.totalCalories,
+                            totalProtein = foodNutrition.totalProtein,
                             totalCarbohydrate = foodNutrition.totalCarbohydrate,
                             totalFat = foodNutrition.totalFat,
                             totalCalories = foodNutrition.totalCalories,
@@ -420,10 +421,13 @@ fun FoodScannerScreen(
                 maxDailyFat = userNutrition?.maxDailyFat ?: 0f,
                 maxDailyCalories = userNutrition?.maxDailyCalories ?: 0f,
                 maxDailyCarbohydrate = userNutrition?.maxDailyCarbohydrate ?: 0f,
-                totalFoodCalories = foodNutrition?.totalCalories ?: 0f,
                 addFoodDiaryState = addFoodDiaryState,
                 navigateFoodDiaryDetail = navigateFoodDiaryDetail,
-                isLoading = predictedResultState is UiState.Loading
+                isLoading = predictedResultState is UiState.Loading,
+                totalFoodCalories = foodNutrition?.totalCalories ?: 0f,
+                totalFoodFat = foodNutrition?.totalFat ?: 0f,
+                totalFoodCarbohydrate = foodNutrition?.totalCarbohydrate ?: 0f,
+                totalFoodProtein = foodNutrition?.totalProtein?: 0f,
             )
 
             QuestionDialog(
@@ -444,7 +448,7 @@ fun FoodScannerScreen(
                             title = title,
                             category = selectedFoodDiaryCategory,
                             foodPicture = foodNutrition!!.image as File,
-                            totalProtein = foodNutrition.totalCalories,
+                            totalProtein = foodNutrition.totalProtein,
                             totalCarbohydrate = foodNutrition.totalCarbohydrate,
                             totalFat = foodNutrition.totalFat,
                             totalCalories = foodNutrition.totalCalories,
@@ -799,9 +803,12 @@ private fun PredictedResultDialogPreview() {
             maxDailyProtein = 500f,
             maxDailyFat = 500f,
             maxDailyCarbohydrate = 500f,
-            totalFoodCalories = 1000f,
             addFoodDiaryState = UiState.Initialize,
-            navigateFoodDiaryDetail = {}
+            navigateFoodDiaryDetail = {},
+            totalFoodCalories = 1000f,
+            totalFoodProtein = 1000f,
+            totalFoodFat = 1000f,
+            totalFoodCarbohydrate = 1000f,
         )
     }
 }
@@ -997,6 +1004,9 @@ private fun PredictedResultDialog(
     maxDailyProtein: Float,
     maxDailyFat: Float,
     totalFoodCalories: Float,
+    totalFoodProtein: Float,
+    totalFoodFat: Float,
+    totalFoodCarbohydrate: Float,
     addFoodDiaryState: UiState<String>,
     modifier: Modifier = Modifier,
     foods: List<Food> = listOf(),
@@ -1063,10 +1073,13 @@ private fun PredictedResultDialog(
                             maxDailyCarbohydrate = maxDailyCarbohydrate,
                             maxDailyFat = maxDailyFat,
                             maxDailyProtein = maxDailyProtein,
-                            totalFoodCalories = totalFoodCalories,
                             totalCarbohydrateToday = totalCarbohydrateToday,
                             totalProteinToday = totalProteinToday,
                             totalFatToday = totalFatToday,
+                            totalFoodCalories = totalFoodCalories,
+                            totalFoodProtein = totalFoodProtein,
+                            totalFoodFat = totalFoodFat,
+                            totalFoodCarbohydrate = totalFoodCarbohydrate,
                             foods = foods,
                             bottomContent = {
                                 Spacer(modifier = Modifier.height(16.dp))
@@ -1074,7 +1087,6 @@ private fun PredictedResultDialog(
                                     onClick = onQuestionDialog,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 16.dp)
                                 ) {
                                     if (addFoodDiaryState is UiState.Loading)
                                         CircularProgressIndicator()
@@ -1086,6 +1098,7 @@ private fun PredictedResultDialog(
                     }
                 },
                 scaffoldState = scaffoldState,
+                containerColor = surfaceDark,
                 sheetPeekHeight = 370.dp,
             ) { _ ->
                 Box(modifier = Modifier.fillMaxSize()) {

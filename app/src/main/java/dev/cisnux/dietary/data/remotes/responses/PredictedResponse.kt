@@ -7,5 +7,9 @@ import kotlinx.serialization.SerialName
 data class PredictedResponse(
     val foods: List<PredictedFoodResponse>,
     @SerialName("imagePlotPath")
-    val imagePath: String
+    val imagePath: String,
+    val totalCalories: Float,
+    val totalProtein: Float,
+    val totalFat: Float,
+    val totalCarbohydrate: Float,
 )

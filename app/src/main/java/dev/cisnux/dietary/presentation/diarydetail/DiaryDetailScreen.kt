@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.BottomSheetScaffold
@@ -22,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -48,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,6 +64,7 @@ import dev.cisnux.dietary.domain.models.UserNutrition
 import dev.cisnux.dietary.presentation.ui.components.AddedDietaryBody
 import dev.cisnux.dietary.presentation.ui.components.AddedDiaryShimmer
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
+import dev.cisnux.dietary.presentation.ui.theme.surfaceDark
 import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.UiState
@@ -130,13 +134,16 @@ fun DiaryDetailScreen(
                     (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.foodNutrition?.image
                 else null,
                 onNavigateUp = navigateUp,
+                title = if (foodDiaryDetailState is UiState.Success)
+                    (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.title ?: ""
+                else "",
                 onRemove = viewModel::deleteFoodDiaryById,
                 isSuccess = foodDiaryDetailState is UiState.Success,
                 isRemoveEnable = removeState !is UiState.Loading,
             )
         },
         sheetContent = {
-            if(foodDiaryDetailState is UiState.Success && userDailyNutritionState is UiState.Success) {
+            if (foodDiaryDetailState is UiState.Success && userDailyNutritionState is UiState.Success) {
                 val foodDiaryDetail =
                     (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data!!
                 val userDailyNutrition =
@@ -151,10 +158,13 @@ fun DiaryDetailScreen(
                     maxDailyFat = userDailyNutrition.maxDailyFat,
                     maxDailyCarbohydrate = userDailyNutrition.maxDailyCarbohydrate,
                     maxDailyCalories = userDailyNutrition.maxDailyCalories,
-                    totalFoodCalories = foodDiaryDetail.foodNutrition.totalCalories,
                     foods = foodDiaryDetail.foodNutrition.foods,
-                    bottomContent = { Spacer(modifier = Modifier.height(16.dp))},
-                    feedback = foodDiaryDetail.feedback
+                    bottomContent = { Spacer(modifier = Modifier.height(16.dp)) },
+                    feedback = foodDiaryDetail.feedback,
+                    totalFoodCalories = foodDiaryDetail.foodNutrition.totalCalories,
+                    totalFoodFat = foodDiaryDetail.foodNutrition.totalFat,
+                    totalFoodProtein = foodDiaryDetail.foodNutrition.totalProtein,
+                    totalFoodCarbohydrate = foodDiaryDetail.foodNutrition.totalCarbohydrate
                 )
             }
             AnimatedVisibility(visible = foodDiaryDetailState is UiState.Loading || foodDiaryDetailState is UiState.Error || userDailyNutritionState is UiState.Loading || userDailyNutritionState is UiState.Error) {
@@ -175,7 +185,7 @@ fun DiaryDetailScreen(
 private fun DiaryDetailContentPreview() {
     val foodDiaryDetail = FoodDiaryDetail(
         id = "1",
-        title = "Warteg",
+        title = "Warteg Bahari Bahari",
         status = "Kurang disarankan",
         feedback = listOf(
             "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
@@ -234,6 +244,7 @@ private fun DiaryDetailContentPreview() {
             snackbarHostState = SnackbarHostState(),
             body = {
                 DiaryDetailBody(
+                    title = foodDiaryDetail.title,
                     foodPictures = foodDiaryDetail.foodNutrition.image,
                     onNavigateUp = { /*TODO*/ },
                     onRemove = { /*TODO*/ },
@@ -249,9 +260,12 @@ private fun DiaryDetailContentPreview() {
                     maxDailyFat = userDailyNutrition.maxDailyFat,
                     maxDailyCarbohydrate = userDailyNutrition.maxDailyCarbohydrate,
                     maxDailyCalories = userDailyNutrition.maxDailyCalories,
-                    totalFoodCalories = foodDiaryDetail.foodNutrition.totalCalories,
                     foods = foodDiaryDetail.foodNutrition.foods,
-                    feedback = foodDiaryDetail.feedback
+                    feedback = foodDiaryDetail.feedback,
+                    totalFoodCalories = foodDiaryDetail.foodNutrition.totalCalories,
+                    totalFoodFat = foodDiaryDetail.foodNutrition.totalFat,
+                    totalFoodProtein = foodDiaryDetail.foodNutrition.totalProtein,
+                    totalFoodCarbohydrate = foodDiaryDetail.foodNutrition.totalCarbohydrate
                 )
             },
             bottomSheetScaffoldState = scaffoldState
@@ -267,6 +281,7 @@ fun DiaryDetailBody(
     onRemove: () -> Unit,
     isRemoveEnable: Boolean = true,
     isSuccess: Boolean = true,
+    title: String = "",
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         AnimatedVisibility(
@@ -309,7 +324,9 @@ fun DiaryDetailBody(
                 SubcomposeAsyncImage(
                     model = foodPictures,
                     contentDescription = null,
-                    modifier = Modifier.fillMaxHeight().align(Alignment.TopCenter)
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .align(Alignment.TopCenter)
                 )
             }
         }
@@ -358,6 +375,20 @@ fun DiaryDetailBody(
                 }
             }
         }
+        AnimatedVisibility(
+            visible = isSuccess,
+            modifier = Modifier
+                .padding(top = 22.dp, start = 80.dp)
+                .align(Alignment.TopStart)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White,
+                modifier = Modifier.width(230.dp)
+            )
+        }
     }
 }
 
@@ -376,6 +407,7 @@ private fun DiaryDetailContent(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         scaffoldState = bottomSheetScaffoldState,
         sheetPeekHeight = 370.dp,
+        containerColor = surfaceDark
     ) {
         body(it)
     }

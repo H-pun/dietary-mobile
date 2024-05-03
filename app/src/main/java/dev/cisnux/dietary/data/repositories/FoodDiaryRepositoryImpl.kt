@@ -258,6 +258,10 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                     ),
                                     second = FoodNutrition(
                                         image = path?.toFile(),
+                                        totalFat = predictedResponse.totalFat,
+                                        totalProtein = predictedResponse.totalProtein,
+                                        totalCalories = predictedResponse.totalCalories,
+                                        totalCarbohydrate = predictedResponse.totalCarbohydrate,
                                         foods = predictedResponse.foods.map { predictedFoodResponse ->
                                             val serving =
                                                 predictedFoodResponse.foodDetail.serving.first { servingResponse ->

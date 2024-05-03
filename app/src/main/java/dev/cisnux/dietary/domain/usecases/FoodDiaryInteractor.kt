@@ -118,16 +118,7 @@ class FoodDiaryInteractor @Inject constructor(
                                             maxDailyFat = userMaxDailyFat,
                                             maxDailyCarbohydrate = userMaxDailyCarbohydrate,
                                         ),
-                                        second = currentDataState.second.copy(
-                                            totalCalories = currentDataState.second.foods.sumOf { predictedFood -> predictedFood.calories.toDouble() }
-                                                .toFloat(),
-                                            totalProtein = currentDataState.second.foods.sumOf { predictedFood -> predictedFood.protein.toDouble() }
-                                                .toFloat(),
-                                            totalFat = currentDataState.second.foods.sumOf { predictedFood -> predictedFood.fat.toDouble() }
-                                                .toFloat(),
-                                            totalCarbohydrate = currentDataState.second.foods.sumOf { predictedFood -> predictedFood.carbohydrates.toDouble() }
-                                                .toFloat(),
-                                        )
+                                        second = currentDataState.second
                                     )
                                 )
                             } else uiState
