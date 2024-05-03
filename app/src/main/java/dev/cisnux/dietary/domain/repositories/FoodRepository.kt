@@ -2,9 +2,9 @@ package dev.cisnux.dietary.domain.repositories
 
 import dev.cisnux.dietary.domain.models.AddFoodDiary
 import dev.cisnux.dietary.domain.models.FoodDiary
-import dev.cisnux.dietary.domain.models.FoodDiaryQuestion
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
-import dev.cisnux.dietary.domain.models.PredictedFood
+import dev.cisnux.dietary.domain.models.FoodNutrition
+import dev.cisnux.dietary.domain.models.UserNutrition
 import dev.cisnux.dietary.domain.models.Report
 import dev.cisnux.dietary.utils.FoodDiaryCategory
 import dev.cisnux.dietary.utils.ReportCategory
@@ -14,7 +14,7 @@ import java.io.File
 
 interface FoodRepository {
     val baseUrl: Flow<String>
-    fun getDiaryFoodsByDays(
+    fun getDiaryFoodsByDate(
         accessToken: String,
         userId: String,
         date: String,
@@ -27,16 +27,21 @@ interface FoodRepository {
         accessToken: String,
         userId: String,
         addFoodDiary: AddFoodDiary
-    ): Flow<UiState<FoodDiaryDetail>>
+    ): Flow<UiState<String>>
 
     fun predictFood(
+        userId: String,
         accessToken: String,
-        foodPicture: File
-    ): Flow<UiState<List<PredictedFood>>>
+        foodPicture: File,
+        date: String
+    ): Flow<UiState<Pair<UserNutrition, FoodNutrition>>>
 
-    fun updateFoodDiaryBaseOnAnsweredQuestion(foodDiaryQuestion: FoodDiaryQuestion): Flow<UiState<FoodDiaryDetail>>
-    fun deleteFoodDiaryById(foodDiaryId: String): Flow<UiState<Nothing>>
-    fun getFoodDiaryDetailById(foodDiaryId: String): Flow<UiState<FoodDiaryDetail>>
+    fun deleteFoodDiaryById(accessToken: String, foodDiaryId: String): Flow<UiState<Nothing>>
+    fun getFoodDiaryDetailById(
+        accessToken: String,
+        foodDiaryId: String
+    ): Flow<UiState<FoodDiaryDetail>>
+
     fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<Report>>
     suspend fun updateBaseUrlApi(baseUrl: String)
 }

@@ -7,10 +7,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -18,7 +19,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import dev.cisnux.dietary.presentation.MainViewModel
 import dev.cisnux.dietary.presentation.addmyprofile.AddMyProfileScreen
 import dev.cisnux.dietary.presentation.devmode.DevModeScreen
 import dev.cisnux.dietary.presentation.diarydetail.DiaryDetailScreen
@@ -29,7 +29,6 @@ import dev.cisnux.dietary.presentation.myprofile.MyProfileScreen
 import dev.cisnux.dietary.presentation.newpassword.NewPasswordScreen
 import dev.cisnux.dietary.presentation.report.ReportScreen
 import dev.cisnux.dietary.presentation.resetpassword.ResetPasswordScreen
-import dev.cisnux.dietary.presentation.diary.DiaryScreen
 import dev.cisnux.dietary.presentation.signin.SignInScreen
 import dev.cisnux.dietary.presentation.signup.SignUpScreen
 import dev.cisnux.dietary.presentation.splash.SplashScreen
@@ -42,9 +41,10 @@ fun DietaryNavGraph(
     navComponentAction: NavComponentAction = rememberNavComponentAction(
         navController = navController,
     ),
-    mainViewModel: MainViewModel = hiltViewModel()
 ) {
-    val foodPicture by mainViewModel.foodPicture.collectAsState(initial = null)
+    var isHomeNavigationInclusive by rememberSaveable {
+        mutableStateOf(false)
+    }
     val snackbarHostState = remember {
         SnackbarHostState()
     }
@@ -451,7 +451,11 @@ fun DietaryNavGraph(
             }
         ) {
             DiaryDetailScreen(
-                navigateUp = navComponentAction.navigateUp,
+                navigateUp = {
+                    if (!isHomeNavigationInclusive)
+                        navComponentAction.navigateUp()
+                    else navComponentAction.navigateToHome(AppDestination.DiaryDetailRoute.route)
+                },
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )
         }
@@ -486,56 +490,11 @@ fun DietaryNavGraph(
         ) {
             FoodScannerScreen(
                 onNavigateUp = navComponentAction.navigateUp,
-                navigateToAddedDietary = { title, category, foodPictures ->
-                    mainViewModel.updateFoodPicture(foodPictures)
-                    navComponentAction.navigateToDiary(title, category)
+                navigateFoodDiaryDetail = {
+                    isHomeNavigationInclusive = true
+                    navComponentAction.navigateToFoodDiaryDetail(it)
                 },
                 onGalleryButton = navComponentAction.takePictureFromGallery,
-                navigateToSignIn = navComponentAction.navigateToSignIn
-            )
-        }
-        composable(
-            route = AppDestination.DiaryRoute.route,
-            arguments = listOf(
-                navArgument(name = "title") {
-                    nullable = false
-                    type = NavType.StringType
-                },
-                navArgument(name = "foodDiaryCategory") {
-                    nullable = false
-                    type = NavType.StringType
-                },
-            ),
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
-                )
-            },
-            exitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        300, easing = LinearEasing
-                    )
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
-                )
-            },
-            popExitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        300, easing = LinearEasing
-                    )
-                )
-            }
-        ) {
-            DiaryScreen(
-                foodPicture = foodPicture,
-                onNavigateUp = navComponentAction.navigateToHomeFromDiary,
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )
         }

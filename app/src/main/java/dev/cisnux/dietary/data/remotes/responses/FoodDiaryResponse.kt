@@ -9,6 +9,6 @@ data class FoodDiaryResponse(
     val id: String,
     val title: String,
     val addedAt: String,
-    val totalFoodCalories: Float,
+    val totalCalories: Float,
     val filePath: String,
 )

@@ -6,12 +6,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FoodDiaryDetailResponse(
     val id: String,
-    val totalUserCaloriesToday: Float,
-    val maxDailyBmrCalorie: Float,
-    val totalFoodCalories: Float,
-    val status: String,
-    val foodPictureUrl: String,
-    val feedback: String? = null,
+    val title: String,
+    val status: String?,
+    val filePath: String,
+    val feedback: List<String>,
+    val totalCalories: Float,
+    val totalProtein: Float,
+    val totalFat: Float,
+    val totalCarbohydrate: Float,
     // the foods which was detected
-    val foods: List<FoodResponse>,
+    val foods: List<PredictedFoodDetailResponse>,
 )

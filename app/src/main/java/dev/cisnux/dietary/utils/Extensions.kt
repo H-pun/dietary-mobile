@@ -2,12 +2,10 @@ package dev.cisnux.dietary.utils
 
 import android.content.Context
 import android.content.ContextWrapper
-import android.os.Build
 import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import dev.cisnux.dietary.data.remotes.bodyrequests.UserAccountBodyRequest
-import dev.cisnux.dietary.domain.models.FoodDiaryDetail
 import dev.cisnux.dietary.domain.models.UserAccount
 import dev.cisnux.dietary.domain.models.UserProfile
 import dev.cisnux.dietary.presentation.addmyprofile.MyProfile
@@ -19,7 +17,6 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 val Context.activity: AppCompatActivity?
     get() {
@@ -118,7 +115,6 @@ fun Instant.hoursAndMinutes(): String {
     return DateTimeFormatter.ofPattern("HH:mm", locale).format(localTime)
 }
 
-val Long.asDays: Long get() = TimeUnit.MILLISECONDS.toDays(this)
 
 val Int.foodDiaryCategory: FoodDiaryCategory
     get() = when (this) {
@@ -133,18 +129,6 @@ val Int.reportCategory: ReportCategory
         1 -> ReportCategory.THIS_WEEK
         else -> ReportCategory.THIS_MONTH
     }
-
-val String.questionType: QuestionType
-    get() = when (this) {
-        "float" -> QuestionType.FLOAT
-        "integer" -> QuestionType.INTEGER
-        "text" -> QuestionType.TEXT
-        else -> QuestionType.BOOLEAN
-    }
-
-fun FoodDiaryDetail.isQuestionNotEmpty() = foods.any { food ->
-    food.questions?.isNotEmpty() ?: false
-}
 
 fun convertISOToInstant(isoDateTime: String): Instant {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")

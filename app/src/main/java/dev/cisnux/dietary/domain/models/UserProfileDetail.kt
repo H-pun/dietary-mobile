@@ -1,6 +1,8 @@
 package dev.cisnux.dietary.domain.models
 
 data class UserProfileDetail(
+    val id: String,
+    val userAccountId: String,
     val username: String,
     val emailAddress: String,
     val age: Int,

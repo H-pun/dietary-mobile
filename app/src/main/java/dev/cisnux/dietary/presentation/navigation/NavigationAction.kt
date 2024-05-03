@@ -33,23 +33,6 @@ class NavComponentAction(
             }
         }
     }
-    val navigateToHomeFromDiary: () -> Unit = {
-        navController.navigate(route = AppDestination.HomeRoute.route) {
-            popUpTo(AppDestination.DiaryRoute.route) {
-                inclusive = true
-            }
-        }
-    }
-    val navigateToDiary: (String, String) -> Unit = { title, foodDiaryCategory ->
-        navController.navigate(
-            route = AppDestination.DiaryRoute.createRouteUrl(
-                title,
-                foodDiaryCategory
-            )
-        ) {
-
-        }
-    }
     val navigateToLanding: () -> Unit = {
         navController.navigate(route = AppDestination.LandingRoute.route) {
             popUpTo(navController.graph.findStartDestination().id) {

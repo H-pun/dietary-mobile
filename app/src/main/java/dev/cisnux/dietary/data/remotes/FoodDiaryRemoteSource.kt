@@ -1,8 +1,6 @@
 package dev.cisnux.dietary.data.remotes
 
 import arrow.core.Either
-import dev.cisnux.dietary.data.remotes.responses.AddedFoodDiaryResponse
-import dev.cisnux.dietary.data.remotes.bodyrequests.DiaryQuestionBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse
@@ -25,17 +23,12 @@ interface FoodDiaryRemoteSource {
     suspend fun addFoodDiary(
         accessToken: String,
         foodDiary: FoodDiaryBodyRequest
-    ): Either<Exception, AddedFoodDiaryResponse>
+    ): Either<Exception, String>
 
     suspend fun predictFoods(
         accessToken: String,
         foodPicture: File
     ): Either<Exception, PredictedResponse>
-
-    suspend fun updateFoodDiaryByQuestions(
-        accessToken: String,
-        foodDiaryQuestion: DiaryQuestionBodyRequest
-    ): Either<Exception, AddedFoodDiaryResponse>
 
     suspend fun getFoodDiaryReports(
         accessToken: String,

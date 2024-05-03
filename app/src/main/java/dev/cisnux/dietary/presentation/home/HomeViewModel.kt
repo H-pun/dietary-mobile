@@ -7,7 +7,6 @@ import dev.cisnux.dietary.domain.usecases.AuthenticationUseCase
 import dev.cisnux.dietary.domain.usecases.FoodDiaryUseCase
 import dev.cisnux.dietary.utils.FoodDiaryCategory
 import dev.cisnux.dietary.utils.UiState
-import dev.cisnux.dietary.utils.asDays
 import dev.cisnux.dietary.utils.currentLocalDateTimeInBasicISOFormat
 import dev.cisnux.dietary.utils.foodDiaryCategory
 import kotlinx.coroutines.ExperimentalCoroutinesApi

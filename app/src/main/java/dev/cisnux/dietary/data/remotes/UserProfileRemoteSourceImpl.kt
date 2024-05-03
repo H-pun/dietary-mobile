@@ -5,6 +5,7 @@ import dev.cisnux.dietary.data.locals.BaseApiUrlLocalSource
 import dev.cisnux.dietary.data.remotes.responses.CommonResponse
 import dev.cisnux.dietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.UpdateUserProfileBodyRequest
+import dev.cisnux.dietary.data.remotes.responses.NutrientResponse
 import dev.cisnux.dietary.data.remotes.responses.UserProfileDetailResponse
 import dev.cisnux.dietary.utils.Failure
 import io.ktor.client.HttpClient
@@ -16,13 +17,13 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -48,12 +49,14 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                 }
                 val isSuccess = response.status.isSuccess()
                 return@withContext if (!isSuccess) {
-                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    val commonResponse: CommonResponse<Nothing>? =
+                        if (response.status != HttpStatusCode.Unauthorized) response.body()
+                        else null
                     val failure = Failure.HTTP_FAILURES[response.status]?.let {
                         Either.Left(it.apply {
-                            message = commonResponse.message
+                            message = commonResponse?.message
                         })
-                    } ?: Either.Left(Exception(commonResponse.message))
+                    } ?: Either.Left(Exception(commonResponse?.message))
                     failure
                 } else Either.Right(null)
             } catch (e: UnresolvedAddressException) {
@@ -79,12 +82,14 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                 }
                 val isSuccess = response.status.isSuccess()
                 return@withContext if (!isSuccess) {
-                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    val commonResponse: CommonResponse<Nothing>? =
+                        if (response.status != HttpStatusCode.Unauthorized) response.body()
+                        else null
                     val failure = Failure.HTTP_FAILURES[response.status]?.let {
                         Either.Left(it.apply {
-                            message = commonResponse.message
+                            message = commonResponse?.message
                         })
-                    } ?: Either.Left(Exception(commonResponse.message))
+                    } ?: Either.Left(Exception(commonResponse?.message))
                     failure
                 } else Either.Right(null)
             } catch (e: UnresolvedAddressException) {
@@ -93,7 +98,10 @@ class UserProfileRemoteSourceImpl @Inject constructor(
         }
 
 
-    override suspend fun getUserProfile(accessToken: String, userAccountId: String): Either<Exception, UserProfileDetailResponse> =
+    override suspend fun getUserProfile(
+        accessToken: String,
+        userAccountId: String
+    ): Either<Exception, UserProfileDetailResponse> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
@@ -106,12 +114,14 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                 }
                 val isSuccess = response.status.isSuccess()
                 return@withContext if (!isSuccess) {
-                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    val commonResponse: CommonResponse<Nothing>? =
+                        if (response.status != HttpStatusCode.Unauthorized) response.body()
+                        else null
                     val failure = Failure.HTTP_FAILURES[response.status]?.let {
                         Either.Left(it.apply {
-                            message = commonResponse.message
+                            message = commonResponse?.message
                         })
-                    } ?: Either.Left(Exception(commonResponse.message))
+                    } ?: Either.Left(Exception(commonResponse?.message))
                     failure
                 } else {
                     val commonResponse: CommonResponse<UserProfileDetailResponse> = response.body()
@@ -121,4 +131,45 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                 Either.Left(Failure.ConnectionFailure())
             }
         }
+
+    override suspend fun getDailyNutrients(
+        accessToken: String,
+        userId: String,
+        date: String
+    ): Either<Exception, NutrientResponse> = withContext(Dispatchers.IO) {
+        try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
+            val response =
+                client.get(urlString = "$baseUrl/food-diary/daily-nutrients?idUser=$userId&date=$date") {
+                    headers {
+                        append(HttpHeaders.Authorization, "Bearer $accessToken")
+                    }
+                    contentType(ContentType.Application.Json)
+                }
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
+                val commonResponse: CommonResponse<Nothing>? =
+                    if (response.status != HttpStatusCode.Unauthorized) response.body()
+                    else null
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse?.message
+                    })
+                } ?: Either.Left(Exception(commonResponse?.message))
+                failure
+            } else {
+                val commonResponse: CommonResponse<NutrientResponse> = response.body()
+                Either.Right(
+                    commonResponse.data ?: NutrientResponse(
+                        calories = 0f,
+                        protein = 0f,
+                        fat = 0f,
+                        carbohydrate = 0f
+                    )
+                )
+            }
+        } catch (e: UnresolvedAddressException) {
+            Either.Left(Failure.ConnectionFailure())
+        }
+    }
 }

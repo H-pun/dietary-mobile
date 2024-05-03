@@ -91,6 +91,8 @@ fun MyProfileScreen(
     }
     val userProfileDetail by viewModel.userProfileDetail.collectAsState(
         initial = UserProfileDetail(
+            id = "1",
+            userAccountId = "1",
             username = "",
             emailAddress = "",
             age = 0,
@@ -278,6 +280,8 @@ private fun MyProfileContentPreview() {
         SnackbarHostState()
     }
     val userProfileDetail = UserProfileDetail(
+        id = "1",
+        userAccountId = "1",
         username = "yagamijaeger",
         emailAddress = "yagami12@gmail.com",
         age = 40,

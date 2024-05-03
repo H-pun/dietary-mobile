@@ -2,6 +2,7 @@ package dev.cisnux.dietary.presentation.foodscanner
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
 import android.util.Log
@@ -33,6 +34,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -85,40 +87,29 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.toRect
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.Color as ComposeColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -128,16 +119,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import dev.cisnux.dietary.R
-import dev.cisnux.dietary.domain.models.Bound
-import dev.cisnux.dietary.domain.models.PredictedFood
-import dev.cisnux.dietary.presentation.diary.AnsweredQuestion
-import dev.cisnux.dietary.presentation.ui.components.FoodListItem
+import dev.cisnux.dietary.domain.models.FoodNutrition
+import dev.cisnux.dietary.domain.models.UserNutrition
+import dev.cisnux.dietary.domain.models.Food
+import dev.cisnux.dietary.presentation.ui.components.AddedDiaryShimmer
+import dev.cisnux.dietary.presentation.ui.components.AddedDietaryBody
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.ui.theme.Typography
 import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.UiState
 import dev.cisnux.dietary.utils.afterMeasured
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -147,7 +140,7 @@ fun FoodScannerScreen(
     onNavigateUp: () -> Unit,
     navigateToSignIn: (String) -> Unit,
     onGalleryButton: (launcher: ActivityResultLauncher<Intent>) -> Unit,
-    navigateToAddedDietary: (String, String, File) -> Unit,
+    navigateFoodDiaryDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: FoodScannerViewModel = hiltViewModel()
 ) {
@@ -178,7 +171,6 @@ fun FoodScannerScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
-    val currentFileState by viewModel.currentFileState.collectAsState()
     val foodDiaryCategories = stringArrayResource(id = R.array.food_diary_category)
     var title by rememberSaveable {
         mutableStateOf("")
@@ -196,12 +188,18 @@ fun FoodScannerScreen(
         mutableStateOf(true)
     }
     val predictedResultState by viewModel.predictedResultState.collectAsState()
-    val foods = if (predictedResultState is UiState.Success)
-        (predictedResultState as UiState.Success<List<PredictedFood>>).data ?: listOf()
-    else listOf()
+    val userNutrition = if (predictedResultState is UiState.Success) {
+        (predictedResultState as UiState.Success<Pair<UserNutrition, FoodNutrition>>).data!!.first
+    } else null
+    val foodNutrition = if (predictedResultState is UiState.Success) {
+        (predictedResultState as UiState.Success<Pair<UserNutrition, FoodNutrition>>).data!!.second
+    } else null
+    val foods = foodNutrition?.foods ?: listOf()
 
     val foodQuestions =
         foods.filter { food -> food.questions.isNotEmpty() }
+
+    val addFoodDiaryState by viewModel.addFoodDiaryState.collectAsState()
 
     val answeredQuestions = remember(foodQuestions) {
         mutableStateListOf(
@@ -212,20 +210,39 @@ fun FoodScannerScreen(
                             AnsweredQuestion(
                                 questionId = question.id,
                                 question = question.question,
-                                answer = "",
-                                choices = question.options.map { option -> option.answer }
+                                choices = question.options.map { option ->
+                                    AnsweredQuestion.Choice(
+                                        id = option.id,
+                                        answer = option.answer,
+                                        reference = option.reference
+                                    )
+                                }
                             )
                         }.toTypedArray()
                     mutableStateListOf(*answers)
                 }.toTypedArray()
         )
     }
+    val feedback = remember(answeredQuestions, foodNutrition) {
+        mutableStateListOf<String>()
+    }
+    val coroutineScope = rememberCoroutineScope(getContext = {
+        Dispatchers.Default
+    })
+
+    LaunchedEffect(foodNutrition) {
+        coroutineScope.launch {
+            foodNutrition?.foods?.forEach { food ->
+                feedback.addAll(food.feedback)
+            }
+        }
+    }
 
     val isQuestionDialogEnable by remember(answeredQuestions) {
         derivedStateOf {
-            answeredQuestions.any { foodQuestion ->
-                foodQuestion.any { answeredQuestion ->
-                    answeredQuestion.answer.isNotBlank()
+            answeredQuestions.all { foodQuestion ->
+                foodQuestion.all { answeredQuestion ->
+                    answeredQuestion.choice != null
                 }
             }
         }
@@ -374,34 +391,65 @@ fun FoodScannerScreen(
                 },
                 isDialogOpen = isPredictedResultDialogOpen,
                 onDismissRequest = { isPredictedResultDialogOpen = false },
-                foodPictures = currentFileState,
+                foodPictures = foodNutrition?.image,
                 onQuestionDialog = {
                     isQuestionDialogOpen = foods.any { predictedFood ->
                         predictedFood.questions.isNotEmpty()
                     }
                     if (!isQuestionDialogOpen) {
-                        currentFileState?.let { currentFileState ->
-                            navigateToAddedDietary(
-                                title,
-                                selectedFoodDiaryCategory,
-                                currentFileState
-                            )
-                        }
+                        viewModel.addFoodDiary(
+                            title = title,
+                            category = selectedFoodDiaryCategory,
+                            foodPicture = foodNutrition!!.image as File,
+                            totalProtein = foodNutrition.totalCalories,
+                            totalCarbohydrate = foodNutrition.totalCarbohydrate,
+                            totalFat = foodNutrition.totalFat,
+                            totalCalories = foodNutrition.totalCalories,
+                            foodIds = foodNutrition.foods.map { food -> food.id },
+                            feedback = feedback
+                        )
                     }
                 },
                 modifier = Modifier.padding(it),
                 foods = foods,
-                snackbarHostState = snackbarHostState,
+                totalCaloriesToday = userNutrition?.totalCaloriesToday ?: 0f,
+                totalProteinToday = userNutrition?.totalProteinToday ?: 0f,
+                totalFatToday = userNutrition?.totalFatToday ?: 0f,
+                totalCarbohydrateToday = userNutrition?.totalCarbohydrateToday ?: 0f,
+                maxDailyProtein = userNutrition?.maxDailyProtein ?: 0f,
+                maxDailyFat = userNutrition?.maxDailyFat ?: 0f,
+                maxDailyCalories = userNutrition?.maxDailyCalories ?: 0f,
+                maxDailyCarbohydrate = userNutrition?.maxDailyCarbohydrate ?: 0f,
+                totalFoodCalories = foodNutrition?.totalCalories ?: 0f,
+                addFoodDiaryState = addFoodDiaryState,
+                navigateFoodDiaryDetail = navigateFoodDiaryDetail,
+                isLoading = predictedResultState is UiState.Loading
             )
 
             QuestionDialog(
                 onSave = {
                     isQuestionDialogOpen = false
-                    currentFileState?.let { currentFileState ->
-                        navigateToAddedDietary(
-                            title,
-                            selectedFoodDiaryCategory,
-                            currentFileState
+                    coroutineScope.launch {
+                        answeredQuestions.forEach { snapshot ->
+                            snapshot.filter { answeredQuestion -> answeredQuestion.choice?.answer != null && answeredQuestion.choice!!.answer.isNotBlank() }
+                                .forEach { answeredQuestion ->
+                                    answeredQuestion.choice!!.reference?.let { reference ->
+                                        feedback.add(
+                                            reference
+                                        )
+                                    }
+                                }
+                        }
+                        viewModel.addFoodDiary(
+                            title = title,
+                            category = selectedFoodDiaryCategory,
+                            foodPicture = foodNutrition!!.image as File,
+                            totalProtein = foodNutrition.totalCalories,
+                            totalCarbohydrate = foodNutrition.totalCarbohydrate,
+                            totalFat = foodNutrition.totalFat,
+                            totalCalories = foodNutrition.totalCalories,
+                            foodIds = foodNutrition.foods.map { food -> food.id },
+                            feedback = feedback,
                         )
                     }
                 },
@@ -410,7 +458,7 @@ fun FoodScannerScreen(
                     answeredQuestions.forEachIndexed { foodIndex, items ->
                         items.forEachIndexed { answeredIndex, answeredQuestion ->
                             answeredQuestions[foodIndex][answeredIndex] =
-                                answeredQuestion.copy(answer = "")
+                                answeredQuestion.copy(choice = null)
                         }
                     }
                 },
@@ -421,7 +469,7 @@ fun FoodScannerScreen(
                 answeredQuestions = answeredQuestions,
                 onAnswerChange = { newAnswer, foodIndex, answerIndex ->
                     answeredQuestions[foodIndex][answerIndex] =
-                        answeredQuestions[foodIndex][answerIndex].copy(answer = newAnswer)
+                        answeredQuestions[foodIndex][answerIndex].copy(choice = newAnswer)
                 },
             )
         },
@@ -613,9 +661,9 @@ private fun QuestionDialog(
     onCancel: () -> Unit,
     isDialogOpen: Boolean,
     onDismissRequest: () -> Unit,
-    foods: List<PredictedFood>,
+    foods: List<Food>,
     answeredQuestions: List<List<AnsweredQuestion>>,
-    onAnswerChange: (newAnswer: String, foodIndex: Int, answerIndex: Int) -> Unit,
+    onAnswerChange: (newAnswer: AnsweredQuestion.Choice, foodIndex: Int, answerIndex: Int) -> Unit,
     isEnable: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -680,8 +728,8 @@ private fun QuestionDialog(
                 ) { index ->
                     if (index != 0) {
                         val prevIndex = index - 1
-                        val isNotBlank = answeredQuestions[prevIndex].all { it.answer.isNotBlank() }
-                        AnimatedVisibility(visible = isNotBlank) {
+                        val isNotNull = answeredQuestions[prevIndex].all { it.choice != null }
+                        AnimatedVisibility(visible = isNotNull) {
                             QuestionListItem(
                                 foodName = foods[index].name,
                                 answeredQuestions = answeredQuestions[index],
@@ -705,7 +753,10 @@ private fun QuestionDialog(
     }
 }
 
-@Preview
+@Preview(
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 private fun PredictedResultDialogPreview() {
     DietaryTheme {
@@ -716,30 +767,23 @@ private fun PredictedResultDialogPreview() {
             foodPictures = null,
             onQuestionDialog = { },
             foods = listOf(
-                PredictedFood(
+                Food(
                     id = "1",
                     name = "Nasi Putih",
-                    bound = Bound(
-                        x = 404.0,
-                        y = 75.0,
-                        width = 411.0,
-                        height = 308.0
-                    ),
                     calories = 8.3f,
                     fat = 8.3f,
                     protein = 8.3f,
                     carbohydrates = 8.3f,
                     sugar = null,
+                    feedback = listOf(
+                        "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+                        "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+                        "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+                    )
                 ),
-                PredictedFood(
+                Food(
                     id = "2",
                     name = "Ayam Goreng",
-                    bound = Bound(
-                        x = 197.0,
-                        y = 275.0,
-                        width = 434.0,
-                        height = 277.0
-                    ),
                     calories = 8.3f,
                     fat = 8.3f,
                     protein = 8.3f,
@@ -747,7 +791,17 @@ private fun PredictedResultDialogPreview() {
                     sugar = null,
                 ),
             ),
-            snackbarHostState = SnackbarHostState()
+            totalCaloriesToday = 300f,
+            totalFatToday = 200f,
+            totalProteinToday = 220f,
+            totalCarbohydrateToday = 210f,
+            maxDailyCalories = 500f,
+            maxDailyProtein = 500f,
+            maxDailyFat = 500f,
+            maxDailyCarbohydrate = 500f,
+            totalFoodCalories = 1000f,
+            addFoodDiaryState = UiState.Initialize,
+            navigateFoodDiaryDetail = {}
         )
     }
 }
@@ -799,10 +853,12 @@ private fun AddDiaryDialog(
                     )
                 },
                 floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = onSave,
-                    ) {
-                        Icon(imageVector = Icons.Rounded.AddCircle, contentDescription = null)
+                    AnimatedVisibility(title.isNotBlank()) {
+                        FloatingActionButton(
+                            onClick = onSave,
+                        ) {
+                            Icon(imageVector = Icons.Rounded.AddCircle, contentDescription = null)
+                        }
                     }
                 },
                 modifier = modifier,
@@ -930,18 +986,59 @@ private fun PredictedResultDialog(
     onCancel: () -> Unit,
     isDialogOpen: Boolean,
     onDismissRequest: () -> Unit,
-    foodPictures: File?,
+    foodPictures: Any?,
     onQuestionDialog: () -> Unit,
-    snackbarHostState: SnackbarHostState,
+    totalCaloriesToday: Float,
+    totalCarbohydrateToday: Float,
+    totalProteinToday: Float,
+    totalFatToday: Float,
+    maxDailyCalories: Float,
+    maxDailyCarbohydrate: Float,
+    maxDailyProtein: Float,
+    maxDailyFat: Float,
+    totalFoodCalories: Float,
+    addFoodDiaryState: UiState<String>,
     modifier: Modifier = Modifier,
-    foods: List<PredictedFood> = listOf(),
+    foods: List<Food> = listOf(),
+    onFailToAddFoodDiary: () -> Unit = {},
+    navigateFoodDiaryDetail: (String) -> Unit,
+    isLoading: Boolean = false,
 ) {
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
+    when (addFoodDiaryState) {
+        is UiState.Error -> {
+            addFoodDiaryState.error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        snackbarHostState.showSnackbar(
+                            message = it,
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                }
+                if (exception is Failure.UnauthorizedFailure) {
+                    onFailToAddFoodDiary()
+                }
+            }
+        }
+
+        is UiState.Success -> {
+            addFoodDiaryState.data?.let { foodDiaryId ->
+                navigateFoodDiaryDetail(foodDiaryId)
+            }
+        }
+
+        else -> {}
+    }
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberModalBottomSheetState()
     )
 
     LaunchedEffect(Unit) {
-        scaffoldState.bottomSheetState.expand()
+        scaffoldState.bottomSheetState.hide()
     }
 
     if (isDialogOpen)
@@ -956,43 +1053,44 @@ private fun PredictedResultDialog(
                 modifier = modifier,
                 snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
                 sheetContent = {
-                    LazyColumn(
-                        contentPadding = PaddingValues(horizontal = 16.dp), modifier = modifier
-                    ) {
-                        items(foods,
-                            key = { it.id },
-                            contentType = { it }) {
-                            Column {
-                                FoodListItem(
-                                    foodName = it.name,
-                                    calorie = String.format("%.2f", it.calories),
-                                    fat = String.format("%.2f", it.fat),
-                                    carbohydrates = String.format("%.2f", it.carbohydrates),
-                                    protein = String.format("%.2f", it.protein),
-                                    sugar = it.sugar?.let { sugar -> String.format("%.2f", sugar) },
-                                    feedbacks = it.feedbacks
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                            }
-                        }
-
-                        item {
-                           Button(
-                                onClick = onQuestionDialog,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(text = "Lanjutkan")
-                            }
-                        }
+                    AnimatedVisibility(visible = isLoading) {
+                        AddedDiaryShimmer()
                     }
-
+                    AnimatedVisibility(visible = !isLoading and foods.isNotEmpty()) {
+                        AddedDietaryBody(
+                            totalCaloriesToday = totalCaloriesToday,
+                            maxDailyCalories = maxDailyCalories,
+                            maxDailyCarbohydrate = maxDailyCarbohydrate,
+                            maxDailyFat = maxDailyFat,
+                            maxDailyProtein = maxDailyProtein,
+                            totalFoodCalories = totalFoodCalories,
+                            totalCarbohydrateToday = totalCarbohydrateToday,
+                            totalProteinToday = totalProteinToday,
+                            totalFatToday = totalFatToday,
+                            foods = foods,
+                            bottomContent = {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Button(
+                                    onClick = onQuestionDialog,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                ) {
+                                    if (addFoodDiaryState is UiState.Loading)
+                                        CircularProgressIndicator()
+                                    else Text(text = "Lanjutkan")
+                                }
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                        )
+                    }
                 },
                 scaffoldState = scaffoldState,
-                sheetPeekHeight = 160.dp,
-            ) {
-                Box(modifier = modifier.fillMaxSize()) {
+                sheetPeekHeight = 370.dp,
+            ) { _ ->
+                Box(modifier = Modifier.fillMaxSize()) {
                     AnimatedVisibility(
-                        visible = foods.isEmpty(), modifier = Modifier
+                        visible = isLoading, modifier = Modifier
                             .align(Alignment.Center)
                             .fillMaxSize()
                     ) {
@@ -1015,8 +1113,8 @@ private fun PredictedResultDialog(
                             }
 
                         Box(
-                            Modifier
-                                .padding(it)
+                            modifier = Modifier
+                                .padding(bottom = 270.dp)
                                 .graphicsLayer(
                                     scaleX = scale,
                                     scaleY = scale,
@@ -1027,62 +1125,17 @@ private fun PredictedResultDialog(
                                 // add transformable to listen to multitouch transformation events
                                 // after offset
                                 .transformable(state = state)
-                                .fillMaxSize()
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            val textMeasurer = rememberTextMeasurer()
                             val context = LocalContext.current
                             SubcomposeAsyncImage(
                                 model = ImageRequest.Builder(context).data(
                                     foodPictures
                                 ).build(),
-                                contentScale = ContentScale.Fit,
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .drawWithContent {
-                                        drawContent()
-                                        foods.forEach {
-                                            val foodSize = Size(
-                                                width = it.bound.width.toFloat(),
-                                                height = it.bound.height.toFloat()
-                                            )
-                                            val measuredText =
-                                                textMeasurer.measure(
-                                                    AnnotatedString(it.name),
-                                                    overflow = TextOverflow.Ellipsis,
-                                                    style = Typography.labelSmall.copy(fontSize = 8.sp)
-                                                )
-                                            drawRect(
-                                                topLeft = foodSize.toRect().topLeft.copy(
-                                                    x = it.bound.x.toFloat(),
-                                                    y = it.bound.y.toFloat() - 40f
-                                                ),
-                                                color = ComposeColor.White,
-                                                size = measuredText.size
-                                                    .toSize()
-                                                    .copy(
-                                                        width = measuredText.size.toSize().width + 8,
-                                                        height = measuredText.size.toSize().height + 8
-                                                    )
-                                            )
-                                            drawText(
-                                                measuredText,
-                                                topLeft = foodSize.toRect().topLeft.copy(
-                                                    x = it.bound.x.toFloat() + 4,
-                                                    y = it.bound.y.toFloat() - 36f
-                                                )
-                                            )
-                                            drawRoundRect(
-                                                topLeft = foodSize.toRect().topLeft.copy(
-                                                    x = it.bound.x.toFloat(),
-                                                    y = it.bound.y.toFloat()
-                                                ),
-                                                color = ComposeColor.White,
-                                                cornerRadius = CornerRadius(2f, 2f),
-                                                style = Stroke(width = 4f),
-                                                size = foodSize
-                                            )
-                                        }
-                                    }
+                                    .fillMaxHeight()
                                     .align(Alignment.Center)
                             )
                         }
@@ -1112,7 +1165,7 @@ private fun PredictedResultDialog(
 fun QuestionListItem(
     foodName: String,
     answeredQuestions: List<AnsweredQuestion>,
-    onAnswerChange: (newAnswer: String, index: Int) -> Unit,
+    onAnswerChange: (newAnswer: AnsweredQuestion.Choice, index: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(Modifier.padding(horizontal = 16.dp)) {
@@ -1145,7 +1198,7 @@ fun QuestionListItem(
             val size by remember {
                 derivedStateOf {
                     answeredQuestions
-                        .filter { it.answer.isNotBlank() }
+                        .filter { it.choice != null }
                         .size
                         .let {
                             if (it < answeredQuestions.size)
@@ -1181,7 +1234,7 @@ fun QuestionListItem(
                     LazyRow {
                         items(
                             answeredQuestions[index].choices,
-//                            key = { it },
+                            key = { it.id },
                             contentType = { it }
                         ) {
                             Surface(
@@ -1194,7 +1247,7 @@ fun QuestionListItem(
                                     }
                             ) {
                                 Text(
-                                    text = it,
+                                    text = it.answer,
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onTertiaryContainer,
                                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -1203,7 +1256,7 @@ fun QuestionListItem(
                             Spacer(modifier = Modifier.width(4.dp))
                         }
                     }
-                    AnimatedVisibility(visible = answeredQuestions[index].answer.isNotBlank()) {
+                    AnimatedVisibility(visible = answeredQuestions[index].choice != null) {
                         Column {
                             Spacer(modifier = Modifier.height(8.dp))
                             Row(
@@ -1219,7 +1272,7 @@ fun QuestionListItem(
                                     ),
                                 ) {
                                     Text(
-                                        text = answeredQuestions[index].answer,
+                                        text = answeredQuestions[index].choice!!.answer,
                                         style = MaterialTheme.typography.titleMedium,
                                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                                         modifier = Modifier.padding(

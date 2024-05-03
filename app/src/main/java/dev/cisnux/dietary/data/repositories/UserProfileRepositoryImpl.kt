@@ -1,9 +1,11 @@
 package dev.cisnux.dietary.data.repositories
 
+import androidx.collection.emptyIntSet
 import dev.cisnux.dietary.data.locals.UserProfileLocalSource
 import dev.cisnux.dietary.data.remotes.UserProfileRemoteSource
 import dev.cisnux.dietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.UpdateUserProfileBodyRequest
+import dev.cisnux.dietary.domain.models.UserNutrition
 import dev.cisnux.dietary.domain.models.UserProfile
 import dev.cisnux.dietary.domain.models.UserProfileDetail
 import dev.cisnux.dietary.domain.repositories.UserProfileRepository
@@ -91,9 +93,38 @@ class UserProfileRepositoryImpl @Inject constructor(
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
 
+    override fun getUserNutrition(
+        accessToken: String,
+        userId: String,
+        date: String
+    ): Flow<UiState<UserNutrition>> = flow<UiState<UserNutrition>> {
+        emit(UiState.Loading)
+        userProfileRemoteSource.getDailyNutrients(
+            accessToken = accessToken,
+            userId = userId,
+            date = date
+        ).fold(
+            ifLeft = { exception -> emit(UiState.Error(exception)) },
+            ifRight = { nutrientResponse ->
+                emit(
+                    UiState.Success(
+                        UserNutrition(
+                            totalCaloriesToday = nutrientResponse.calories,
+                            totalFatToday = nutrientResponse.fat,
+                            totalCarbohydrateToday = nutrientResponse.carbohydrate,
+                            totalProteinToday = nutrientResponse.protein
+                        )
+                    )
+                )
+            }
+        )
+    }.flowOn(Dispatchers.IO)
+
     override val userProfileDetail: Flow<UserProfileDetail>
         get() = userProfileLocalSource.userProfile.map {
             UserProfileDetail(
+                id = it.id,
+                userAccountId = it.userAccountId,
                 age = it.age,
                 weight = it.weight,
                 height = it.height,

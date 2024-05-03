@@ -1,18 +1,23 @@
 package dev.cisnux.dietary.data.repositories
 
+import android.content.Context
+import coil.ImageLoader
+import coil.annotation.ExperimentalCoilApi
+import coil.request.ImageRequest
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.cisnux.dietary.data.locals.BaseApiUrlLocalSource
 import dev.cisnux.dietary.data.remotes.FoodDiaryRemoteSource
+import dev.cisnux.dietary.data.remotes.UserProfileRemoteSource
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
 import dev.cisnux.dietary.domain.models.AddFoodDiary
-import dev.cisnux.dietary.domain.models.Bound
-import dev.cisnux.dietary.domain.models.Food
 import dev.cisnux.dietary.domain.models.FoodDiary
-import dev.cisnux.dietary.domain.models.FoodDiaryQuestion
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
 import dev.cisnux.dietary.domain.models.FoodDiaryReport
+import dev.cisnux.dietary.domain.models.FoodNutrition
+import dev.cisnux.dietary.domain.models.UserNutrition
 import dev.cisnux.dietary.domain.models.Option
-import dev.cisnux.dietary.domain.models.PredictedFood
+import dev.cisnux.dietary.domain.models.Food
 import dev.cisnux.dietary.domain.models.Question
 import dev.cisnux.dietary.domain.models.Report
 import dev.cisnux.dietary.domain.repositories.FoodRepository
@@ -27,13 +32,13 @@ import dev.cisnux.dietary.utils.dateAndMonth
 import dev.cisnux.dietary.utils.dayDateMonth
 import dev.cisnux.dietary.utils.getCurrentDateTimeInISOFormat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -42,7 +47,9 @@ import kotlin.random.Random
 
 class FoodDiaryRepositoryImpl @Inject constructor(
     private val foodDiaryRemoteSource: FoodDiaryRemoteSource,
-    private val baseApiUrlLocalSource: BaseApiUrlLocalSource
+    private val baseApiUrlLocalSource: BaseApiUrlLocalSource,
+    private val userProfileRemoteSource: UserProfileRemoteSource,
+    @ApplicationContext private val context: Context,
 ) : FoodRepository {
     private val foodsBreakfastDiary = List(10) {
         FoodDiary(
@@ -67,165 +74,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         "Nasi Bakar",
         "Pizza",
         "Kebab"
-    )
-    private val foodDiaryDetail = MutableStateFlow(
-        FoodDiaryDetail(
-            foodDiaryId = "1",
-            totalFoodCalories = 200.4512f,
-            maxDailyBmrCalorie = 800.6798f,
-            totalUserCaloriesToday = 500.7892f,
-            status = "Boleh dimakan",
-            feedbacks = listOf(
-                "Terlalu berminyak",
-                "Terlalu banyak gula",
-                "Kurang protein",
-            ),
-            foods = listOf(
-                Food(
-                    id = "1",
-                    name = "Nasi",
-                    calorie = 50f,
-                    protein = 8f,
-                    fat = 2f,
-                    carbohydrates = 4.3f,
-                    sugar = 8.7f,
-                    bound = Bound(
-                        x = 404.0,
-                        y = 75.0,
-                        width = 411.0,
-                        height = 308.0
-                    ),
-                    questions = listOf(
-                    )
-                ),
-                Food(
-                    id = "2",
-                    name = "Ayam Bakar",
-                    calorie = 50f,
-                    protein = 6f,
-                    fat = 10f,
-                    carbohydrates = 8.3f,
-                    sugar = null,
-                    bound = Bound(
-                        x = 404.0,
-                        y = 75.0,
-                        width = 411.0,
-                        height = 308.0
-                    ),
-                    questions = listOf(
-                    )
-                ),
-                Food(
-                    id = "3",
-                    name = "Tempe",
-                    calorie = 5.8f,
-                    protein = 9f,
-                    fat = 1f,
-                    carbohydrates = 8.3f,
-                    sugar = 0f,
-                    bound = Bound(
-                        x = 404.0,
-                        y = 75.0,
-                        width = 411.0,
-                        height = 308.0
-                    ),
-                    questions = listOf(
-                    )
-                ),
-                Food(
-                    id = "4",
-                    name = "Sayur Kangkung",
-                    calorie = 5.8f,
-                    protein = 9f,
-                    fat = 0.5f,
-                    carbohydrates = 8.3f,
-                    sugar = 0f,
-                    questions = null,
-                    bound = Bound(
-                        x = 404.0,
-                        y = 75.0,
-                        width = 411.0,
-                        height = 308.0
-                    ),
-                ),
-            )
-        )
-    )
-
-    private val anotherFoodDiaryDetail = FoodDiaryDetail(
-        foodDiaryId = "1",
-        totalFoodCalories = 200.4512f,
-        maxDailyBmrCalorie = 800.6798f,
-        totalUserCaloriesToday = 500.7892f,
-        status = "Kurang disarankan",
-        feedbacks = listOf(
-            "Terlalu berminyak",
-            "Terlalu banyak gula",
-            "Kurang protein",
-        ),
-        foodPicture = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
-        foods = listOf(
-            Food(
-                id = "1",
-                name = "Nasi",
-                calorie = 50f,
-                protein = 8f,
-                fat = 2f,
-                carbohydrates = 4.3f,
-                sugar = 8.7f,
-                bound = Bound(
-                    x = 404.0,
-                    y = 75.0,
-                    width = 411.0,
-                    height = 308.0
-                ),
-            ),
-            Food(
-                id = "2",
-                name = "Ayam Bakar",
-                calorie = 50f,
-                protein = 6f,
-                fat = 10f,
-                carbohydrates = 8.3f,
-                sugar = null,
-                bound = Bound(
-                    x = 404.0,
-                    y = 75.0,
-                    width = 411.0,
-                    height = 308.0
-                ),
-            ),
-            Food(
-                id = "3",
-                name = "Tempe Goreng",
-                calorie = 5.8f,
-                protein = 9f,
-                fat = 1f,
-                carbohydrates = 8.3f,
-                sugar = 0f,
-                bound = Bound(
-                    x = 404.0,
-                    y = 75.0,
-                    width = 411.0,
-                    height = 308.0
-                ),
-            ),
-            Food(
-                id = "4",
-                name = "Sayur Kangkung",
-                calorie = 5.8f,
-                protein = 9f,
-                fat = 0.5f,
-                carbohydrates = 8.3f,
-                sugar = 0f,
-                bound = Bound(
-                    x = 404.0,
-                    y = 75.0,
-                    width = 411.0,
-                    height = 308.0
-                ),
-            ),
-        )
     )
 
     private val foodDiaryReportToday = Report(
@@ -270,14 +118,13 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         get() = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO)
 
 
-    override fun getDiaryFoodsByDays(
+    override fun getDiaryFoodsByDate(
         accessToken: String,
         userId: String,
         date: String,
         category: FoodDiaryCategory
     ): Flow<UiState<List<FoodDiary>>> = channelFlow {
         send(UiState.Loading)
-        delay(1000L)
         foodDiaryRemoteSource.getFoodDiaries(
             accessToken = accessToken,
             getFoodDiaryBodyRequest = GetFoodDiaryBodyRequest(
@@ -297,7 +144,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                         date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
                         time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
                         foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
-                        totalFoodCalories = foodDiary.totalFoodCalories
+                        totalFoodCalories = foodDiary.totalCalories
                     )
                 }))
             }
@@ -324,10 +171,9 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         accessToken: String,
         userId: String,
         addFoodDiary: AddFoodDiary
-    ): Flow<UiState<FoodDiaryDetail>> =
+    ): Flow<UiState<String>> =
         flow {
             emit(UiState.Loading)
-            delay(1000L)
             val addedAt = getCurrentDateTimeInISOFormat()
             foodDiaryRemoteSource.addFoodDiary(
                 accessToken = accessToken,
@@ -336,16 +182,22 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                     category = addFoodDiary.category,
                     foodPicture = addFoodDiary.foodPicture,
                     userAccountId = userId,
-                    addedAt = addedAt
+                    addedAt = addedAt,
+                    foodIds = addFoodDiary.foodIds,
+                    totalProtein = addFoodDiary.totalProtein,
+                    totalFat = addFoodDiary.totalFat,
+                    totalCarbohydrate = addFoodDiary.totalCarbohydrate,
+                    totalCalories = addFoodDiary.totalCalories,
+                    feedback = addFoodDiary.feedback
                 )
             ).fold(
                 ifLeft = { exception ->
                     emit(UiState.Error(exception))
                 },
-                ifRight = { addedFoodDiary ->
+                ifRight = { foodId ->
                     emit(
                         UiState.Success(
-                            foodDiaryDetail.value
+                            foodId
                         )
                     )
                 }
@@ -353,95 +205,168 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 
+    @OptIn(ExperimentalCoilApi::class)
     override fun predictFood(
+        userId: String,
         accessToken: String,
-        foodPicture: File
-    ): Flow<UiState<List<PredictedFood>>> =
-        flow {
-            emit(UiState.Loading)
-            foodDiaryRemoteSource.predictFoods(accessToken, foodPicture).fold(
-                ifLeft = { exception ->
-                    emit(UiState.Error(exception))
-                },
-                ifRight = {
-                    emit(UiState.Success(it.foods.map { predictedFoodResponse ->
-                        val serving = predictedFoodResponse.foodDetail.serving.first { servingResponse ->
-                            servingResponse.metricServingAmount == 100
-                        }
-                        PredictedFood(
-                            id = predictedFoodResponse.foodDetail.id,
-                            name = predictedFoodResponse.foodDetail.name,
-                            bound = Bound(
-                                x = predictedFoodResponse.bounds.bound.x,
-                                y = predictedFoodResponse.bounds.bound.y,
-                                height = predictedFoodResponse.bounds.bound.height,
-                                width = predictedFoodResponse.bounds.bound.width,
-                            ),
-                            questions = predictedFoodResponse.foodDetail.questions.filter { questionResponse -> questionResponse.type == "food" }
-                                .map { questionResponse ->
-                                    Question(
-                                        id = questionResponse.id,
-                                        question = questionResponse.question,
-                                        options = questionResponse.options.map { optionResponse ->
-                                            Option(
-                                                id = optionResponse.id,
-                                                answer = optionResponse.answer,
-                                                reference = optionResponse.reference
-                                            )
-                                        })
-                                },
-                            calories = serving.calories,
-                            carbohydrates = serving.carbohydrate,
-                            protein = serving.protein,
-                            fat = serving.fat,
-                            sugar = serving.sugar,
-                            feedbacks = predictedFoodResponse.foodDetail.questions.filter { questionResponse -> questionResponse.type == "information" }
-                                .map { questionResponse -> questionResponse.question },
-                            )
-                    }))
+        foodPicture: File,
+        date: String
+    ): Flow<UiState<Pair<UserNutrition, FoodNutrition>>> =
+        channelFlow {
+            trySend(UiState.Loading)
+            withContext(Dispatchers.IO) {
+                val deferredPredictFoods = async {
+                    foodDiaryRemoteSource.predictFoods(accessToken, foodPicture)
                 }
-            )
-        }.flowOn(Dispatchers.IO)
-            .distinctUntilChanged()
-
-    override fun updateFoodDiaryBaseOnAnsweredQuestion(foodDiaryQuestion: FoodDiaryQuestion): Flow<UiState<FoodDiaryDetail>> =
-        flow {
-            emit(UiState.Loading)
-            delay(1000L)
-            emit(UiState.Success(foodDiaryDetail.value.copy(
-                status = "Kurang disarankan",
-                feedbacks = listOf(
-                    "Terlalu berminyak",
-                    "Terlalu banyak gula",
-                    "Kurang protein",
-                ),
-                foods = foodDiaryDetail.value.foods.map {
-                    it.copy(
-                        questions = null
+                val deferredDailyNutrients = async {
+                    userProfileRemoteSource.getDailyNutrients(
+                        accessToken = accessToken,
+                        userId = userId,
+                        date = date
                     )
                 }
-            )))
-            //        emit(UiState.Error(Failure.BadRequestFailure("bad request")))
-//                                emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
+                Pair(deferredPredictFoods.await(), deferredDailyNutrients.await()).run {
+                    first.isLeft {
+                        trySend(UiState.Error(it))
+                        true
+                    }
+                    second.isLeft {
+                        trySend(UiState.Error(it))
+                        true
+                    }
+                    val predictedResponse = first.getOrNull()
+                    val nutrientResponse = second.getOrNull()
+                    if (predictedResponse != null && nutrientResponse != null) {
+                        val image = "$IMAGE_LOCATION/${predictedResponse.imagePath}"
+                        val imageLoader = ImageLoader(context)
+                        val imageRequest = ImageRequest.Builder(context)
+                            .allowConversionToBitmap(true)
+                            .dispatcher(Dispatchers.IO)
+                            .data(image).build()
+                        imageLoader
+                            .execute(imageRequest)
+                        val path =
+                            imageLoader.diskCache?.openSnapshot(image)?.data
+                        trySend(
+                            UiState.Success(
+                                data = Pair(
+                                    first = UserNutrition(
+                                        totalCaloriesToday = nutrientResponse.calories,
+                                        totalFatToday = nutrientResponse.fat,
+                                        totalCarbohydrateToday = nutrientResponse.carbohydrate,
+                                        totalProteinToday = nutrientResponse.protein
+                                    ),
+                                    second = FoodNutrition(
+                                        image = path?.toFile(),
+                                        foods = predictedResponse.foods.map { predictedFoodResponse ->
+                                            val serving =
+                                                predictedFoodResponse.foodDetail.serving.first { servingResponse ->
+                                                    servingResponse.metricServingAmount == 100
+                                                }
+                                            Food(
+                                                id = predictedFoodResponse.foodDetail.id,
+                                                name = predictedFoodResponse.foodDetail.name,
+                                                questions = predictedFoodResponse.foodDetail.questions.filter { questionResponse -> questionResponse.type == "food" }
+                                                    .map { questionResponse ->
+                                                        Question(
+                                                            id = questionResponse.id,
+                                                            question = questionResponse.question,
+                                                            options = questionResponse.options.map { optionResponse ->
+                                                                Option(
+                                                                    id = optionResponse.id,
+                                                                    answer = optionResponse.answer,
+                                                                    reference = optionResponse.reference
+                                                                )
+                                                            })
+                                                    },
+                                                calories = serving.calories,
+                                                carbohydrates = serving.carbohydrate,
+                                                protein = serving.protein,
+                                                fat = serving.fat,
+                                                sugar = serving.sugar,
+                                                feedback = predictedFoodResponse.foodDetail.questions.filter { questionResponse -> questionResponse.type == "information" }
+                                                    .map { questionResponse -> questionResponse.question },
+                                            )
+                                        }
+                                    )
+                                )
+                            )
+                        )
+                    }
+                }
+            }
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 
-    override fun deleteFoodDiaryById(foodDiaryId: String): Flow<UiState<Nothing>> = flow {
+
+    override fun deleteFoodDiaryById(
+        accessToken: String,
+        foodDiaryId: String
+    ): Flow<UiState<Nothing>> = flow {
         emit(UiState.Loading)
-        delay(1000L)
-        //        emit(UiState.Error(Failure.BadRequestFailure("bad request")))
-//        emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
-        emit(UiState.Success())
+        foodDiaryRemoteSource.deleteFoodDiaryById(accessToken, foodDiaryId).fold(
+            ifLeft = { exception ->
+                emit(UiState.Error(exception))
+            },
+            ifRight = { emit(UiState.Success(null)) }
+        )
     }.flowOn(Dispatchers.IO)
         .distinctUntilChanged()
 
-    override fun getFoodDiaryDetailById(foodDiaryId: String): Flow<UiState<FoodDiaryDetail>> =
+    override fun getFoodDiaryDetailById(
+        accessToken: String,
+        foodDiaryId: String
+    ): Flow<UiState<FoodDiaryDetail>> =
         flow {
             emit(UiState.Loading)
-            delay(1000L)
-            emit(UiState.Success(anotherFoodDiaryDetail))
-            //        emit(UiState.Error(Failure.BadRequestFailure("bad request")))
-//                            emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
+            foodDiaryRemoteSource.getFoodDiaryById(accessToken, foodDiaryId).fold(
+                ifLeft = {
+                    emit(UiState.Error(it))
+                },
+                ifRight = {
+                    emit(UiState.Success(FoodDiaryDetail(id = it.id,
+                        title = it.title,
+                        feedback = it.feedback,
+                        status = it.status,
+                        foodNutrition = FoodNutrition(
+                            image = "$IMAGE_LOCATION/${it.filePath}",
+                            totalProtein = it.totalProtein,
+                            totalCalories = it.totalCalories,
+                            totalCarbohydrate = it.totalCarbohydrate,
+                            totalFat = it.totalFat,
+                            foods = it.foods.map { predictedFoodDetailResponse ->
+                                val serving =
+                                    predictedFoodDetailResponse.serving.first { servingResponse ->
+                                        servingResponse.metricServingAmount == 100
+                                    }
+                                Food(
+                                    id = predictedFoodDetailResponse.id,
+                                    name = predictedFoodDetailResponse.name,
+                                    questions = predictedFoodDetailResponse.questions.filter { questionResponse -> questionResponse.type == "food" }
+                                        .map { questionResponse ->
+                                            Question(
+                                                id = questionResponse.id,
+                                                question = questionResponse.question,
+                                                options = questionResponse.options.map { optionResponse ->
+                                                    Option(
+                                                        id = optionResponse.id,
+                                                        answer = optionResponse.answer,
+                                                        reference = optionResponse.reference
+                                                    )
+                                                })
+                                        },
+                                    calories = serving.calories,
+                                    carbohydrates = serving.carbohydrate,
+                                    protein = serving.protein,
+                                    fat = serving.fat,
+                                    sugar = serving.sugar,
+                                    feedback = predictedFoodDetailResponse.questions.filter { questionResponse -> questionResponse.type == "information" }
+                                        .map { questionResponse -> questionResponse.question },
+                                )
+                            }
+                        ))))
+                }
+            )
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 

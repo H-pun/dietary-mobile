@@ -46,7 +46,7 @@ private fun FoodListItemPreview() {
             carbohydrates = String.format("%.2f", 20f),
             protein = String.format("%.2f", 9.8f),
             sugar = String.format("%.2f", 9.8f),
-            feedbacks = listOf(
+            feedback = listOf(
                 "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
                 "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
                 "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
@@ -65,17 +65,17 @@ fun FoodListItem(
     carbohydrates: String,
     sugar: String?,
     modifier: Modifier = Modifier,
-    feedbacks: List<String> = listOf()
+    feedback: List<String> = listOf()
 ) {
     var isContentExpanded by rememberSaveable {
         mutableStateOf(false)
     }
-    var isNoteExpanded by rememberSaveable {
+    var isFeedbackExpanded by rememberSaveable {
         mutableStateOf(false)
     }
 
     Surface {
-        Column {
+        Column(modifier = modifier) {
             Text(
                 text = "✧ $foodName (100 g)",
                 fontWeight = FontWeight.SemiBold,
@@ -83,186 +83,184 @@ fun FoodListItem(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Row(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
             ) {
                 Spacer(modifier = Modifier.width(16.dp))
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .clickable { isContentExpanded = !isContentExpanded },
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = "Kandungan",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    IconButton(onClick = { isContentExpanded = !isContentExpanded }) {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isContentExpanded)
-                    }
-                }
-                HorizontalDivider(thickness = 1.5.dp)
-            }
-            AnimatedVisibility(visible = isContentExpanded) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Column {
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row(
-                            modifier = modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = stringResource(R.string.calorie),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = stringResource(R.string.kcal, calorie),
-                                fontWeight = FontWeight.Light,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        HorizontalDivider(thickness = 1.5.dp)
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row(
-                            modifier = modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = stringResource(R.string.fat),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = stringResource(R.string.g, fat),
-                                fontWeight = FontWeight.Light,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        HorizontalDivider(thickness = 1.5.dp)
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row(
-                            modifier = modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = stringResource(R.string.protein),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = stringResource(R.string.g, protein),
-                                fontWeight = FontWeight.Light,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        HorizontalDivider(thickness = 1.5.dp)
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row(
-                            modifier = modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = stringResource(R.string.carbohydrate),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = stringResource(R.string.g, carbohydrates),
-                                fontWeight = FontWeight.Light,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        HorizontalDivider(thickness = 1.5.dp)
-                        sugar?.let {
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Row(
-                                modifier = modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.sugar),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                                Text(
-                                    text = stringResource(R.string.g, sugar),
-                                    fontWeight = FontWeight.Light,
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(10.dp))
-                            HorizontalDivider(thickness = 1.5.dp)
-                        }
-                    }
-                }
-            }
-            if (feedbacks.isNotEmpty())
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth()
-                ) {
-                    Spacer(modifier = Modifier.width(16.dp))
+                Column {
                     Row(
                         modifier = modifier
                             .fillMaxWidth()
-                            .clickable { isNoteExpanded = !isNoteExpanded },
+                            .clickable { isContentExpanded = !isContentExpanded },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(
-                            text = stringResource(id = R.string.feedbacks),
+                            text = "Kandungan",
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onSurface
                         )
-                        IconButton(onClick = { isNoteExpanded = !isNoteExpanded }) {
+                        IconButton(onClick = { isContentExpanded = !isContentExpanded }) {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = isContentExpanded)
                         }
                     }
                     HorizontalDivider(thickness = 1.5.dp)
-                }
-            AnimatedVisibility(visible = isNoteExpanded) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Column {
-                        feedbacks.forEach { note ->
-                            Spacer(modifier = Modifier.height(10.dp))
+                    AnimatedVisibility(visible = isContentExpanded) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Spacer(modifier = Modifier.width(30.dp))
+                            Column {
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Row(
+                                    modifier = modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.calorie),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.kcal, calorie),
+                                        fontWeight = FontWeight.Light,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(10.dp))
+                                HorizontalDivider(thickness = 1.5.dp)
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Row(
+                                    modifier = modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.fat),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.g, fat),
+                                        fontWeight = FontWeight.Light,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(10.dp))
+                                HorizontalDivider(thickness = 1.5.dp)
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Row(
+                                    modifier = modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.protein),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.g, protein),
+                                        fontWeight = FontWeight.Light,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(10.dp))
+                                HorizontalDivider(thickness = 1.5.dp)
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Row(
+                                    modifier = modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.carbohydrate),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.g, carbohydrates),
+                                        fontWeight = FontWeight.Light,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(10.dp))
+                                HorizontalDivider(thickness = 1.5.dp)
+                                sugar?.let {
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Row(
+                                        modifier = modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.sugar),
+                                            style = MaterialTheme.typography.labelMedium,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                        Text(
+                                            text = stringResource(R.string.g, sugar),
+                                            fontWeight = FontWeight.Light,
+                                            style = MaterialTheme.typography.labelMedium,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    HorizontalDivider(thickness = 1.5.dp)
+                                }
+                            }
+                        }
+                    }
+                    if (feedback.isNotEmpty()) {
+                        Row(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .clickable { isFeedbackExpanded = !isFeedbackExpanded },
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
                             Text(
-                                text = note,
-                                textAlign = TextAlign.Start,
-                                style = MaterialTheme.typography.labelMedium,
+                                text = stringResource(id = R.string.feedback),
+                                style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
-                            Spacer(modifier = Modifier.height(10.dp))
-                            HorizontalDivider(thickness = 1.5.dp)
+                            IconButton(onClick = { isFeedbackExpanded = !isFeedbackExpanded }) {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = isFeedbackExpanded)
+                            }
+                        }
+                        HorizontalDivider(thickness = 1.5.dp)
+                    }
+                    AnimatedVisibility(visible = isFeedbackExpanded) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Spacer(modifier = Modifier.width(30.dp))
+                            Column {
+                                feedback.forEach { feedback ->
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Text(
+                                        text = feedback,
+                                        textAlign = TextAlign.Start,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    HorizontalDivider(thickness = 1.5.dp)
+                                }
+                            }
                         }
                     }
                 }
+
             }
         }
     }

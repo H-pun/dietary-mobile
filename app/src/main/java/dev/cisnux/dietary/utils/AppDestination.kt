@@ -16,10 +16,6 @@ sealed class AppDestination(val route: String) {
             "food_diary/$foodDiaryId"
     }
 
-    data object DiaryRoute : AppDestination(route = "diary?title={title}&foodDiaryCategory={foodDiaryCategory}") {
-            fun createRouteUrl(title: String, foodDiaryCategory: String): String =
-                "diary?title=$title&foodDiaryCategory=$foodDiaryCategory"
-    }
     data object SignInRoute : AppDestination(route = "sign_in")
     data object SignUpRoute : AppDestination(route = "sign_up")
     data object AddMyProfileRoute : AppDestination(route = "add_my_profile")
@@ -30,11 +26,12 @@ sealed class AppDestination(val route: String) {
         fun createDeepLinkUrl(emailAddress: String): String =
             "new_password?email_address$emailAddress"
     }
-    data object DevModeRoute:
-        AppDestination(route = "dev_mode"){
-            val deepLinkPattern = "https://www.dietary.xyz/$route"
-            fun createDeepLink() = "dev_mode"
-        }
+
+    data object DevModeRoute :
+        AppDestination(route = "dev_mode") {
+        val deepLinkPattern = "https://www.dietary.xyz/$route"
+        fun createDeepLink() = "dev_mode"
+    }
 
     data object SplashRoute : AppDestination(route = "splash")
     data object LandingRoute : AppDestination(route = "landing")

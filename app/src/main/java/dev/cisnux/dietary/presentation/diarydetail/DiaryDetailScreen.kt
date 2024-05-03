@@ -7,7 +7,10 @@ import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -40,36 +43,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.drawText
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import dev.cisnux.dietary.R
-import dev.cisnux.dietary.domain.models.Bound
-import dev.cisnux.dietary.domain.models.Food
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
+import dev.cisnux.dietary.domain.models.Food
+import dev.cisnux.dietary.domain.models.FoodNutrition
+import dev.cisnux.dietary.domain.models.UserNutrition
 import dev.cisnux.dietary.presentation.ui.components.AddedDietaryBody
-import dev.cisnux.dietary.presentation.ui.components.ScannerResultShimmer
+import dev.cisnux.dietary.presentation.ui.components.AddedDiaryShimmer
 import dev.cisnux.dietary.presentation.ui.theme.DietaryTheme
-import dev.cisnux.dietary.presentation.ui.theme.Typography
 import dev.cisnux.dietary.utils.AppDestination
 import dev.cisnux.dietary.utils.Failure
 import dev.cisnux.dietary.utils.UiState
@@ -86,12 +77,13 @@ fun DiaryDetailScreen(
         bottomSheetState = rememberModalBottomSheetState()
     )
     LaunchedEffect(Unit) {
-        scaffoldState.bottomSheetState.expand()
+        scaffoldState.bottomSheetState.partialExpand()
     }
     val snackbarHostState = remember {
         SnackbarHostState()
     }
     val foodDiaryDetailState by viewModel.foodDiaryDetailState.collectAsState()
+    val userDailyNutritionState by viewModel.userDailyNutritionState.collectAsState()
     val removeState by viewModel.removeState.collectAsState()
     val context = LocalContext.current
 
@@ -135,30 +127,38 @@ fun DiaryDetailScreen(
         body = {
             DiaryDetailBody(
                 foodPictures = if (foodDiaryDetailState is UiState.Success)
-                    (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.foodPicture
+                    (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.foodNutrition?.image
                 else null,
                 onNavigateUp = navigateUp,
                 onRemove = viewModel::deleteFoodDiaryById,
-                modifier = Modifier.padding(it),
-                isRemoveVisible = foodDiaryDetailState is UiState.Success,
+                isSuccess = foodDiaryDetailState is UiState.Success,
                 isRemoveEnable = removeState !is UiState.Loading,
             )
         },
         sheetContent = {
-            AnimatedVisibility(foodDiaryDetailState is UiState.Success) {
-                (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.let { foodDiaryDetail ->
-                    AddedDietaryBody(
-                        totalUserCaloriesToday = foodDiaryDetail.totalUserCaloriesToday,
-                        userDailyBmiCalorie = foodDiaryDetail.maxDailyBmrCalorie,
-                        totalFoodCalories = foodDiaryDetail.totalFoodCalories,
-                        foods = foodDiaryDetail.foods,
-                        status = foodDiaryDetail.status,
-                        feedbacks = foodDiaryDetail.feedbacks,
-                    )
-                }
+            if(foodDiaryDetailState is UiState.Success && userDailyNutritionState is UiState.Success) {
+                val foodDiaryDetail =
+                    (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data!!
+                val userDailyNutrition =
+                    (userDailyNutritionState as UiState.Success<UserNutrition>).data!!
+
+                AddedDietaryBody(
+                    totalCaloriesToday = userDailyNutrition.totalCaloriesToday,
+                    totalFatToday = userDailyNutrition.totalFatToday,
+                    totalProteinToday = userDailyNutrition.totalProteinToday,
+                    totalCarbohydrateToday = userDailyNutrition.totalCarbohydrateToday,
+                    maxDailyProtein = userDailyNutrition.maxDailyProtein,
+                    maxDailyFat = userDailyNutrition.maxDailyFat,
+                    maxDailyCarbohydrate = userDailyNutrition.maxDailyCarbohydrate,
+                    maxDailyCalories = userDailyNutrition.maxDailyCalories,
+                    totalFoodCalories = foodDiaryDetail.foodNutrition.totalCalories,
+                    foods = foodDiaryDetail.foodNutrition.foods,
+                    bottomContent = { Spacer(modifier = Modifier.height(16.dp))},
+                    feedback = foodDiaryDetail.feedback
+                )
             }
-            AnimatedVisibility(visible = foodDiaryDetailState is UiState.Loading || foodDiaryDetailState is UiState.Error) {
-                ScannerResultShimmer()
+            AnimatedVisibility(visible = foodDiaryDetailState is UiState.Loading || foodDiaryDetailState is UiState.Error || userDailyNutritionState is UiState.Loading || userDailyNutritionState is UiState.Error) {
+                AddedDiaryShimmer()
             }
         },
         bottomSheetScaffoldState = scaffoldState,
@@ -174,198 +174,84 @@ fun DiaryDetailScreen(
 @Composable
 private fun DiaryDetailContentPreview() {
     val foodDiaryDetail = FoodDiaryDetail(
-        foodDiaryId = "1",
-        totalFoodCalories = 200.4512f,
-        maxDailyBmrCalorie = 800.6798f,
-        totalUserCaloriesToday = 500.7892f,
+        id = "1",
+        title = "Warteg",
         status = "Kurang disarankan",
-        feedbacks = listOf(
-            "Terlalu berminyak",
-            "Terlalu banyak gula",
-            "Kurang protein",
+        feedback = listOf(
+            "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+            "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+            "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
         ),
-        foodPicture = "https://firebasestorage.googleapis.com/v0/b/dietary-f1812.appspot.com/o/images%2FWhatsApp%20Image%202024-03-26%20at%2019.30.43.jpeg?alt=media&token=e89da25b-baa6-481b-b4d0-cb7c9504e759",
-        foods = listOf(
-            Food(
-                id = "1",
-                name = "Nasi",
-                calorie = 50f,
-                protein = 8f,
-                fat = 2f,
-                carbohydrates = 4.3f,
-                sugar = 8.7f,
-                bound = Bound(
-                    x = 404.0,
-                    y = 75.0,
-                    width = 411.0,
-                    height = 308.0
-                )
+        foodNutrition = FoodNutrition(
+            image = null,
+            totalProtein = 2000f,
+            foods = listOf(
+                Food(
+                    id = "1",
+                    name = "Nasi Putih",
+                    calories = 8.3f,
+                    fat = 8.3f,
+                    protein = 8.3f,
+                    carbohydrates = 8.3f,
+                    sugar = null,
+                    feedback = listOf(
+                        "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+                        "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+                        "Bagian gosong pada makanan yang dibakar mengandung karsinogenik (senyawa yang berpotensi menyebabkan kanker), jangan terlalu sering mengkonsumsi makanan yang diolah dengan cara dibakar",
+                    )
+                ),
+                Food(
+                    id = "2",
+                    name = "Ayam Goreng",
+                    calories = 8.3f,
+                    fat = 8.3f,
+                    protein = 8.3f,
+                    carbohydrates = 8.3f,
+                    sugar = null,
+                ),
             ),
-            Food(
-                id = "2",
-                name = "Ayam Bakar",
-                calorie = 50f,
-                protein = 6f,
-                fat = 10f,
-                carbohydrates = 8.3f,
-                sugar = null,
-                bound = Bound(
-                    x = 404.0,
-                    y = 75.0,
-                    width = 411.0,
-                    height = 308.0
-                )
-            ),
-            Food(
-                id = "3",
-                name = "Tempe Goreng",
-                calorie = 5.8f,
-                protein = 9f,
-                fat = 1f,
-                carbohydrates = 8.3f,
-                sugar = 0f,
-                bound = Bound(
-                    x = 404.0,
-                    y = 75.0,
-                    width = 411.0,
-                    height = 308.0
-                )
-            ),
-            Food(
-                id = "4",
-                name = "Sayur Kangkung",
-                calorie = 5.8f,
-                protein = 9f,
-                fat = 0.5f,
-                carbohydrates = 8.3f,
-                sugar = 0f,
-                bound = Bound(
-                    x = 404.0,
-                    y = 75.0,
-                    width = 411.0,
-                    height = 308.0
-                )
-            ),
-        )
+            totalFat = 2000f,
+            totalCarbohydrate = 2000f,
+            totalCalories = 2000f,
+        ),
+    )
+    val userDailyNutrition = UserNutrition(
+        totalCaloriesToday = 2000f,
+        totalFatToday = 2000f,
+        totalProteinToday = 2000f,
+        totalCarbohydrateToday = 2000f,
+        maxDailyCalories = 2000f,
+        maxDailyFat = 2000f,
+        maxDailyCarbohydrate = 2000f,
+        maxDailyProtein = 2000f,
     )
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberModalBottomSheetState()
     )
 
-    LaunchedEffect(Unit) {
-        scaffoldState.bottomSheetState.expand()
-    }
-
     DietaryTheme {
         DiaryDetailContent(
             snackbarHostState = SnackbarHostState(),
             body = {
-                foodDiaryDetail.foodPicture?.let { foodPicture ->
-                    DiaryDetailBody(
-                        foodPictures = foodPicture,
-                        onNavigateUp = { /*TODO*/ },
-                        onRemove = { /*TODO*/ },
-                        modifier = Modifier.padding(it)
-                    )
-                }
+                DiaryDetailBody(
+                    foodPictures = foodDiaryDetail.foodNutrition.image,
+                    onNavigateUp = { /*TODO*/ },
+                    onRemove = { /*TODO*/ },
+                )
             },
             sheetContent = {
                 AddedDietaryBody(
-                    totalUserCaloriesToday = foodDiaryDetail.totalUserCaloriesToday,
-                    userDailyBmiCalorie = foodDiaryDetail.maxDailyBmrCalorie,
-                    totalFoodCalories = foodDiaryDetail.totalFoodCalories,
-                    foods = foodDiaryDetail.foods,
-                    status = foodDiaryDetail.status,
-                    feedbacks = foodDiaryDetail.feedbacks,
-                )
-            },
-            bottomSheetScaffoldState = scaffoldState
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
-)
-@Composable
-private fun DiaryDetailContentBoundsPreview() {
-    val foodDiaryDetail = FoodDiaryDetail(
-        foodDiaryId = "1",
-        totalFoodCalories = 200.4512f,
-        maxDailyBmrCalorie = 800.6798f,
-        totalUserCaloriesToday = 500.7892f,
-        status = "Kurang disarankan",
-        feedbacks = listOf(
-            "Terlalu berminyak",
-            "Terlalu banyak gula",
-            "Kurang protein",
-        ),
-        foodPicture = "https://firebasestorage.googleapis.com/v0/b/dietary-f1812.appspot.com/o/images%2FWhatsApp%20Image%202024-03-26%20at%2019.30.43.jpeg?alt=media&token=e89da25b-baa6-481b-b4d0-cb7c9504e759",
-        foods = listOf(
-            Food(
-                id = "1",
-                name = "Nasi Putih",
-                calorie = 50f,
-                protein = 8f,
-                fat = 2f,
-                carbohydrates = 4.3f,
-                sugar = 8.7f,
-                bound = Bound(
-                    x = 404.0,
-                    y = 75.0,
-                    width = 411.0,
-                    height = 308.0
-                )
-            ),
-            Food(
-                id = "2",
-                name = "Ayam Goreng",
-                calorie = 50f,
-                protein = 6f,
-                fat = 10f,
-                carbohydrates = 8.3f,
-                sugar = null,
-                bound = Bound(
-                    x = 197.0,
-                    y = 275.0,
-                    width = 434.0,
-                    height = 277.0
-                )
-            ),
-        )
-    )
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberModalBottomSheetState()
-    )
-
-    LaunchedEffect(Unit) {
-        scaffoldState.bottomSheetState.expand()
-    }
-
-    DietaryTheme {
-        DiaryDetailContent(
-            snackbarHostState = SnackbarHostState(),
-            body = {
-                foodDiaryDetail.foodPicture?.let { foodPicture ->
-                    DiaryDetailBody(
-                        foodPictures = foodPicture,
-                        onNavigateUp = { /*TODO*/ },
-                        onRemove = { /*TODO*/ },
-                        modifier = Modifier.padding(it),
-                        foods = foodDiaryDetail.foods
-                    )
-                }
-            },
-            sheetContent = {
-                AddedDietaryBody(
-                    totalUserCaloriesToday = foodDiaryDetail.totalUserCaloriesToday,
-                    userDailyBmiCalorie = foodDiaryDetail.maxDailyBmrCalorie,
-                    totalFoodCalories = foodDiaryDetail.totalFoodCalories,
-                    foods = foodDiaryDetail.foods,
-                    status = foodDiaryDetail.status,
-                    feedbacks = foodDiaryDetail.feedbacks,
+                    totalCaloriesToday = userDailyNutrition.totalCaloriesToday,
+                    totalFatToday = userDailyNutrition.totalFatToday,
+                    totalProteinToday = userDailyNutrition.totalProteinToday,
+                    totalCarbohydrateToday = userDailyNutrition.totalCarbohydrateToday,
+                    maxDailyProtein = userDailyNutrition.maxDailyCalories,
+                    maxDailyFat = userDailyNutrition.maxDailyFat,
+                    maxDailyCarbohydrate = userDailyNutrition.maxDailyCarbohydrate,
+                    maxDailyCalories = userDailyNutrition.maxDailyCalories,
+                    totalFoodCalories = foodDiaryDetail.foodNutrition.totalCalories,
+                    foods = foodDiaryDetail.foodNutrition.foods,
+                    feedback = foodDiaryDetail.feedback
                 )
             },
             bottomSheetScaffoldState = scaffoldState
@@ -376,15 +262,13 @@ private fun DiaryDetailContentBoundsPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryDetailBody(
-    foodPictures: String?,
+    foodPictures: Any?,
     onNavigateUp: () -> Unit,
     onRemove: () -> Unit,
-    modifier: Modifier = Modifier,
     isRemoveEnable: Boolean = true,
-    isRemoveVisible: Boolean = true,
-    foods: List<Food> = listOf()
+    isSuccess: Boolean = true,
 ) {
-    Box(modifier = modifier) {
+    Box(modifier = Modifier.fillMaxSize()) {
         AnimatedVisibility(
             visible = foodPictures == null, modifier = Modifier
                 .align(Alignment.Center)
@@ -408,7 +292,8 @@ fun DiaryDetailBody(
             }
 
             Box(
-                Modifier
+                modifier = Modifier
+                    .padding(bottom = 270.dp)
                     .graphicsLayer(
                         scaleX = scale,
                         scaleY = scale,
@@ -419,54 +304,12 @@ fun DiaryDetailBody(
                     // add transformable to listen to multitouch transformation events
                     // after offset
                     .transformable(state = state)
-                    .fillMaxSize()
+                    .fillMaxSize(),
             ) {
-                val textMeasurer = rememberTextMeasurer()
                 SubcomposeAsyncImage(
                     model = foodPictures,
-                    contentScale = ContentScale.Fit,
                     contentDescription = null,
-                    modifier = Modifier
-                        .drawWithContent {
-                            drawContent()
-                            foods.forEach {
-                                val foodSize = Size(
-                                    width = it.bound.width.toFloat(),
-                                    height = it.bound.height.toFloat()
-                                )
-                                val measuredText =
-                                    textMeasurer.measure(
-                                        AnnotatedString(it.name),
-                                        overflow = TextOverflow.Ellipsis,
-                                        style = Typography.labelSmall.copy(fontSize = 8.sp)
-                                    )
-                                drawRect(
-                                    topLeft = foodSize.toRect().topLeft.copy(
-                                        x = it.bound.x.toFloat(),
-                                        y = it.bound.y.toFloat() - 40f
-                                    ),
-                                    color = Color.White,
-                                    size = measuredText.size.toSize().copy(width = measuredText.size.toSize().width + 8, height = measuredText.size.toSize().height + 8)
-                                )
-                                drawText(
-                                    measuredText, topLeft = foodSize.toRect().topLeft.copy(
-                                        x = it.bound.x.toFloat() + 4,
-                                        y = it.bound.y.toFloat() - 36f
-                                    )
-                                )
-                                drawRoundRect(
-                                    topLeft = foodSize.toRect().topLeft.copy(
-                                        x = it.bound.x.toFloat(),
-                                        y = it.bound.y.toFloat()
-                                    ),
-                                    color = Color.White,
-                                    cornerRadius = CornerRadius(2f, 2f),
-                                    style = Stroke(width = 4f),
-                                    size = foodSize
-                                )
-                            }
-                        }
-                        .align(Alignment.Center)
+                    modifier = Modifier.fillMaxHeight().align(Alignment.TopCenter)
                 )
             }
         }
@@ -486,8 +329,8 @@ fun DiaryDetailBody(
             )
         }
         AnimatedVisibility(
-            visible = isRemoveVisible,
-            modifier = modifier
+            visible = isSuccess,
+            modifier = Modifier
                 .padding(top = 12.dp, end = 12.dp)
                 .align(Alignment.TopEnd)
         ) {
@@ -532,7 +375,7 @@ private fun DiaryDetailContent(
         sheetContent = sheetContent,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         scaffoldState = bottomSheetScaffoldState,
-        sheetPeekHeight = 160.dp,
+        sheetPeekHeight = 370.dp,
     ) {
         body(it)
     }
