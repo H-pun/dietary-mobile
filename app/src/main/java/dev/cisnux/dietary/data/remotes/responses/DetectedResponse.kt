@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
 
 @Serializable
-data class PredictedResponse(
-    val foods: List<PredictedFoodResponse>,
+data class DetectedResponse(
+    val foods: List<DetectedFoodResponse>,
     @SerialName("imagePlotPath")
     val imagePath: String,
     val totalCalories: Float,

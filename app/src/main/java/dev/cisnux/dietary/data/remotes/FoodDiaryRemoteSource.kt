@@ -2,17 +2,17 @@ package dev.cisnux.dietary.data.remotes
 
 import arrow.core.Either
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
-import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryParams
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryDetailResponse
 import dev.cisnux.dietary.data.remotes.responses.FoodDiaryResponse
-import dev.cisnux.dietary.data.remotes.responses.PredictedResponse
+import dev.cisnux.dietary.data.remotes.responses.DetectedResponse
 import dev.cisnux.dietary.data.remotes.responses.ReportResponse
 import java.io.File
 
 interface FoodDiaryRemoteSource {
     suspend fun getFoodDiaries(
         accessToken: String,
-        getFoodDiaryBodyRequest: GetFoodDiaryBodyRequest
+        getFoodDiaryParams: GetFoodDiaryParams
     ): Either<Exception, List<FoodDiaryResponse>>
 
     suspend fun getFoodDiaryById(
@@ -28,7 +28,7 @@ interface FoodDiaryRemoteSource {
     suspend fun predictFoods(
         accessToken: String,
         foodPicture: File
-    ): Either<Exception, PredictedResponse>
+    ): Either<Exception, DetectedResponse>
 
     suspend fun getFoodDiaryReports(
         accessToken: String,

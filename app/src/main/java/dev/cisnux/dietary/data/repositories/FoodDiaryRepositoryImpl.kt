@@ -9,7 +9,7 @@ import dev.cisnux.dietary.data.locals.BaseApiUrlLocalSource
 import dev.cisnux.dietary.data.remotes.FoodDiaryRemoteSource
 import dev.cisnux.dietary.data.remotes.UserProfileRemoteSource
 import dev.cisnux.dietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
-import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryBodyRequest
+import dev.cisnux.dietary.data.remotes.bodyrequests.GetFoodDiaryParams
 import dev.cisnux.dietary.domain.models.AddFoodDiary
 import dev.cisnux.dietary.domain.models.FoodDiary
 import dev.cisnux.dietary.domain.models.FoodDiaryDetail
@@ -127,7 +127,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         send(UiState.Loading)
         foodDiaryRemoteSource.getFoodDiaries(
             accessToken = accessToken,
-            getFoodDiaryBodyRequest = GetFoodDiaryBodyRequest(
+            getFoodDiaryParams = GetFoodDiaryParams(
                 userId = userId,
                 date = date,
                 category = category.value,

@@ -1,6 +1,6 @@
 package dev.cisnux.dietary.data.remotes.bodyrequests
 
-data class GetFoodDiaryBodyRequest(
+data class GetFoodDiaryParams(
     val userId: String,
     val date: String,
     val category: String,
