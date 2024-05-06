@@ -19,5 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Dietary"
+rootProject.name = "MyDietary"
 include(":app")
+ 
