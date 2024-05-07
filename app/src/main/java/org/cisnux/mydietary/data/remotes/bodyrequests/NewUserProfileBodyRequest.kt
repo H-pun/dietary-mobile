@@ -15,6 +15,7 @@ data class NewUserProfileBodyRequest(
     val age: Int,
     val weight: Float,
     val height: Float,
+    val waistCircumference: Float,
     val gender: String,
     val goal: String,
     val weightTarget: Float = 0f,

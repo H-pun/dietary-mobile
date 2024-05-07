@@ -16,32 +16,29 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.cisnux.mydietary.domain.models.FoodDiaryReport
+import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ReportViewModel @Inject constructor(
     private val useCase: FoodDiaryUseCase,
+    private val userProfileUseCase: UserProfileUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
 ) : ViewModel() {
-    private val _reportState = MutableStateFlow<UiState<Report>>(UiState.Initialize)
+    private val _reportState = MutableStateFlow<UiState<List<FoodDiaryReport>>>(UiState.Initialize)
     val reportState get() = _reportState.asStateFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val report = _reportState.mapLatest { uiState ->
-        when (uiState) {
-            is UiState.Success -> uiState.data
-            else -> null
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = null
-    )
+    init {
+        getReports(0)
+    }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val maxRange = report.mapLatest { report ->
-        report?.foods?.maxBy { it.totalFoodCalories }?.totalFoodCalories?.toInt() ?: 0
-    }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = 0)
+    val userDailyNutritionState
+        get() = userProfileUseCase.userDailyNutrition.stateIn(
+            viewModelScope,
+            SharingStarted.Lazily,
+            UiState.Initialize
+        )
 
     fun getReports(index: Int = 0) = viewModelScope.launch {
         useCase.getFoodDiaryReports(index.reportCategory).collectLatest { uiState ->

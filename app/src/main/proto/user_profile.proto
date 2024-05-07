@@ -14,5 +14,6 @@ message UserProfile {
   string gender = 8;
   string goal = 9;
   float weight_target = 10;
-  string activity_level = 11;
+  float waist_circumference = 11;
+  string activity_level = 12;
 }

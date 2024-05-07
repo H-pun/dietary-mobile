@@ -320,12 +320,12 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
         }
 
     override suspend fun getFoodDiaryReports(
-        accessToken: String, category: Int
-    ): Either<Exception, ReportResponse> = withContext(Dispatchers.IO) {
+        accessToken: String, userId: String, category: String
+    ): Either<Exception, List<ReportResponse>> = withContext(Dispatchers.IO) {
         try {
             val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
             val response = client.get(
-                urlString = "$baseUrl/report?category=$category"
+                urlString = "$baseUrl/food-diary/report?idUser=$userId"
             ) {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -343,7 +343,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 } ?: Either.Left(Exception(commonResponse?.message))
                 failure
             } else {
-                val commonResponse: CommonResponse<ReportResponse> = response.body()
+                val commonResponse: CommonResponse<List<ReportResponse>> = response.body()
                 Either.Right(commonResponse.data!!)
             }
         } catch (e: UnresolvedAddressException) {

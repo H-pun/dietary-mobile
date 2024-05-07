@@ -27,6 +27,7 @@ class UserProfileLocalSourceImpl @Inject constructor(
                 .setGoal(userProfileDetailResponse.goal)
                 .setWeightTarget(userProfileDetailResponse.weightTarget)
                 .setActivityLevel(userProfileDetailResponse.activityLevel)
+                .setWaistCircumference(userProfileDetailResponse.waistCircumference)
                 .build()
         }
     }

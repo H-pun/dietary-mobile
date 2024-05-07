@@ -19,7 +19,6 @@ import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.models.Option
 import org.cisnux.mydietary.domain.models.Food
 import org.cisnux.mydietary.domain.models.Question
-import org.cisnux.mydietary.domain.models.Report
 import org.cisnux.mydietary.domain.repositories.FoodRepository
 import org.cisnux.mydietary.utils.dayDateMonthYear
 import org.cisnux.mydietary.utils.hoursAndMinutes
@@ -28,8 +27,6 @@ import org.cisnux.mydietary.utils.IMAGE_LOCATION
 import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.convertISOToInstant
-import org.cisnux.mydietary.utils.dateAndMonth
-import org.cisnux.mydietary.utils.dayDateMonth
 import org.cisnux.mydietary.utils.getCurrentDateTimeInISOFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -42,6 +39,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.withContext
 import org.cisnux.mydietary.domain.models.Keyword
+import org.cisnux.mydietary.utils.asDateAndMonth
 import java.io.File
 import java.time.Instant
 import kotlin.random.Random
@@ -63,44 +61,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         )
     }
 
-    private val foodDiaryReportToday = Report(
-        totalUserCaloriesToday = 500.7892f,
-        maxDailyBmiCalorie = 800.6798f,
-        foods = List(10) {
-            FoodDiaryReport(
-                id = it.toString(),
-                title = "Warteg $it",
-                totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
-                label = Instant.now().hoursAndMinutes()
-            )
-        }
-    )
-
-    private val foodDiaryReportWeek = Report(
-        totalUserCaloriesToday = 500.7892f,
-        maxDailyBmiCalorie = 800.6798f,
-        foods = List(12) {
-            FoodDiaryReport(
-                id = it.toString(),
-                title = "Warter $it",
-                totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
-                label = Instant.now().dayDateMonth()
-            )
-        }
-    )
-
-    private val foodDiaryReportMonth = Report(
-        totalUserCaloriesToday = 500.7892f,
-        maxDailyBmiCalorie = 800.6798f,
-        foods = List(25) {
-            FoodDiaryReport(
-                id = it.toString(),
-                title = "Warter $it",
-                totalFoodCalories = Random.nextDouble(80.0, 500.0).toFloat(),
-                label = Instant.now().dateAndMonth()
-            )
-        }
-    )
     override val baseUrl: Flow<String>
         get() = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO)
 
@@ -379,20 +339,31 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 
-    override fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<Report>> =
+    override fun getFoodDiaryReports(
+        accessToken: String,
+        userId: String,
+        category: ReportCategory
+    ): Flow<UiState<List<FoodDiaryReport>>> =
         flow {
             emit(UiState.Loading)
-            delay(1000L)
-            //        emit(UiState.Error(Failure.BadRequestFailure("bad request")))
-//        emit(UiState.Error(error = Failure.ConnectionFailure("No internet access")))
-            emit(
-                UiState.Success(
-                    when (category) {
-                        ReportCategory.TODAY -> foodDiaryReportToday
-                        ReportCategory.THIS_WEEK -> foodDiaryReportWeek
-                        else -> foodDiaryReportMonth
-                    }
-                )
+            foodDiaryRemoteSource.getFoodDiaryReports(
+                accessToken = accessToken,
+                userId = userId,
+                category = category.name
+            ).fold(
+                ifLeft = { exception -> emit(UiState.Error(exception)) },
+                ifRight = {
+                    emit(UiState.Success(it.map { reportResponse ->
+                        FoodDiaryReport(
+                            averageCarbohydrate = reportResponse.averageCarbohydrate,
+                            averageCalories = reportResponse.averageCalories,
+                            averageFat = reportResponse.averageProtein,
+                            averageProtein = reportResponse.averageProtein,
+                            label = reportResponse.week.toString(),
+                            date = "(${reportResponse.startDate.asDateAndMonth} - ${reportResponse.endDate.asDateAndMonth})"
+                        )
+                    }))
+                }
             )
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()

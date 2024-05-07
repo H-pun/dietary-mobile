@@ -68,10 +68,11 @@ import org.cisnux.mydietary.presentation.ui.theme.placeholder
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.isIntAnswerValid
-import org.cisnux.mydietary.utils.isHeightOrWeightValid
+import org.cisnux.mydietary.utils.isGreaterThanZeroValid
 import org.cisnux.mydietary.utils.isFloatAnswerValid
 import org.cisnux.mydietary.utils.isUsernameValid
 import org.cisnux.mydietary.utils.Failure
+import java.util.Locale
 
 @Composable
 fun MyProfileScreen(
@@ -102,6 +103,7 @@ fun MyProfileScreen(
             goal = "",
             weightTarget = 0f,
             activityLevel = "",
+            waistCircumference = 0f
         )
     )
     val userProfileState by viewModel.userProfileState.collectAsState(initial = UiState.Initialize)
@@ -119,6 +121,7 @@ fun MyProfileScreen(
         userProfileDetail.goal,
         userProfileDetail.weightTarget,
         userProfileDetail.activityLevel,
+        userProfileDetail.waistCircumference
     ) {
         mutableStateOf(
             MyProfile(
@@ -129,7 +132,8 @@ fun MyProfileScreen(
                 gender = userProfileDetail.gender,
                 goal = userProfileDetail.goal,
                 weightTarget = userProfileDetail.weightTarget.toString(),
-                activityLevel = userProfileDetail.activityLevel
+                activityLevel = userProfileDetail.activityLevel,
+                waistCircumference = userProfileDetail.waistCircumference.toString()
             )
         )
     }
@@ -173,6 +177,7 @@ fun MyProfileScreen(
                             duration = SnackbarDuration.Long
                         )
                         if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.updateMyProfile(
+                            id = userProfileDetail.id,
                             myProfile = myProfile
                         )
                     }
@@ -198,26 +203,32 @@ fun MyProfileScreen(
                         (userProfileState is UiState.Error && (userProfileState as UiState.Error).error is Failure.ConnectionFailure
                                 && userProfileDetail.username.isNotBlank())
             ) {
+                val locale = Locale("id", "ID")
                 MyProfileBody(
                     username = userProfileDetail.username,
                     emailAddress = userProfileDetail.emailAddress,
                     age = userProfileDetail.age,
-                    weight = String.format("%.2f", userProfileDetail.weight),
-                    height = String.format("%.2f", userProfileDetail.height),
-                    weightTarget = String.format("%.2f", userProfileDetail.weightTarget),
+                    weight = String.format(locale, "%.2f", userProfileDetail.weight),
+                    height = String.format(locale, "%.2f", userProfileDetail.height),
+                    weightTarget = String.format(locale, "%.2f", userProfileDetail.weightTarget),
                     gender = userProfileDetail.gender,
                     goal = userProfileDetail.goal,
                     activityLevel = userProfileDetail.activityLevel,
                     onEdit = {
                         isUpdateMyProfileDialogOpen = true
                     },
+                    waistCircumference = String.format(
+                        locale,
+                        "%.2f",
+                        userProfileDetail.waistCircumference
+                    ),
                     isWeightTargetVisible = userProfileDetail.goal != goals[1],
                     modifier = modifier.padding(it)
                 )
                 UpdateMyProfileDialog(
                     onSave = {
                         isUpdateMyProfileDialogOpen = false
-                        viewModel.updateMyProfile(myProfile = myProfile)
+                        viewModel.updateMyProfile(id = userProfileDetail.id, myProfile = myProfile)
                     },
                     onCancel = { isUpdateMyProfileDialogOpen = false },
                     onDismissRequest = { isUpdateMyProfileDialogOpen = false },
@@ -258,6 +269,10 @@ fun MyProfileScreen(
                     onActivityLevelChange = { newValue ->
                         myProfile = myProfile.copy(activityLevel = newValue)
                     },
+                    waistCircumference = myProfile.waistCircumference,
+                    onWaistCircumference = { newValue ->
+                        myProfile = myProfile.copy(waistCircumference = newValue)
+                    },
                 )
             }
             AnimatedVisibility(
@@ -291,6 +306,7 @@ private fun MyProfileContentPreview() {
         goal = "Menurunkan berat badan",
         weightTarget = 10f,
         activityLevel = "Very Active",
+        waistCircumference = 40.2f
     )
     var isUpdateMyProfileDialogOpen by remember {
         mutableStateOf(false)
@@ -305,7 +321,8 @@ private fun MyProfileContentPreview() {
                 gender = userProfileDetail.gender,
                 goal = userProfileDetail.goal,
                 weightTarget = userProfileDetail.weightTarget.toString(),
-                activityLevel = userProfileDetail.activityLevel
+                activityLevel = userProfileDetail.activityLevel,
+                waistCircumference = userProfileDetail.waistCircumference.toString()
             )
         )
     }
@@ -318,19 +335,25 @@ private fun MyProfileContentPreview() {
         MyProfileContent(
             onSelectedDestination = { _, _ -> },
             body = {
+                val locale = Locale("id", "ID")
                 MyProfileBody(
                     username = userProfileDetail.username,
                     emailAddress = userProfileDetail.emailAddress,
                     age = userProfileDetail.age,
-                    weight = String.format("%.2f", userProfileDetail.weight),
-                    height = String.format("%.2f", userProfileDetail.height),
-                    weightTarget = String.format("%.2f", userProfileDetail.weightTarget),
+                    weight = String.format(locale, "%.2f", userProfileDetail.weight),
+                    height = String.format(locale, "%.2f", userProfileDetail.height),
+                    weightTarget = String.format(locale, "%.2f", userProfileDetail.weightTarget),
                     gender = userProfileDetail.gender,
                     goal = userProfileDetail.goal,
                     activityLevel = userProfileDetail.activityLevel,
                     onEdit = {
                         isUpdateMyProfileDialogOpen = true
                     },
+                    waistCircumference = String.format(
+                        locale,
+                        "%.2f",
+                        userProfileDetail.waistCircumference
+                    ),
                     modifier = Modifier.padding(it),
                     isWeightTargetVisible = userProfileDetail.weightTarget != 0f,
                 )
@@ -368,6 +391,10 @@ private fun MyProfileContentPreview() {
                     },
                     onActivityLevelChange = { newValue ->
                         myProfile = myProfile.copy(activityLevel = newValue)
+                    },
+                    waistCircumference = myProfile.waistCircumference,
+                    onWaistCircumference = { newValue ->
+                        myProfile = myProfile.copy(waistCircumference = newValue)
                     },
                 )
             },
@@ -433,6 +460,7 @@ private fun MyProfileBody(
     age: Int,
     weight: String,
     height: String,
+    waistCircumference: String,
     gender: String,
     goal: String,
     weightTarget: String,
@@ -566,6 +594,31 @@ private fun MyProfileBody(
                 bodyLabel = {
                     Text(
                         text = stringResource(R.string.kg, weight),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ListTileProfile(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_waist_100dp),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = {
+                    Text(
+                        text = "Lingkar Pinggang",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                bodyLabel = {
+                    Text(
+                        text = stringResource(R.string.cm, waistCircumference),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -769,7 +822,8 @@ private fun UpdateMyProfileDialogPreview() {
                 gender = "Man",
                 goal = "Weight Loss",
                 weightTarget = "10",
-                activityLevel = "Very Active"
+                activityLevel = "Very Active",
+                waistCircumference = "40.2"
             )
         )
     }
@@ -806,6 +860,10 @@ private fun UpdateMyProfileDialogPreview() {
             onActivityLevelChange = { newValue ->
                 myProfile = myProfile.copy(activityLevel = newValue)
             },
+            waistCircumference = myProfile.waistCircumference,
+            onWaistCircumference = { newValue ->
+                myProfile = myProfile.copy(waistCircumference = newValue)
+            },
         )
     }
 }
@@ -823,6 +881,7 @@ fun UpdateMyProfileDialog(
     height: String,
     selectedGender: String,
     selectedGoal: String,
+    waistCircumference: String,
     weightTarget: String,
     selectedActivityLevel: String,
     genders: Array<String>,
@@ -837,6 +896,7 @@ fun UpdateMyProfileDialog(
     onGoalChange: (String) -> Unit,
     onTargetWeightChange: (String) -> Unit,
     onActivityLevelChange: (String) -> Unit,
+    onWaistCircumference: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -872,7 +932,7 @@ fun UpdateMyProfileDialog(
                             TextButton(
                                 onClick = onSave,
                                 enabled = username.isUsernameValid() and age.isIntAnswerValid()
-                                        and weight.isHeightOrWeightValid() and height.isHeightOrWeightValid()
+                                        and weight.isGreaterThanZeroValid() and height.isGreaterThanZeroValid()
                                         and weightTarget.isFloatAnswerValid(),
                             ) {
                                 Text(
@@ -906,6 +966,8 @@ fun UpdateMyProfileDialog(
                     onGoalChange = onGoalChange,
                     onTargetWeightChange = onTargetWeightChange,
                     onActivityLevelChange = onActivityLevelChange,
+                    waistCircumference = waistCircumference,
+                    onWaistCircumference = onWaistCircumference,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValues)

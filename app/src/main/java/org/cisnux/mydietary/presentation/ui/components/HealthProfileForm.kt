@@ -30,33 +30,25 @@ import androidx.compose.ui.unit.dp
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.isIntAnswerValid
-import org.cisnux.mydietary.utils.isHeightOrWeightValid
+import org.cisnux.mydietary.utils.isGreaterThanZeroValid
 
 @Preview(showBackground = true)
 @Composable
 private fun HealthProfileFormPreview() {
     val genders = stringArrayResource(id = R.array.gender)
-    var healthProfile by rememberSaveable {
-        mutableStateOf(
-            HealthProfile(
-                age = "",
-                weight = "",
-                height = "",
-                gender = genders[0],
-            )
-        )
-    }
 
     DietaryTheme {
         HealthProfileForm(
-            age = healthProfile.age,
-            weight = healthProfile.weight,
-            height = healthProfile.height,
-            selectedGender = healthProfile.gender,
-            onAgeChange = { newValue -> healthProfile = healthProfile.copy(age = newValue) },
-            onHeightChange = { newValue -> healthProfile = healthProfile.copy(height = newValue) },
-            onWeightChange = { newValue -> healthProfile = healthProfile.copy(weight = newValue) },
-            onGenderChange = { newValue -> healthProfile = healthProfile.copy(gender = newValue) },
+            age = "",
+            weight = "",
+            height = "",
+            selectedGender = genders[0],
+            waistCircumference = "",
+            onAgeChange = { },
+            onHeightChange = { },
+            onWeightChange = { },
+            onGenderChange = { },
+            onWaistCircumference = {},
             genders = genders
         )
     }
@@ -69,10 +61,12 @@ fun HealthProfileForm(
     weight: String,
     height: String,
     selectedGender: String,
+    waistCircumference: String,
     onAgeChange: (String) -> Unit,
     onHeightChange: (String) -> Unit,
     onWeightChange: (String) -> Unit,
     onGenderChange: (String) -> Unit,
+    onWaistCircumference: (String) -> Unit,
     genders: Array<String>,
     modifier: Modifier = Modifier
 ) {
@@ -83,6 +77,9 @@ fun HealthProfileForm(
         mutableStateOf(false)
     }
     var isHeightFocused by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var isWaistCircumferenceFocused by rememberSaveable {
         mutableStateOf(false)
     }
     var isGenderExpanded by rememberSaveable { mutableStateOf(false) }
@@ -172,7 +169,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (weight.isNotEmpty() and !weight.isHeightOrWeightValid())
+                if (weight.isNotEmpty() and !weight.isGreaterThanZeroValid())
                     Text(
                         text = stringResource(R.string.weight_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -183,9 +180,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = weight.isNotEmpty() and !weight.isHeightOrWeightValid(),
+            isError = weight.isNotEmpty() and !weight.isGreaterThanZeroValid(),
             trailingIcon = {
-                if (weight.isNotEmpty() and !weight.isHeightOrWeightValid())
+                if (weight.isNotEmpty() and !weight.isGreaterThanZeroValid())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
@@ -226,7 +223,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (height.isNotEmpty() and !height.isHeightOrWeightValid())
+                if (height.isNotEmpty() and !height.isGreaterThanZeroValid())
                     Text(
                         text = stringResource(R.string.height_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -237,9 +234,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = height.isNotEmpty() and !height.isHeightOrWeightValid(),
+            isError = height.isNotEmpty() and !height.isGreaterThanZeroValid(),
             trailingIcon = {
-                if (height.isNotEmpty() and !height.isHeightOrWeightValid())
+                if (height.isNotEmpty() and !height.isGreaterThanZeroValid())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
@@ -250,6 +247,60 @@ fun HealthProfileForm(
                 .fillMaxWidth()
                 .onFocusChanged {
                     isHeightFocused = it.isFocused
+                },
+        )
+        OutlinedTextField(
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_waist_100dp),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            },
+            value = waistCircumference,
+            singleLine = true,
+            onValueChange = onWaistCircumference,
+            placeholder = {
+                Text(
+                    text = "Masukkan lingkar pinggang anda",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            label = {
+                Text(
+                    text = "Lingkar Pinggang",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            supportingText = {
+                if (waistCircumference.isNotEmpty() and !waistCircumference.isGreaterThanZeroValid())
+                    Text(
+                        text = stringResource(R.string.waist_error_text),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                else if (isWaistCircumferenceFocused)
+                    Text(
+                        text = stringResource(R.string.supporting_text_required),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+            },
+            isError = waistCircumference.isNotEmpty() and !waistCircumference.isGreaterThanZeroValid(),
+            trailingIcon = {
+                if (waistCircumference.isNotEmpty() and !waistCircumference.isGreaterThanZeroValid())
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_round_error_24dp),
+                        contentDescription = null,
+                    )
+                else Text(text = stringResource(R.string.trailing_text_cm))
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged {
+                    isWaistCircumferenceFocused = it.isFocused
                 },
         )
         ExposedDropdownMenuBox(

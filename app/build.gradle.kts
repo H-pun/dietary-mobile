@@ -121,8 +121,6 @@ dependencies {
     testImplementation(libs.ktor.client.mock)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
-    // ycharts
-    implementation(libs.yml.charts)
     // datastore
     implementation(libs.datastore.proto)
     implementation(libs.datastore.preferences)
@@ -132,6 +130,9 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
     implementation(libs.kotlinx.coroutines.play.services)
+    // vico charts
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
 }
 
 // Allow references to generated code

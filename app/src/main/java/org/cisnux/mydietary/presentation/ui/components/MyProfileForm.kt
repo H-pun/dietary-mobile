@@ -59,6 +59,7 @@ private fun MyProfileFormPreview() {
                 goal = goals[0],
                 weightTarget = "",
                 activityLevel = activityLevels[0],
+                waistCircumference = ""
             )
         )
     }
@@ -91,6 +92,10 @@ private fun MyProfileFormPreview() {
             onActivityLevelChange = { newValue ->
                 myProfile = myProfile.copy(activityLevel = newValue)
             },
+            waistCircumference = myProfile.waistCircumference,
+            onWaistCircumference = { newValue ->
+                myProfile = myProfile.copy(waistCircumference = newValue)
+            },
         )
     }
 }
@@ -105,6 +110,7 @@ fun MyProfileForm(
     selectedGender: String,
     selectedGoal: String,
     weightTarget: String,
+    waistCircumference: String,
     selectedActivityLevel: String,
     genders: Array<String>,
     activityLevels: Array<String>,
@@ -116,6 +122,7 @@ fun MyProfileForm(
     onWeightChange: (String) -> Unit,
     onGenderChange: (String) -> Unit,
     onGoalChange: (String) -> Unit,
+    onWaistCircumference: (String) -> Unit,
     onTargetWeightChange: (String) -> Unit,
     onActivityLevelChange: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -196,7 +203,9 @@ fun MyProfileForm(
             onHeightChange = onHeightChange,
             onWeightChange = onWeightChange,
             onGenderChange = onGenderChange,
-            genders = genders
+            genders = genders,
+            waistCircumference =waistCircumference,
+            onWaistCircumference = onWaistCircumference,
         )
         Spacer(modifier = Modifier.height(15.dp))
         ExposedDropdownMenuBox(

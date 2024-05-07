@@ -1,8 +1,10 @@
 package org.cisnux.mydietary.domain.models
 
 data class FoodDiaryReport(
-    val id: String,
-    val title: String,
-    val totalFoodCalories: Float,
-    val label: String
+    val averageCalories: Float,
+    val averageProtein: Float,
+    val averageFat: Float,
+    val averageCarbohydrate: Float,
+    val label: String,
+    val date: String
 )

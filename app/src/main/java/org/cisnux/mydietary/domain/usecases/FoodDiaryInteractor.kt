@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import org.cisnux.mydietary.domain.models.FoodDiaryReport
 import org.cisnux.mydietary.domain.models.Keyword
 import java.io.File
 import java.time.Instant
@@ -56,12 +57,12 @@ class FoodDiaryInteractor @Inject constructor(
                     .map { uiState ->
                         if (uiState is UiState.Success)
                             UiState.Success(data = uiState.data?.filter { keyword ->
-                                keyword.text.lowercase().contains(query)
+                                keyword.text.lowercase().contains(query.lowercase())
                             })
                         else uiState
-                    }
+                    }.flowOn(Dispatchers.Default)
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override fun addFoodDiary(addFoodDiary: AddFoodDiary): Flow<UiState<String>> =
         authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
@@ -73,10 +74,10 @@ class FoodDiaryInteractor @Inject constructor(
         }
 
     override fun getFoodDiaryDetailById(foodDiaryId: String): Flow<UiState<FoodDiaryDetail>> =
-        authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
-            it?.let {
+        authenticationUseCase.accessToken.flatMapLatest {
+            it?.let {accessToken->
                 foodRepository.getFoodDiaryDetailById(
-                    accessToken = it.second,
+                    accessToken = accessToken,
                     foodDiaryId = foodDiaryId
                 )
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
@@ -89,8 +90,16 @@ class FoodDiaryInteractor @Inject constructor(
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }.flowOn(Dispatchers.IO)
 
-    override fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<Report>> =
-        foodRepository.getFoodDiaryReports(category)
+    override fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<List<FoodDiaryReport>>> =
+        authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
+            it?.let {
+                foodRepository.getFoodDiaryReports(
+                    accessToken = it.second,
+                    userId = it.first,
+                    category = category
+                )
+            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
+        }.flowOn(Dispatchers.IO)
 
     override fun predictFoods(foodPicture: File): Flow<UiState<Pair<UserNutrition, FoodNutrition>>> =
         userProfileUseCase.userProfileDetail.combine(authenticationUseCase.accessToken) { userProfileDetail, accessToken ->

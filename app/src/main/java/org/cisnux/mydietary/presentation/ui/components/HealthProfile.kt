@@ -11,4 +11,5 @@ data class HealthProfile(
     val weight: String,
     val height: String,
     val gender: String,
+    val waistCircumference: String,
 ) : Parcelable

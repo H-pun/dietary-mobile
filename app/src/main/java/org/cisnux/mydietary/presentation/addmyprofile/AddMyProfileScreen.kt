@@ -43,7 +43,7 @@ import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.Failure
 import org.cisnux.mydietary.utils.isIntAnswerValid
-import org.cisnux.mydietary.utils.isHeightOrWeightValid
+import org.cisnux.mydietary.utils.isGreaterThanZeroValid
 import org.cisnux.mydietary.utils.isFloatAnswerValid
 import org.cisnux.mydietary.utils.isUsernameValid
 import org.cisnux.mydietary.utils.UiState
@@ -73,6 +73,7 @@ fun AddMyProfileScreen(
                 goal = goals[0],
                 weightTarget = "",
                 activityLevel = activityLevels[0],
+                waistCircumference = ""
             )
         )
     }
@@ -143,7 +144,11 @@ fun AddMyProfileScreen(
                 },
                 onBuildProfile = { viewModel.addMyProfile(myProfile) },
                 modifier = modifier.padding(it),
-                isBuildProfileLoading = addMyProfileState is UiState.Loading
+                isBuildProfileLoading = addMyProfileState is UiState.Loading,
+                waistCircumference = myProfile.waistCircumference,
+                onWaistCircumference = { newValue ->
+                    myProfile = myProfile.copy(waistCircumference = newValue)
+                },
             )
         },
         snackbarHostState = snackbarHostState
@@ -175,6 +180,7 @@ private fun AddMyProfileContentPreview() {
                 goal = goals[0],
                 weightTarget = "",
                 activityLevel = activityLevels[0],
+                waistCircumference = ""
             )
         )
     }
@@ -196,6 +202,10 @@ private fun AddMyProfileContentPreview() {
                     activityLevels = activityLevels,
                     goals = goals,
                     activityDescriptions = activityDescriptions,
+                    waistCircumference = myProfile.waistCircumference,
+                    onWaistCircumference = { newValue ->
+                        myProfile = myProfile.copy(waistCircumference = newValue)
+                    },
                     onUsernameChange = { newValue ->
                         myProfile = myProfile.copy(username = newValue)
                     },
@@ -244,6 +254,7 @@ private fun AddMyProfileContentDarkPreview() {
                 goal = goals[0],
                 weightTarget = "",
                 activityLevel = activityLevels[0],
+                waistCircumference = ""
             )
         )
     }
@@ -280,6 +291,10 @@ private fun AddMyProfileContentDarkPreview() {
                         myProfile = myProfile.copy(activityLevel = newValue)
                     },
                     onBuildProfile = {},
+                    waistCircumference = myProfile.waistCircumference,
+                    onWaistCircumference = { newValue ->
+                        myProfile = myProfile.copy(waistCircumference = newValue)
+                    },
                     modifier = Modifier.padding(it),
                 )
             },
@@ -313,6 +328,7 @@ private fun AddMyProfileContentLoadingDarkPreview() {
                 goal = goals[0],
                 weightTarget = "",
                 activityLevel = activityLevels[0],
+                waistCircumference = ""
             )
         )
     }
@@ -350,6 +366,10 @@ private fun AddMyProfileContentLoadingDarkPreview() {
                     },
                     onBuildProfile = {},
                     modifier = Modifier.padding(it),
+                    waistCircumference = myProfile.waistCircumference,
+                    onWaistCircumference = { newValue ->
+                        myProfile = myProfile.copy(waistCircumference = newValue)
+                    },
                     isBuildProfileLoading = true
                 )
             },
@@ -363,6 +383,8 @@ private fun MyProfileBody(
     username: String,
     age: String,
     weight: String,
+    waistCircumference: String,
+    onWaistCircumference: (String) -> Unit,
     height: String,
     selectedGender: String,
     selectedGoal: String,
@@ -422,7 +444,9 @@ private fun MyProfileBody(
             onGenderChange = onGenderChange,
             onGoalChange = onGoalChange,
             onTargetWeightChange = onTargetWeightChange,
-            onActivityLevelChange = onActivityLevelChange
+            onActivityLevelChange = onActivityLevelChange,
+            waistCircumference = waistCircumference,
+            onWaistCircumference = onWaistCircumference,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
@@ -430,7 +454,7 @@ private fun MyProfileBody(
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
             enabled = username.isUsernameValid() and age.isIntAnswerValid()
-                    and weight.isHeightOrWeightValid() and height.isHeightOrWeightValid()
+                    and weight.isGreaterThanZeroValid() and height.isGreaterThanZeroValid()
                     and weightTarget.isFloatAnswerValid() and !isBuildProfileLoading,
         ) {
             if (isBuildProfileLoading)

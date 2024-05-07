@@ -1,5 +1,6 @@
 package org.cisnux.mydietary.data.repositories
 
+import android.util.Log
 import org.cisnux.mydietary.data.locals.UserProfileLocalSource
 import org.cisnux.mydietary.data.remotes.UserProfileRemoteSource
 import org.cisnux.mydietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
@@ -40,7 +41,8 @@ class UserProfileRepositoryImpl @Inject constructor(
                     gender = userProfile.gender,
                     height = userProfile.height,
                     weight = userProfile.weight,
-                    age = userProfile.age
+                    age = userProfile.age,
+                    waistCircumference = userProfile.waistCircumference
                 )
             ).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
@@ -71,6 +73,7 @@ class UserProfileRepositoryImpl @Inject constructor(
     ): Flow<UiState<Nothing>> =
         flow {
             emit(UiState.Loading)
+            Log.d(UserProfileRepository::class.simpleName, "updateUserProfile: $userProfile")
             userProfileRemoteSource.updateUserProfile(
                 accessToken = accessToken,
                 userProfile = UpdateUserProfileBodyRequest(
@@ -82,7 +85,8 @@ class UserProfileRepositoryImpl @Inject constructor(
                     gender = userProfile.gender,
                     height = userProfile.height,
                     weight = userProfile.weight,
-                    age = userProfile.age
+                    age = userProfile.age,
+                    waistCircumference = userProfile.waistCircumference
                 )
             ).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
@@ -96,7 +100,7 @@ class UserProfileRepositoryImpl @Inject constructor(
         accessToken: String,
         userId: String,
         date: String
-    ): Flow<UiState<UserNutrition>> = flow<UiState<UserNutrition>> {
+    ): Flow<UiState<UserNutrition>> = flow {
         emit(UiState.Loading)
         userProfileRemoteSource.getDailyNutrients(
             accessToken = accessToken,
@@ -118,6 +122,7 @@ class UserProfileRepositoryImpl @Inject constructor(
             }
         )
     }.flowOn(Dispatchers.IO)
+        .distinctUntilChanged()
 
     override val userProfileDetail: Flow<UserProfileDetail>
         get() = userProfileLocalSource.userProfile.map {
@@ -132,7 +137,8 @@ class UserProfileRepositoryImpl @Inject constructor(
                 goal = it.goal,
                 activityLevel = it.activityLevel,
                 username = it.username,
-                emailAddress = it.emailAddress
+                emailAddress = it.emailAddress,
+                waistCircumference = it.waistCircumference
             )
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()

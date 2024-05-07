@@ -33,8 +33,9 @@ interface FoodDiaryRemoteSource {
 
     suspend fun getFoodDiaryReports(
         accessToken: String,
-        category: Int
-    ): Either<Exception, ReportResponse>
+        userId: String,
+        category: String
+    ): Either<Exception, List<ReportResponse>>
 
     // optional
     suspend fun getKeywordSuggestions(

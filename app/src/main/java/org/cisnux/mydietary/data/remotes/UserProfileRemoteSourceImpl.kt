@@ -1,5 +1,6 @@
 package org.cisnux.mydietary.data.remotes
 
+import android.util.Log
 import arrow.core.Either
 import org.cisnux.mydietary.data.locals.BaseApiUrlLocalSource
 import org.cisnux.mydietary.data.remotes.responses.CommonResponse
@@ -78,6 +79,7 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
                     }
                     contentType(ContentType.Application.Json)
+                    Log.d(UserProfileRemoteSource::class.simpleName, userProfile.toString())
                     setBody(userProfile)
                 }
                 val isSuccess = response.status.isSuccess()

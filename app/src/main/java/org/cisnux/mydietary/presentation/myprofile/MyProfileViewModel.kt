@@ -1,6 +1,5 @@
 package org.cisnux.mydietary.presentation.myprofile
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,9 +49,8 @@ class MyProfileViewModel @Inject constructor(
         refreshUserProfile.value = isRefresh
     }
 
-    fun updateMyProfile(myProfile: MyProfile) {
-        val userProfile = myProfile.asUserProfile
-        Log.d("userprofile", userProfile.toString())
+    fun updateMyProfile(id: String, myProfile: MyProfile) {
+        val userProfile = myProfile.asUserProfile.copy(id = id)
         viewModelScope.launch {
             useCase.updateUserProfile(userProfile).collectLatest { uiState ->
                 _updateMyProfileState.value = uiState

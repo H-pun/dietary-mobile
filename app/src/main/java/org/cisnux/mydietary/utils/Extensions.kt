@@ -16,6 +16,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 
 val Context.activity: AppCompatActivity?
@@ -46,7 +47,8 @@ val MyProfile.asUserProfile: UserProfile
         gender = gender,
         goal = goal,
         weightTarget = weightTarget.toFloat(),
-        activityLevel = activityLevel
+        activityLevel = activityLevel,
+        waistCircumference = waistCircumference.toFloat()
     )
 
 val UserAccount.userAccountBodyRequest
@@ -73,7 +75,7 @@ fun String.isIntAnswerValid(): Boolean = try {
     false
 }
 
-fun String.isHeightOrWeightValid(): Boolean = try {
+fun String.isGreaterThanZeroValid(): Boolean = try {
     val number = this.toFloat()
     number > 0
 } catch (e: NumberFormatException) {
@@ -125,9 +127,8 @@ val Int.foodDiaryCategory: FoodDiaryCategory
 
 val Int.reportCategory: ReportCategory
     get() = when (this) {
-        0 -> ReportCategory.TODAY
-        1 -> ReportCategory.THIS_WEEK
-        else -> ReportCategory.THIS_MONTH
+        0 -> ReportCategory.DAY
+        else -> ReportCategory.WEEK
     }
 
 fun convertISOToInstant(isoDateTime: String): Instant {
@@ -137,6 +138,15 @@ fun convertISOToInstant(isoDateTime: String): Instant {
     // Convert LocalDateTime to milliseconds
     return parsedDateTime.atZone(ZoneId.systemDefault()).toInstant()
 }
+
+val String.asDateAndMonth: String
+    get() =
+        DateTimeFormatter.ofPattern("dd/MM/yyyy").run {
+            val locale = Locale("id", "ID")
+            LocalDate.parse(this@asDateAndMonth, this@run)
+                .format(DateTimeFormatter.ofPattern("dd MMMM", locale))
+        }
+
 
 fun getCurrentDateTimeInISOFormat(): String {
     // Convert current time to Instant

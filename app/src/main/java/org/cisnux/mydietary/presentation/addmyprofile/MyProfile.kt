@@ -15,4 +15,5 @@ data class MyProfile(
     val goal: String,
     val weightTarget: String,
     val activityLevel: String,
+    val waistCircumference: String,
 ) : Parcelable

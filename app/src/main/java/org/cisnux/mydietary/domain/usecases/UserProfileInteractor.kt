@@ -60,7 +60,8 @@ class UserProfileInteractor @Inject constructor(
                             val height = userProfile.height // tinggi badan
                             val weight = userProfile.weight // berat badan
                             val age = userProfile.age // umur
-                            val isWoman = userProfile.gender.lowercase() == "wanita" // menentukan pria atau wanita
+                            val isWoman =
+                                userProfile.gender.lowercase() == "wanita" // menentukan pria atau wanita
                             // menghitung bmr berdasarkan tinggi, berat badan, umur dan jenis kelamin
                             val bmr = if (!isWoman)
                                 66 + (13.7 * weight) + (5 * height) - (6.8 * age)
@@ -112,10 +113,10 @@ class UserProfileInteractor @Inject constructor(
 
     override fun updateUserProfile(userProfile: UserProfile): Flow<UiState<Nothing>> =
         authenticationUseCase.accessToken.flatMapLatest {
-            it?.let { id ->
+            it?.let { accessToken ->
                 userProfileRepository.updateUserProfile(
-                    accessToken = it,
-                    userProfile = userProfile.copy(id = id)
+                    accessToken = accessToken,
+                    userProfile = userProfile
                 )
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }

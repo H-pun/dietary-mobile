@@ -68,6 +68,7 @@
     <string name="weight_error_text">Berat harus berupa angka dan lebih besar dari 0</string>
     <string name="height_placeholder">Masukkan tinggi Anda</string>
     <string name="height_error_text">Tinggi harus berupa angka dan lebih besar dari 0</string>
+    <string name="waist_error_text">Lingkar pinggang harus berupa angka dan lebih besar dari 0</string>
     <string name="trailing_text_kg" translatable="false">kg</string>
     <string name="trailing_text_cm" translatable="false">cm</string>
     <string name="goal_label">Tujuan</string>

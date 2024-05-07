@@ -1,13 +1,14 @@
 package org.cisnux.mydietary.data.remotes.responses
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ReportResponse(
-    @SerialName(value = "total_user_calories_today")
-    val totalUserCaloriesToday: Float,
-    @SerialName(value = "max_daily_bmr_calories")
-    val maxDailyBmrCalorie: Float,
-    val foods: List<FoodDiaryReportResponse>
+    val week: Int,
+    val startDate: String,
+    val endDate: String,
+    val averageCalories: Float,
+    val averageCarbohydrate: Float,
+    val averageProtein: Float,
+    val averageFat: Float,
 )
