@@ -6,5 +6,5 @@ data class FoodDiaryReport(
     val averageFat: Float,
     val averageCarbohydrate: Float,
     val label: String,
-    val date: String
+    val description: String
 )

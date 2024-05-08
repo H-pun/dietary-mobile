@@ -75,9 +75,7 @@ class NavComponentAction(
                 navController.navigate(route = destination.route) {
                     popUpTo(currentRoute.route) {
                         inclusive = true
-                        saveState = true
                     }
-                    restoreState = true
                     launchSingleTop = true
                 }
         }

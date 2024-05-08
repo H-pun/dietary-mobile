@@ -85,7 +85,7 @@
     <string name="welcome_to">Selamat Datang di</string>
     <string name="dietary" translatable="false">" Dietary!"</string>
     <string name="your_diet_s_best_ally">" Teman terbaik dietmu 🌟"</string>
-    <string name="landing_message">Lihat Diary Makanan Anda:\nTrack Makanan Anda! 🥘🍱.</string>
+    <string name="landing_message">Lihat Diary Makanan Anda:\nPantau Makananmu! 🥘🍱.</string>
     <string name="get_started">Mulai</string>
     <string name="failed_to_took_picture">Gagal mengambil gambar</string>
     <string-array name="goal">
@@ -109,7 +109,7 @@
     <string name="searchbar_hint" translatable="false">Nasi goreng, pizza, nasi padang</string>
     <string name="cancel">Batal</string>
     <string name="ok" translatable="false">OK</string>
-    <string name="diary_display">Lihat Diary Makanan Anda:\nTrack Makanan Anda! 🥘🍱</string>
+    <string name="diary_display">Lihat Diary Makanan Anda:\nPantau Makanan Anda! 🥘🍱</string>
     <string name="empty_content_label">Tidak ada food diary</string>
     <string name="empty_content_search">Makanan yang Anda yang cari tidak dapat ditemukan</string>
     <string name="cm">%1$s cm</string>

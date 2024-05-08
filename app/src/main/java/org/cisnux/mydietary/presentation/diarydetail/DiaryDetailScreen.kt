@@ -1,6 +1,7 @@
 package org.cisnux.mydietary.presentation.diarydetail
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -87,7 +88,7 @@ fun DiaryDetailScreen(
         SnackbarHostState()
     }
     val foodDiaryDetailState by viewModel.foodDiaryDetailState.collectAsState()
-    val userDailyNutritionState by viewModel.userDailyNutritionState.collectAsState()
+    val userDailyNutritionState by viewModel.userDailyNutritionState.collectAsState(UiState.Initialize)
     val removeState by viewModel.removeState.collectAsState()
     val context = LocalContext.current
 

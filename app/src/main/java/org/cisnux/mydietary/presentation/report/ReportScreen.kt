@@ -1,21 +1,24 @@
 package org.cisnux.mydietary.presentation.report
 
 import android.content.res.Configuration
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -34,9 +37,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -59,6 +60,7 @@ import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.common.data.ExtraStore
 import com.patrykandpatrick.vico.core.common.shader.DynamicShader
 import com.patrykandpatrick.vico.core.common.shape.Shape
+import com.valentinilk.shimmer.shimmer
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.FoodDiaryReport
 import org.cisnux.mydietary.domain.models.UserNutrition
@@ -66,6 +68,15 @@ import org.cisnux.mydietary.presentation.ui.components.BottomBar
 import org.cisnux.mydietary.presentation.ui.components.UserNutritionCard
 import org.cisnux.mydietary.presentation.ui.components.UserNutritionCardShimmer
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
+import org.cisnux.mydietary.presentation.ui.theme.darkBlue
+import org.cisnux.mydietary.presentation.ui.theme.darkMagenta
+import org.cisnux.mydietary.presentation.ui.theme.darkYellow
+import org.cisnux.mydietary.presentation.ui.theme.lightBlue
+import org.cisnux.mydietary.presentation.ui.theme.lightMagenta
+import org.cisnux.mydietary.presentation.ui.theme.lightYellow
+import org.cisnux.mydietary.presentation.ui.theme.placeholder
+import org.cisnux.mydietary.presentation.ui.theme.primaryContainerDark
+import org.cisnux.mydietary.presentation.ui.theme.primaryContainerLight
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.Failure
 import org.cisnux.mydietary.utils.UiState
@@ -80,13 +91,14 @@ fun ReportScreen(
     viewModel: ReportViewModel = hiltViewModel(),
 ) {
     var tabState by rememberSaveable { mutableIntStateOf(0) }
+    val userNutritionState by viewModel.userDailyNutritionState.collectAsState(UiState.Initialize)
     val snackbarHostState = remember {
         SnackbarHostState()
     }
     val reportState by viewModel.reportState.collectAsState()
-    val userNutritionState: UiState<*> = UiState.Loading
-//    val userNutritionState by viewModel.userDailyNutritionState.collectAsState()
     val context = LocalContext.current
+
+    viewModel.refresh(true)
 
     when {
         reportState is UiState.Error -> {
@@ -141,10 +153,10 @@ fun ReportScreen(
             else listOf()
 
             ReportBody(
-                reportFilter = tabState,
+                selectedFilter = tabState,
                 onReportFilterChange = { index ->
                     tabState = index
-                    viewModel.getReports(index = tabState)
+                    viewModel.getReports(index = 0)
                 },
                 modifier = Modifier.padding(it),
                 maxDailyProtein = userDailyNutrition?.maxDailyProtein ?: 0f,
@@ -157,7 +169,7 @@ fun ReportScreen(
                 totalCarbohydrateToday = userDailyNutrition?.totalCarbohydrateToday ?: 0f,
                 reports = reports,
                 isReportLoading = reportState is UiState.Loading || reportState is UiState.Error,
-                isUserNutritionLoading = true
+                isUserNutritionLoading = userNutritionState is UiState.Loading || userNutritionState is UiState.Error
             )
         },
         snackbarHostState = snackbarHostState,
@@ -190,10 +202,10 @@ private fun ReportContentPreview() {
                                 averageCalories = Random.nextDouble(100.0, 320.0).toFloat(),
                                 averageCarbohydrate = Random.nextDouble(100.0, 270.0).toFloat(),
                                 label = "${index + 1}",
-                                date = "17 Feb - 21 Feb"
+                                description = "17 Feb - 21 Feb"
                             )
                         },
-                        reportFilter = tabState,
+                        selectedFilter = tabState,
                         onReportFilterChange = { index -> tabState = index },
                         maxDailyCarbohydrate = 1000f,
                         maxDailyFat = 1000f,
@@ -227,7 +239,6 @@ fun ReportContent(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ReportBody(
     totalCaloriesToday: Float,
@@ -238,16 +249,16 @@ private fun ReportBody(
     maxDailyCarbohydrate: Float,
     maxDailyProtein: Float,
     maxDailyFat: Float,
-    reportFilter: Int,
+    selectedFilter: Int,
     onReportFilterChange: (Int) -> Unit,
     reports: List<FoodDiaryReport>,
     modifier: Modifier = Modifier,
     isReportLoading: Boolean = false,
     isUserNutritionLoading: Boolean = false,
 ) {
-    val reportCategories = stringArrayResource(id = R.array.report_category)
+//    val reportCategories = stringArrayResource(id = R.array.report_category)
     val scrollState = rememberScrollState()
-    val pagerState = rememberPagerState(initialPage = 0, pageCount = { reportCategories.size })
+//    val pagerState = rememberPagerState(initialPage = 0, pageCount = { reportCategories.size })
 
 //    LaunchedEffect(pagerState.currentPage) {
 //        onTabChange(pagerState.currentPage)
@@ -255,17 +266,35 @@ private fun ReportBody(
 //    LaunchedEffect(tabState) {
 //        pagerState.animateScrollToPage(tabState)
 //    }
+    val context = LocalContext.current
+    val caloriesColor = when (context.resources.configuration.uiMode) {
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> primaryContainerDark
+        else -> primaryContainerLight
+    }
+    val carbohydrateColor = when (context.resources.configuration.uiMode) {
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL ->darkBlue
+        else -> lightBlue
+    }
+    val proteinColor = when (context.resources.configuration.uiMode) {
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> darkYellow
+        else ->lightYellow
+    }
+    val fatColor = when (context.resources.configuration.uiMode) {
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL ->darkMagenta
+        else -> lightMagenta
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-            .verticalScroll(state = scrollState),
+            .verticalScroll(state = scrollState)
+            .padding(PaddingValues(16.dp)),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "✦ Nutrisimu Saat Ini",
-            style = MaterialTheme.typography.titleMedium,
+            text = "✦ Pantau Nutrisimu\ndan Keberhasilanmu",
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.fillMaxWidth()
         )
@@ -285,19 +314,49 @@ private fun ReportBody(
             UserNutritionCardShimmer()
         }
         Spacer(modifier = Modifier.height(16.dp))
+        Row(modifier = Modifier.fillMaxWidth()) {
+            repeat(
+                2
+            ) {
+                FilterChip(
+                    selected = it == selectedFilter,
+                    onClick = { onReportFilterChange(it) },
+                    leadingIcon = {
+                        if (it == selectedFilter) {
+                            Icon(
+                                imageVector = Icons.Filled.Done,
+                                contentDescription = null,
+                                modifier = Modifier.size(FilterChipDefaults.IconSize)
+                            )
+                        }
+                    },
+                    label = {
+                        Text(text = if (it == 0) "Harian" else "Mingguan")
+                    }
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
         if (!isReportLoading) {
-            val model = remember { CartesianChartModelProducer.build() }
+            val firstModel = remember { CartesianChartModelProducer.build() }
+            val secondModel = remember { CartesianChartModelProducer.build() }
             val labelListKey = remember {
                 ExtraStore.Key<List<String>>()
             }
             LaunchedEffect(Unit) {
-                model.tryRunTransaction {
+                firstModel.tryRunTransaction {
                     lineSeries {
                         series(reports.map { it.averageCalories })
                     }
                     lineSeries {
                         series(reports.map { it.averageCarbohydrate })
                     }
+                    updateExtras {
+                        it[labelListKey] = reports.map { report -> report.label }
+                    }
+                }
+                secondModel.tryRunTransaction {
                     lineSeries {
                         series(reports.map { it.averageProtein })
                     }
@@ -313,19 +372,19 @@ private fun ReportBody(
                 marker = rememberDefaultCartesianMarker(
                     label = rememberAxisLabelComponent(),
                     valueFormatter = { _, targets ->
-                        reports[targets[0].x.toInt()].date
+                        reports[targets[0].x.toInt()].description
                     }
                 ),
                 chart = rememberCartesianChart(
                     rememberLineCartesianLayer(
                         listOf(
                             rememberLineSpec(
-                                shader = DynamicShader.color(Color.Blue),
+                                shader = DynamicShader.color(caloriesColor),
                                 backgroundShader =
                                 DynamicShader.verticalGradient(
                                     arrayOf(
-                                        Color.Blue.copy(alpha = 0.4f),
-                                        Color.Blue.copy(alpha = 0f)
+                                        caloriesColor.copy(alpha = 0.4f),
+                                        caloriesColor.copy(alpha = 0f)
                                     ),
                                 ),
                             ),
@@ -334,46 +393,17 @@ private fun ReportBody(
                     rememberLineCartesianLayer(
                         listOf(
                             rememberLineSpec(
-                                shader = DynamicShader.color(Color.Cyan),
+                                shader = DynamicShader.color(carbohydrateColor),
                                 backgroundShader =
                                 DynamicShader.verticalGradient(
                                     arrayOf(
-                                        Color.Cyan.copy(alpha = 0.4f),
-                                        Color.Cyan.copy(alpha = 0f)
+                                        carbohydrateColor.copy(alpha = 0.4f),
+                                        carbohydrateColor.copy(alpha = 0f)
                                     ),
                                 ),
                             ),
                         ),
                     ),
-                    rememberLineCartesianLayer(
-                        listOf(
-                            rememberLineSpec(
-                                shader = DynamicShader.color(Color.Yellow),
-                                backgroundShader =
-                                DynamicShader.verticalGradient(
-                                    arrayOf(
-                                        Color.Yellow.copy(alpha = 0.4f),
-                                        Color.Yellow.copy(alpha = 0f)
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                    rememberLineCartesianLayer(
-                        listOf(
-                            rememberLineSpec(
-                                shader = DynamicShader.color(Color.Magenta),
-                                backgroundShader =
-                                DynamicShader.verticalGradient(
-                                    arrayOf(
-                                        Color.Magenta.copy(alpha = 0.4f),
-                                        Color.Magenta.copy(alpha = 0f)
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                    persistentMarkers = mapOf(),
                     startAxis = rememberStartAxis(),
                     bottomAxis = rememberBottomAxis(
                         title = "Minggu",
@@ -387,40 +417,20 @@ private fun ReportBody(
                                     shape = Shape.rounded(
                                         allPercent = 50
                                     ),
-                                    color = Color.Blue
+                                    color = caloriesColor
                                 ),
                                 label = rememberAxisLabelComponent(),
-                                labelText = "Kalori"
+                                labelText = "Kalori (kcal)"
                             ),
                             rememberLegendItem(
                                 icon = rememberShapeComponent(
                                     shape = Shape.rounded(
                                         allPercent = 50
                                     ),
-                                    color = Color.Cyan
+                                    color = carbohydrateColor
                                 ),
                                 label = rememberAxisLabelComponent(),
-                                labelText = "Karbohidrat"
-                            ),
-                            rememberLegendItem(
-                                icon = rememberShapeComponent(
-                                    shape = Shape.rounded(
-                                        allPercent = 50
-                                    ),
-                                    color = Color.Yellow
-                                ),
-                                label = rememberAxisLabelComponent(),
-                                labelText = "Protein"
-                            ),
-                            rememberLegendItem(
-                                icon = rememberShapeComponent(
-                                    shape = Shape.rounded(
-                                        allPercent = 50
-                                    ),
-                                    color = Color.Magenta
-                                ),
-                                label = rememberAxisLabelComponent(),
-                                labelText = "Lemak"
+                                labelText = "Karbohidrat (g)"
                             ),
 
                             ),
@@ -428,12 +438,101 @@ private fun ReportBody(
                         iconPadding = 4.dp
                     )
                 ),
-                modelProducer = model,
+                modelProducer = firstModel,
+                modifier = Modifier.height(300.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            CartesianChartHost(
+                marker = rememberDefaultCartesianMarker(
+                    label = rememberAxisLabelComponent(),
+                    valueFormatter = { _, targets ->
+                        reports[targets[0].x.toInt()].description
+                    }
+                ),
+                chart = rememberCartesianChart(
+                    rememberLineCartesianLayer(
+                        listOf(
+                            rememberLineSpec(
+                                shader = DynamicShader.color(proteinColor),
+                                backgroundShader =
+                                DynamicShader.verticalGradient(
+                                    arrayOf(
+                                        proteinColor.copy(alpha = 0.4f),
+                                        proteinColor.copy(alpha = 0f)
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    rememberLineCartesianLayer(
+                        listOf(
+                            rememberLineSpec(
+                                shader = DynamicShader.color(fatColor),
+                                backgroundShader =
+                                DynamicShader.verticalGradient(
+                                    arrayOf(
+                                        fatColor.copy(alpha = 0.4f),
+                                        fatColor.copy(alpha = 0f)
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    startAxis = rememberStartAxis(),
+                    bottomAxis = rememberBottomAxis(
+                        title = "Minggu",
+                        titleComponent = rememberAxisLabelComponent(),
+                        valueFormatter = { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
+                    ),
+                    legend = rememberVerticalLegend(
+                        items = listOf(
+                            rememberLegendItem(
+                                icon = rememberShapeComponent(
+                                    shape = Shape.rounded(
+                                        allPercent = 50
+                                    ),
+                                    color = proteinColor
+                                ),
+                                label = rememberAxisLabelComponent(),
+                                labelText = "Protein (g)"
+                            ),
+                            rememberLegendItem(
+                                icon = rememberShapeComponent(
+                                    shape = Shape.rounded(
+                                        allPercent = 50
+                                    ),
+                                    color = fatColor
+                                ),
+                                label = rememberAxisLabelComponent(),
+                                labelText = "Lemak (g)"
+                            ),
+
+                            ),
+                        iconSize = 12.dp,
+                        iconPadding = 4.dp
+                    )
+                ),
+                modelProducer = secondModel,
                 modifier = Modifier.height(300.dp)
             )
         } else
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(modifier = Modifier.size(48.dp))
+            repeat(2) {
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.padding(top = 60.dp)
+                ) {
+                    repeat(12) {
+                        Surface(
+                            color = placeholder,
+                            modifier = Modifier
+                                .padding(end = 12.dp)
+                                .width(26.dp)
+                                .height(Random.nextInt(150, 200).dp)
+                                .shimmer()
+                        ) {}
+                    }
+                }
             }
     }
 }

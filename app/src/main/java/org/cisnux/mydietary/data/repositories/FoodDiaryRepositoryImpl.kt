@@ -41,8 +41,6 @@ import kotlinx.coroutines.withContext
 import org.cisnux.mydietary.domain.models.Keyword
 import org.cisnux.mydietary.utils.asDateAndMonth
 import java.io.File
-import java.time.Instant
-import kotlin.random.Random
 
 class FoodDiaryRepositoryImpl @Inject constructor(
     private val foodDiaryRemoteSource: FoodDiaryRemoteSource,
@@ -357,10 +355,10 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                         FoodDiaryReport(
                             averageCarbohydrate = reportResponse.averageCarbohydrate,
                             averageCalories = reportResponse.averageCalories,
-                            averageFat = reportResponse.averageProtein,
+                            averageFat = reportResponse.averageFat,
                             averageProtein = reportResponse.averageProtein,
                             label = reportResponse.week.toString(),
-                            date = "(${reportResponse.startDate.asDateAndMonth} - ${reportResponse.endDate.asDateAndMonth})"
+                            description = "(${reportResponse.startDate.asDateAndMonth} - ${reportResponse.endDate.asDateAndMonth})"
                         )
                     }))
                 }

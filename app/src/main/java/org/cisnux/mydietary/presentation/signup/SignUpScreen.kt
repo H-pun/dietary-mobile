@@ -313,8 +313,8 @@ private fun SignUpBody(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(state = scrollState),
+            .verticalScroll(state = scrollState)
+            .padding(PaddingValues(16.dp)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(

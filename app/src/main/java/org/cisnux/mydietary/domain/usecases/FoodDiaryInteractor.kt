@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -91,7 +92,7 @@ class FoodDiaryInteractor @Inject constructor(
         }.flowOn(Dispatchers.IO)
 
     override fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<List<FoodDiaryReport>>> =
-        authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
+        authenticationUseCase.isAccessTokenAndUserIdExists.distinctUntilChanged().flatMapLatest {
             it?.let {
                 foodRepository.getFoodDiaryReports(
                     accessToken = it.second,
@@ -99,7 +100,7 @@ class FoodDiaryInteractor @Inject constructor(
                     category = category
                 )
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO).distinctUntilChanged()
 
     override fun predictFoods(foodPicture: File): Flow<UiState<Pair<UserNutrition, FoodNutrition>>> =
         userProfileUseCase.userProfileDetail.combine(authenticationUseCase.accessToken) { userProfileDetail, accessToken ->

@@ -23,8 +23,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.cisnux.mydietary.presentation.ui.theme.darkCircularCardSurface
 import org.cisnux.mydietary.presentation.ui.theme.darkRed
 import org.cisnux.mydietary.presentation.ui.theme.darkYellow
+import org.cisnux.mydietary.presentation.ui.theme.lightCircularCardSurface
 import org.cisnux.mydietary.presentation.ui.theme.lightRed
 import org.cisnux.mydietary.presentation.ui.theme.lightYellow
 import org.cisnux.mydietary.presentation.ui.theme.onSurfaceDark
@@ -95,6 +97,10 @@ fun UserNutritionCard(
         fatPercentage > 0.5f -> lightYellow
         else -> secondaryContainerLight
     }
+    val onSurfaceColor = when (context.resources.configuration.uiMode) {
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightCircularCardSurface
+        else -> darkCircularCardSurface
+    }
 
     Row(
         modifier = modifier
@@ -108,10 +114,7 @@ fun UserNutritionCard(
                 .size(115.dp)
                 .drawBehind {
                     drawCircle(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> onSurfaceLight
-                            else -> onSurfaceDark
-                        }
+                        color = onSurfaceColor
                     )
                 })
             Spacer(modifier = Modifier
@@ -119,8 +122,8 @@ fun UserNutritionCard(
                 .drawBehind {
                     drawArc(
                         color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> calorieLightColor
-                            else -> calorieDarkColor
+                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> calorieDarkColor
+                            else -> calorieLightColor
                         },
                         startAngle = 270f,
                         sweepAngle = 360f * caloriePercentage,
@@ -167,10 +170,7 @@ fun UserNutritionCard(
                 .size(115.dp)
                 .drawBehind {
                     drawCircle(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> onSurfaceLight
-                            else -> onSurfaceDark
-                        }
+                        color = onSurfaceColor
                     )
                 })
             Spacer(modifier = Modifier
@@ -178,8 +178,8 @@ fun UserNutritionCard(
                 .drawBehind {
                     drawArc(
                         color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> carbohydrateLightColor
-                            else -> carbohydrateDarkColor
+                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> carbohydrateDarkColor
+                            else -> carbohydrateLightColor
                         },
                         startAngle = 270f,
                         sweepAngle = 360f * carbohydratePercentage,
@@ -228,10 +228,7 @@ fun UserNutritionCard(
                 .size(115.dp)
                 .drawBehind {
                     drawCircle(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> onSurfaceLight
-                            else -> onSurfaceDark
-                        }
+                        color = onSurfaceColor
                     )
                 })
             Spacer(modifier = Modifier
@@ -239,8 +236,8 @@ fun UserNutritionCard(
                 .drawBehind {
                     drawArc(
                         color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> proteinLightColor
-                            else -> proteinDarkColor
+                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> proteinDarkColor
+                            else -> proteinLightColor
                         },
                         startAngle = 270f,
                         sweepAngle = 360f * proteinPercentage,
@@ -287,10 +284,7 @@ fun UserNutritionCard(
                 .size(115.dp)
                 .drawBehind {
                     drawCircle(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> onSurfaceLight
-                            else -> onSurfaceDark
-                        }
+                        color = onSurfaceColor
                     )
                 })
             Spacer(modifier = Modifier
@@ -298,8 +292,8 @@ fun UserNutritionCard(
                 .drawBehind {
                     drawArc(
                         color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> fatLightColor
-                            else -> fatDarkColor
+                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> fatDarkColor
+                            else -> fatLightColor
                         },
                         startAngle = 270f,
                         sweepAngle = 360f * fatPercentage,

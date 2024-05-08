@@ -30,7 +30,10 @@ val inverseSurfaceLight = Color(0xFF2D322C)
 val inverseOnSurfaceLight = Color(0xFFEEF2E9)
 val inversePrimaryLight = Color(0xFF9FD49B)
 val lightRed = Color(0xFFE8CFCF)
-val lightYellow = Color(0xFFE8E3CF)
+val lightYellow = Color(0xFFECF0B6)
+val lightBlue = Color(0xFFB6D9F0)
+val lightMagenta = Color(0xFFE3B6F0)
+val lightCircularCardSurface = Color(0xFF262E24)
 
 val primaryDark = Color(0xFF9FD49B)
 val onPrimaryDark = Color(0xFF073910)
@@ -63,7 +66,9 @@ val inversePrimaryDark = Color(0xFF3A693B)
 val placeholder = Color(color = 0xFF404040)
 val darkYellow = Color(0xFF4B4939)
 val darkRed = Color(0xFF4B3939)
-
+val darkBlue = Color(0xFF223C50)
+val darkMagenta = Color(0xFF492250)
+val darkCircularCardSurface = Color(0xFFC4C7C0)
 
 
 
