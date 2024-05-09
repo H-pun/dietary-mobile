@@ -23,14 +23,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.cisnux.mydietary.presentation.ui.theme.darkCircularCardSurface
+import org.cisnux.mydietary.presentation.ui.theme.commonCircularCardColor
 import org.cisnux.mydietary.presentation.ui.theme.darkRed
 import org.cisnux.mydietary.presentation.ui.theme.darkYellow
-import org.cisnux.mydietary.presentation.ui.theme.lightCircularCardSurface
 import org.cisnux.mydietary.presentation.ui.theme.lightRed
 import org.cisnux.mydietary.presentation.ui.theme.lightYellow
-import org.cisnux.mydietary.presentation.ui.theme.onSurfaceDark
-import org.cisnux.mydietary.presentation.ui.theme.onSurfaceLight
 import org.cisnux.mydietary.presentation.ui.theme.secondaryContainerDark
 import org.cisnux.mydietary.presentation.ui.theme.secondaryContainerLight
 import org.cisnux.mydietary.presentation.ui.theme.surfaceDark
@@ -97,10 +94,7 @@ fun UserNutritionCard(
         fatPercentage > 0.5f -> lightYellow
         else -> secondaryContainerLight
     }
-    val onSurfaceColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightCircularCardSurface
-        else -> darkCircularCardSurface
-    }
+    val onSurfaceColor = commonCircularCardColor
 
     Row(
         modifier = modifier

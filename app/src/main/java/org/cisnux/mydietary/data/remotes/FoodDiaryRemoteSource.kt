@@ -1,6 +1,7 @@
 package org.cisnux.mydietary.data.remotes
 
 import arrow.core.Either
+import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.GetFoodDiaryParams
 import org.cisnux.mydietary.data.remotes.responses.FoodDiaryDetailResponse

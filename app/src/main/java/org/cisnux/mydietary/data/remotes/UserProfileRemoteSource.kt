@@ -1,8 +1,10 @@
 package org.cisnux.mydietary.data.remotes
 
 import arrow.core.Either
+import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileBodyRequest
+import org.cisnux.mydietary.data.remotes.responses.DietProgressResponse
 import org.cisnux.mydietary.data.remotes.responses.NutrientResponse
 import org.cisnux.mydietary.data.remotes.responses.UserProfileDetailResponse
 
@@ -15,4 +17,7 @@ interface UserProfileRemoteSource {
         userId: String,
         date: String
     ): Either<Exception, NutrientResponse>
+
+    suspend fun updateDietProgress(accessToken: String, dietProgressBodyRequest: DietProgressBodyRequest): Either<Exception, Nothing?>
+    suspend fun getDietProgress(accessToken: String, userAccountId: String): Either<Exception, List<DietProgressResponse>>
 }

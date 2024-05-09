@@ -1,6 +1,5 @@
 package org.cisnux.mydietary.data.remotes
 
-import android.util.Log
 import arrow.core.Either
 import org.cisnux.mydietary.data.locals.BaseApiUrlLocalSource
 import org.cisnux.mydietary.data.remotes.responses.CommonResponse
@@ -26,6 +25,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
+import org.cisnux.mydietary.data.remotes.responses.DietProgressResponse
 import javax.inject.Inject
 
 class UserProfileRemoteSourceImpl @Inject constructor(
@@ -79,7 +80,6 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
                     }
                     contentType(ContentType.Application.Json)
-                    Log.d(UserProfileRemoteSource::class.simpleName, userProfile.toString())
                     setBody(userProfile)
                 }
                 val isSuccess = response.status.isSuccess()
@@ -168,6 +168,73 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                         fat = 0f,
                         carbohydrate = 0f
                     )
+                )
+            }
+        } catch (e: UnresolvedAddressException) {
+            Either.Left(Failure.ConnectionFailure())
+        }
+    }
+
+    override suspend fun updateDietProgress(
+        accessToken: String,
+        dietProgressBodyRequest: DietProgressBodyRequest
+    ): Either<Exception, Nothing?> = withContext(Dispatchers.IO) {
+        try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
+            val response = client.post(
+                urlString = "$baseUrl/user-data/diet-progression",
+            ) {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $accessToken")
+                    contentType(ContentType.Application.Json)
+                    setBody(dietProgressBodyRequest)
+                }
+            }
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
+                val commonResponse: CommonResponse<Nothing>? =
+                    if (response.status != HttpStatusCode.Unauthorized) response.body()
+                    else null
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse?.message
+                    })
+                } ?: Either.Left(Exception(commonResponse?.message))
+                failure
+            } else
+                Either.Right(null)
+        } catch (e: UnresolvedAddressException) {
+            Either.Left(Failure.ConnectionFailure())
+        }
+    }
+
+    override suspend fun getDietProgress(
+        accessToken: String,
+        userAccountId: String
+    ): Either<Exception, List<DietProgressResponse>> = withContext(Dispatchers.IO) {
+        try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
+            val response =
+                client.get(urlString = "$baseUrl/user-data/diet-progression/$userAccountId") {
+                    headers {
+                        append(HttpHeaders.Authorization, "Bearer $accessToken")
+                    }
+                }
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
+                val commonResponse: CommonResponse<Nothing>? =
+                    if (response.status != HttpStatusCode.Unauthorized) response.body()
+                    else null
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse?.message
+                    })
+                } ?: Either.Left(Exception(commonResponse?.message))
+                failure
+            } else {
+                val commonResponse: CommonResponse<List<DietProgressResponse>> = response.body()
+                Either.Right(
+                    commonResponse.data!!
                 )
             }
         } catch (e: UnresolvedAddressException) {

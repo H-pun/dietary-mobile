@@ -112,10 +112,11 @@ class UserProfileInteractor @Inject constructor(
 
 
     override fun updateUserProfile(userProfile: UserProfile): Flow<UiState<Nothing>> =
-        authenticationUseCase.accessToken.flatMapLatest {
-            it?.let { accessToken ->
+        authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
+            it?.let {
                 userProfileRepository.updateUserProfile(
-                    accessToken = accessToken,
+                    accessToken = it.second,
+                    userId = it.first,
                     userProfile = userProfile
                 )
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
