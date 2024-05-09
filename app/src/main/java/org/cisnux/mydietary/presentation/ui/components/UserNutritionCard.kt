@@ -28,6 +28,8 @@ import org.cisnux.mydietary.presentation.ui.theme.darkRed
 import org.cisnux.mydietary.presentation.ui.theme.darkYellow
 import org.cisnux.mydietary.presentation.ui.theme.lightRed
 import org.cisnux.mydietary.presentation.ui.theme.lightYellow
+import org.cisnux.mydietary.presentation.ui.theme.primaryContainerDark
+import org.cisnux.mydietary.presentation.ui.theme.primaryContainerLight
 import org.cisnux.mydietary.presentation.ui.theme.secondaryContainerDark
 import org.cisnux.mydietary.presentation.ui.theme.secondaryContainerLight
 import org.cisnux.mydietary.presentation.ui.theme.surfaceDark
@@ -57,42 +59,42 @@ fun UserNutritionCard(
     val calorieDarkColor = when {
         caloriePercentage > 1.0f -> darkRed
         caloriePercentage > 0.5f -> darkYellow
-        else -> secondaryContainerDark
+        else -> primaryContainerDark
     }
     val carbohydrateDarkColor = when {
         carbohydratePercentage > 1.0f -> darkRed
         carbohydratePercentage > 0.5f -> darkYellow
-        else -> secondaryContainerDark
+        else -> primaryContainerDark
     }
     val proteinDarkColor = when {
         proteinPercentage > 1.0f -> darkRed
         proteinPercentage > 0.5f -> darkYellow
-        else -> secondaryContainerDark
+        else -> primaryContainerDark
     }
     val fatDarkColor = when {
         fatPercentage > 1.0f -> darkRed
         fatPercentage > 0.5f -> darkYellow
-        else -> secondaryContainerDark
+        else -> primaryContainerDark
     }
     val calorieLightColor = when {
         caloriePercentage > 1.0f -> lightRed
         caloriePercentage > 0.5f -> lightYellow
-        else -> secondaryContainerLight
+        else -> primaryContainerLight
     }
     val carbohydrateLightColor = when {
         carbohydratePercentage > 1.0f -> lightRed
         carbohydratePercentage > 0.5f -> lightYellow
-        else -> secondaryContainerLight
+        else -> primaryContainerLight
     }
     val proteinLightColor = when {
         proteinPercentage > 1.0f -> lightRed
         proteinPercentage > 0.5f -> lightYellow
-        else -> secondaryContainerLight
+        else -> primaryContainerLight
     }
     val fatLightColor = when {
         fatPercentage > 1.0f -> lightRed
         fatPercentage > 0.5f -> lightYellow
-        else -> secondaryContainerLight
+        else -> primaryContainerLight
     }
     val onSurfaceColor = commonCircularCardColor
 
