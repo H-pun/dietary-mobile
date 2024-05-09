@@ -27,7 +27,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -86,7 +85,6 @@ fun SignUpScreen(
         SnackbarHostState()
     }
     val signUpWithEmailAndPasswordState by viewModel.signUpWithEmailAndPasswordState.collectAsState()
-    val signUpWithGoogleState by viewModel.signUpWithGoogleState.collectAsState()
     val context = LocalContext.current
 
     when (signUpWithEmailAndPasswordState) {
@@ -117,36 +115,10 @@ fun SignUpScreen(
         else -> {}
     }
 
-    when (signUpWithGoogleState) {
-        is UiState.Success -> {
-            navigateToSignIn()
-        }
-
-        is UiState.Error -> {
-            (signUpWithGoogleState as UiState.Error).error?.let { exception ->
-                LaunchedEffect(snackbarHostState) {
-                    exception.message?.let {
-                        val snackbarResult = snackbarHostState.showSnackbar(
-                            message = it,
-                            actionLabel = context.getString(R.string.retry),
-                            withDismissAction = true,
-                            duration = SnackbarDuration.Long
-                        )
-                        if (snackbarResult == SnackbarResult.ActionPerformed)
-                            viewModel.signUpWithGoogle()
-                    }
-                }
-            }
-        }
-
-        else -> {}
-    }
-
     SignUpContent(
         body = {
             SignUpBody(
                 onSignIn = navigateToSignIn,
-                onGoogleSignUp = { viewModel.signUpWithGoogle() },
                 onEmailPasswordSignUp = {
                     viewModel.signUpWithEmailAndPassword(
                         emailAddress = emailAddress,
@@ -161,7 +133,6 @@ fun SignUpScreen(
                 onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
                 modifier = modifier.padding(it),
                 isEmailPassSignUpLoading = signUpWithEmailAndPasswordState is UiState.Loading,
-                isGoogleSignUpLoading = signUpWithGoogleState is UiState.Loading
             )
         },
         snackbarHostState = snackbarHostState
@@ -186,7 +157,6 @@ private fun SignUpContentPreview() {
             body = {
                 SignUpBody(
                     onSignIn = {},
-                    onGoogleSignUp = {},
                     onEmailPasswordSignUp = {},
                     emailAddress = emailAddress,
                     password = password,
@@ -223,7 +193,6 @@ private fun SignUpContentDarkPreview() {
             body = {
                 SignUpBody(
                     onSignIn = {},
-                    onGoogleSignUp = {},
                     onEmailPasswordSignUp = {},
                     emailAddress = emailAddress,
                     password = password,
@@ -260,7 +229,6 @@ private fun SignUpContentLoadingDarkPreview() {
             body = {
                 SignUpBody(
                     onSignIn = {},
-                    onGoogleSignUp = {},
                     onEmailPasswordSignUp = {},
                     emailAddress = emailAddress,
                     password = password,
@@ -270,7 +238,6 @@ private fun SignUpContentLoadingDarkPreview() {
                     onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
                     modifier = Modifier.padding(it),
                     isEmailPassSignUpLoading = true,
-                    isGoogleSignUpLoading = true
                 )
             },
             snackbarHostState = SnackbarHostState(),
@@ -281,7 +248,6 @@ private fun SignUpContentLoadingDarkPreview() {
 @Composable
 private fun SignUpBody(
     onSignIn: () -> Unit,
-    onGoogleSignUp: () -> Unit,
     onEmailPasswordSignUp: () -> Unit,
     emailAddress: String,
     password: String,
@@ -291,7 +257,6 @@ private fun SignUpBody(
     onConfirmationPasswordChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     isEmailPassSignUpLoading: Boolean = false,
-    isGoogleSignUpLoading: Boolean = false
 ) {
     var isPasswordVisible by rememberSaveable {
         mutableStateOf(false)
@@ -507,7 +472,7 @@ private fun SignUpBody(
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
             enabled = emailAddress.isEmailValid() and password.isPasswordSecure() and (password == confirmationPassword)
-                    and !isEmailPassSignUpLoading and !isGoogleSignUpLoading,
+                    and !isEmailPassSignUpLoading
         ) {
             if (isEmailPassSignUpLoading)
                 CircularProgressIndicator()
@@ -526,26 +491,6 @@ private fun SignUpBody(
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 8.dp)
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        OutlinedButton(
-            shape = MaterialTheme.shapes.medium,
-            enabled = !isGoogleSignUpLoading and !isEmailPassSignUpLoading,
-            onClick = onGoogleSignUp, modifier = Modifier.fillMaxWidth(),
-        ) {
-            if (isGoogleSignUpLoading)
-                CircularProgressIndicator()
-            else {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_google_24dp),
-                    contentDescription = null,
-                )
-                Text(
-                    text = stringResource(R.string.sign_up_with_google),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.SemiBold
                 )
             }
         }

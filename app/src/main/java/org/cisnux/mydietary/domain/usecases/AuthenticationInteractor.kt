@@ -1,6 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package org.cisnux.mydietary.domain.usecases
 
-import android.util.Log
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -18,6 +20,9 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import org.cisnux.mydietary.utils.Failure
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -25,11 +30,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
+@Suppress("DEPRECATION")
 @ExperimentalCoroutinesApi
 class AuthenticationInteractor @Inject constructor(
     private val authenticationRepository: AuthenticationRepository,
     private val userProfileRepository: UserProfileRepository,
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val googleClient: GoogleSignInClient
 ) : AuthenticationUseCase {
     override val accessToken: Flow<String?>
         get() = authenticationRepository.accessToken
@@ -67,38 +74,46 @@ class AuthenticationInteractor @Inject constructor(
         }
 
     override fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>> =
-        authenticationRepository.signInWithEmailAndPassword(userAccount)
+        authenticationRepository.verifyUserAccount(userAccount)
 
-    override fun signInWithGoogle(token: String): Flow<UiState<Nothing>> = flow {
-        emit(UiState.Loading)
+    override fun signInWithGoogle(token: String): Flow<UiState<Nothing>> = channelFlow {
+        trySend(UiState.Loading)
         try {
+            // change to flow
             val credential = GoogleAuthProvider.getCredential(token, null)
             val authResult = firebaseAuth.signInWithCredential(credential).await()
             val authUser = authResult.user
-            val idToken = authUser?.getIdToken(true)?.await()?.token
-            Log.d(AuthenticationUseCase::class.simpleName, idToken?: "null")
-            emit(UiState.Success(null))
+            val googleToken = authUser?.getIdToken(true)?.await()?.token
+            googleToken?.let {
+                authenticationRepository.verifyGoogleAccount(token = it).distinctUntilChanged()
+                    .collectLatest { uiState ->
+                        trySend(uiState)
+                    }
+            } ?: trySend(UiState.Error(Failure.UnauthorizedFailure("token is invalid")))
         } catch (e: FirebaseAuthInvalidUserException) {
-            emit(UiState.Error(e))
+            trySend(UiState.Error(e))
         } catch (e: FirebaseAuthUserCollisionException) {
-            emit(UiState.Error(e))
+            trySend(UiState.Error(e))
         } catch (e: FirebaseAuthInvalidCredentialsException) {
-            emit(UiState.Error(e))
+            trySend(UiState.Error(e))
         } catch (e: IOException) {
-            emit(UiState.Error(Failure.ConnectionFailure("no internet connection")))
+            trySend(UiState.Error(Failure.ConnectionFailure("no internet connection")))
         } catch (e: Exception) {
-            emit(UiState.Error(e))
+            trySend(UiState.Error(e))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     override fun signUpWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>> =
-        authenticationRepository.signUpWithEmailAndPassword(userAccount)
-
-    override fun signUpWithGoogle(): Flow<UiState<Nothing>> =
-        authenticationRepository.signUpWithGoogle()
+        authenticationRepository.addUserAccount(userAccount)
 
     override fun resetPassword(emailAddress: String): Flow<UiState<Nothing>> =
         authenticationRepository.resetPassword(emailAddress)
 
-    override suspend fun signOut() = authenticationRepository.signOut()
+    override suspend fun signOut() {
+        try {
+            googleClient.signOut().await()
+        } finally {
+            authenticationRepository.deleteSession()
+        }
+    }
 }

@@ -21,7 +21,6 @@ class SignUpViewModel @Inject constructor(
     val signUpWithEmailAndPasswordState get() = _signUpWithEmailAndPasswordState.asStateFlow()
     private val _signUpWithGoogleState: MutableStateFlow<UiState<Nothing>> =
         MutableStateFlow(UiState.Initialize)
-    val signUpWithGoogleState get() = _signUpWithGoogleState.asStateFlow()
 
     fun signUpWithEmailAndPassword(emailAddress: String, password: String) {
         val userAccount = UserAccount(emailAddress = emailAddress, password = password)
@@ -31,12 +30,5 @@ class SignUpViewModel @Inject constructor(
                     _signUpWithEmailAndPasswordState.value = uiState
                 }
         }
-    }
-
-    fun signUpWithGoogle() = viewModelScope.launch {
-        authenticationUseCase.signUpWithGoogle()
-            .collectLatest { uiState ->
-                _signUpWithGoogleState.value = uiState
-            }
     }
 }

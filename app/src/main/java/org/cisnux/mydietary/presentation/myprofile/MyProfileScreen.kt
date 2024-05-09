@@ -199,7 +199,7 @@ fun MyProfileScreen(
         onSelectedDestination = navigateForBottomNav,
         body = {
             AnimatedVisibility(
-                visible = userProfileState is UiState.Success && updateUserProfileState !is UiState.Loading ||
+                visible = userProfileState is UiState.Success ||
                         (userProfileState is UiState.Error && (userProfileState as UiState.Error).error is Failure.ConnectionFailure
                                 && userProfileDetail.username.isNotBlank())
             ) {
@@ -276,7 +276,7 @@ fun MyProfileScreen(
                 )
             }
             AnimatedVisibility(
-                visible = userProfileState is UiState.Loading || updateUserProfileState is UiState.Loading ||
+                visible = userProfileState is UiState.Loading ||
                         userProfileState is UiState.Error && (userProfileState as UiState.Error).error !is Failure.ConnectionFailure
                         || userProfileDetail.username.isBlank()
             ) {

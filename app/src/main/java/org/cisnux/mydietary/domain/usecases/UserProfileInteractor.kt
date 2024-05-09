@@ -19,6 +19,7 @@ import org.cisnux.mydietary.utils.Failure
 import org.cisnux.mydietary.utils.GOALS_FACTOR
 import org.cisnux.mydietary.utils.currentLocalDateTimeInBasicISOFormat
 import kotlinx.coroutines.flow.combine
+import org.cisnux.mydietary.domain.models.DietProgress
 import java.time.Instant
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -26,21 +27,6 @@ class UserProfileInteractor @Inject constructor(
     private val userProfileRepository: UserProfileRepository,
     private val authenticationUseCase: AuthenticationUseCase
 ) : UserProfileUseCase {
-    override val isUserProfileExist: Flow<Boolean>
-        get() = authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
-            it?.let {
-                userProfileRepository.getUserProfile(userId = it.first, accessToken = it.second)
-                    .map { uiState ->
-                        if (uiState is UiState.Error)
-                            when (uiState.error) {
-                                is Failure.NotFoundFailure -> false
-                                else -> true
-                            }
-                        else true
-                    }
-            } ?: flow { emit(false) }
-        }.distinctUntilChanged()
-            .flowOn(Dispatchers.IO)
     override val userProfileDetail: Flow<UserProfileDetail>
         get() = userProfileRepository.userProfileDetail
     override val userDailyNutrition: Flow<UiState<UserNutrition>>
@@ -118,6 +104,16 @@ class UserProfileInteractor @Inject constructor(
                     accessToken = it.second,
                     userId = it.first,
                     userProfile = userProfile
+                )
+            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
+        }
+
+    override fun getDietProgress(): Flow<UiState<List<DietProgress>>> =
+        authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
+            it?.let {
+                userProfileRepository.getDietProgress(
+                    accessToken = it.second,
+                    userId = it.first
                 )
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }

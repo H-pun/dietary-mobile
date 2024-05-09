@@ -16,7 +16,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Date
 import java.util.Locale
 
 val Context.activity: AppCompatActivity?
@@ -89,20 +88,6 @@ fun String.isFloatAnswerValid(): Boolean = try {
     false
 }
 
-fun Instant.dateAndMonth(): String {
-    val locale = Locale("id", "ID")
-    val clock = Clock.fixed(this, ZoneId.systemDefault())
-    val localDate = LocalDate.now(clock)
-    return DateTimeFormatter.ofPattern("dd MMMM", locale).format(localDate)
-}
-
-fun Instant.dayDateMonth(): String {
-    val locale = Locale("id", "ID")
-    val clock = Clock.fixed(this, ZoneId.systemDefault())
-    val localDate = LocalDate.now(clock)
-    return DateTimeFormatter.ofPattern("EEEE, dd", locale).format(localDate)
-}
-
 fun Instant.dayDateMonthYear(): String {
     val locale = Locale("id", "ID")
     val clock = Clock.fixed(this, ZoneId.systemDefault())
@@ -146,6 +131,12 @@ val String.asDateAndMonth: String
             LocalDate.parse(this@asDateAndMonth, this@run)
                 .format(DateTimeFormatter.ofPattern("dd MMMM", locale))
         }
+val String.asDayDateAndMonth: String
+    get() = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").run {
+        val locale = Locale("id", "ID")
+        LocalDate.parse(this@asDayDateAndMonth, this@run)
+           .format(DateTimeFormatter.ofPattern("EEEE, dd MMM", locale))
+    }
 
 
 fun getCurrentDateTimeInISOFormat(): String {

@@ -22,12 +22,13 @@ import io.ktor.http.isSuccess
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
+import org.cisnux.mydietary.data.remotes.bodyrequests.GoogleTokenRequest
 
 class UserAccountRemoteSourceImpl @Inject constructor(
     private val client: HttpClient,
     private val baseApiUrlLocalSource: BaseApiUrlLocalSource
 ) : UserAccountRemoteSource {
-    override suspend fun signIn(userAccount: UserAccountBodyRequest): Either<Exception, AddedUserAccountResponse> =
+    override suspend fun verifyUserAccount(userAccount: UserAccountBodyRequest): Either<Exception, AddedUserAccountResponse> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
@@ -56,7 +57,36 @@ class UserAccountRemoteSourceImpl @Inject constructor(
             }
         }
 
-    override suspend fun signUp(userAccount: UserAccountBodyRequest): Either<Exception, Nothing?> =
+    override suspend fun verifyGoogleAccount(googleToken: GoogleTokenRequest): Either<Exception, AddedUserAccountResponse> =
+        withContext(Dispatchers.IO) {
+            try {
+                val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
+                val response = client.post(
+                    urlString = "$baseUrl/user/firebase-auth"
+                ) {
+                    contentType(ContentType.Application.Json)
+                    setBody(googleToken)
+                }
+
+                val isSuccess = response.status.isSuccess()
+                return@withContext if (!isSuccess) {
+                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                        Either.Left(it.apply {
+                            message = commonResponse.message
+                        })
+                    } ?: Either.Left(Exception(commonResponse.message))
+                    failure
+                } else {
+                    val commonResponse: CommonResponse<AddedUserAccountResponse> = response.body()
+                    Either.Right(commonResponse.data!!)
+                }
+            } catch (e: UnresolvedAddressException) {
+                Either.Left(Failure.ConnectionFailure())
+            }
+        }
+
+    override suspend fun addUserAccount(userAccount: UserAccountBodyRequest): Either<Exception, Nothing?> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()

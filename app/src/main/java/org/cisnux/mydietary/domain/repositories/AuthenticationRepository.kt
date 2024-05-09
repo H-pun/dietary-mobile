@@ -7,10 +7,9 @@ import kotlinx.coroutines.flow.Flow
 interface AuthenticationRepository {
     val accessToken: Flow<String?>
     val userId: Flow<String?>
-    fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
-    fun signInWithGoogle(): Flow<UiState<Nothing>>
-    fun signUpWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
-    fun signUpWithGoogle(): Flow<UiState<Nothing>>
+    fun verifyUserAccount(userAccount: UserAccount): Flow<UiState<Nothing>>
+    fun addUserAccount(userAccount: UserAccount): Flow<UiState<Nothing>>
+    suspend fun verifyGoogleAccount(token: String): Flow<UiState<Nothing>>
     fun resetPassword(emailAddress: String): Flow<UiState<Nothing>>
-    suspend fun signOut()
+    suspend fun deleteSession()
 }

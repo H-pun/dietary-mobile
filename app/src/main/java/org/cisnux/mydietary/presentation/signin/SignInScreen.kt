@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package org.cisnux.mydietary.presentation.signin
 
 import android.app.Activity
@@ -67,7 +69,6 @@ import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
@@ -98,6 +99,23 @@ fun SignInScreen(
     val signInWithEmailAndPasswordState by viewModel.signInWithEmailAndPasswordState.collectAsState()
     val signInWithGoogleState by viewModel.signInWithGoogleState.collectAsState()
     val context = LocalContext.current
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { result ->
+            Log.d("SignInScreen", result.resultCode.toString())
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                try {
+                    // Google Sign In was successful, authenticate with firebase
+                    val account = task.getResult(ApiException::class.java)!!
+                    Log.d("SignInScreen", account.idToken ?: "null")
+                    account.idToken?.let(viewModel::signInWithGoogle)
+                } catch (e: ApiException) {
+                    Log.d("google login", e.message.toString())
+                }
+            }
+        }
+    )
 
     when (signInWithEmailAndPasswordState) {
         is UiState.Success -> {
@@ -134,12 +152,11 @@ fun SignInScreen(
 
     when (signInWithGoogleState) {
         is UiState.Success -> {
-            val isUserProfileExist by viewModel.isUserProfileExist.collectAsState(initial = null)
-            isUserProfileExist?.let {
-                if (it)
-                    navigateToHome(AppDestination.SignInRoute.route)
-                else
-                    navigateToAddMyProfile(AppDestination.SignInRoute.route)
+            val authenticationState by viewModel.authenticationState.collectAsState()
+            when (authenticationState) {
+                AuthenticationState.HAS_NOT_USER_PROFILE -> navigateToAddMyProfile(AppDestination.SignInRoute.route)
+                AuthenticationState.HAS_SIGNED_IN_AND_USER_PROFILE -> navigateToHome(AppDestination.SignInRoute.route)
+                else -> {}
             }
         }
 
@@ -166,7 +183,9 @@ fun SignInScreen(
                     viewModel.clearAllStates()
                     navigateToSignUp()
                 },
-                onGoogleSignIn = { token -> viewModel.signInWithGoogle(token) },
+                onGoogleSignIn = {
+                    googleSignInLauncher.launch(viewModel.googleSignInClient.signInIntent)
+                },
                 onEmailPasswordSignIn = {
                     viewModel.signInWithEmailAndPassword(
                         emailAddress = emailAddress,
@@ -283,7 +302,7 @@ private fun SignInContentLoadingDarkPreview() {
                     onForgotPassword = {},
                     modifier = Modifier.padding(it),
                     isEmailPassSignInLoading = true,
-                    isGoogleSignInLoading = true
+                    isGoogleSignInLoading = true,
                 )
             },
             snackbarHostState = SnackbarHostState(),
@@ -294,7 +313,7 @@ private fun SignInContentLoadingDarkPreview() {
 @Composable
 private fun SignInBody(
     onSignUp: () -> Unit,
-    onGoogleSignIn: (String) -> Unit,
+    onGoogleSignIn: () -> Unit,
     onEmailPasswordSignIn: () -> Unit,
     onForgotPassword: () -> Unit,
     emailAddress: String,
@@ -303,7 +322,7 @@ private fun SignInBody(
     onPasswordChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     isEmailPassSignInLoading: Boolean = false,
-    isGoogleSignInLoading: Boolean = false
+    isGoogleSignInLoading: Boolean = false,
 ) {
     var isPasswordVisible by rememberSaveable {
         mutableStateOf(false)
@@ -315,29 +334,6 @@ private fun SignInBody(
     var isPasswordFocused by rememberSaveable {
         mutableStateOf(false)
     }
-    val gso = GoogleSignInOptions
-        .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestEmail()
-        .requestIdToken("871244307697-17fmcgek3i0ol6jp7a3ik214kjlqdk14.apps.googleusercontent.com")
-        .build()
-    val googleSignInClient = GoogleSignIn.getClient(LocalContext.current, gso)
-    val googleSignInLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = { result ->
-            Log.d("SignInScreen", result.resultCode.toString())
-            if (result.resultCode == Activity.RESULT_OK) {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                try {
-                    // Google Sign In was successful, authenticate with firebase
-                    val account = task.getResult(ApiException::class.java)!!
-//                    Log.d("SignInScreen", account.idToken ?: "null")
-                    account.idToken?.let(onGoogleSignIn)
-                } catch (e: ApiException) {
-                    Log.d("google login", e.message.toString())
-                }
-            }
-        }
-    )
 
     Column(
         modifier = modifier
@@ -367,9 +363,7 @@ private fun SignInBody(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedButton(
             shape = MaterialTheme.shapes.medium,
-            onClick = {
-                googleSignInLauncher.launch(googleSignInClient.signInIntent)
-            },
+            onClick = onGoogleSignIn,
             enabled = !isEmailPassSignInLoading and !isEmailPassSignInLoading,
             modifier = Modifier.fillMaxWidth(),
         ) {

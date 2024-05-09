@@ -13,7 +13,6 @@ interface AuthenticationUseCase {
     fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
     fun signInWithGoogle(token: String): Flow<UiState<Nothing>>
     fun signUpWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
-    fun signUpWithGoogle(): Flow<UiState<Nothing>>
     fun resetPassword(emailAddress: String): Flow<UiState<Nothing>>
     suspend fun signOut()
 }

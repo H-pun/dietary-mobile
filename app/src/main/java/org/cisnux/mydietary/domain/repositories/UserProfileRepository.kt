@@ -17,7 +17,7 @@ interface UserProfileRepository {
     fun getUserProfile(accessToken: String, userId: String): Flow<UiState<Nothing>>
     fun updateUserProfile(accessToken: String, userId: String, userProfile: UserProfile): Flow<UiState<Nothing>>
     fun getUserNutrition(accessToken: String, userId: String, date: String): Flow<UiState<UserNutrition>>
-    fun getDietProgress(accessToken: String, userId: String): Flow<UiState<DietProgress>>
+    fun getDietProgress(accessToken: String, userId: String): Flow<UiState<List<DietProgress>>>
 
     val userProfileDetail: Flow<UserProfileDetail>
 }

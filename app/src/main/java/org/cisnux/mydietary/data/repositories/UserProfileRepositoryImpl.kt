@@ -10,17 +10,15 @@ import org.cisnux.mydietary.domain.models.UserProfileDetail
 import org.cisnux.mydietary.domain.repositories.UserProfileRepository
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
 import org.cisnux.mydietary.domain.models.DietProgress
+import org.cisnux.mydietary.utils.asDayDateAndMonth
 import org.cisnux.mydietary.utils.getCurrentDateTimeInISOFormat
 
 class UserProfileRepositoryImpl @Inject constructor(
@@ -52,6 +50,15 @@ class UserProfileRepositoryImpl @Inject constructor(
             ).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
                 ifRight = { emit(UiState.Success(null)) }
+            )
+            userProfileRemoteSource.updateDietProgress(
+                accessToken = accessToken,
+                dietProgressBodyRequest = DietProgressBodyRequest(
+                    id = userId,
+                    weight = userProfile.weight,
+                    waistCircumference = userProfile.waistCircumference,
+                    updatedAt = getCurrentDateTimeInISOFormat()
+                )
             )
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
@@ -137,14 +144,29 @@ class UserProfileRepositoryImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
         .distinctUntilChanged()
 
-    override fun getDietProgress(accessToken: String, userId: String): Flow<UiState<DietProgress>> = flow {
+    override fun getDietProgress(
+        accessToken: String,
+        userId: String
+    ): Flow<UiState<List<DietProgress>>> = flow {
         emit(UiState.Loading)
         userProfileRemoteSource.getDietProgress(
             accessToken = accessToken,
             userAccountId = userId,
         ).fold(
-            ifLeft = {},
-            ifRight = {}
+            ifLeft = { exception -> emit(UiState.Error(exception)) },
+            ifRight = {
+                emit(
+                    UiState.Success(
+                        it.map { dietProgressResponse ->
+                            DietProgress(
+                                weight = dietProgressResponse.weight,
+                                waistCircumference = dietProgressResponse.waistCircumference,
+                                description = dietProgressResponse.updatedAt.asDayDateAndMonth
+                            )
+                        }
+                    )
+                )
+            }
         )
     }.flowOn(Dispatchers.IO)
         .distinctUntilChanged()

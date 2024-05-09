@@ -232,9 +232,9 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                 } ?: Either.Left(Exception(commonResponse?.message))
                 failure
             } else {
-                val commonResponse: CommonResponse<List<DietProgressResponse>> = response.body()
+                val commonResponse: CommonResponse<List<DietProgressResponse>?> = response.body()
                 Either.Right(
-                    commonResponse.data!!
+                    commonResponse.data ?: listOf()
                 )
             }
         } catch (e: UnresolvedAddressException) {

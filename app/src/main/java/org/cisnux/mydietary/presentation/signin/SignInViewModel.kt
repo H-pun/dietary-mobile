@@ -2,25 +2,25 @@ package org.cisnux.mydietary.presentation.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
-import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import org.cisnux.mydietary.utils.AuthenticationState
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Suppress("DEPRECATION")
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
-    userProfileUseCase: UserProfileUseCase
+    val googleSignInClient: GoogleSignInClient,
 ) : ViewModel() {
     private val _signInWithEmailAndPasswordState: MutableStateFlow<UiState<Nothing>> =
         MutableStateFlow(UiState.Initialize)
@@ -28,10 +28,6 @@ class SignInViewModel @Inject constructor(
     private val _signInWithGoogleState: MutableStateFlow<UiState<Nothing>> =
         MutableStateFlow(UiState.Initialize)
     val signInWithGoogleState get() = _signInWithGoogleState.asStateFlow()
-    val isUserProfileExist = userProfileUseCase.isUserProfileExist.shareIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-    )
     val authenticationState = authenticationUseCase.authenticationState.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
