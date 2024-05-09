@@ -489,7 +489,7 @@ private fun ReportBody(
         Spacer(modifier = Modifier.height(16.dp))
         AnimatedVisibility(!isNutritionReportLoading) {
             if (nutritionReports.isEmpty()) {
-                Image(painter = painterResource(R.drawable.empty_report), contentDescription = null, modifier = Modifier.size(310.dp))
+                Image(painter = painterResource(R.drawable.empty_report), contentDescription = null, modifier = Modifier.size(280.dp))
             } else {
                 val firstModel = remember { CartesianChartModelProducer.build() }
                 val secondModel = remember { CartesianChartModelProducer.build() }

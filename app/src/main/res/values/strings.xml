@@ -106,11 +106,11 @@
         <item>Aktivitas sehari-hari memerlukan upaya fisik yang intens seperti pekerjaan konstruksi atau olahraga berat yang teratur.</item>
     </string-array>
     <string name="retry">Ulangi</string>
-    <string name="searchbar_hint" translatable="false">Nasi goreng, pizza, nasi padang</string>
+    <string name="searchbar_hint" translatable="false">Temukan diary makananmu!</string>
     <string name="cancel">Batal</string>
     <string name="ok" translatable="false">OK</string>
     <string name="diary_display">Lihat Diary Makanan Anda:\nPantau Makanan Anda! 🥘🍱</string>
-    <string name="empty_content_label">Tidak ada food diary</string>
+    <string name="empty_content_label">Belum ada diary makanan</string>
     <string name="empty_content_search">Makanan yang Anda yang cari tidak dapat ditemukan</string>
     <string name="cm">%1$s cm</string>
     <string name="tahun">%1$s tahun</string>
