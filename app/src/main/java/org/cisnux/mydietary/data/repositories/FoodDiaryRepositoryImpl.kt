@@ -293,7 +293,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 ifRight = {
                     emit(UiState.Success(FoodDiaryDetail(id = it.id,
                         title = it.title,
-                        feedback = it.feedback,
+                        feedback = it.feedback ?: listOf(),
                         status = it.status,
                         foodNutrition = FoodNutrition(
                             image = "$IMAGE_LOCATION/${it.filePath}",

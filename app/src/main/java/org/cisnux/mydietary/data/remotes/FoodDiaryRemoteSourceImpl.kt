@@ -30,7 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.KeywordResponse
 import java.io.File
 import javax.inject.Inject

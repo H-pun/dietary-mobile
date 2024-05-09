@@ -9,7 +9,7 @@ data class FoodDiaryDetailResponse(
     val title: String,
     val status: String?,
     val filePath: String,
-    val feedback: List<String>,
+    val feedback: List<String>?,
     val totalCalories: Float,
     val totalProtein: Float,
     val totalFat: Float,

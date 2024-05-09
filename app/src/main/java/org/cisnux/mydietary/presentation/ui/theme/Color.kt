@@ -67,7 +67,7 @@ val darkYellow = Color(0xFF867700)
 val darkRed = Color(0xFF810101)
 val darkBlue = Color(0xFF003863)
 val darkMagenta = Color(0xFF550064)
-val commonCircularCardColor = Color(0xFFC4C7C0)
+val commonCircularCardColor = Color(0xFFB2B4AF)
 
 
 

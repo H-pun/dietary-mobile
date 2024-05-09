@@ -220,7 +220,16 @@ private fun ReportContentPreview() {
                         totalFatToday = 211f,
                         totalProteinToday = 242.23f,
                         totalCarbohydrateToday = 241.11f,
-                        nutritionReports = listOf(),
+                        nutritionReports = List(20) {index->
+                            FoodDiaryReport(
+                                averageCarbohydrate = Random.nextDouble(80.0, 100.0).toFloat(),
+                                averageFat = Random.nextDouble(20.0, 100.0).toFloat(),
+                                averageProtein = Random.nextDouble(60.0, 100.0).toFloat(),
+                                averageCalories = Random.nextDouble(50.0, 100.0).toFloat(),
+                                label = index.toString(),
+                                description = "Senin, 17 Feb"
+                            )
+                        },
                         selectedFilter = tabState,
                         onReportFilterChange = { index -> tabState = index },
                         maxDailyCarbohydrate = 1000f,
@@ -382,6 +391,7 @@ private fun ReportBody(
                         title = "Berat dan Lingkar Pinggang",
                         titleComponent = rememberAxisLabelComponent(
                             textAlignment = Layout.Alignment.ALIGN_CENTER,
+                            lineCount = 2
                         ),
                     ),
                     bottomAxis = rememberBottomAxis(
@@ -418,7 +428,7 @@ private fun ReportBody(
                     )
                 ),
                 modelProducer = weightAndWaistCircumference,
-                modifier = Modifier.height(310.dp)
+                modifier = Modifier.height(280.dp)
             )
         } else
             Row(
@@ -454,7 +464,7 @@ private fun ReportBody(
                 maxDailyCalories = maxDailyCalories,
                 maxDailyCarbohydrate = maxDailyCarbohydrate,
                 maxDailyProtein = maxDailyProtein,
-                maxDailyFat = maxDailyFat
+                maxDailyFat = maxDailyFat,
             )
         } else {
             UserNutritionCardShimmer()
@@ -489,194 +499,200 @@ private fun ReportBody(
         Spacer(modifier = Modifier.height(16.dp))
         AnimatedVisibility(!isNutritionReportLoading) {
             if (nutritionReports.isEmpty()) {
-                Image(painter = painterResource(R.drawable.empty_report), contentDescription = null, modifier = Modifier.size(280.dp))
+                Image(
+                    painter = painterResource(R.drawable.empty_report),
+                    contentDescription = null,
+                    modifier = Modifier.size(260.dp)
+                )
             } else {
-                val firstModel = remember { CartesianChartModelProducer.build() }
-                val secondModel = remember { CartesianChartModelProducer.build() }
-                val labelListKey = remember {
-                    ExtraStore.Key<List<String>>()
-                }
-                LaunchedEffect(nutritionReports) {
-                    firstModel.tryRunTransaction {
-                        lineSeries {
-                            series(nutritionReports.map { it.averageCalories })
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    val firstModel = remember { CartesianChartModelProducer.build() }
+                    val secondModel = remember { CartesianChartModelProducer.build() }
+                    val labelListKey = remember {
+                        ExtraStore.Key<List<String>>()
+                    }
+                    LaunchedEffect(nutritionReports) {
+                        firstModel.tryRunTransaction {
+                            lineSeries {
+                                series(nutritionReports.map { it.averageCalories })
+                            }
+                            lineSeries {
+                                series(nutritionReports.map { it.averageCarbohydrate })
+                            }
+                            updateExtras {
+                                it[labelListKey] = nutritionReports.map { report -> report.label }
+                            }
                         }
-                        lineSeries {
-                            series(nutritionReports.map { it.averageCarbohydrate })
-                        }
-                        updateExtras {
-                            it[labelListKey] = nutritionReports.map { report -> report.label }
+                        secondModel.tryRunTransaction {
+                            lineSeries {
+                                series(nutritionReports.map { it.averageProtein })
+                            }
+                            lineSeries {
+                                series(nutritionReports.map { it.averageFat })
+                            }
+                            updateExtras {
+                                it[labelListKey] = nutritionReports.map { report -> report.label }
+                            }
                         }
                     }
-                    secondModel.tryRunTransaction {
-                        lineSeries {
-                            series(nutritionReports.map { it.averageProtein })
-                        }
-                        lineSeries {
-                            series(nutritionReports.map { it.averageFat })
-                        }
-                        updateExtras {
-                            it[labelListKey] = nutritionReports.map { report -> report.label }
-                        }
-                    }
+                    CartesianChartHost(
+                        marker = rememberDefaultCartesianMarker(
+                            label = rememberAxisLabelComponent(),
+                            valueFormatter = { _, targets ->
+                                nutritionReports[targets[0].x.toInt()].description
+                            }
+                        ),
+                        chart = rememberCartesianChart(
+                            rememberLineCartesianLayer(
+                                listOf(
+                                    rememberLineSpec(
+                                        shader = DynamicShader.color(caloriesColor),
+                                        backgroundShader =
+                                        DynamicShader.verticalGradient(
+                                            arrayOf(
+                                                caloriesColor.copy(alpha = 0.4f),
+                                                caloriesColor.copy(alpha = 0f)
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            rememberLineCartesianLayer(
+                                listOf(
+                                    rememberLineSpec(
+                                        shader = DynamicShader.color(carbohydrateColor),
+                                        backgroundShader =
+                                        DynamicShader.verticalGradient(
+                                            arrayOf(
+                                                carbohydrateColor.copy(alpha = 0.4f),
+                                                carbohydrateColor.copy(alpha = 0f)
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            startAxis = rememberStartAxis(
+                                title = "Kalori dan Karbohidrat",
+                                titleComponent = rememberAxisLabelComponent(
+                                    textAlignment = Layout.Alignment.ALIGN_CENTER,
+                                ),
+                            ),
+                            bottomAxis = rememberBottomAxis(
+                                title = "Minggu",
+                                titleComponent = rememberAxisLabelComponent(),
+                                valueFormatter = { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
+                            ),
+                            legend = rememberVerticalLegend(
+                                items = listOf(
+                                    rememberLegendItem(
+                                        icon = rememberShapeComponent(
+                                            shape = Shape.rounded(
+                                                allPercent = 50
+                                            ),
+                                            color = caloriesColor
+                                        ),
+                                        label = rememberAxisLabelComponent(),
+                                        labelText = "Kalori (kcal)"
+                                    ),
+                                    rememberLegendItem(
+                                        icon = rememberShapeComponent(
+                                            shape = Shape.rounded(
+                                                allPercent = 50
+                                            ),
+                                            color = carbohydrateColor
+                                        ),
+                                        label = rememberAxisLabelComponent(),
+                                        labelText = "Karbohidrat (g)"
+                                    ),
+
+                                    ),
+                                iconSize = 12.dp,
+                                iconPadding = 4.dp
+                            )
+                        ),
+                        modelProducer = firstModel,
+                        modifier = Modifier.height(280.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CartesianChartHost(
+                        marker = rememberDefaultCartesianMarker(
+                            label = rememberAxisLabelComponent(),
+                            valueFormatter = { _, targets ->
+                                nutritionReports[targets[0].x.toInt()].description
+                            }
+                        ),
+                        chart = rememberCartesianChart(
+                            rememberLineCartesianLayer(
+                                listOf(
+                                    rememberLineSpec(
+                                        shader = DynamicShader.color(proteinColor),
+                                        backgroundShader =
+                                        DynamicShader.verticalGradient(
+                                            arrayOf(
+                                                proteinColor.copy(alpha = 0.4f),
+                                                proteinColor.copy(alpha = 0f)
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            rememberLineCartesianLayer(
+                                listOf(
+                                    rememberLineSpec(
+                                        shader = DynamicShader.color(fatColor),
+                                        backgroundShader =
+                                        DynamicShader.verticalGradient(
+                                            arrayOf(
+                                                fatColor.copy(alpha = 0.4f),
+                                                fatColor.copy(alpha = 0f)
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            startAxis = rememberStartAxis(
+                                title = "Protein dan Lemak",
+                                titleComponent = rememberAxisLabelComponent(
+                                    textAlignment = Layout.Alignment.ALIGN_CENTER,
+                                ),
+                            ),
+                            bottomAxis = rememberBottomAxis(
+                                title = "Minggu",
+                                titleComponent = rememberAxisLabelComponent(),
+                                valueFormatter = { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
+                            ),
+                            legend = rememberVerticalLegend(
+                                items = listOf(
+                                    rememberLegendItem(
+                                        icon = rememberShapeComponent(
+                                            shape = Shape.rounded(
+                                                allPercent = 50
+                                            ),
+                                            color = proteinColor
+                                        ),
+                                        label = rememberAxisLabelComponent(),
+                                        labelText = "Protein (g)"
+                                    ),
+                                    rememberLegendItem(
+                                        icon = rememberShapeComponent(
+                                            shape = Shape.rounded(
+                                                allPercent = 50
+                                            ),
+                                            color = fatColor
+                                        ),
+                                        label = rememberAxisLabelComponent(),
+                                        labelText = "Lemak (g)"
+                                    ),
+
+                                    ),
+                                iconSize = 12.dp,
+                                iconPadding = 4.dp
+                            )
+                        ),
+                        modelProducer = secondModel,
+                        modifier = Modifier.height(280.dp)
+                    )
                 }
-                CartesianChartHost(
-                    marker = rememberDefaultCartesianMarker(
-                        label = rememberAxisLabelComponent(),
-                        valueFormatter = { _, targets ->
-                            nutritionReports[targets[0].x.toInt()].description
-                        }
-                    ),
-                    chart = rememberCartesianChart(
-                        rememberLineCartesianLayer(
-                            listOf(
-                                rememberLineSpec(
-                                    shader = DynamicShader.color(caloriesColor),
-                                    backgroundShader =
-                                    DynamicShader.verticalGradient(
-                                        arrayOf(
-                                            caloriesColor.copy(alpha = 0.4f),
-                                            caloriesColor.copy(alpha = 0f)
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                        rememberLineCartesianLayer(
-                            listOf(
-                                rememberLineSpec(
-                                    shader = DynamicShader.color(carbohydrateColor),
-                                    backgroundShader =
-                                    DynamicShader.verticalGradient(
-                                        arrayOf(
-                                            carbohydrateColor.copy(alpha = 0.4f),
-                                            carbohydrateColor.copy(alpha = 0f)
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                        startAxis = rememberStartAxis(
-                            title = "Kalori dan Karbohidrat",
-                            titleComponent = rememberAxisLabelComponent(
-                                textAlignment = Layout.Alignment.ALIGN_CENTER
-                            ),
-                        ),
-                        bottomAxis = rememberBottomAxis(
-                            title = "Minggu",
-                            titleComponent = rememberAxisLabelComponent(),
-                            valueFormatter = { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
-                        ),
-                        legend = rememberVerticalLegend(
-                            items = listOf(
-                                rememberLegendItem(
-                                    icon = rememberShapeComponent(
-                                        shape = Shape.rounded(
-                                            allPercent = 50
-                                        ),
-                                        color = caloriesColor
-                                    ),
-                                    label = rememberAxisLabelComponent(),
-                                    labelText = "Kalori (kcal)"
-                                ),
-                                rememberLegendItem(
-                                    icon = rememberShapeComponent(
-                                        shape = Shape.rounded(
-                                            allPercent = 50
-                                        ),
-                                        color = carbohydrateColor
-                                    ),
-                                    label = rememberAxisLabelComponent(),
-                                    labelText = "Karbohidrat (g)"
-                                ),
-
-                                ),
-                            iconSize = 12.dp,
-                            iconPadding = 4.dp
-                        )
-                    ),
-                    modelProducer = firstModel,
-                    modifier = Modifier.height(310.dp)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                CartesianChartHost(
-                    marker = rememberDefaultCartesianMarker(
-                        label = rememberAxisLabelComponent(),
-                        valueFormatter = { _, targets ->
-                            nutritionReports[targets[0].x.toInt()].description
-                        }
-                    ),
-                    chart = rememberCartesianChart(
-                        rememberLineCartesianLayer(
-                            listOf(
-                                rememberLineSpec(
-                                    shader = DynamicShader.color(proteinColor),
-                                    backgroundShader =
-                                    DynamicShader.verticalGradient(
-                                        arrayOf(
-                                            proteinColor.copy(alpha = 0.4f),
-                                            proteinColor.copy(alpha = 0f)
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                        rememberLineCartesianLayer(
-                            listOf(
-                                rememberLineSpec(
-                                    shader = DynamicShader.color(fatColor),
-                                    backgroundShader =
-                                    DynamicShader.verticalGradient(
-                                        arrayOf(
-                                            fatColor.copy(alpha = 0.4f),
-                                            fatColor.copy(alpha = 0f)
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                        startAxis = rememberStartAxis(
-                            title = "Protein dan Lemak",
-                            titleComponent = rememberAxisLabelComponent(
-                                textAlignment = Layout.Alignment.ALIGN_CENTER
-                            ),
-                        ),
-                        bottomAxis = rememberBottomAxis(
-                            title = "Minggu",
-                            titleComponent = rememberAxisLabelComponent(),
-                            valueFormatter = { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
-                        ),
-                        legend = rememberVerticalLegend(
-                            items = listOf(
-                                rememberLegendItem(
-                                    icon = rememberShapeComponent(
-                                        shape = Shape.rounded(
-                                            allPercent = 50
-                                        ),
-                                        color = proteinColor
-                                    ),
-                                    label = rememberAxisLabelComponent(),
-                                    labelText = "Protein (g)"
-                                ),
-                                rememberLegendItem(
-                                    icon = rememberShapeComponent(
-                                        shape = Shape.rounded(
-                                            allPercent = 50
-                                        ),
-                                        color = fatColor
-                                    ),
-                                    label = rememberAxisLabelComponent(),
-                                    labelText = "Lemak (g)"
-                                ),
-
-                                ),
-                            iconSize = 12.dp,
-                            iconPadding = 4.dp
-                        )
-                    ),
-                    modelProducer = secondModel,
-                    modifier = Modifier.height(310.dp)
-                )
             }
         }
         AnimatedVisibility(isNutritionReportLoading) {
