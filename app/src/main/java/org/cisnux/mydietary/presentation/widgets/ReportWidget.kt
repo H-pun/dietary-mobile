@@ -19,6 +19,7 @@ import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.LinearProgressIndicator
 import androidx.glance.appwidget.appWidgetBackground
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -154,7 +155,7 @@ class ReportWidget : GlanceAppWidget() {
         ) {
             if (isSuccess) {
                 item {
-                    Column {
+                    Column(modifier = GlanceModifier.fillMaxWidth()) {
                         Text(
                             text = "✦ Nutrisimu saat ini",
                             style = TextStyle(
@@ -162,7 +163,7 @@ class ReportWidget : GlanceAppWidget() {
                                 fontWeight = FontWeight.Medium,
                                 fontSize = DietaryTypeScaleTokens.TitleMediumSize,
                                 color = GlanceTheme.colors.onSurface,
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Start
                             ),
                         )
                         Spacer(GlanceModifier.height(4.dp))
@@ -272,7 +273,7 @@ class ReportWidget : GlanceAppWidget() {
                     }
                 }
                 item {
-                    Column {
+                    Column(modifier = GlanceModifier.fillMaxWidth()) {
                         Text(
                             text = "✦ Diary makananmu",
                             style = TextStyle(
@@ -280,7 +281,7 @@ class ReportWidget : GlanceAppWidget() {
                                 fontWeight = FontWeight.Medium,
                                 fontSize = DietaryTypeScaleTokens.TitleMediumSize,
                                 color = GlanceTheme.colors.onSurface,
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Start
                             ),
                         )
                         Spacer(GlanceModifier.height(4.dp))
@@ -300,7 +301,7 @@ class ReportWidget : GlanceAppWidget() {
                             modifier = GlanceModifier.fillMaxWidth()
                         ) {
                             Spacer(
-                                GlanceModifier.size(20.dp).background(
+                                GlanceModifier.size(20.dp).cornerRadius(8.dp).background(
                                     ColorProvider(
                                         day = lightProgress,
                                         night = darkProgress
