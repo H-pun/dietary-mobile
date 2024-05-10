@@ -109,14 +109,14 @@ class UserProfileInteractor @Inject constructor(
         }
 
     override fun getDietProgress(): Flow<UiState<List<DietProgress>>> =
-        authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
+        authenticationUseCase.isAccessTokenAndUserIdExists.distinctUntilChanged().flatMapLatest {
             it?.let {
                 userProfileRepository.getDietProgress(
                     accessToken = it.second,
                     userId = it.first
-                )
-            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
-        }
+                ).distinctUntilChanged()
+            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }.distinctUntilChanged()
+        }.distinctUntilChanged()
 
     override fun refreshUserProfile(): Flow<UiState<Nothing>> =
         authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {

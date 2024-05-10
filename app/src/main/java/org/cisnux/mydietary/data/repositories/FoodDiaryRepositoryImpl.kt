@@ -68,8 +68,8 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         userId: String,
         date: String,
         category: FoodDiaryCategory
-    ): Flow<UiState<List<FoodDiary>>> = channelFlow {
-        send(UiState.Loading)
+    ): Flow<UiState<List<FoodDiary>>> = flow{
+        emit(UiState.Loading)
         foodDiaryRemoteSource.getFoodDiaries(
             accessToken = accessToken,
             getFoodDiaryParams = GetFoodDiaryParams(
@@ -79,10 +79,10 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             )
         ).fold(
             ifLeft = { exception ->
-                send(UiState.Error(exception))
+                emit(UiState.Error(exception))
             },
             ifRight = { foodDiaries ->
-                send(UiState.Success(foodDiaries.map { foodDiary ->
+                emit(UiState.Success(foodDiaries.map { foodDiary ->
                     FoodDiary(
                         id = foodDiary.id,
                         title = foodDiary.title,
@@ -96,6 +96,38 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         )
     }.distinctUntilChanged()
         .flowOn(Dispatchers.IO)
+
+    override fun getDiaryFoodsByDate(
+        accessToken: String,
+        userId: String,
+        date: String
+    ): Flow<UiState<List<FoodDiary>>> = flow{
+        emit(UiState.Loading)
+        foodDiaryRemoteSource.getFoodDiaries(
+            accessToken = accessToken,
+            getFoodDiaryParams = GetFoodDiaryParams(
+                userId = userId,
+                date = date,
+            )
+        ).fold(
+            ifLeft = { exception ->
+                emit(UiState.Error(exception))
+            },
+            ifRight = { foodDiaries ->
+                emit(UiState.Success(foodDiaries.map { foodDiary ->
+                    FoodDiary(
+                        id = foodDiary.id,
+                        title = foodDiary.title,
+                        date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
+                        time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
+                        foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
+                        totalFoodCalories = foodDiary.totalCalories
+                    )
+                }))
+            }
+        )
+    }.distinctUntilChanged()
+    .flowOn(Dispatchers.IO)
 
     override fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>> = flow {
         emit(UiState.Loading)

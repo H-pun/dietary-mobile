@@ -45,7 +45,7 @@ class AuthenticationInteractor @Inject constructor(
     override val isAccessTokenAndUserIdExists: Flow<Pair<String, String>?>
         get() = userId.combine(accessToken) { userId, accessToken ->
             Pair(first = userId, second = accessToken)
-        }.map {
+        }.distinctUntilChanged().map {
             if (it.first != null && it.first?.isNotBlank() == true && it.second != null && it.second?.isNotBlank() == true)
                 Pair(
                     first = it.first!!,

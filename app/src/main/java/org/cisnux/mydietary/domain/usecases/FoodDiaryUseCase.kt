@@ -5,7 +5,6 @@ import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.UserNutrition
-import org.cisnux.mydietary.domain.models.Report
 import org.cisnux.mydietary.utils.FoodDiaryCategory
 import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
@@ -16,6 +15,7 @@ import java.io.File
 
 interface FoodDiaryUseCase {
     fun getDiaryFoodsByDays(date: String, category: FoodDiaryCategory): Flow<UiState<List<FoodDiary>>>
+    fun getDiaryFoodsByDaysOnly(date: String): Flow<UiState<List<FoodDiary>>>
     fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>>
     fun getKeywordSuggestionsByQuery(query: String): Flow<UiState<List<Keyword>>>
     fun addFoodDiary(addFoodDiary: AddFoodDiary): Flow<UiState<String>>

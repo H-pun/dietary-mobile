@@ -54,6 +54,8 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
+            } catch (e: Exception){
+                Either.Left(e)
             }
         }
 
@@ -83,6 +85,8 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
+            } catch (e: Exception){
+                Either.Left(e)
             }
         }
 
@@ -111,6 +115,8 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
+            } catch (e: Exception){
+                Either.Left(e)
             }
         }
 
@@ -140,6 +146,8 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
+            } catch (e: Exception){
+                Either.Left(e)
             }
         }
 
@@ -170,6 +178,8 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
+            } catch (e: Exception){
+                Either.Left(e)
             }
         }
 }

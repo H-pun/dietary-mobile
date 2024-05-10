@@ -292,28 +292,28 @@ private fun ReportBody(
 ) {
     val context = LocalContext.current
     val caloriesColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> primaryContainerDark
-        else -> primaryContainerLight
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> primaryContainerLight
+        else -> primaryContainerDark
     }
     val carbohydrateColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> darkBlue
-        else -> lightBlue
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightBlue
+        else -> darkBlue
     }
     val proteinColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> darkYellow
-        else -> lightYellow
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightYellow
+        else -> darkYellow
     }
     val fatColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> darkMagenta
-        else -> lightMagenta
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightMagenta
+        else -> darkMagenta
     }
     val weightColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> primaryContainerDark
-        else -> primaryContainerLight
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> primaryContainerLight
+        else -> primaryContainerDark
     }
     val waistCircumferenceColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> darkMagenta
-        else -> lightMagenta
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightMagenta
+        else -> darkMagenta
     }
 
     Column(
@@ -332,104 +332,112 @@ private fun ReportBody(
         )
         Spacer(modifier = Modifier.height(16.dp))
         if (!isDietProgressLoading) {
-            val weightAndWaistCircumference = remember { CartesianChartModelProducer.build() }
-            val labelListKey = remember {
-                ExtraStore.Key<List<String>>()
-            }
+            if (dietProgressReport.isEmpty()) {
+                Image(
+                    painter = painterResource(R.drawable.empty_report),
+                    contentDescription = null,
+                    modifier = Modifier.size(260.dp)
+                )
+            } else {
+                val weightAndWaistCircumference = remember { CartesianChartModelProducer.build() }
+                val labelListKey = remember {
+                    ExtraStore.Key<List<String>>()
+                }
 
-            LaunchedEffect(dietProgressReport) {
-                weightAndWaistCircumference.tryRunTransaction {
-                    lineSeries {
-                        series(dietProgressReport.map { it.weight })
-                    }
-                    lineSeries {
-                        series(dietProgressReport.map { it.waistCircumference })
-                    }
-                    updateExtras {
-                        it[labelListKey] = dietProgressReport.map { report -> report.description }
+                LaunchedEffect(dietProgressReport) {
+                    weightAndWaistCircumference.tryRunTransaction {
+                        lineSeries {
+                            series(dietProgressReport.map { it.weight })
+                        }
+                        lineSeries {
+                            series(dietProgressReport.map { it.waistCircumference })
+                        }
+                        updateExtras {
+                            it[labelListKey] = dietProgressReport.map { report -> report.description }
+                        }
                     }
                 }
+
+                CartesianChartHost(
+                    marker = rememberDefaultCartesianMarker(
+                        label = rememberAxisLabelComponent(),
+                        valueFormatter = { _, targets ->
+                            dietProgressReport[targets[0].x.toInt()].description
+                        }
+                    ),
+                    chart = rememberCartesianChart(
+                        rememberLineCartesianLayer(
+                            listOf(
+                                rememberLineSpec(
+                                    shader = DynamicShader.color(weightColor),
+                                    backgroundShader =
+                                    DynamicShader.verticalGradient(
+                                        arrayOf(
+                                            weightColor.copy(alpha = 0.4f),
+                                            weightColor.copy(alpha = 0f)
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                        rememberLineCartesianLayer(
+                            listOf(
+                                rememberLineSpec(
+                                    shader = DynamicShader.color(waistCircumferenceColor),
+                                    backgroundShader =
+                                    DynamicShader.verticalGradient(
+                                        arrayOf(
+                                            waistCircumferenceColor.copy(alpha = 0.4f),
+                                            waistCircumferenceColor.copy(alpha = 0f)
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                        startAxis = rememberStartAxis(
+                            title = "Berat dan Lingkar Pinggang",
+                            titleComponent = rememberAxisLabelComponent(
+                                textAlignment = Layout.Alignment.ALIGN_CENTER,
+                                lineCount = 2
+                            ),
+                        ),
+                        bottomAxis = rememberBottomAxis(
+                            title = "Hari",
+                            titleComponent = rememberAxisLabelComponent(),
+                            valueFormatter = { x, _, _ -> (x.toInt() + 1).toString() }
+                        ),
+                        legend = rememberVerticalLegend(
+                            items = listOf(
+                                rememberLegendItem(
+                                    icon = rememberShapeComponent(
+                                        shape = Shape.rounded(
+                                            allPercent = 50
+                                        ),
+                                        color = weightColor
+                                    ),
+                                    label = rememberAxisLabelComponent(),
+                                    labelText = "Berat Badan (kg)"
+                                ),
+                                rememberLegendItem(
+                                    icon = rememberShapeComponent(
+                                        shape = Shape.rounded(
+                                            allPercent = 50
+                                        ),
+                                        color = waistCircumferenceColor
+                                    ),
+                                    label = rememberAxisLabelComponent(),
+                                    labelText = "Lingkar Pinggang (cm)"
+                                ),
+
+                                ),
+                            iconSize = 12.dp,
+                            iconPadding = 4.dp
+                        )
+                    ),
+                    modelProducer = weightAndWaistCircumference,
+                    modifier = Modifier.height(280.dp)
+                )
             }
-
-            CartesianChartHost(
-                marker = rememberDefaultCartesianMarker(
-                    label = rememberAxisLabelComponent(),
-                    valueFormatter = { _, targets ->
-                        dietProgressReport[targets[0].x.toInt()].description
-                    }
-                ),
-                chart = rememberCartesianChart(
-                    rememberLineCartesianLayer(
-                        listOf(
-                            rememberLineSpec(
-                                shader = DynamicShader.color(weightColor),
-                                backgroundShader =
-                                DynamicShader.verticalGradient(
-                                    arrayOf(
-                                        weightColor.copy(alpha = 0.4f),
-                                        weightColor.copy(alpha = 0f)
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                    rememberLineCartesianLayer(
-                        listOf(
-                            rememberLineSpec(
-                                shader = DynamicShader.color(waistCircumferenceColor),
-                                backgroundShader =
-                                DynamicShader.verticalGradient(
-                                    arrayOf(
-                                        waistCircumferenceColor.copy(alpha = 0.4f),
-                                        waistCircumferenceColor.copy(alpha = 0f)
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                    startAxis = rememberStartAxis(
-                        title = "Berat dan Lingkar Pinggang",
-                        titleComponent = rememberAxisLabelComponent(
-                            textAlignment = Layout.Alignment.ALIGN_CENTER,
-                            lineCount = 2
-                        ),
-                    ),
-                    bottomAxis = rememberBottomAxis(
-                        title = "Hari",
-                        titleComponent = rememberAxisLabelComponent(),
-                        valueFormatter = { x, _, _ -> (x.toInt() + 1).toString() }
-                    ),
-                    legend = rememberVerticalLegend(
-                        items = listOf(
-                            rememberLegendItem(
-                                icon = rememberShapeComponent(
-                                    shape = Shape.rounded(
-                                        allPercent = 50
-                                    ),
-                                    color = weightColor
-                                ),
-                                label = rememberAxisLabelComponent(),
-                                labelText = "Berat Badan (kg)"
-                            ),
-                            rememberLegendItem(
-                                icon = rememberShapeComponent(
-                                    shape = Shape.rounded(
-                                        allPercent = 50
-                                    ),
-                                    color = waistCircumferenceColor
-                                ),
-                                label = rememberAxisLabelComponent(),
-                                labelText = "Lingkar Pinggang (cm)"
-                            ),
-
-                            ),
-                        iconSize = 12.dp,
-                        iconPadding = 4.dp
-                    )
-                ),
-                modelProducer = weightAndWaistCircumference,
-                modifier = Modifier.height(280.dp)
-            )
         } else
             Row(
                 verticalAlignment = Alignment.Bottom,

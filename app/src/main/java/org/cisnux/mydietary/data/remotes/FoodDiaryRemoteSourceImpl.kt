@@ -88,6 +88,8 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 // catch error dari koneksi jaringan
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
+            } catch (e: Exception){
+                Either.Left(e)
             }
         }
 
@@ -136,6 +138,8 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             // catch error dari koneksi jaringan
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
+        } catch (e: Exception){
+            Either.Left(e)
         }
     }
 
@@ -244,6 +248,8 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 // catch error dari koneksi jaringan
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
+            } catch (e: Exception){
+                Either.Left(e)
             }
         }
 
@@ -316,6 +322,8 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 // catch error dari koneksi jaringan
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
+            } catch (e: Exception){
+                Either.Left(e)
             }
         }
 
@@ -348,6 +356,8 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
+        } catch (e: Exception){
+            Either.Left(e)
         }
     }
 
@@ -381,6 +391,8 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
+        } catch (e: Exception){
+            Either.Left(e)
         }
     }
 
@@ -412,6 +424,8 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 Either.Right(null)
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
+        } catch (e: Exception){
+            Either.Left(e)
         }
     }
 }

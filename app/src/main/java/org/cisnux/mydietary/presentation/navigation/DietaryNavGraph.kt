@@ -7,11 +7,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.glance.appwidget.updateAll
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import kotlinx.coroutines.launch
 import org.cisnux.mydietary.presentation.addmyprofile.AddMyProfileScreen
 import org.cisnux.mydietary.presentation.devmode.DevModeScreen
 import org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreen
@@ -33,6 +33,7 @@ import org.cisnux.mydietary.presentation.signin.SignInScreen
 import org.cisnux.mydietary.presentation.signup.SignUpScreen
 import org.cisnux.mydietary.presentation.splash.SplashScreen
 import org.cisnux.mydietary.presentation.ui.components.NotificationDialog
+import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import org.cisnux.mydietary.utils.AppDestination
 
 @Composable
@@ -42,12 +43,11 @@ fun DietaryNavGraph(
         navController = navController,
     ),
 ) {
-    var isHomeNavigationInclusive by rememberSaveable {
-        mutableStateOf(false)
-    }
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     NotificationDialog(snackbarHostState = snackbarHostState)
     NavHost(
         navController = navController,
@@ -141,7 +141,12 @@ fun DietaryNavGraph(
             }
         ) {
             SignInScreen(
-                navigateToHome = navComponentAction.navigateToHome,
+                navigateToHome = {
+                    navComponentAction.navigateToHome(it)
+                    coroutineScope.launch {
+                        ReportWidget().updateAll(context)
+                    }
+                },
                 navigateToAddMyProfile = navComponentAction.navigateToAddMyProfile,
                 navigateToResetPassword = navComponentAction.navigateToResetPassword,
                 navigateToSignUp = navComponentAction.navigateToSignUp
@@ -375,7 +380,12 @@ fun DietaryNavGraph(
         ) {
             MyProfileScreen(
                 navigateForBottomNav = navComponentAction.bottomNavigation,
-                navigateToSignIn = navComponentAction.navigateToSignOut
+                navigateToSignIn = {
+                    navComponentAction.navigateToSignOut()
+                    coroutineScope.launch {
+                        ReportWidget().updateAll(context)
+                    }
+                }
             )
         }
         composable(
@@ -451,9 +461,10 @@ fun DietaryNavGraph(
         ) {
             DiaryDetailScreen(
                 navigateUp = {
-                    if (!isHomeNavigationInclusive)
-                        navComponentAction.navigateUp()
-                    else navComponentAction.navigateToHome(AppDestination.DiaryDetailRoute.route)
+                    coroutineScope.launch {
+                        ReportWidget().updateAll(context)
+                        navComponentAction.navigateToHome(AppDestination.DiaryDetailRoute.route)
+                    }
                 },
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )
@@ -489,10 +500,7 @@ fun DietaryNavGraph(
         ) {
             FoodScannerScreen(
                 onNavigateUp = navComponentAction.navigateUp,
-                navigateFoodDiaryDetail = {
-                    isHomeNavigationInclusive = true
-                    navComponentAction.navigateToFoodDiaryDetail(it)
-                },
+                navigateFoodDiaryDetail = navComponentAction.navigateToFoodDiaryDetail,
                 onGalleryButton = navComponentAction.takePictureFromGallery,
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )

@@ -49,16 +49,18 @@ class UserProfileRepositoryImpl @Inject constructor(
                 )
             ).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
-                ifRight = { emit(UiState.Success(null)) }
-            )
-            userProfileRemoteSource.updateDietProgress(
-                accessToken = accessToken,
-                dietProgressBodyRequest = DietProgressBodyRequest(
-                    id = userId,
-                    weight = userProfile.weight,
-                    waistCircumference = userProfile.waistCircumference,
-                    updatedAt = getCurrentDateTimeInISOFormat()
-                )
+                ifRight = {
+                    userProfileRemoteSource.updateDietProgress(
+                        accessToken = accessToken,
+                        dietProgressBodyRequest = DietProgressBodyRequest(
+                            id = userId,
+                            weight = userProfile.weight,
+                            waistCircumference = userProfile.waistCircumference,
+                            updatedAt = getCurrentDateTimeInISOFormat()
+                        )
+                    )
+                    emit(UiState.Success(null))
+                }
             )
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
@@ -102,16 +104,18 @@ class UserProfileRepositoryImpl @Inject constructor(
                 )
             ).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
-                ifRight = { emit(UiState.Success(null)) }
-            )
-            userProfileRemoteSource.updateDietProgress(
-                accessToken = accessToken,
-                dietProgressBodyRequest = DietProgressBodyRequest(
-                    id = userId,
-                    weight = userProfile.weight,
-                    waistCircumference = userProfile.waistCircumference,
-                    updatedAt = getCurrentDateTimeInISOFormat()
-                )
+                ifRight = {
+                    userProfileRemoteSource.updateDietProgress(
+                        accessToken = accessToken,
+                        dietProgressBodyRequest = DietProgressBodyRequest(
+                            id = userId,
+                            weight = userProfile.weight,
+                            waistCircumference = userProfile.waistCircumference,
+                            updatedAt = getCurrentDateTimeInISOFormat()
+                        )
+                    )
+                    emit(UiState.Success(null))
+                }
             )
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)

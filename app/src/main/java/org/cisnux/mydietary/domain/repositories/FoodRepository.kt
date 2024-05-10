@@ -22,6 +22,12 @@ interface FoodRepository {
         category: FoodDiaryCategory
     ): Flow<UiState<List<FoodDiary>>>
 
+    fun getDiaryFoodsByDate(
+        accessToken: String,
+        userId: String,
+        date: String,
+    ): Flow<UiState<List<FoodDiary>>>
+
     fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>>
 
     fun getKeywordSuggestions(accessToken: String, userId: String): Flow<UiState<List<Keyword>>>

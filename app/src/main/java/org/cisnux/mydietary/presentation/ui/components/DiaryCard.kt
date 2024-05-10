@@ -29,6 +29,7 @@ import org.cisnux.mydietary.presentation.ui.theme.placeholder
 import org.cisnux.mydietary.utils.dayDateMonthYear
 import org.cisnux.mydietary.utils.hoursAndMinutes
 import java.time.Instant
+import java.util.Locale
 
 @Preview(showBackground = true)
 @Composable
@@ -64,6 +65,8 @@ fun DiaryCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val locale = Locale("id", "ID")
+
     Column(
         modifier = modifier
             .clickable(onClick = onClick)
@@ -129,7 +132,7 @@ fun DiaryCard(
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "$calorie kcal",
+                        text = "${String.format(locale, "%.2f", calorie)} kcal",
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.labelLarge,
                     )

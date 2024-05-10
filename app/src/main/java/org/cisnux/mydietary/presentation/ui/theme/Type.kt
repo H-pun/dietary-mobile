@@ -118,7 +118,7 @@ val Typography = Typography(
 )
 
 @Immutable
-private object DietaryTypeScaleTokens {
+public object DietaryTypeScaleTokens {
     val BodyLargeFont = DietaryTypefaceTokens.Plain
     val BodyLargeLineHeight = 24.0.sp
     val BodyLargeSize = 16.sp

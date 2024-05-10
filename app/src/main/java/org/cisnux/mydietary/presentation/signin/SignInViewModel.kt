@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package org.cisnux.mydietary.presentation.signin
 
 import androidx.lifecycle.ViewModel

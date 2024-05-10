@@ -14,6 +14,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.glance.GlanceTheme
+import androidx.glance.color.ColorProvider
+import androidx.glance.color.colorProviders
 
 
 private val lightScheme = lightColorScheme(
@@ -77,6 +80,87 @@ private val darkScheme = darkColorScheme(
     inverseOnSurface = inverseOnSurfaceDark,
     inversePrimary = inversePrimaryDark,
 )
+
+val widgetColorScheme = colorProviders(
+    primary = ColorProvider(day = primaryLight, night = primaryDark),
+    onPrimary = ColorProvider(day = onPrimaryLight, night = onPrimaryDark),
+    primaryContainer = ColorProvider(
+        day = primaryContainerLight,
+        night = primaryContainerDark
+    ),
+    onPrimaryContainer = ColorProvider(
+        day = onPrimaryContainerLight,
+        night = onPrimaryDark
+    ),
+    secondary = ColorProvider(day = secondaryLight, night = secondaryDark),
+    onSecondary = ColorProvider(
+        day = onSecondaryLight,
+        night = onSecondaryDark
+    ),
+    secondaryContainer = ColorProvider(
+        day = secondaryContainerLight,
+        night = secondaryContainerDark
+    ),
+    onSecondaryContainer = ColorProvider(
+        day = onSecondaryContainerLight,
+        night = onSecondaryContainerDark
+    ),
+    tertiary = ColorProvider(day = tertiaryLight, night = tertiaryDark),
+    onTertiary = ColorProvider(day = onTertiaryLight, night = onTertiaryDark),
+    tertiaryContainer = ColorProvider(
+        day = tertiaryContainerLight,
+        night = tertiaryContainerDark
+    ),
+    onTertiaryContainer = ColorProvider(
+        day = onTertiaryContainerLight,
+        night = onTertiaryContainerDark
+    ),
+    error = ColorProvider(day = errorLight, night = errorDark),
+    errorContainer = ColorProvider(
+        day = errorContainerLight,
+        night = errorContainerDark
+    ),
+    onError = ColorProvider(day = onErrorLight, night = onErrorDark),
+    onErrorContainer = ColorProvider(
+        day = onErrorContainerLight,
+        night = onErrorContainerDark
+    ),
+    background = ColorProvider(day = backgroundLight, night = backgroundDark),
+    onBackground = ColorProvider(
+        day = onBackgroundLight,
+        night = onBackgroundDark
+    ),
+    surface = ColorProvider(day = surfaceLight, night = surfaceDark),
+    onSurface = ColorProvider(day = onSurfaceLight, night = onSurfaceDark),
+    surfaceVariant = ColorProvider(
+        day = surfaceVariantLight,
+        night = surfaceVariantDark
+    ),
+    onSurfaceVariant = ColorProvider(
+        day = onSurfaceVariantLight,
+        night = onSurfaceVariantDark
+    ),
+    outline = ColorProvider(day = outlineLight, night = outlineDark),
+    inverseOnSurface = ColorProvider(
+        day = inverseOnSurfaceLight,
+        night = inverseOnSurfaceDark
+    ),
+    inverseSurface = ColorProvider(
+        day = inverseSurfaceLight,
+        night = inverseSurfaceDark
+    ),
+    inversePrimary = ColorProvider(
+        day = inversePrimaryLight,
+        night = inversePrimaryDark
+    ),
+)
+
+@Composable
+fun DietaryGlanceTheme(
+    content: @Composable () -> Unit,
+) {
+    GlanceTheme(colors = widgetColorScheme, content = content)
+}
 
 @Composable
 fun DietaryTheme(

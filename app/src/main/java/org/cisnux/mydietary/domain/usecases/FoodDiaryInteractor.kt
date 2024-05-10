@@ -5,7 +5,6 @@ import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.UserNutrition
-import org.cisnux.mydietary.domain.models.Report
 import org.cisnux.mydietary.domain.repositories.FoodRepository
 import org.cisnux.mydietary.utils.ACTIVITY_FACTOR
 import org.cisnux.mydietary.utils.Failure
@@ -46,6 +45,15 @@ class FoodDiaryInteractor @Inject constructor(
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }
 
+    override fun getDiaryFoodsByDaysOnly(date: String): Flow<UiState<List<FoodDiary>>> =
+        authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
+            it?.let {
+                foodRepository.getDiaryFoodsByDate(
+                    userId = it.first, accessToken = it.second, date = date
+                )
+            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
+        }
+
     override fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>> =
         foodRepository.getDiaryFoodsByQuery(query)
 
@@ -76,7 +84,7 @@ class FoodDiaryInteractor @Inject constructor(
 
     override fun getFoodDiaryDetailById(foodDiaryId: String): Flow<UiState<FoodDiaryDetail>> =
         authenticationUseCase.accessToken.flatMapLatest {
-            it?.let {accessToken->
+            it?.let { accessToken ->
                 foodRepository.getFoodDiaryDetailById(
                     accessToken = accessToken,
                     foodDiaryId = foodDiaryId

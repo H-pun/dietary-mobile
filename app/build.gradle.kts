@@ -44,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.13"
@@ -133,6 +134,8 @@ dependencies {
     // vico charts
     implementation(libs.vico.compose)
     implementation(libs.vico.compose.m3)
+    //widget
+    implementation(libs.androidx.glance.appwidget)
 }
 
 // Allow references to generated code

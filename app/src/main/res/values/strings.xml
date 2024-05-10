@@ -150,4 +150,5 @@
         <item>Minggu Ini</item>
         <item>Bulan Ini</item>
     </string-array>
+    <string name="appwidget_text">Dietary</string>
 </resources>

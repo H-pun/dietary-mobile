@@ -33,6 +33,7 @@ val lightRed = Color(0xFFE67D7D)
 val lightYellow = Color(0xFFECF0B6)
 val lightBlue = Color(0xFFB6D9F0)
 val lightMagenta = Color(0xFFE3B6F0)
+val lightProgress = Color(0xFFD9DDD5)
 
 val primaryDark = Color(0xFF9FD49B)
 val onPrimaryDark = Color(0xFF073910)
@@ -67,10 +68,4 @@ val darkYellow = Color(0xFF867700)
 val darkRed = Color(0xFF810101)
 val darkBlue = Color(0xFF003863)
 val darkMagenta = Color(0xFF550064)
-val commonCircularCardColor = Color(0xFFB2B4AF)
-
-
-
-
-
-
+val darkProgress = Color(0xFFB9BBB5)

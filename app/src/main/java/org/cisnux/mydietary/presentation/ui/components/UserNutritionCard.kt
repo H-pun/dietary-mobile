@@ -23,15 +23,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.cisnux.mydietary.presentation.ui.theme.commonCircularCardColor
 import org.cisnux.mydietary.presentation.ui.theme.darkRed
+import org.cisnux.mydietary.presentation.ui.theme.darkProgress
 import org.cisnux.mydietary.presentation.ui.theme.darkYellow
 import org.cisnux.mydietary.presentation.ui.theme.lightRed
+import org.cisnux.mydietary.presentation.ui.theme.lightProgress
 import org.cisnux.mydietary.presentation.ui.theme.lightYellow
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerDark
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerLight
-import org.cisnux.mydietary.presentation.ui.theme.secondaryContainerDark
-import org.cisnux.mydietary.presentation.ui.theme.secondaryContainerLight
 import org.cisnux.mydietary.presentation.ui.theme.surfaceDark
 import org.cisnux.mydietary.presentation.ui.theme.surfaceLight
 import java.util.Locale
@@ -96,7 +95,10 @@ fun UserNutritionCard(
         fatPercentage > 0.5f -> lightYellow
         else -> primaryContainerLight
     }
-    val onSurfaceColor = commonCircularCardColor
+    val onSurfaceColor = when (context.resources.configuration.uiMode) {
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
+        else -> darkProgress
+    }
 
     Row(
         modifier = modifier
@@ -118,8 +120,8 @@ fun UserNutritionCard(
                 .drawBehind {
                     drawArc(
                         color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> calorieDarkColor
-                            else -> calorieLightColor
+                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> calorieLightColor
+                            else -> calorieDarkColor
                         },
                         startAngle = 270f,
                         sweepAngle = 360f * caloriePercentage,
@@ -154,7 +156,7 @@ fun UserNutritionCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Kalori/\nMax Kalori",
+                    text = "Kalori/\nMaks Kalori",
                     style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.Center
                 )
@@ -174,8 +176,8 @@ fun UserNutritionCard(
                 .drawBehind {
                     drawArc(
                         color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> carbohydrateDarkColor
-                            else -> carbohydrateLightColor
+                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> carbohydrateLightColor
+                            else -> carbohydrateDarkColor
                         },
                         startAngle = 270f,
                         sweepAngle = 360f * carbohydratePercentage,
@@ -212,7 +214,7 @@ fun UserNutritionCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Karbohidrat/\nMax Karbo",
+                    text = "Karbohidrat/\nMaks Karbo",
                     style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.Center
                 )
@@ -232,8 +234,8 @@ fun UserNutritionCard(
                 .drawBehind {
                     drawArc(
                         color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> proteinDarkColor
-                            else -> proteinLightColor
+                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> proteinLightColor
+                            else -> proteinDarkColor
                         },
                         startAngle = 270f,
                         sweepAngle = 360f * proteinPercentage,
@@ -268,7 +270,7 @@ fun UserNutritionCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Protein/\nMax Protein",
+                    text = "Protein/\nMaks Protein",
                     style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.Center
                 )
@@ -288,8 +290,8 @@ fun UserNutritionCard(
                 .drawBehind {
                     drawArc(
                         color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> fatDarkColor
-                            else -> fatLightColor
+                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> fatLightColor
+                            else -> fatDarkColor
                         },
                         startAngle = 270f,
                         sweepAngle = 360f * fatPercentage,
@@ -324,7 +326,7 @@ fun UserNutritionCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Lemak/\nMax Lemak",
+                    text = "Lemak/\nMaks Lemak",
                     style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.Center
                 )

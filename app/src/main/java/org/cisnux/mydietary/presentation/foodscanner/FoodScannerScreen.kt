@@ -115,6 +115,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.glance.appwidget.updateAll
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
@@ -132,6 +133,7 @@ import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.afterMeasured
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -427,7 +429,7 @@ fun FoodScannerScreen(
                 totalFoodCalories = foodNutrition?.totalCalories ?: 0f,
                 totalFoodFat = foodNutrition?.totalFat ?: 0f,
                 totalFoodCarbohydrate = foodNutrition?.totalCarbohydrate ?: 0f,
-                totalFoodProtein = foodNutrition?.totalProtein?: 0f,
+                totalFoodProtein = foodNutrition?.totalProtein ?: 0f,
             )
 
             QuestionDialog(
@@ -1017,6 +1019,7 @@ private fun PredictedResultDialog(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+    val context = LocalContext.current
     when (addFoodDiaryState) {
         is UiState.Error -> {
             addFoodDiaryState.error?.let { exception ->
@@ -1036,8 +1039,14 @@ private fun PredictedResultDialog(
         }
 
         is UiState.Success -> {
-            addFoodDiaryState.data?.let { foodDiaryId ->
-                navigateFoodDiaryDetail(foodDiaryId)
+            val coroutineScope = rememberCoroutineScope()
+            LaunchedEffect(addFoodDiaryState) {
+                coroutineScope.launch {
+                    ReportWidget().updateAll(context)
+                    addFoodDiaryState.data?.let { foodDiaryId ->
+                        navigateFoodDiaryDetail(foodDiaryId)
+                    }
+                }
             }
         }
 
@@ -1141,7 +1150,6 @@ private fun PredictedResultDialog(
                                 .fillMaxSize(),
                             contentAlignment = Alignment.Center
                         ) {
-                            val context = LocalContext.current
                             SubcomposeAsyncImage(
                                 model = ImageRequest.Builder(context).data(
                                     foodPictures
