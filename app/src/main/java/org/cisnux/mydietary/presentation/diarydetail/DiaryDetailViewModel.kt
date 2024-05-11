@@ -10,19 +10,19 @@ import org.cisnux.mydietary.domain.usecases.FoodDiaryUseCase
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.cisnux.mydietary.domain.models.AddFoodDiary
 import org.cisnux.mydietary.domain.models.UserNutrition
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class DiaryDetailViewModel @Inject constructor(
-    private val useCase: FoodDiaryUseCase,
+    private val foodDiaryUseCase: FoodDiaryUseCase,
     private val userProfileUseCase: UserProfileUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
@@ -41,9 +41,39 @@ class DiaryDetailViewModel @Inject constructor(
             }
         }
     }
+
     val foodDiaryDetailState get() = _foodDiaryDetailState.asStateFlow()
-    private val _duplicateState =
-        MutableStateFlow<UiState<FoodDiaryDetail>>(UiState.Initialize)
+    private val _addFoodDiaryState =
+        MutableStateFlow<UiState<String>>(UiState.Initialize)
+    val addFoodDiaryState get() = _addFoodDiaryState.asStateFlow()
+
+    fun addFoodDiary(
+        title: String,
+        category: String,
+        foodPicture: File,
+        feedback: List<String>,
+        foodIds: List<String>,
+        totalCalories: Float,
+        totalProtein: Float,
+        totalFat: Float,
+        totalCarbohydrate: Float,
+    ) = viewModelScope.launch {
+        val addFoodDiary = AddFoodDiary(
+            title = title,
+            category = category,
+            foodPicture = foodPicture,
+            feedback = feedback,
+            foodIds = foodIds,
+            totalCalories = totalCalories,
+            totalProtein = totalProtein,
+            totalFat = totalFat,
+            totalCarbohydrate = totalCarbohydrate,
+        )
+        foodDiaryUseCase.addFoodDiary(addFoodDiary).collectLatest { uiState ->
+            _addFoodDiaryState.value = uiState
+        }
+    }
+
     private val _removeState = MutableStateFlow<UiState<Nothing>>(UiState.Initialize)
     val removeState get() = _removeState.asStateFlow()
 
@@ -52,13 +82,13 @@ class DiaryDetailViewModel @Inject constructor(
     }
 
     fun getFoodDiaryDetailById() = viewModelScope.launch {
-        useCase.getFoodDiaryDetailById(foodDiaryId = foodDiaryId).collectLatest { uiState ->
+        foodDiaryUseCase.getFoodDiaryDetailById(foodDiaryId = foodDiaryId).collectLatest { uiState ->
             _foodDiaryDetailState.value = uiState
         }
     }
 
     fun deleteFoodDiaryById() = viewModelScope.launch {
-        useCase.deleteFoodDiaryById(foodDiaryId = foodDiaryId).collectLatest { uiState ->
+        foodDiaryUseCase.deleteFoodDiaryById(foodDiaryId = foodDiaryId).collectLatest { uiState ->
             _removeState.value = uiState
         }
     }

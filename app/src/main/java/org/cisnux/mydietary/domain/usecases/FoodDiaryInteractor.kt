@@ -3,6 +3,7 @@ package org.cisnux.mydietary.domain.usecases
 import android.content.Context
 import androidx.core.graphics.drawable.toBitmapOrNull
 import coil.ImageLoader
+import coil.annotation.ExperimentalCoilApi
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.request.SuccessResult
@@ -63,8 +64,10 @@ class FoodDiaryInteractor @Inject constructor(
                         uiState.copy(data = uiState.data?.map { foodDiary ->
                             val imageLoader = ImageLoader(context)
                             val request = ImageRequest.Builder(context)
+                                .allowConversionToBitmap(true)
                                 .diskCachePolicy(CachePolicy.ENABLED)
                                 .data(foodDiary.foodPictureUrl)
+                                .dispatcher(Dispatchers.IO)
                                 .build()
 
                             val result = imageLoader.execute(request)
@@ -113,13 +116,32 @@ class FoodDiaryInteractor @Inject constructor(
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }
 
+    @OptIn(ExperimentalCoilApi::class)
     override fun getFoodDiaryDetailById(foodDiaryId: String): Flow<UiState<FoodDiaryDetail>> =
         authenticationUseCase.accessToken.flatMapLatest {
             it?.let { accessToken ->
                 foodRepository.getFoodDiaryDetailById(
                     accessToken = accessToken,
                     foodDiaryId = foodDiaryId
-                )
+                ).map {uiState ->
+                    if (uiState is UiState.Success){
+                        val image = uiState.data?.foodNutrition?.image as String?
+                        val imageLoader = ImageLoader(context)
+                        val imageRequest = ImageRequest.Builder(context)
+                            .allowConversionToBitmap(true)
+                            .dispatcher(Dispatchers.IO)
+                            .data(image).build()
+                        imageLoader
+                            .execute(imageRequest)
+                        val path = image?.let { img -> imageLoader.diskCache?.openSnapshot(img)?.data }
+                        uiState.copy(
+                            data = uiState.data?.copy(
+                                foodNutrition = uiState.data.foodNutrition.copy(image = path?.toFile())
+                            )
+                            )
+                    }
+                    else uiState
+                }
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }.flowOn(Dispatchers.IO)
 
@@ -141,6 +163,7 @@ class FoodDiaryInteractor @Inject constructor(
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }.flowOn(Dispatchers.IO).distinctUntilChanged()
 
+    @OptIn(ExperimentalCoilApi::class)
     override fun predictFoods(foodPicture: File): Flow<UiState<Pair<UserNutrition, FoodNutrition>>> =
         userProfileUseCase.userProfileDetail.combine(authenticationUseCase.accessToken) { userProfileDetail, accessToken ->
             Pair(first = accessToken, second = userProfileDetail)
@@ -173,6 +196,15 @@ class FoodDiaryInteractor @Inject constructor(
                                 val userMaxDailyCarbohydrate = 0.6f * userMaxDailyCalories
                                 val currentDataState = uiState.data!!
 
+                                val image = currentDataState.second.image as String?
+                                val imageLoader = ImageLoader(context)
+                                val imageRequest = ImageRequest.Builder(context)
+                                    .allowConversionToBitmap(true)
+                                    .dispatcher(Dispatchers.IO)
+                                    .data(image).build()
+                                imageLoader
+                                    .execute(imageRequest)
+                                val path = image?.let { img -> imageLoader.diskCache?.openSnapshot(img)?.data }
                                 UiState.Success(
                                     data = currentDataState.copy(
                                         first = currentDataState.first.copy(
@@ -181,7 +213,9 @@ class FoodDiaryInteractor @Inject constructor(
                                             maxDailyFat = userMaxDailyFat,
                                             maxDailyCarbohydrate = userMaxDailyCarbohydrate,
                                         ),
-                                        second = currentDataState.second
+                                        second = currentDataState.second.copy(
+                                            image = path?.toFile()
+                                        )
                                     )
                                 )
                             } else uiState

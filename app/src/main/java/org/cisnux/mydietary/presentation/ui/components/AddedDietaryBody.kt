@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -50,7 +51,7 @@ fun AddedDietaryBody(
     totalFoodFat: Float,
     foods: List<Food>,
     modifier: Modifier = Modifier,
-    bottomContent: @Composable () -> Unit = {},
+    bottomContent: @Composable LazyItemScope.() -> Unit = {},
     feedback: List<String> = listOf()
 ) {
     val locale = rememberSaveable {

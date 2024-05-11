@@ -9,5 +9,5 @@ data class ServingResponse(
     val protein: Float,
     val carbohydrate: Float,
     val sugar: Float?,
-    val metricServingAmount: Int
+    val metricServingAmount: Float
 )

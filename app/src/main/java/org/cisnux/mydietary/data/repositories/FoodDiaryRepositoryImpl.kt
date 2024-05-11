@@ -1,10 +1,5 @@
 package org.cisnux.mydietary.data.repositories
 
-import android.content.Context
-import coil.ImageLoader
-import coil.annotation.ExperimentalCoilApi
-import coil.request.ImageRequest
-import dagger.hilt.android.qualifiers.ApplicationContext
 import org.cisnux.mydietary.data.locals.BaseApiUrlLocalSource
 import org.cisnux.mydietary.data.remotes.FoodDiaryRemoteSource
 import org.cisnux.mydietary.data.remotes.UserProfileRemoteSource
@@ -46,7 +41,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
     private val foodDiaryRemoteSource: FoodDiaryRemoteSource,
     private val baseApiUrlLocalSource: BaseApiUrlLocalSource,
     private val userProfileRemoteSource: UserProfileRemoteSource,
-    @ApplicationContext private val context: Context,
 ) : FoodRepository {
     private val foodsBreakfastDiary = List(10) {
         FoodDiary(
@@ -200,7 +194,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 
-    @OptIn(ExperimentalCoilApi::class)
     override fun predictFood(
         userId: String,
         accessToken: String,
@@ -232,16 +225,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                     val predictedResponse = first.getOrNull()
                     val nutrientResponse = second.getOrNull()
                     if (predictedResponse != null && nutrientResponse != null) {
-                        val image = "$IMAGE_LOCATION/${predictedResponse.imagePath}"
-                        val imageLoader = ImageLoader(context)
-                        val imageRequest = ImageRequest.Builder(context)
-                            .allowConversionToBitmap(true)
-                            .dispatcher(Dispatchers.IO)
-                            .data(image).build()
-                        imageLoader
-                            .execute(imageRequest)
-                        val path =
-                            imageLoader.diskCache?.openSnapshot(image)?.data
                         trySend(
                             UiState.Success(
                                 data = Pair(
@@ -252,7 +235,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                         totalProteinToday = nutrientResponse.protein
                                     ),
                                     second = FoodNutrition(
-                                        image = path?.toFile(),
+                                        image = "$IMAGE_LOCATION/${predictedResponse.imagePath}",
                                         totalFat = predictedResponse.totalFat,
                                         totalProtein = predictedResponse.totalProtein,
                                         totalCalories = predictedResponse.totalCalories,
@@ -260,7 +243,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                         foods = predictedResponse.foods.map { predictedFoodResponse ->
                                             val serving =
                                                 predictedFoodResponse.foodDetail.serving.first { servingResponse ->
-                                                    servingResponse.metricServingAmount == 100
+                                                    servingResponse.metricServingAmount.toInt() == 100
                                                 }
                                             Food(
                                                 id = predictedFoodResponse.foodDetail.id,
@@ -336,7 +319,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                             foods = it.foods.map { predictedFoodDetailResponse ->
                                 val serving =
                                     predictedFoodDetailResponse.serving.first { servingResponse ->
-                                        servingResponse.metricServingAmount == 100
+                                        servingResponse.metricServingAmount.toInt() == 100
                                     }
                                 Food(
                                     id = predictedFoodDetailResponse.id,

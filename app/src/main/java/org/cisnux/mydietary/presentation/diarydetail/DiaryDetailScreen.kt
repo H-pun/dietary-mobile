@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
@@ -43,6 +45,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,17 +54,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.Food
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.UserNutrition
+import org.cisnux.mydietary.presentation.ui.components.AddDiaryDialog
 import org.cisnux.mydietary.presentation.ui.components.AddedDietaryBody
 import org.cisnux.mydietary.presentation.ui.components.AddedDiaryShimmer
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
@@ -69,6 +75,7 @@ import org.cisnux.mydietary.presentation.ui.theme.surfaceDark
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.Failure
 import org.cisnux.mydietary.utils.UiState
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,8 +96,10 @@ fun DiaryDetailScreen(
     }
     val foodDiaryDetailState by viewModel.foodDiaryDetailState.collectAsState()
     val userDailyNutritionState by viewModel.userDailyNutritionState.collectAsState(UiState.Initialize)
+    val addFoodDiaryState by viewModel.addFoodDiaryState.collectAsState()
     val removeState by viewModel.removeState.collectAsState()
     val context = LocalContext.current
+
     BackHandler {
         navigateUp()
     }
@@ -108,8 +117,7 @@ fun DiaryDetailScreen(
                     if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getFoodDiaryDetailById()
                 }
             }
-            if (exception is Failure.UnauthorizedFailure)
-                navigateToSignIn(AppDestination.DiaryDetailRoute.route)
+            if (exception is Failure.UnauthorizedFailure) navigateToSignIn(AppDestination.DiaryDetailRoute.route)
         }
 
         removeState is UiState.Error -> (removeState as UiState.Error).error?.let { exception ->
@@ -121,25 +129,46 @@ fun DiaryDetailScreen(
                         withDismissAction = true,
                         duration = SnackbarDuration.Long
                     )
-                    if (snackbarResult == SnackbarResult.ActionPerformed)
-                        viewModel.deleteFoodDiaryById()
+                    if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.deleteFoodDiaryById()
+                }
+            }
+        }
+
+        addFoodDiaryState is UiState.Error -> (addFoodDiaryState as UiState.Error).error?.let { exception ->
+            LaunchedEffect(snackbarHostState) {
+                exception.message?.let {
+                    snackbarHostState.showSnackbar(
+                        message = it, withDismissAction = true, duration = SnackbarDuration.Short
+                    )
                 }
             }
         }
 
         removeState is UiState.Success -> navigateUp()
+
+        addFoodDiaryState is UiState.Success -> navigateUp()
+    }
+
+
+    val foodDiaryCategories = stringArrayResource(id = R.array.food_diary_category)
+    var title by rememberSaveable {
+        mutableStateOf("")
+    }
+    var selectedFoodDiaryCategory by rememberSaveable {
+        mutableStateOf(foodDiaryCategories[0])
+    }
+    var isAddDiaryDialogOpen by remember {
+        mutableStateOf(false)
     }
 
     DiaryDetailContent(
-        snackbarHostState = snackbarHostState,
-        body = {
+        snackbarHostState = snackbarHostState, body = {
             DiaryDetailBody(
-                foodPictures = if (foodDiaryDetailState is UiState.Success)
-                    (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.foodNutrition?.image
+                foodPictures = if (foodDiaryDetailState is UiState.Success) (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.foodNutrition?.image
                 else null,
                 onNavigateUp = navigateUp,
-                title = if (foodDiaryDetailState is UiState.Success)
-                    (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.title ?: ""
+                title = if (foodDiaryDetailState is UiState.Success) (foodDiaryDetailState as UiState.Success<FoodDiaryDetail>).data?.title
+                    ?: ""
                 else "",
                 onRemove = viewModel::deleteFoodDiaryById,
                 isSuccess = foodDiaryDetailState is UiState.Success,
@@ -163,12 +192,56 @@ fun DiaryDetailScreen(
                     maxDailyCarbohydrate = userDailyNutrition.maxDailyCarbohydrate,
                     maxDailyCalories = userDailyNutrition.maxDailyCalories,
                     foods = foodDiaryDetail.foodNutrition.foods,
-                    bottomContent = { Spacer(modifier = Modifier.height(16.dp)) },
+                    bottomContent = {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = { isAddDiaryDialogOpen = true },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = addFoodDiaryState !is UiState.Loading
+                        ) {
+                            if (addFoodDiaryState is UiState.Loading) CircularProgressIndicator()
+                            else Text(text = "Tambahkan Ulang")
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                    },
                     feedback = foodDiaryDetail.feedback,
                     totalFoodCalories = foodDiaryDetail.foodNutrition.totalCalories,
                     totalFoodFat = foodDiaryDetail.foodNutrition.totalFat,
                     totalFoodProtein = foodDiaryDetail.foodNutrition.totalProtein,
                     totalFoodCarbohydrate = foodDiaryDetail.foodNutrition.totalCarbohydrate
+                )
+
+                AddDiaryDialog(
+                    onCancel = {
+                        title = ""
+                        isAddDiaryDialogOpen = false
+                    },
+                    isDialogOpen = isAddDiaryDialogOpen,
+                    onDismissRequest = {
+                        title = ""
+                        isAddDiaryDialogOpen = false
+                    },
+                    title = title,
+                    selectedFoodDiaryCategory = selectedFoodDiaryCategory,
+                    onTitleChange = { newValue -> title = newValue },
+                    onFoodDiaryCategoryChange = { newValue ->
+                        selectedFoodDiaryCategory = newValue
+                    },
+                    foodDiaryCategories = foodDiaryCategories,
+                    onSave = {
+                        isAddDiaryDialogOpen = false
+                        viewModel.addFoodDiary(
+                            title = title,
+                            category = selectedFoodDiaryCategory,
+                            foodPicture = foodDiaryDetail.foodNutrition.image as File,
+                            totalProtein = foodDiaryDetail.foodNutrition.totalProtein,
+                            totalCarbohydrate = foodDiaryDetail.foodNutrition.totalCarbohydrate,
+                            totalFat = foodDiaryDetail.foodNutrition.totalFat,
+                            totalCalories = foodDiaryDetail.foodNutrition.totalCalories,
+                            foodIds = foodDiaryDetail.foodNutrition.foods.map { food -> food.id },
+                            feedback = foodDiaryDetail.feedback
+                        )
+                    },
                 )
             }
             AnimatedVisibility(visible = foodDiaryDetailState is UiState.Loading || foodDiaryDetailState is UiState.Error || userDailyNutritionState is UiState.Loading || userDailyNutritionState is UiState.Error) {
@@ -244,35 +317,31 @@ private fun DiaryDetailContentPreview() {
     )
 
     DietaryTheme {
-        DiaryDetailContent(
-            snackbarHostState = SnackbarHostState(),
-            body = {
-                DiaryDetailBody(
-                    title = foodDiaryDetail.title,
-                    foodPictures = foodDiaryDetail.foodNutrition.image,
-                    onNavigateUp = { /*TODO*/ },
-                    onRemove = { /*TODO*/ },
-                )
-            },
-            sheetContent = {
-                AddedDietaryBody(
-                    totalCaloriesToday = userDailyNutrition.totalCaloriesToday,
-                    totalFatToday = userDailyNutrition.totalFatToday,
-                    totalProteinToday = userDailyNutrition.totalProteinToday,
-                    totalCarbohydrateToday = userDailyNutrition.totalCarbohydrateToday,
-                    maxDailyProtein = userDailyNutrition.maxDailyCalories,
-                    maxDailyFat = userDailyNutrition.maxDailyFat,
-                    maxDailyCarbohydrate = userDailyNutrition.maxDailyCarbohydrate,
-                    maxDailyCalories = userDailyNutrition.maxDailyCalories,
-                    foods = foodDiaryDetail.foodNutrition.foods,
-                    feedback = foodDiaryDetail.feedback,
-                    totalFoodCalories = foodDiaryDetail.foodNutrition.totalCalories,
-                    totalFoodFat = foodDiaryDetail.foodNutrition.totalFat,
-                    totalFoodProtein = foodDiaryDetail.foodNutrition.totalProtein,
-                    totalFoodCarbohydrate = foodDiaryDetail.foodNutrition.totalCarbohydrate
-                )
-            },
-            bottomSheetScaffoldState = scaffoldState
+        DiaryDetailContent(snackbarHostState = SnackbarHostState(), body = {
+            DiaryDetailBody(
+                title = foodDiaryDetail.title,
+                foodPictures = foodDiaryDetail.foodNutrition.image,
+                onNavigateUp = { /*TODO*/ },
+                onRemove = { /*TODO*/ },
+            )
+        }, sheetContent = {
+            AddedDietaryBody(
+                totalCaloriesToday = userDailyNutrition.totalCaloriesToday,
+                totalFatToday = userDailyNutrition.totalFatToday,
+                totalProteinToday = userDailyNutrition.totalProteinToday,
+                totalCarbohydrateToday = userDailyNutrition.totalCarbohydrateToday,
+                maxDailyProtein = userDailyNutrition.maxDailyCalories,
+                maxDailyFat = userDailyNutrition.maxDailyFat,
+                maxDailyCarbohydrate = userDailyNutrition.maxDailyCarbohydrate,
+                maxDailyCalories = userDailyNutrition.maxDailyCalories,
+                foods = foodDiaryDetail.foodNutrition.foods,
+                feedback = foodDiaryDetail.feedback,
+                totalFoodCalories = foodDiaryDetail.foodNutrition.totalCalories,
+                totalFoodFat = foodDiaryDetail.foodNutrition.totalFat,
+                totalFoodProtein = foodDiaryDetail.foodNutrition.totalProtein,
+                totalFoodCarbohydrate = foodDiaryDetail.foodNutrition.totalCarbohydrate
+            )
+        }, bottomSheetScaffoldState = scaffoldState
         )
     }
 }
@@ -287,9 +356,12 @@ fun DiaryDetailBody(
     isSuccess: Boolean = true,
     title: String = "",
 ) {
+    val context = LocalContext.current
+
     Box(modifier = Modifier.fillMaxSize()) {
         AnimatedVisibility(
-            visible = foodPictures == null, modifier = Modifier
+            visible = foodPictures == null,
+            modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize()
         ) {
@@ -326,7 +398,9 @@ fun DiaryDetailBody(
                     .fillMaxSize(),
             ) {
                 SubcomposeAsyncImage(
-                    model = foodPictures,
+                    model = ImageRequest.Builder(context).data(
+                        foodPictures
+                    ).build(),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxHeight()
@@ -365,11 +439,9 @@ fun DiaryDetailBody(
                 state = rememberTooltipState(),
             ) {
                 FilledIconButton(
-                    onClick = onRemove,
-                    colors = IconButtonDefaults.filledIconButtonColors(
+                    onClick = onRemove, colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = Color.Black.copy(alpha = 0.5f)
-                    ),
-                    enabled = isRemoveEnable
+                    ), enabled = isRemoveEnable
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_outline_cancel_24dp),

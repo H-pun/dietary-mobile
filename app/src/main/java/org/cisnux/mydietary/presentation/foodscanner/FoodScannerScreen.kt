@@ -46,26 +46,19 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -94,7 +87,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -105,8 +97,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -133,6 +123,7 @@ import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.afterMeasured
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.cisnux.mydietary.presentation.ui.components.AddDiaryDialog
 import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -817,180 +808,6 @@ private fun PredictedResultDialogPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AddDiaryDialog(
-    onCancel: () -> Unit,
-    isDialogOpen: Boolean,
-    onDismissRequest: () -> Unit,
-    title: String,
-    selectedFoodDiaryCategory: String,
-    onTitleChange: (String) -> Unit,
-    onFoodDiaryCategoryChange: (String) -> Unit,
-    foodDiaryCategories: Array<String>,
-    onSave: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var isTitleFocused by remember {
-        mutableStateOf(false)
-    }
-    if (isDialogOpen)
-        Dialog(
-            onDismissRequest = onDismissRequest,
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false,
-                dismissOnBackPress = true,
-            ),
-        ) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(
-                                text = "Food Diary",
-                                color = MaterialTheme.colorScheme.onSurface,
-                                fontWeight = FontWeight.ExtraBold
-                            )
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = onCancel) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Close,
-                                    tint = MaterialTheme.colorScheme.onSurface,
-                                    contentDescription = null
-                                )
-                            }
-                        }
-                    )
-                },
-                floatingActionButton = {
-                    AnimatedVisibility(title.isNotBlank()) {
-                        FloatingActionButton(
-                            onClick = onSave,
-                        ) {
-                            Icon(imageVector = Icons.Rounded.AddCircle, contentDescription = null)
-                        }
-                    }
-                },
-                modifier = modifier,
-            ) {
-                var isFoodDiaryCategoryExpanded by rememberSaveable { mutableStateOf(false) }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Top,
-                    modifier = Modifier
-                        .padding(it)
-                        .padding(horizontal = 16.dp)
-                ) {
-                    OutlinedTextField(
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
-                        ),
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_fastfood_24dp),
-                                contentDescription = null,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        },
-                        value = title,
-                        singleLine = true,
-                        onValueChange = onTitleChange,
-                        placeholder = {
-                            Text(
-                                text = stringResource(R.string.title_placeholder),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        },
-                        label = {
-                            Text(
-                                text = stringResource(R.string.title),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        },
-                        supportingText = {
-                            if (title.isNotEmpty() and title.isBlank())
-                                Text(
-                                    text = stringResource(R.string.title_error_text),
-                                    style = MaterialTheme.typography.bodySmall,
-                                )
-                            else if (isTitleFocused)
-                                Text(
-                                    text = stringResource(R.string.supporting_text_required),
-                                    style = MaterialTheme.typography.bodySmall,
-                                )
-                        },
-                        isError = title.isNotEmpty() and title.isBlank(),
-                        trailingIcon = {
-                            if (title.isNotEmpty() and title.isBlank())
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_round_error_24dp),
-                                    contentDescription = null,
-                                )
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onFocusChanged { newValue ->
-                                isTitleFocused = newValue.hasFocus
-                            },
-                    )
-                    ExposedDropdownMenuBox(
-                        expanded = isFoodDiaryCategoryExpanded,
-                        onExpandedChange = { newValue ->
-                            isFoodDiaryCategoryExpanded = newValue
-                        },
-                    ) {
-                        OutlinedTextField(
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(
-                                        id = when (selectedFoodDiaryCategory) {
-                                            foodDiaryCategories[0] -> R.drawable.ic_breakfast_24dp
-                                            foodDiaryCategories[1] -> R.drawable.ic_lunch_24dp
-                                            else -> R.drawable.ic_dinner_24dp
-                                        }
-                                    ),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            },
-                            value = selectedFoodDiaryCategory,
-                            onValueChange = {},
-                            label = {
-                                Text(
-                                    text = "Category",
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            },
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isFoodDiaryCategoryExpanded) },
-                            readOnly = true,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .menuAnchor(),
-                        )
-                        ExposedDropdownMenu(
-                            expanded = isFoodDiaryCategoryExpanded,
-                            onDismissRequest = { isFoodDiaryCategoryExpanded = false },
-                        ) {
-                            foodDiaryCategories.forEach { selectedOption ->
-                                DropdownMenuItem(
-                                    text = { Text(selectedOption) },
-                                    onClick = {
-                                        onFoodDiaryCategoryChange(selectedOption)
-                                        isFoodDiaryCategoryExpanded = false
-                                    },
-                                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
 private fun PredictedResultDialog(
     onCancel: () -> Unit,
     isDialogOpen: Boolean,
@@ -1095,7 +912,8 @@ private fun PredictedResultDialog(
                                 Button(
                                     onClick = onQuestionDialog,
                                     modifier = Modifier
-                                        .fillMaxWidth()
+                                        .fillMaxWidth(),
+                                    enabled = addFoodDiaryState !is UiState.Loading
                                 ) {
                                     if (addFoodDiaryState is UiState.Loading)
                                         CircularProgressIndicator()
