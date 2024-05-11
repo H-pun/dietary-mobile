@@ -34,6 +34,7 @@ firebaseAuthKtx = "23.0.0"
 googleGmsGoogleServices = "4.4.1"
 firebaseAuth = "23.0.0"
 vico = "2.0.0-alpha.19"
+leakcanary-android = "2.12"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -83,6 +84,7 @@ firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx",
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
+leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary-android" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

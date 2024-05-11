@@ -136,6 +136,8 @@ dependencies {
     implementation(libs.vico.compose.m3)
     //widget
     implementation(libs.androidx.glance.appwidget)
+    //leakcanary
+    debugImplementation(libs.leakcanary.android)
 }
 
 // Allow references to generated code
