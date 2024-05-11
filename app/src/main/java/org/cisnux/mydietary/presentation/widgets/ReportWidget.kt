@@ -2,8 +2,6 @@ package org.cisnux.mydietary.presentation.widgets
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -13,13 +11,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
-import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.LinearProgressIndicator
@@ -161,7 +157,7 @@ class ReportWidget : GlanceAppWidget() {
         isSuccess: Boolean = false,
     ) {
         LazyColumn(
-            modifier = modifier.fillMaxWidth().appWidgetBackground()
+            modifier = modifier.fillMaxSize().appWidgetBackground()
                 .background(GlanceTheme.colors.surface).padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -313,19 +309,20 @@ class ReportWidget : GlanceAppWidget() {
                     }
                 }
                 item {
-                    Column(modifier = GlanceModifier.fillMaxWidth()) {
-                        Text(
-                            text = "✦ Diary makananmu",
-                            style = TextStyle(
-                                fontFamily = FontFamily("roboto"),
-                                fontWeight = FontWeight.Medium,
-                                fontSize = DietaryTypeScaleTokens.TitleMediumSize,
-                                color = GlanceTheme.colors.onSurface,
-                                textAlign = TextAlign.Start
-                            ),
-                        )
-                        Spacer(GlanceModifier.height(4.dp))
-                    }
+                    if (foodDiaries.isNotEmpty())
+                        Column(modifier = GlanceModifier.fillMaxWidth()) {
+                            Text(
+                                text = "✦ Diary makananmu",
+                                style = TextStyle(
+                                    fontFamily = FontFamily("roboto"),
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = DietaryTypeScaleTokens.TitleMediumSize,
+                                    color = GlanceTheme.colors.onSurface,
+                                    textAlign = TextAlign.Start
+                                ),
+                            )
+                            Spacer(GlanceModifier.height(4.dp))
+                        }
                 }
                 items(
                     foodDiaries.size,
@@ -357,9 +354,9 @@ class ReportWidget : GlanceAppWidget() {
                                 modifier = GlanceModifier.fillMaxWidth()
                             ) {
                                 val foodPictureFile = foodDiaries[it].foodPictureFile
-                                foodPictureFile?.let {
+                                foodPictureFile?.let {bitmap ->
                                     Image(
-                                        provider = ImageProvider(it),
+                                        provider = ImageProvider(bitmap),
                                         contentDescription = null,
                                         contentScale = ContentScale.Crop,
                                         modifier = GlanceModifier.size(24.dp).cornerRadius(8.dp)
