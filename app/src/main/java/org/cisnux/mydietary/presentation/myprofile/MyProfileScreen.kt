@@ -41,6 +41,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -57,8 +58,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.glance.appwidget.updateAll
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.valentinilk.shimmer.shimmer
+import kotlinx.coroutines.launch
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.UserProfileDetail
 import org.cisnux.mydietary.presentation.addmyprofile.MyProfile
@@ -68,6 +71,7 @@ import org.cisnux.mydietary.presentation.ui.components.MyProfileForm
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.presentation.ui.theme.darkProgress
 import org.cisnux.mydietary.presentation.ui.theme.lightProgress
+import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.isIntAnswerValid
@@ -193,6 +197,15 @@ fun MyProfileScreen(
                 if (exception is Failure.UnauthorizedFailure) {
                     viewModel.signOut()
                     navigateToSignIn()
+                }
+            }
+        }
+
+        updateUserProfileState is UiState.Success -> {
+            val coroutineScope = rememberCoroutineScope()
+            LaunchedEffect(updateUserProfileState) {
+                coroutineScope.launch {
+                    ReportWidget().updateAll(context)
                 }
             }
         }
