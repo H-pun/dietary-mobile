@@ -13,15 +13,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.valentinilk.shimmer.shimmer
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.presentation.ui.theme.placeholder
+import org.cisnux.mydietary.presentation.ui.theme.darkProgress
+import org.cisnux.mydietary.presentation.ui.theme.lightProgress
 
 @Preview(
     showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 )
 @Composable
 private fun ScannerResultShimmerPreview() {
@@ -36,6 +38,11 @@ private fun ScannerResultShimmerPreview() {
 fun AddedDiaryShimmer(
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val placeholder = when (context.resources.configuration.uiMode) {
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
+        else -> darkProgress
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,

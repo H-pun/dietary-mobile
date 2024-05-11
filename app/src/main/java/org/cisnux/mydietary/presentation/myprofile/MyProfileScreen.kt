@@ -1,5 +1,7 @@
 package org.cisnux.mydietary.presentation.myprofile
 
+import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -64,7 +66,8 @@ import org.cisnux.mydietary.presentation.ui.components.BottomBar
 import org.cisnux.mydietary.presentation.ui.components.ListTileProfile
 import org.cisnux.mydietary.presentation.ui.components.MyProfileForm
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.presentation.ui.theme.placeholder
+import org.cisnux.mydietary.presentation.ui.theme.darkProgress
+import org.cisnux.mydietary.presentation.ui.theme.lightProgress
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.isIntAnswerValid
@@ -79,8 +82,13 @@ fun MyProfileScreen(
     navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     navigateToSignIn: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MyProfileViewModel = hiltViewModel()
+    viewModel: MyProfileViewModel = hiltViewModel(),
+    navigateUp: () -> Unit,
 ) {
+    BackHandler {
+        navigateUp()
+    }
+
     val onRefresh by rememberUpdatedState(viewModel::updateRefreshUserProfile)
 
     LaunchedEffect(Unit) {
@@ -493,7 +501,7 @@ private fun MyProfileBody(
                             .clip(CircleShape)
                     ) {}
                     Text(
-                        text = username[0].uppercase(),
+                        text = username.getOrNull(0)?.uppercase() ?: "U",
                         color = MaterialTheme.colorScheme.onTertiaryContainer,
                         style = MaterialTheme.typography.headlineMedium,
                         textAlign = TextAlign.Center,
@@ -737,6 +745,11 @@ private fun MyProfileShimmer(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    val placeholder = when (context.resources.configuration.uiMode) {
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
+        else -> darkProgress
+    }
 
     Column(
         modifier = modifier

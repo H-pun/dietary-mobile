@@ -19,7 +19,8 @@ class NavComponentAction(
     val navigateToFoodDiaryDetail: (foodDiaryId: String) -> Unit = { foodDiaryId ->
         navController.navigate(
             route = AppDestination.DiaryDetailRoute.createRouteUrl(
-                foodDiaryId = foodDiaryId
+                foodDiaryId = foodDiaryId,
+                isWidget = false
             )
         )
     }
@@ -31,6 +32,15 @@ class NavComponentAction(
             popUpTo(currentRoute) {
                 inclusive = true
             }
+            launchSingleTop = true
+        }
+    }
+    val navigateToHomeClearAll: () -> Unit = {
+        navController.navigate(route = AppDestination.HomeRoute.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                inclusive = true
+            }
+            launchSingleTop = true
         }
     }
     val navigateToLanding: () -> Unit = {

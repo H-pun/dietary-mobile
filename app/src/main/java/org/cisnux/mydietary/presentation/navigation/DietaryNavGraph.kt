@@ -1,5 +1,6 @@
 package org.cisnux.mydietary.presentation.navigation
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -48,6 +49,7 @@ fun DietaryNavGraph(
     }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val activity = (context as Activity)
     NotificationDialog(snackbarHostState = snackbarHostState)
     NavHost(
         navController = navController,
@@ -344,7 +346,8 @@ fun DietaryNavGraph(
                 navigateForBottomNav = navComponentAction.bottomNavigation,
                 onFabFoodScanner = navComponentAction.navigateToFoodScanner,
                 navigateToDiaryDetail = navComponentAction.navigateToFoodDiaryDetail,
-                navigateToSignIn = navComponentAction.navigateToSignIn
+                navigateToSignIn = navComponentAction.navigateToSignIn,
+                navigateUp = { activity.finish() }
             )
         }
         composable(
@@ -385,7 +388,8 @@ fun DietaryNavGraph(
                     coroutineScope.launch {
                         ReportWidget().updateAll(context)
                     }
-                }
+                },
+                navigateUp = { activity.finish() }
             )
         }
         composable(
@@ -417,11 +421,17 @@ fun DietaryNavGraph(
                         100, easing = LinearEasing
                     )
                 )
-            }
+            },
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = AppDestination.ReportRoute.deepLinkPattern
+                },
+            )
         ) {
             ReportScreen(
                 navigateForBottomNav = navComponentAction.bottomNavigation,
-                navigateToSignIn = navComponentAction.navigateToSignIn
+                navigateToSignIn = navComponentAction.navigateToSignIn,
+                navigateUp = { activity.finish() }
             )
         }
         composable(
@@ -431,6 +441,10 @@ fun DietaryNavGraph(
                     nullable = false
                     type = NavType.StringType
                 },
+                navArgument(name = "isWidget") {
+                    nullable = false
+                    type = NavType.BoolType
+                }
             ),
             enterTransition = {
                 slideIntoContainer(
@@ -457,13 +471,21 @@ fun DietaryNavGraph(
                         300, easing = LinearEasing
                     )
                 )
-            }
+            },
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = AppDestination.DiaryDetailRoute.deepLinkPattern
+                },
+            )
         ) {
+            val isWidget = it.arguments!!.getBoolean("isWidget")
             DiaryDetailScreen(
                 navigateUp = {
                     coroutineScope.launch {
                         ReportWidget().updateAll(context)
-                        navComponentAction.navigateToHome(AppDestination.DiaryDetailRoute.route)
+                        if (!isWidget)
+                            navComponentAction.navigateToHome(AppDestination.DiaryDetailRoute.route)
+                        else navComponentAction.navigateToHomeClearAll()
                     }
                 },
                 navigateToSignIn = navComponentAction.navigateToSignIn

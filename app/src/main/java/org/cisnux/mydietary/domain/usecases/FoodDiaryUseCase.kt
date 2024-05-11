@@ -15,7 +15,7 @@ import java.io.File
 
 interface FoodDiaryUseCase {
     fun getDiaryFoodsByDays(date: String, category: FoodDiaryCategory): Flow<UiState<List<FoodDiary>>>
-    fun getDiaryFoodsByDaysOnly(date: String): Flow<UiState<List<FoodDiary>>>
+    fun getDiaryFoodsByDaysForWidget(date: String): Flow<UiState<List<FoodDiary>>>
     fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>>
     fun getKeywordSuggestionsByQuery(query: String): Flow<UiState<List<Keyword>>>
     fun addFoodDiary(addFoodDiary: AddFoodDiary): Flow<UiState<String>>

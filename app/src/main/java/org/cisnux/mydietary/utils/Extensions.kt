@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import org.cisnux.mydietary.data.remotes.bodyrequests.UserAccountBodyRequest
+import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.domain.models.UserProfile
 import org.cisnux.mydietary.presentation.addmyprofile.MyProfile
@@ -135,7 +136,7 @@ val String.asDayDateAndMonth: String
     get() = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").run {
         val locale = Locale("id", "ID")
         LocalDate.parse(this@asDayDateAndMonth, this@run)
-           .format(DateTimeFormatter.ofPattern("EEEE, dd MMM", locale))
+            .format(DateTimeFormatter.ofPattern("EEEE, dd MMM", locale))
     }
 
 

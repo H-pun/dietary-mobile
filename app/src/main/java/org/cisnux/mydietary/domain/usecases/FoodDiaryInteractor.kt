@@ -1,5 +1,12 @@
 package org.cisnux.mydietary.domain.usecases
 
+import android.content.Context
+import androidx.core.graphics.drawable.toBitmapOrNull
+import coil.ImageLoader
+import coil.request.CachePolicy
+import coil.request.ImageRequest
+import coil.request.SuccessResult
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.cisnux.mydietary.domain.models.AddFoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
@@ -33,6 +40,7 @@ class FoodDiaryInteractor @Inject constructor(
     private val foodRepository: FoodRepository,
     private val authenticationUseCase: AuthenticationUseCase,
     private val userProfileUseCase: UserProfileUseCase,
+    @ApplicationContext private val context: Context
 ) : FoodDiaryUseCase {
     override fun getDiaryFoodsByDays(
         date: String, category: FoodDiaryCategory
@@ -45,12 +53,35 @@ class FoodDiaryInteractor @Inject constructor(
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }
 
-    override fun getDiaryFoodsByDaysOnly(date: String): Flow<UiState<List<FoodDiary>>> =
+    override fun getDiaryFoodsByDaysForWidget(date: String): Flow<UiState<List<FoodDiary>>> =
         authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
             it?.let {
                 foodRepository.getDiaryFoodsByDate(
                     userId = it.first, accessToken = it.second, date = date
-                )
+                ).map { uiState ->
+                    if (uiState is UiState.Success)
+                        uiState.copy(data = uiState.data?.map { foodDiary ->
+                            val imageLoader = ImageLoader(context)
+                            val request = ImageRequest.Builder(context)
+                                .diskCachePolicy(CachePolicy.ENABLED)
+                                .data(foodDiary.foodPictureUrl)
+                                .build()
+
+                            val result = imageLoader.execute(request)
+
+                            FoodDiary(
+                                id = foodDiary.id,
+                                title = foodDiary.title,
+                                date = foodDiary.date,
+                                time = foodDiary.time,
+                                foodPictureUrl = foodDiary.foodPictureUrl,
+                                totalFoodCalories = foodDiary.totalFoodCalories,
+                                foodPictureFile = if (result is SuccessResult) result.drawable.toBitmapOrNull()
+                                else null
+                            )
+                        } ?: listOf())
+                    else uiState
+                }.flowOn(Dispatchers.IO)
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }
 

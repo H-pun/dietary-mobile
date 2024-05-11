@@ -1,6 +1,7 @@
 package org.cisnux.mydietary.presentation.diarydetail
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -90,6 +91,9 @@ fun DiaryDetailScreen(
     val userDailyNutritionState by viewModel.userDailyNutritionState.collectAsState(UiState.Initialize)
     val removeState by viewModel.removeState.collectAsState()
     val context = LocalContext.current
+    BackHandler {
+        navigateUp()
+    }
 
     when {
         foodDiaryDetailState is UiState.Error -> (foodDiaryDetailState as UiState.Error).error?.let { exception ->

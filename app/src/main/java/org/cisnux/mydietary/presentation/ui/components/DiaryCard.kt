@@ -1,5 +1,6 @@
 package org.cisnux.mydietary.presentation.ui.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,7 +27,8 @@ import coil.compose.SubcomposeAsyncImage
 import com.valentinilk.shimmer.shimmer
 import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.presentation.ui.theme.placeholder
+import org.cisnux.mydietary.presentation.ui.theme.darkProgress
+import org.cisnux.mydietary.presentation.ui.theme.lightProgress
 import org.cisnux.mydietary.utils.dayDateMonthYear
 import org.cisnux.mydietary.utils.hoursAndMinutes
 import java.time.Instant
@@ -66,6 +69,11 @@ fun DiaryCard(
     modifier: Modifier = Modifier
 ) {
     val locale = Locale("id", "ID")
+    val context = LocalContext.current
+    val placeholder = when (context.resources.configuration.uiMode) {
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
+        else -> darkProgress
+    }
 
     Column(
         modifier = modifier

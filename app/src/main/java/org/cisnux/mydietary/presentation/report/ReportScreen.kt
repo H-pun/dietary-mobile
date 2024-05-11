@@ -2,6 +2,7 @@ package org.cisnux.mydietary.presentation.report
 
 import android.content.res.Configuration
 import android.text.Layout
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -74,11 +75,12 @@ import org.cisnux.mydietary.presentation.ui.components.UserNutritionCardShimmer
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.presentation.ui.theme.darkBlue
 import org.cisnux.mydietary.presentation.ui.theme.darkMagenta
+import org.cisnux.mydietary.presentation.ui.theme.darkProgress
 import org.cisnux.mydietary.presentation.ui.theme.darkYellow
 import org.cisnux.mydietary.presentation.ui.theme.lightBlue
 import org.cisnux.mydietary.presentation.ui.theme.lightMagenta
+import org.cisnux.mydietary.presentation.ui.theme.lightProgress
 import org.cisnux.mydietary.presentation.ui.theme.lightYellow
-import org.cisnux.mydietary.presentation.ui.theme.placeholder
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerDark
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerLight
 import org.cisnux.mydietary.utils.AppDestination
@@ -90,6 +92,7 @@ import kotlin.random.Random
 fun ReportScreen(
     navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     navigateToSignIn: (String) -> Unit,
+    navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ReportViewModel = hiltViewModel(),
 ) {
@@ -101,6 +104,10 @@ fun ReportScreen(
     val nutritionReportState by viewModel.nutritionReportState.collectAsState()
     val dietProgressState by viewModel.dietProgressState.collectAsState()
     val context = LocalContext.current
+
+    BackHandler {
+        navigateUp()
+    }
 
     when {
         nutritionReportState is UiState.Error -> {
@@ -220,7 +227,7 @@ private fun ReportContentPreview() {
                         totalFatToday = 211f,
                         totalProteinToday = 242.23f,
                         totalCarbohydrateToday = 241.11f,
-                        nutritionReports = List(20) {index->
+                        nutritionReports = List(20) { index ->
                             FoodDiaryReport(
                                 averageCarbohydrate = Random.nextDouble(80.0, 100.0).toFloat(),
                                 averageFat = Random.nextDouble(20.0, 100.0).toFloat(),
@@ -291,6 +298,10 @@ private fun ReportBody(
     isDietProgressLoading: Boolean = false
 ) {
     val context = LocalContext.current
+    val placeholder = when (context.resources.configuration.uiMode) {
+        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
+        else -> darkProgress
+    }
     val caloriesColor = when (context.resources.configuration.uiMode) {
         Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> primaryContainerLight
         else -> primaryContainerDark
@@ -353,7 +364,8 @@ private fun ReportBody(
                             series(dietProgressReport.map { it.waistCircumference })
                         }
                         updateExtras {
-                            it[labelListKey] = dietProgressReport.map { report -> report.description }
+                            it[labelListKey] =
+                                dietProgressReport.map { report -> report.description }
                         }
                     }
                 }
