@@ -251,7 +251,20 @@ fun MyProfileScreen(
                         isUpdateMyProfileDialogOpen = false
                         viewModel.updateMyProfile(id = userProfileDetail.id, myProfile = myProfile)
                     },
-                    onCancel = { isUpdateMyProfileDialogOpen = false },
+                    onCancel = {
+                        isUpdateMyProfileDialogOpen = false
+                        myProfile = myProfile.copy(
+                            username = userProfileDetail.username,
+                            age = userProfileDetail.age.toString(),
+                            weight = userProfileDetail.weight.toString(),
+                            height = userProfileDetail.height.toString(),
+                            gender = userProfileDetail.gender,
+                            goal = userProfileDetail.goal,
+                            weightTarget = userProfileDetail.weightTarget.toString(),
+                            activityLevel = userProfileDetail.activityLevel,
+                            waistCircumference = userProfileDetail.waistCircumference.toString()
+                        )
+                    },
                     onDismissRequest = { isUpdateMyProfileDialogOpen = false },
                     isDialogOpen = isUpdateMyProfileDialogOpen,
                     username = myProfile.username,
