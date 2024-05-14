@@ -11,9 +11,7 @@ data class FoodDiary(
     val totalFoodCalories: Float,
 ) {
     var foodPictureFile: Bitmap? = null
-        private set(value) {
-            field = value
-        }
+        private set
 
     constructor(
         id: String,

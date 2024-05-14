@@ -9,8 +9,8 @@ import org.cisnux.mydietary.utils.FoodDiaryCategory
 import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.Flow
-import org.cisnux.mydietary.domain.models.FoodDiaryReport
 import org.cisnux.mydietary.domain.models.Keyword
+import org.cisnux.mydietary.domain.models.Report
 import java.io.File
 
 interface FoodDiaryUseCase {
@@ -23,7 +23,7 @@ interface FoodDiaryUseCase {
 
     fun deleteFoodDiaryById(foodDiaryId: String): Flow<UiState<Nothing>>
 
-    fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<List<FoodDiaryReport>>>
+    fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<Report>>
     fun predictFoods(foodPicture: File): Flow<UiState<Pair<UserNutrition, FoodNutrition>>>
 
     val baseUrl: Flow<String>

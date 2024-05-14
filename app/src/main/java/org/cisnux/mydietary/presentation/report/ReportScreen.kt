@@ -18,7 +18,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -33,13 +36,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -68,6 +74,7 @@ import com.valentinilk.shimmer.shimmer
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.DietProgress
 import org.cisnux.mydietary.domain.models.FoodDiaryReport
+import org.cisnux.mydietary.domain.models.Report
 import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.presentation.ui.components.BottomBar
 import org.cisnux.mydietary.presentation.ui.components.UserNutritionCard
@@ -97,6 +104,7 @@ fun ReportScreen(
     viewModel: ReportViewModel = hiltViewModel(),
 ) {
     var tabState by rememberSaveable { mutableIntStateOf(0) }
+    var rangeState by rememberSaveable { mutableIntStateOf(0) }
     val userNutritionState by viewModel.userDailyNutritionState.collectAsState(UiState.Initialize)
     val snackbarHostState = remember {
         SnackbarHostState()
@@ -175,18 +183,48 @@ fun ReportScreen(
             val userDailyNutrition = if (userNutritionState is UiState.Success)
                 (userNutritionState as UiState.Success<UserNutrition>).data!!
             else null
-            val reports = if (nutritionReportState is UiState.Success)
-                (nutritionReportState as UiState.Success<List<FoodDiaryReport>>).data!!
+
+            val datePages = if (nutritionReportState is UiState.Success)
+                (nutritionReportState as UiState.Success<Report>).data?.datePages
             else listOf()
+
+            val chunkedFoodDiaries = if (nutritionReportState is UiState.Success)
+                (nutritionReportState as UiState.Success<Report>).data?.chunkedFoodDiaries
+            else listOf()
+
             val dietProgress = if (dietProgressState is UiState.Success)
                 (dietProgressState as UiState.Success<List<DietProgress>>).data!!
             else listOf()
+
+            val reports by remember(chunkedFoodDiaries, rangeState, tabState) {
+                derivedStateOf {
+                    if (chunkedFoodDiaries?.isNotEmpty() == true)
+                        if (tabState == 0)
+                            chunkedFoodDiaries[rangeState]
+                        else chunkedFoodDiaries.first()
+                    else
+                        listOf()
+                }
+            }
+
+            val selectedDate by remember(datePages, rangeState) {
+                derivedStateOf {
+                    when {
+                        (datePages?.isNotEmpty() == true) && datePages.size > 1 ->
+                            datePages[rangeState].dateRange
+
+                        (datePages?.isNotEmpty() == true) && datePages.size == 1 -> datePages[0].dateRange
+                        else -> ""
+                    }
+                }
+            }
 
             ReportBody(
                 selectedFilter = tabState,
                 onReportFilterChange = { index ->
                     tabState = index
-                    viewModel.getReports(index = 0)
+                    viewModel.getReports(index = tabState)
+                    rangeState = 0
                 },
                 modifier = Modifier.padding(it),
                 maxDailyProtein = userDailyNutrition?.maxDailyProtein ?: 0f,
@@ -201,7 +239,12 @@ fun ReportScreen(
                 isNutritionReportLoading = nutritionReportState is UiState.Loading || nutritionReportState is UiState.Error,
                 isUserNutritionLoading = userNutritionState is UiState.Loading || userNutritionState is UiState.Error,
                 isDietProgressLoading = dietProgressState is UiState.Loading || dietProgressState is UiState.Error,
-                dietProgressReport = dietProgress
+                dietProgressReport = dietProgress,
+                selectedDate = selectedDate,
+                datePages = datePages ?: listOf(),
+                onSelectedRange = { newValue ->
+                    rangeState = newValue
+                }
             )
         },
         snackbarHostState = snackbarHostState,
@@ -244,15 +287,23 @@ private fun ReportContentPreview() {
                         maxDailyProtein = 1000f,
                         maxDailyCalories = 1000f,
                         modifier = Modifier.padding(it),
+                        onSelectedRange = {},
                         dietProgressReport = List(20) {
                             DietProgress(
                                 weight = Random.nextDouble(60.0, 120.0).toFloat(),
                                 waistCircumference = Random.nextDouble(60.0, 120.0).toFloat(),
                                 description = "Senin, 17 Feb"
                             )
-                        }
+                        },
+                        selectedDate = "17 Feb - 21 Feb",
+                        datePages = listOf(
+                            Report.DatePage(dateRange = "17 Feb - 21 Feb"),
+                            Report.DatePage(dateRange = "22 Feb - 29 Feb"),
+                            Report.DatePage(dateRange = "30 Feb - 7 Mar")
+                        )
                     )
-                }, snackbarHostState = SnackbarHostState()
+                },
+                snackbarHostState = SnackbarHostState()
             )
         }
     }
@@ -289,10 +340,13 @@ private fun ReportBody(
     maxDailyProtein: Float,
     maxDailyFat: Float,
     selectedFilter: Int,
+    selectedDate: String,
     onReportFilterChange: (Int) -> Unit,
+    onSelectedRange: (Int) -> Unit,
     nutritionReports: List<FoodDiaryReport>,
     dietProgressReport: List<DietProgress>,
     modifier: Modifier = Modifier,
+    datePages: List<Report.DatePage> = listOf(),
     isNutritionReportLoading: Boolean = false,
     isUserNutritionLoading: Boolean = false,
     isDietProgressLoading: Boolean = false
@@ -325,6 +379,9 @@ private fun ReportBody(
     val waistCircumferenceColor = when (context.resources.configuration.uiMode) {
         Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightMagenta
         else -> darkMagenta
+    }
+    var isExpanded by rememberSaveable {
+        mutableStateOf(false)
     }
 
     Column(
@@ -485,9 +542,10 @@ private fun ReportBody(
                 maxDailyCarbohydrate = maxDailyCarbohydrate,
                 maxDailyProtein = maxDailyProtein,
                 maxDailyFat = maxDailyFat,
+                modifier = Modifier.padding(PaddingValues())
             )
         } else {
-            UserNutritionCardShimmer()
+            UserNutritionCardShimmer(modifier = Modifier.padding(PaddingValues()))
         }
         Spacer(modifier = Modifier.height(16.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -508,12 +566,50 @@ private fun ReportBody(
                     },
                     label = {
                         Text(
-                            text = if (it == 0) "Harian"
-                            else "Mingguan"
+                            text = if (it == 0) "Mingguan"
+                            else "Bulanan"
                         )
                     }
                 )
                 Spacer(modifier = Modifier.width(8.dp))
+            }
+        }
+        AnimatedVisibility(visible = selectedFilter == 0 && selectedDate.isNotBlank()) {
+            Column(
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .fillMaxWidth()
+            ) {
+                FilterChip(
+                    selected = true,
+                    onClick = {
+                        if (selectedDate.isNotBlank())
+                            isExpanded = true
+                    },
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowDropDown,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(FilterChipDefaults.IconSize)
+                                .rotate(if (isExpanded) 180f else 0f)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = selectedDate
+                        )
+                    },
+                    modifier = Modifier.align(Alignment.Start)
+                )
+                DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+                    datePages.forEachIndexed { index, datePage ->
+                        DropdownMenuItem(text = { Text(text = datePage.dateRange) }, onClick = {
+                            isExpanded = false
+                            onSelectedRange(index)
+                        })
+                    }
+                }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -598,7 +694,7 @@ private fun ReportBody(
                                 ),
                             ),
                             bottomAxis = rememberBottomAxis(
-                                title = "Minggu",
+                                title = if (selectedFilter == 0) "Hari" else "Minggu",
                                 titleComponent = rememberAxisLabelComponent(),
                                 valueFormatter = { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
                             ),
@@ -677,7 +773,7 @@ private fun ReportBody(
                                 ),
                             ),
                             bottomAxis = rememberBottomAxis(
-                                title = "Minggu",
+                                title = if (selectedFilter == 0) "Hari" else "Minggu",
                                 titleComponent = rememberAxisLabelComponent(),
                                 valueFormatter = { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
                             ),

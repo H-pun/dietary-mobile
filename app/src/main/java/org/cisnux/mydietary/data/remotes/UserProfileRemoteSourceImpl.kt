@@ -36,7 +36,7 @@ class UserProfileRemoteSourceImpl @Inject constructor(
     override suspend fun addUserProfile(
         accessToken: String,
         userProfile: NewUserProfileBodyRequest
-    ): Either<Exception, Nothing?> =
+    ): Either<Exception, String> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
@@ -60,7 +60,10 @@ class UserProfileRemoteSourceImpl @Inject constructor(
                         })
                     } ?: Either.Left(Exception(commonResponse?.message))
                     failure
-                } else Either.Right(null)
+                } else {
+                    val commonResponse: CommonResponse<String> = response.body()
+                    Either.Right(commonResponse.data!!)
+                }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
             } catch (e: Exception){

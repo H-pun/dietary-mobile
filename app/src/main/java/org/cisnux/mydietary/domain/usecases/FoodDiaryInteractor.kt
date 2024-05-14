@@ -14,10 +14,8 @@ import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.repositories.FoodRepository
-import org.cisnux.mydietary.utils.ACTIVITY_FACTOR
 import org.cisnux.mydietary.utils.Failure
 import org.cisnux.mydietary.utils.FoodDiaryCategory
-import org.cisnux.mydietary.utils.GOALS_FACTOR
 import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.currentLocalDateTimeInBasicISOFormat
@@ -30,8 +28,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import org.cisnux.mydietary.domain.models.FoodDiaryReport
 import org.cisnux.mydietary.domain.models.Keyword
+import org.cisnux.mydietary.domain.models.Report
+import org.cisnux.mydietary.utils.calculateMaxDailyNutrition
 import java.io.File
 import java.time.Instant
 import javax.inject.Inject
@@ -89,7 +88,15 @@ class FoodDiaryInteractor @Inject constructor(
         }
 
     override fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>> =
-        foodRepository.getDiaryFoodsByQuery(query)
+        authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
+            it?.let {
+                foodRepository.getDiaryFoodsByQuery(
+                    userId = it.first,
+                    accessToken = it.second,
+                    query = query
+                )
+            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
+        }
 
     override fun getKeywordSuggestionsByQuery(query: String): Flow<UiState<List<Keyword>>> =
         authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
@@ -123,8 +130,8 @@ class FoodDiaryInteractor @Inject constructor(
                 foodRepository.getFoodDiaryDetailById(
                     accessToken = accessToken,
                     foodDiaryId = foodDiaryId
-                ).map {uiState ->
-                    if (uiState is UiState.Success){
+                ).map { uiState ->
+                    if (uiState is UiState.Success) {
                         val image = uiState.data?.foodNutrition?.image as String?
                         val imageLoader = ImageLoader(context)
                         val imageRequest = ImageRequest.Builder(context)
@@ -133,14 +140,15 @@ class FoodDiaryInteractor @Inject constructor(
                             .data(image).build()
                         imageLoader
                             .execute(imageRequest)
-                        val path = image?.let { img -> imageLoader.diskCache?.openSnapshot(img)?.data }
+                        val path =
+                            image?.let { img -> imageLoader.diskCache?.openSnapshot(img)?.data }
+
                         uiState.copy(
                             data = uiState.data?.copy(
                                 foodNutrition = uiState.data.foodNutrition.copy(image = path?.toFile())
                             )
-                            )
-                    }
-                    else uiState
+                        )
+                    } else uiState
                 }
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }.flowOn(Dispatchers.IO)
@@ -152,7 +160,9 @@ class FoodDiaryInteractor @Inject constructor(
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }.flowOn(Dispatchers.IO)
 
-    override fun getFoodDiaryReports(category: ReportCategory): Flow<UiState<List<FoodDiaryReport>>> =
+    override fun getFoodDiaryReports(
+        category: ReportCategory,
+    ): Flow<UiState<Report>> =
         authenticationUseCase.isAccessTokenAndUserIdExists.distinctUntilChanged().flatMapLatest {
             it?.let {
                 foodRepository.getFoodDiaryReports(
@@ -178,23 +188,10 @@ class FoodDiaryInteractor @Inject constructor(
                     )
                         .map { uiState ->
                             if (uiState is UiState.Success) {
-                                val height = it.second.height
-                                val weight = it.second.weight
-                                val age = it.second.age
-                                val isWoman = it.second.gender.lowercase() == "wanita"
-                                val bmr = if (!isWoman)
-                                    66 + (13.7 * weight) + (5 * height) - (6.8 * age)
-                                else 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)
-                                val activityFactor =
-                                    ACTIVITY_FACTOR[it.second.activityLevel.lowercase()] ?: 1.0
-                                val goalsFactor = GOALS_FACTOR[it.second.goal] ?: 1.0
-                                val stressFactor = 1.0
-                                val userMaxDailyCalories =
-                                    (bmr * activityFactor * goalsFactor * stressFactor).toFloat()
-                                val userMaxDailyProtein = 0.15f * userMaxDailyCalories
-                                val userMaxDailyFat = 0.25f * userMaxDailyCalories
-                                val userMaxDailyCarbohydrate = 0.6f * userMaxDailyCalories
                                 val currentDataState = uiState.data!!
+                                // user profile
+                                val userProfile = it.second
+                                val userNutrition = currentDataState.first
 
                                 val image = currentDataState.second.image as String?
                                 val imageLoader = ImageLoader(context)
@@ -204,15 +201,12 @@ class FoodDiaryInteractor @Inject constructor(
                                     .data(image).build()
                                 imageLoader
                                     .execute(imageRequest)
-                                val path = image?.let { img -> imageLoader.diskCache?.openSnapshot(img)?.data }
+                                val path =
+                                    image?.let { img -> imageLoader.diskCache?.openSnapshot(img)?.data }
+
                                 UiState.Success(
                                     data = currentDataState.copy(
-                                        first = currentDataState.first.copy(
-                                            maxDailyCalories = userMaxDailyCalories,
-                                            maxDailyProtein = userMaxDailyProtein,
-                                            maxDailyFat = userMaxDailyFat,
-                                            maxDailyCarbohydrate = userMaxDailyCarbohydrate,
-                                        ),
+                                        first = userProfile.calculateMaxDailyNutrition(userNutrition = userNutrition),
                                         second = currentDataState.second.copy(
                                             image = path?.toFile()
                                         )

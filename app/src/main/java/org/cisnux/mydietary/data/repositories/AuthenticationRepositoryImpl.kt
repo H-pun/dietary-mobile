@@ -1,6 +1,5 @@
 package org.cisnux.mydietary.data.repositories
 
-import arrow.core.Either
 import org.cisnux.mydietary.data.locals.UserAccountLocalSource
 import org.cisnux.mydietary.data.remotes.UserAccountRemoteSource
 import org.cisnux.mydietary.domain.models.UserAccount

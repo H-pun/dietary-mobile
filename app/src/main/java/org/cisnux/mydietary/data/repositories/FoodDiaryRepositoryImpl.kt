@@ -30,11 +30,16 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.withContext
+import org.cisnux.mydietary.data.remotes.bodyrequests.ReportBodyRequest
+import org.cisnux.mydietary.data.remotes.responses.MonthlyReportResponse
+import org.cisnux.mydietary.data.remotes.responses.WeeklyReportResponse
 import org.cisnux.mydietary.domain.models.Keyword
+import org.cisnux.mydietary.domain.models.Report
 import org.cisnux.mydietary.utils.asDateAndMonth
+import org.cisnux.mydietary.utils.asDay
+import org.cisnux.mydietary.utils.fromLocalDateToDayDateAndMonth
 import java.io.File
 
 class FoodDiaryRepositoryImpl @Inject constructor(
@@ -42,16 +47,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
     private val baseApiUrlLocalSource: BaseApiUrlLocalSource,
     private val userProfileRemoteSource: UserProfileRemoteSource,
 ) : FoodRepository {
-    private val foodsBreakfastDiary = List(10) {
-        FoodDiary(
-            id = it.toString(),
-            title = "Mie Ayam",
-            date = "Senin, 21 Feb",
-            time = "18:20",
-            foodPictureUrl = "https://allofresh.id/blog/wp-content/uploads/2023/08/cara-membuat-mie-ayam-4.jpg",
-            totalFoodCalories = 500f
-        )
-    }
 
     override val baseUrl: Flow<String>
         get() = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO)
@@ -62,7 +57,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         userId: String,
         date: String,
         category: FoodDiaryCategory
-    ): Flow<UiState<List<FoodDiary>>> = flow{
+    ): Flow<UiState<List<FoodDiary>>> = flow {
         emit(UiState.Loading)
         foodDiaryRemoteSource.getFoodDiaries(
             accessToken = accessToken,
@@ -70,6 +65,39 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 userId = userId,
                 date = date,
                 category = category.value,
+            )
+        ).fold(
+            ifLeft = { exception ->
+                emit(UiState.Error(exception))
+            },
+            ifRight = { foodDiaries ->
+                emit(UiState.Success(foodDiaries.filter { it.category.lowercase() == category.value.lowercase() }
+                    .map { foodDiary ->
+                        FoodDiary(
+                            id = foodDiary.id,
+                            title = foodDiary.title,
+                            date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
+                            time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
+                            foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
+                            totalFoodCalories = foodDiary.totalCalories
+                        )
+                    }))
+            }
+        )
+    }.distinctUntilChanged()
+        .flowOn(Dispatchers.IO)
+
+    override fun getDiaryFoodsByDate(
+        accessToken: String,
+        userId: String,
+        date: String
+    ): Flow<UiState<List<FoodDiary>>> = flow {
+        emit(UiState.Loading)
+        foodDiaryRemoteSource.getFoodDiaries(
+            accessToken = accessToken,
+            getFoodDiaryParams = GetFoodDiaryParams(
+                userId = userId,
+                date = date,
             )
         ).fold(
             ifLeft = { exception ->
@@ -91,24 +119,26 @@ class FoodDiaryRepositoryImpl @Inject constructor(
     }.distinctUntilChanged()
         .flowOn(Dispatchers.IO)
 
-    override fun getDiaryFoodsByDate(
+    override fun getDiaryFoodsByQuery(
         accessToken: String,
         userId: String,
-        date: String
-    ): Flow<UiState<List<FoodDiary>>> = flow{
+        query: String
+    ): Flow<UiState<List<FoodDiary>>> = flow {
         emit(UiState.Loading)
         foodDiaryRemoteSource.getFoodDiaries(
             accessToken = accessToken,
             getFoodDiaryParams = GetFoodDiaryParams(
                 userId = userId,
-                date = date,
+                query = query
             )
         ).fold(
             ifLeft = { exception ->
                 emit(UiState.Error(exception))
             },
             ifRight = { foodDiaries ->
-                emit(UiState.Success(foodDiaries.map { foodDiary ->
+                emit(UiState.Success(foodDiaries.filter {
+                    it.title.lowercase().contains(query.lowercase())
+                }.map { foodDiary ->
                     FoodDiary(
                         id = foodDiary.id,
                         title = foodDiary.title,
@@ -120,15 +150,6 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 }))
             }
         )
-    }.distinctUntilChanged()
-    .flowOn(Dispatchers.IO)
-
-    override fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>> = flow {
-        emit(UiState.Loading)
-        delay(1000L)
-//        emit(UiState.Error(Failure.BadRequestFailure("bad request")))
-//        emit(UiState.Success(listOf()))
-        emit(UiState.Success(foodsBreakfastDiary))
     }
 
     override fun getKeywordSuggestions(
@@ -356,26 +377,56 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         accessToken: String,
         userId: String,
         category: ReportCategory
-    ): Flow<UiState<List<FoodDiaryReport>>> =
+    ): Flow<UiState<Report>> =
         flow {
             emit(UiState.Loading)
             foodDiaryRemoteSource.getFoodDiaryReports(
                 accessToken = accessToken,
-                userId = userId,
-                category = category.name
+                reportBodyRequest = ReportBodyRequest(
+                    userId = userId,
+                    reportType = category.reportType
+                )
             ).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
                 ifRight = {
-                    emit(UiState.Success(it.map { reportResponse ->
-                        FoodDiaryReport(
-                            averageCarbohydrate = reportResponse.averageCarbohydrate,
-                            averageCalories = reportResponse.averageCalories,
-                            averageFat = reportResponse.averageFat,
-                            averageProtein = reportResponse.averageProtein,
-                            label = reportResponse.week.toString(),
-                            description = "(${reportResponse.startDate.asDateAndMonth} - ${reportResponse.endDate.asDateAndMonth})"
+                    val chunkedFoodDiaries = it.map { reportResponse ->
+                        if (reportResponse is MonthlyReportResponse) {
+                            FoodDiaryReport(
+                                averageCarbohydrate = reportResponse.averageCarbohydrate,
+                                averageCalories = reportResponse.averageCalories,
+                                averageFat = reportResponse.averageFat,
+                                averageProtein = reportResponse.averageProtein,
+                                label = reportResponse.week.toString(),
+                                description = "${reportResponse.startDate.asDateAndMonth} - ${reportResponse.endDate.asDateAndMonth}",
+                            )
+                        } else
+                            (reportResponse as WeeklyReportResponse).let { weeklyReportResponse ->
+                                FoodDiaryReport(
+                                    averageCarbohydrate = weeklyReportResponse.averageCarbohydrate,
+                                    averageCalories = weeklyReportResponse.averageCalories,
+                                    averageFat = weeklyReportResponse.averageFat,
+                                    averageProtein = weeklyReportResponse.averageProtein,
+                                    label = weeklyReportResponse.date.asDay,
+                                    description = weeklyReportResponse.date.fromLocalDateToDayDateAndMonth,
+                                    date = weeklyReportResponse.date
+                                )
+                            }
+                    }.chunked(7)
+                    val datePages = chunkedFoodDiaries.map { foodDiaries ->
+                        val first = foodDiaries.first().date
+                        val last = foodDiaries.last().date
+                        if (first != null && last != null) {
+                            Report.DatePage(dateRange = "${first.asDateAndMonth} - ${last.asDateAndMonth}")
+                        } else Report.DatePage()
+                    }
+                    emit(
+                        UiState.Success(
+                            Report(
+                                datePages = datePages,
+                                chunkedFoodDiaries = chunkedFoodDiaries
+                            )
                         )
-                    }))
+                    )
                 }
             )
         }.flowOn(Dispatchers.IO)

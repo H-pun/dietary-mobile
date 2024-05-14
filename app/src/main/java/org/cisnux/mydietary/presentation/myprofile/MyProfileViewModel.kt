@@ -7,7 +7,7 @@ import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import org.cisnux.mydietary.presentation.addmyprofile.MyProfile
 import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.asUserProfile
+import org.cisnux.mydietary.utils.asAddUserProfile
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -50,7 +50,7 @@ class MyProfileViewModel @Inject constructor(
     }
 
     fun updateMyProfile(id: String, myProfile: MyProfile) {
-        val userProfile = myProfile.asUserProfile.copy(id = id)
+        val userProfile = myProfile.asAddUserProfile.copy(id = id)
         viewModelScope.launch {
             useCase.updateUserProfile(userProfile).collectLatest { uiState ->
                 _updateMyProfileState.value = uiState

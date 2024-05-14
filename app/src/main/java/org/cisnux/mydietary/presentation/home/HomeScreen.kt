@@ -778,9 +778,9 @@ private fun SearchBody(
     ) {
         LazyColumn(
             contentPadding = PaddingValues(bottom = 8.dp, start = 16.dp, end = 16.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             modifier = modifier
-                .fillMaxHeight()
+                .fillMaxWidth()
                 .padding(top = 72.dp),
         ) {
             item {

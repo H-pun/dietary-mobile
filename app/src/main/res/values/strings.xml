@@ -101,7 +101,7 @@
     </string-array>
     <string-array name="activity_description">
         <item>Aktivitas sehari-hari membutuhkan usaha minimal seperti beristirahat, bekerja di meja atau mengemudi.</item>
-        <item>Aktivitas sehari-hari membutuhkan beberapa usaha seperti periode berdiri, pekerjaan rumah tangga atau beberapa latihan ringan.</item>
+        <item>Aktivitas sehari-hari membutuhkan beberapa usaha seperti berdiri, pekerjaan rumah tangga atau beberapa latihan ringan.</item>
         <item>Aktivitas sehari-hari memerlukan upaya yang wajar seperti berdiri, kerja fisik, atau olahraga ringan yang teratur.</item>
         <item>Aktivitas sehari-hari memerlukan upaya fisik yang intens seperti pekerjaan konstruksi atau olahraga berat yang teratur.</item>
     </string-array>

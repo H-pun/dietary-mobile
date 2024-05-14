@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.DietProgress
-import org.cisnux.mydietary.domain.models.FoodDiaryReport
+import org.cisnux.mydietary.domain.models.Report
 import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class ReportViewModel @Inject constructor(
     private val userProfileUseCase: UserProfileUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
 ) : ViewModel() {
-    private val _nutritionReportState = MutableStateFlow<UiState<List<FoodDiaryReport>>>(UiState.Initialize)
+    private val _nutritionReportState = MutableStateFlow<UiState<Report>>(UiState.Initialize)
     val nutritionReportState get() = _nutritionReportState.asStateFlow()
     private val _dietProgressState = MutableStateFlow<UiState<List<DietProgress>>>(UiState.Initialize)
     val dietProgressState get() = _dietProgressState.asStateFlow()

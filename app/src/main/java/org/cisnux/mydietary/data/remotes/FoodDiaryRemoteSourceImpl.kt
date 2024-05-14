@@ -8,7 +8,7 @@ import org.cisnux.mydietary.data.remotes.bodyrequests.GetFoodDiaryParams
 import org.cisnux.mydietary.data.remotes.responses.FoodDiaryDetailResponse
 import org.cisnux.mydietary.data.remotes.responses.FoodDiaryResponse
 import org.cisnux.mydietary.data.remotes.responses.DetectedResponse
-import org.cisnux.mydietary.data.remotes.responses.ReportResponse
+import org.cisnux.mydietary.data.remotes.responses.MonthlyReportResponse
 import org.cisnux.mydietary.utils.Failure
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -20,9 +20,11 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.util.network.UnresolvedAddressException
 import io.ktor.utils.io.streams.asInput
@@ -30,7 +32,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import org.cisnux.mydietary.data.remotes.bodyrequests.ReportBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.KeywordResponse
+import org.cisnux.mydietary.data.remotes.responses.WeeklyReportResponse
 import java.io.File
 import javax.inject.Inject
 
@@ -60,7 +64,8 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 // dan menyimpan response ke variable response
                 val response = client.get(
                     urlString =
-                    "$baseUrl/food-diary/user?idUser=${getFoodDiaryParams.userId}&date=${getFoodDiaryParams.date}"
+                    getFoodDiaryParams.date?.let { date -> "$baseUrl/food-diary/user?idUser=${getFoodDiaryParams.userId}&date=${date}" }
+                        ?: "$baseUrl/food-diary/user?idUser=${getFoodDiaryParams.userId}"
                 ) {
                     headers {
                         // menambahkan header authorization dengan nilai access token
@@ -88,7 +93,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 // catch error dari koneksi jaringan
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Either.Left(e)
             }
         }
@@ -138,7 +143,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             // catch error dari koneksi jaringan
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Either.Left(e)
         }
     }
@@ -248,7 +253,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 // catch error dari koneksi jaringan
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Either.Left(e)
             }
         }
@@ -322,21 +327,23 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 // catch error dari koneksi jaringan
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Either.Left(e)
             }
         }
 
     override suspend fun getFoodDiaryReports(
-        accessToken: String, userId: String, category: String
-    ): Either<Exception, List<ReportResponse>> = withContext(Dispatchers.IO) {
+        accessToken: String, reportBodyRequest: ReportBodyRequest
+    ): Either<Exception, List<Any>> = withContext(Dispatchers.IO) {
         try {
             val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
-            val response = client.get(
-                urlString = "$baseUrl/food-diary/report?idUser=$userId"
+            val response = client.post(
+                urlString = "$baseUrl/food-diary/report"
             ) {
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
+                    contentType(ContentType.Application.Json)
+                    setBody(reportBodyRequest)
                 }
             }
             val isSuccess = response.status.isSuccess()
@@ -351,12 +358,14 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 } ?: Either.Left(Exception(commonResponse?.message))
                 failure
             } else {
-                val commonResponse: CommonResponse<List<ReportResponse>> = response.body()
+                val commonResponse =
+                    if (reportBodyRequest.reportType.lowercase() == "monthly") response.body<CommonResponse<List<MonthlyReportResponse>>>()
+                    else response.body<CommonResponse<List<WeeklyReportResponse>>>()
                 Either.Right(commonResponse.data!!)
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Either.Left(e)
         }
     }
@@ -391,7 +400,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
             }
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Either.Left(e)
         }
     }
@@ -424,7 +433,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 Either.Right(null)
         } catch (e: UnresolvedAddressException) {
             Either.Left(Failure.ConnectionFailure())
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Either.Left(e)
         }
     }

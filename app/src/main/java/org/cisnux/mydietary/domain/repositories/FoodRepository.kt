@@ -9,8 +9,8 @@ import org.cisnux.mydietary.utils.FoodDiaryCategory
 import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.Flow
-import org.cisnux.mydietary.domain.models.FoodDiaryReport
 import org.cisnux.mydietary.domain.models.Keyword
+import org.cisnux.mydietary.domain.models.Report
 import java.io.File
 
 interface FoodRepository {
@@ -28,7 +28,11 @@ interface FoodRepository {
         date: String,
     ): Flow<UiState<List<FoodDiary>>>
 
-    fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>>
+    fun getDiaryFoodsByQuery(
+        accessToken: String,
+        userId: String,
+        query: String
+    ): Flow<UiState<List<FoodDiary>>>
 
     fun getKeywordSuggestions(accessToken: String, userId: String): Flow<UiState<List<Keyword>>>
 
@@ -51,6 +55,11 @@ interface FoodRepository {
         foodDiaryId: String
     ): Flow<UiState<FoodDiaryDetail>>
 
-    fun getFoodDiaryReports(accessToken: String, userId: String, category: ReportCategory): Flow<UiState<List<FoodDiaryReport>>>
+    fun getFoodDiaryReports(
+        accessToken: String,
+        userId: String,
+        category: ReportCategory
+    ): Flow<UiState<Report>>
+
     suspend fun updateBaseUrlApi(baseUrl: String)
 }

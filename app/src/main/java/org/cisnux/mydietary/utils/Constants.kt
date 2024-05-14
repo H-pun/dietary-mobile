@@ -4,10 +4,10 @@ const val DIETARY_API = "https://api.dietary.cloud"
 const val IMAGE_LOCATION = "https://storage.googleapis.com/dietary-app-407405.appspot.com"
 // nilai faktor untuk masing-masing level aktivitas
 val ACTIVITY_FACTOR = mapOf(
-    "sedentary" to 0.8,
-    "low active" to 0.9,
-    "active" to 1.0, // default
-    "very active" to 1.1
+    "sedentary" to 1.2,
+    "low active" to 1.375,
+    "active" to 1.55, // default
+    "very active" to 1.725
 )
 // nilai faktor untuk masing-masing goals
 val GOALS_FACTOR = mapOf(

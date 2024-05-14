@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import org.cisnux.mydietary.utils.Failure
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine

@@ -1,14 +1,13 @@
 package org.cisnux.mydietary.data.remotes
 
 import arrow.core.Either
-import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.GetFoodDiaryParams
+import org.cisnux.mydietary.data.remotes.bodyrequests.ReportBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.FoodDiaryDetailResponse
 import org.cisnux.mydietary.data.remotes.responses.FoodDiaryResponse
 import org.cisnux.mydietary.data.remotes.responses.DetectedResponse
 import org.cisnux.mydietary.data.remotes.responses.KeywordResponse
-import org.cisnux.mydietary.data.remotes.responses.ReportResponse
 import java.io.File
 
 interface FoodDiaryRemoteSource {
@@ -34,9 +33,9 @@ interface FoodDiaryRemoteSource {
 
     suspend fun getFoodDiaryReports(
         accessToken: String,
-        userId: String,
-        category: String
-    ): Either<Exception, List<ReportResponse>>
+        reportBodyRequest: ReportBodyRequest
+    ): Either<Exception, List<Any>>
+
 
     // optional
     suspend fun getKeywordSuggestions(

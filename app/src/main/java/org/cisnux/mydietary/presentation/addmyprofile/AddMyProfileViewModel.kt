@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
-import org.cisnux.mydietary.utils.asUserProfile
+import org.cisnux.mydietary.utils.asAddUserProfile
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +23,7 @@ class AddMyProfileViewModel @Inject constructor(
     val addMyProfileState get() = _addMyProfileState.asStateFlow()
 
     fun addMyProfile(myProfile: MyProfile) {
-        val userProfile = myProfile.asUserProfile
+        val userProfile = myProfile.asAddUserProfile
         viewModelScope.launch {
             userProfileUseCase.addUserProfile(userProfile).collectLatest { uiState ->
                 _addMyProfileState.value = uiState
