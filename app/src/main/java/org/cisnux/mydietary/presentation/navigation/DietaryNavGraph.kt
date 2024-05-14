@@ -246,7 +246,12 @@ fun DietaryNavGraph(
             }
         ) {
             AddMyProfileScreen(
-                navigateToHome = navComponentAction.navigateToHome,
+                navigateToHome = {
+                    navComponentAction.navigateToHome(it)
+                    coroutineScope.launch {
+                        ReportWidget().updateAll(context)
+                    }
+                },
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )
         }
