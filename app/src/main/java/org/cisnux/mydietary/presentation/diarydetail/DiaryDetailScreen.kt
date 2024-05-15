@@ -95,7 +95,6 @@ fun DiaryDetailScreen(
     )
     LaunchedEffect(Unit) {
         scaffoldState.bottomSheetState.partialExpand()
-        scaffoldState.bottomSheetState.hide()
     }
     val snackbarHostState = remember {
         SnackbarHostState()

@@ -39,7 +39,7 @@ import java.util.Locale
 private fun DiaryCardPreview() {
     val food = FoodDiary(
         id = "1",
-        title = "Nasi Padang",
+        title = "Nasi Padang ayam sambal ijo",
         date = Instant.now().dayDateMonthYear(),
         time = Instant.now().hoursAndMinutes(),
         foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
@@ -137,7 +137,9 @@ fun DiaryCard(
                         text = foodName,
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
+                        maxLines = 2,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.width(180.dp)
                     )
                     Text(
                         text = "${String.format(locale, "%.2f", calorie)} kcal",
