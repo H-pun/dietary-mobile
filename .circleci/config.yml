@@ -1,0 +1,32 @@
+version: 2.1
+orbs:
+  android: circleci/android@2.3.0
+jobs:
+  test:
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: 2021.10.1
+    steps:
+      - run:
+          name: Download JDK 17
+          command: |
+            curl -s "https://get.sdkman.io" | bash && source "$HOME/.sdkman/bin/sdkman-init.sh"
+            sdk install java 22.0.1-oracle
+            java --version
+      - checkout
+      - android/run-tests:
+          test-command: ./gradlew core:test
+          max-tries: 1
+      - store_test_results:
+          path: core/build/test-results
+      - run:
+          name: Run Build
+          command: ./gradlew assembleRelease
+      - store_artifacts:
+          path: app/build/outputs/apk/release/
+          destination: artifact-file
+workflows:
+  test:
+    jobs:
+      - test
