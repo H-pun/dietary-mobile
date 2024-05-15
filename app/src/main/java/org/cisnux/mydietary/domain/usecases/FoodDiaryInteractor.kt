@@ -1,6 +1,8 @@
 package org.cisnux.mydietary.domain.usecases
 
 import android.content.Context
+import android.graphics.Bitmap
+import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -59,6 +61,7 @@ class FoodDiaryInteractor @Inject constructor(
                         uiState.copy(data = uiState.data?.map { foodDiary ->
                             val imageLoader = ImageLoader(context)
                             val request = ImageRequest.Builder(context)
+                                .size(100)
                                 .allowConversionToBitmap(true)
                                 .diskCachePolicy(CachePolicy.ENABLED)
                                 .data(foodDiary.foodPictureUrl)
