@@ -2,7 +2,6 @@ package org.cisnux.mydietary.data.repositories
 
 import org.cisnux.mydietary.data.locals.BaseApiUrlLocalSource
 import org.cisnux.mydietary.data.remotes.FoodDiaryRemoteSource
-import org.cisnux.mydietary.data.remotes.UserProfileRemoteSource
 import org.cisnux.mydietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.GetFoodDiaryParams
 import org.cisnux.mydietary.domain.models.AddFoodDiary
@@ -10,7 +9,6 @@ import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.FoodDiaryReport
 import org.cisnux.mydietary.domain.models.FoodNutrition
-import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.models.Option
 import org.cisnux.mydietary.domain.models.Food
 import org.cisnux.mydietary.domain.models.Question
@@ -24,13 +22,11 @@ import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.convertISOToInstant
 import org.cisnux.mydietary.utils.getCurrentDateTimeInISOFormat
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.withContext
 import org.cisnux.mydietary.data.remotes.bodyrequests.ReportBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.MonthlyReportResponse
@@ -45,7 +41,6 @@ import java.io.File
 class FoodDiaryRepositoryImpl @Inject constructor(
     private val foodDiaryRemoteSource: FoodDiaryRemoteSource,
     private val baseApiUrlLocalSource: BaseApiUrlLocalSource,
-    private val userProfileRemoteSource: UserProfileRemoteSource,
 ) : FoodRepository {
 
     override val baseUrl: Flow<String>
@@ -215,89 +210,56 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 
-    override fun predictFood(
-        userId: String,
+    override fun predictFoods(
         accessToken: String,
         foodPicture: File,
-        date: String
-    ): Flow<UiState<Pair<UserNutrition, FoodNutrition>>> =
-        channelFlow {
-            trySend(UiState.Loading)
-            withContext(Dispatchers.IO) {
-                val deferredPredictFoods = async {
-                    foodDiaryRemoteSource.predictFoods(accessToken, foodPicture)
-                }
-                val deferredDailyNutrients = async {
-                    userProfileRemoteSource.getDailyNutrients(
-                        accessToken = accessToken,
-                        userId = userId,
-                        date = date
+    ): Flow<UiState<FoodNutrition>> =
+        flow {
+            emit(UiState.Loading)
+            foodDiaryRemoteSource.predictFoods(accessToken, foodPicture).fold(
+                ifLeft = { exception -> emit(UiState.Error(exception)) },
+                ifRight = {
+                    emit(UiState.Success(data = FoodNutrition(
+                        image = "$IMAGE_LOCATION/${it.imagePath}",
+                        totalFat = it.totalFat,
+                        totalProtein = it.totalProtein,
+                        totalCalories = it.totalCalories,
+                        totalCarbohydrate = it.totalCarbohydrate,
+                        foods = it.foods.map { predictedFoodResponse ->
+                            val serving =
+                                predictedFoodResponse.foodDetail.serving.first { servingResponse ->
+                                    servingResponse.metricServingAmount.toInt() == 100
+                                }
+                            Food(
+                                id = predictedFoodResponse.foodDetail.id,
+                                name = predictedFoodResponse.foodDetail.name,
+                                questions = predictedFoodResponse.foodDetail.questions.filter { questionResponse -> questionResponse.type == "food" }
+                                    .map { questionResponse ->
+                                        Question(
+                                            id = questionResponse.id,
+                                            question = questionResponse.question,
+                                            options = questionResponse.options.map { optionResponse ->
+                                                Option(
+                                                    id = optionResponse.id,
+                                                    answer = optionResponse.answer,
+                                                    reference = optionResponse.reference
+                                                )
+                                            })
+                                    },
+                                calories = serving.calories,
+                                carbohydrates = serving.carbohydrate,
+                                protein = serving.protein,
+                                fat = serving.fat,
+                                sugar = serving.sugar,
+                                feedback = predictedFoodResponse.foodDetail.questions.filter { questionResponse -> questionResponse.type == "information" }
+                                    .map { questionResponse -> questionResponse.question },
+                            )
+                        }
+                    )
+                    )
                     )
                 }
-                Pair(deferredPredictFoods.await(), deferredDailyNutrients.await()).run {
-                    first.isLeft {
-                        trySend(UiState.Error(it))
-                        true
-                    }
-                    second.isLeft {
-                        trySend(UiState.Error(it))
-                        true
-                    }
-                    val predictedResponse = first.getOrNull()
-                    val nutrientResponse = second.getOrNull()
-                    if (predictedResponse != null && nutrientResponse != null) {
-                        trySend(
-                            UiState.Success(
-                                data = Pair(
-                                    first = UserNutrition(
-                                        totalCaloriesToday = nutrientResponse.calories,
-                                        totalFatToday = nutrientResponse.fat,
-                                        totalCarbohydrateToday = nutrientResponse.carbohydrate,
-                                        totalProteinToday = nutrientResponse.protein
-                                    ),
-                                    second = FoodNutrition(
-                                        image = "$IMAGE_LOCATION/${predictedResponse.imagePath}",
-                                        totalFat = predictedResponse.totalFat,
-                                        totalProtein = predictedResponse.totalProtein,
-                                        totalCalories = predictedResponse.totalCalories,
-                                        totalCarbohydrate = predictedResponse.totalCarbohydrate,
-                                        foods = predictedResponse.foods.map { predictedFoodResponse ->
-                                            val serving =
-                                                predictedFoodResponse.foodDetail.serving.first { servingResponse ->
-                                                    servingResponse.metricServingAmount.toInt() == 100
-                                                }
-                                            Food(
-                                                id = predictedFoodResponse.foodDetail.id,
-                                                name = predictedFoodResponse.foodDetail.name,
-                                                questions = predictedFoodResponse.foodDetail.questions.filter { questionResponse -> questionResponse.type == "food" }
-                                                    .map { questionResponse ->
-                                                        Question(
-                                                            id = questionResponse.id,
-                                                            question = questionResponse.question,
-                                                            options = questionResponse.options.map { optionResponse ->
-                                                                Option(
-                                                                    id = optionResponse.id,
-                                                                    answer = optionResponse.answer,
-                                                                    reference = optionResponse.reference
-                                                                )
-                                                            })
-                                                    },
-                                                calories = serving.calories,
-                                                carbohydrates = serving.carbohydrate,
-                                                protein = serving.protein,
-                                                fat = serving.fat,
-                                                sugar = serving.sugar,
-                                                feedback = predictedFoodResponse.foodDetail.questions.filter { questionResponse -> questionResponse.type == "information" }
-                                                    .map { questionResponse -> questionResponse.question },
-                                            )
-                                        }
-                                    )
-                                )
-                            )
-                        )
-                    }
-                }
-            }
+            )
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()
 
@@ -390,27 +352,28 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
                 ifRight = {
                     val chunkedFoodDiaries = it.map { reportResponse ->
-                        if (reportResponse is MonthlyReportResponse) {
-                            FoodDiaryReport(
+                        when (reportResponse) {
+                            is MonthlyReportResponse -> {
+                                FoodDiaryReport(
+                                    averageCarbohydrate = reportResponse.averageCarbohydrate,
+                                    averageCalories = reportResponse.averageCalories,
+                                    averageFat = reportResponse.averageFat,
+                                    averageProtein = reportResponse.averageProtein,
+                                    label = reportResponse.week.toString(),
+                                    description = "${reportResponse.startDate.asDateAndMonth} - ${reportResponse.endDate.asDateAndMonth}",
+                                )
+                            }
+
+                            is WeeklyReportResponse -> FoodDiaryReport(
                                 averageCarbohydrate = reportResponse.averageCarbohydrate,
                                 averageCalories = reportResponse.averageCalories,
                                 averageFat = reportResponse.averageFat,
                                 averageProtein = reportResponse.averageProtein,
-                                label = reportResponse.week.toString(),
-                                description = "${reportResponse.startDate.asDateAndMonth} - ${reportResponse.endDate.asDateAndMonth}",
+                                label = reportResponse.date.asDay,
+                                description = reportResponse.date.fromLocalDateToDayDateAndMonth,
+                                date = reportResponse.date
                             )
-                        } else
-                            (reportResponse as WeeklyReportResponse).let { weeklyReportResponse ->
-                                FoodDiaryReport(
-                                    averageCarbohydrate = weeklyReportResponse.averageCarbohydrate,
-                                    averageCalories = weeklyReportResponse.averageCalories,
-                                    averageFat = weeklyReportResponse.averageFat,
-                                    averageProtein = weeklyReportResponse.averageProtein,
-                                    label = weeklyReportResponse.date.asDay,
-                                    description = weeklyReportResponse.date.fromLocalDateToDayDateAndMonth,
-                                    date = weeklyReportResponse.date
-                                )
-                            }
+                        }
                     }.chunked(7)
                     val datePages = chunkedFoodDiaries.map { foodDiaries ->
                         val first = foodDiaries.first().date

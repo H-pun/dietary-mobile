@@ -8,6 +8,7 @@ import org.cisnux.mydietary.data.remotes.responses.FoodDiaryDetailResponse
 import org.cisnux.mydietary.data.remotes.responses.FoodDiaryResponse
 import org.cisnux.mydietary.data.remotes.responses.DetectedResponse
 import org.cisnux.mydietary.data.remotes.responses.KeywordResponse
+import org.cisnux.mydietary.data.remotes.responses.ReportResponse
 import java.io.File
 
 interface FoodDiaryRemoteSource {
@@ -34,7 +35,7 @@ interface FoodDiaryRemoteSource {
     suspend fun getFoodDiaryReports(
         accessToken: String,
         reportBodyRequest: ReportBodyRequest
-    ): Either<Exception, List<Any>>
+    ): Either<Exception, List<ReportResponse>>
 
 
     // optional

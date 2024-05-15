@@ -7,8 +7,8 @@ data class MonthlyReportResponse(
     val week: Int,
     val startDate: String,
     val endDate: String,
-    val averageCalories: Float,
-    val averageCarbohydrate: Float,
-    val averageProtein: Float,
-    val averageFat: Float,
-)
+    override val averageCalories: Float,
+    override val averageCarbohydrate: Float,
+    override val averageProtein: Float,
+    override val averageFat: Float,
+):ReportResponse

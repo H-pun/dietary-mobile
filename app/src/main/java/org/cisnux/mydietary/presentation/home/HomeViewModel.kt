@@ -101,7 +101,7 @@ class HomeViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val keywordSuggestionState = refreshSuggestionKeywords.asStateFlow().flatMapMerge { isRefresh ->
         if (isRefresh)
-            query.asStateFlow().debounce(250L).flatMapLatest { query ->
+            query.asStateFlow().debounce(200L).flatMapLatest { query ->
                 if (query.isBlank())
                     flow {
                         emit(UiState.Success(listOf()))

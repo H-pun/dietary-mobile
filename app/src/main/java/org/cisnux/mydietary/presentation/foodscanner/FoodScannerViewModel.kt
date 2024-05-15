@@ -12,9 +12,12 @@ import org.cisnux.mydietary.domain.usecases.FileUseCase
 import org.cisnux.mydietary.domain.usecases.FoodDiaryUseCase
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import java.io.File
 import javax.inject.Inject
 
@@ -23,7 +26,15 @@ class FoodScannerViewModel @Inject constructor(
     private val fileUseCase: FileUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     private val foodDiaryUseCase: FoodDiaryUseCase,
+    private val userProfileUseCase: UserProfileUseCase,
 ) : ViewModel() {
+    init {
+        viewModelScope.launch {
+            userProfileUseCase.userDailyNutrition.distinctUntilChanged().collectLatest {
+                _userDailyNutritionState.value = it
+            }
+        }
+    }
 
     private var _cameraFile: MutableStateFlow<File?> = MutableStateFlow(null)
     val cameraFile get() = _cameraFile.asStateFlow()
@@ -31,8 +42,12 @@ class FoodScannerViewModel @Inject constructor(
     val galleryFile get() = _galleryFile.asStateFlow()
 
     private val _predictedResultState =
-        MutableStateFlow<UiState<Pair<UserNutrition, FoodNutrition>>>(UiState.Initialize)
+        MutableStateFlow<UiState<FoodNutrition>>(UiState.Initialize)
     val predictedResultState get() = _predictedResultState.asStateFlow()
+
+    private val _userDailyNutritionState =
+        MutableStateFlow<UiState<UserNutrition>>(UiState.Initialize)
+    val userDailyNutritionState = _userDailyNutritionState.asSharedFlow()
 
     private val _addFoodDiaryState = MutableStateFlow<UiState<String>>(UiState.Initialize)
     val addFoodDiaryState get() = _addFoodDiaryState.asStateFlow()

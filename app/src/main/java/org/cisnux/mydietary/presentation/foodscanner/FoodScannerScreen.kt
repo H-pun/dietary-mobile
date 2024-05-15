@@ -182,12 +182,16 @@ fun FoodScannerScreen(
         mutableStateOf(true)
     }
     val predictedResultState by viewModel.predictedResultState.collectAsState()
-    val userNutrition = if (predictedResultState is UiState.Success) {
-        (predictedResultState as UiState.Success<Pair<UserNutrition, FoodNutrition>>).data!!.first
+    val userNutritionState by viewModel.userDailyNutritionState.collectAsState(initial = UiState.Initialize)
+
+    val userNutrition = if (userNutritionState is UiState.Success) {
+        (userNutritionState as UiState.Success<UserNutrition>).data!!
     } else null
+
     val foodNutrition = if (predictedResultState is UiState.Success) {
-        (predictedResultState as UiState.Success<Pair<UserNutrition, FoodNutrition>>).data!!.second
+        (predictedResultState as UiState.Success<FoodNutrition>).data!!
     } else null
+
     val foods = foodNutrition?.foods ?: listOf()
 
     val foodQuestions =

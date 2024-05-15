@@ -364,7 +364,7 @@ private fun SignInBody(
         OutlinedButton(
             shape = MaterialTheme.shapes.medium,
             onClick = onGoogleSignIn,
-            enabled = !isEmailPassSignInLoading and !isEmailPassSignInLoading,
+            enabled = !isEmailPassSignInLoading and !isGoogleSignInLoading,
             modifier = Modifier.fillMaxWidth(),
         ) {
             if (isGoogleSignInLoading)

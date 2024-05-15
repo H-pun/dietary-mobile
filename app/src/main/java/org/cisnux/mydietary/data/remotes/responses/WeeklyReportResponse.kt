@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WeeklyReportResponse(
     val date: String,
-    val averageCalories: Float,
-    val averageCarbohydrate: Float,
-    val averageProtein: Float,
-    val averageFat: Float,
-)
+    override val averageCalories: Float,
+    override val averageCarbohydrate: Float,
+    override val averageProtein: Float,
+    override val averageFat: Float,
+):ReportResponse

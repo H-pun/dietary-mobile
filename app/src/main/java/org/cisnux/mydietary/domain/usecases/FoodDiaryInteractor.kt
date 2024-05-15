@@ -12,13 +12,11 @@ import org.cisnux.mydietary.domain.models.AddFoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.FoodNutrition
-import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.repositories.FoodRepository
 import org.cisnux.mydietary.utils.Failure
 import org.cisnux.mydietary.utils.FoodDiaryCategory
 import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.currentLocalDateTimeInBasicISOFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -30,9 +28,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.cisnux.mydietary.domain.models.Keyword
 import org.cisnux.mydietary.domain.models.Report
-import org.cisnux.mydietary.utils.calculateMaxDailyNutrition
 import java.io.File
-import java.time.Instant
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -174,26 +170,21 @@ class FoodDiaryInteractor @Inject constructor(
         }.flowOn(Dispatchers.IO).distinctUntilChanged()
 
     @OptIn(ExperimentalCoilApi::class)
-    override fun predictFoods(foodPicture: File): Flow<UiState<Pair<UserNutrition, FoodNutrition>>> =
+    override fun predictFoods(foodPicture: File): Flow<UiState<FoodNutrition>> =
         userProfileUseCase.userProfileDetail.combine(authenticationUseCase.accessToken) { userProfileDetail, accessToken ->
             Pair(first = accessToken, second = userProfileDetail)
         }
             .flatMapLatest {
                 it.first?.let { accessToken ->
-                    foodRepository.predictFood(
-                        userId = it.second.userAccountId,
+                    foodRepository.predictFoods(
                         accessToken = accessToken,
-                        foodPicture = foodPicture,
-                        date = Instant.now().currentLocalDateTimeInBasicISOFormat
+                        foodPicture = foodPicture
                     )
                         .map { uiState ->
                             if (uiState is UiState.Success) {
                                 val currentDataState = uiState.data!!
-                                // user profile
-                                val userProfile = it.second
-                                val userNutrition = currentDataState.first
 
-                                val image = currentDataState.second.image as String?
+                                val image = currentDataState.image as String?
                                 val imageLoader = ImageLoader(context)
                                 val imageRequest = ImageRequest.Builder(context)
                                     .allowConversionToBitmap(true)
@@ -206,10 +197,7 @@ class FoodDiaryInteractor @Inject constructor(
 
                                 UiState.Success(
                                     data = currentDataState.copy(
-                                        first = userProfile.calculateMaxDailyNutrition(userNutrition = userNutrition),
-                                        second = currentDataState.second.copy(
-                                            image = path?.toFile()
-                                        )
+                                        image = path?.toFile()
                                     )
                                 )
                             } else uiState

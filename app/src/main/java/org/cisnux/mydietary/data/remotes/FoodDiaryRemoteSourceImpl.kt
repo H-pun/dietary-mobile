@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import org.cisnux.mydietary.data.remotes.bodyrequests.ReportBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.KeywordResponse
+import org.cisnux.mydietary.data.remotes.responses.ReportResponse
 import org.cisnux.mydietary.data.remotes.responses.WeeklyReportResponse
 import java.io.File
 import javax.inject.Inject
@@ -334,7 +335,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
 
     override suspend fun getFoodDiaryReports(
         accessToken: String, reportBodyRequest: ReportBodyRequest
-    ): Either<Exception, List<Any>> = withContext(Dispatchers.IO) {
+    ): Either<Exception, List<ReportResponse>> = withContext(Dispatchers.IO) {
         try {
             val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
             val response = client.post(

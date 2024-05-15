@@ -1,16 +1,15 @@
 package org.cisnux.mydietary.domain.repositories
 
+import kotlinx.coroutines.flow.Flow
 import org.cisnux.mydietary.domain.models.AddFoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.FoodNutrition
-import org.cisnux.mydietary.domain.models.UserNutrition
+import org.cisnux.mydietary.domain.models.Keyword
+import org.cisnux.mydietary.domain.models.Report
 import org.cisnux.mydietary.utils.FoodDiaryCategory
 import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
-import kotlinx.coroutines.flow.Flow
-import org.cisnux.mydietary.domain.models.Keyword
-import org.cisnux.mydietary.domain.models.Report
 import java.io.File
 
 interface FoodRepository {
@@ -42,12 +41,10 @@ interface FoodRepository {
         addFoodDiary: AddFoodDiary
     ): Flow<UiState<String>>
 
-    fun predictFood(
-        userId: String,
+    fun predictFoods(
         accessToken: String,
-        foodPicture: File,
-        date: String
-    ): Flow<UiState<Pair<UserNutrition, FoodNutrition>>>
+        foodPicture: File
+    ): Flow<UiState<FoodNutrition>>
 
     fun deleteFoodDiaryById(accessToken: String, foodDiaryId: String): Flow<UiState<Nothing>>
     fun getFoodDiaryDetailById(
