@@ -627,7 +627,7 @@ private fun ReportBody(
                     val labelListKey = remember {
                         ExtraStore.Key<List<String>>()
                     }
-                    LaunchedEffect(nutritionReports) {
+                    LaunchedEffect(nutritionReports, selectedDate, selectedFilter) {
                         firstModel.tryRunTransaction {
                             lineSeries {
                                 series(nutritionReports.map { it.averageCalories })
