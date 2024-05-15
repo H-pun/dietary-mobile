@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -86,10 +87,15 @@ fun DiaryDetailScreen(
     viewModel: DiaryDetailViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberModalBottomSheetState()
+        bottomSheetState = rememberModalBottomSheetState(
+            confirmValueChange = {
+                it != SheetValue.Hidden
+            }
+        )
     )
     LaunchedEffect(Unit) {
         scaffoldState.bottomSheetState.partialExpand()
+        scaffoldState.bottomSheetState.hide()
     }
     val snackbarHostState = remember {
         SnackbarHostState()
