@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$/../../../app" dumb="true">
+      <excludeFolder url="file://$MODULE_DIR$/../../../app/release" />
+    </content>
+  </component>
+  <component name="ModuleClassLoaderOverlays">
+    <paths>
+      <option value="/var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/overlay10084051314289515542" />
+      <option value="/var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/overlay5029465994241761608" />
+      <option value="/var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/overlay5592058055592963268" />
+      <option value="/var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/overlay14652283023641591596" />
+      <option value="/var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/overlay18039051483334341509" />
+      <option value="/var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/overlay8983609736824506706" />
+      <option value="/var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/overlay2494879019265953417" />
+      <option value="/var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/overlay8785150312133154407" />
+      <option value="/var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/overlay5471562003341329964" />
+    </paths>
+  </component>
+</module>
