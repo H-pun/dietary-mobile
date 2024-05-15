@@ -9,17 +9,17 @@ jobs:
       tag: 2021.10.1
     steps:
       - run:
-          name: Download JDK 17
+          name: Download JDK 22
           command: |
             curl -s "https://get.sdkman.io" | bash && source "$HOME/.sdkman/bin/sdkman-init.sh"
             sdk install java 22.0.1-oracle
             java --version
       - checkout
       - android/run-tests:
-          test-command: ./gradlew core:test
+          test-command: ./gradlew test
           max-tries: 1
       - store_test_results:
-          path: core/build/test-results
+          path: build/test-results
       - run:
           name: Run Build
           command: ./gradlew assembleRelease
