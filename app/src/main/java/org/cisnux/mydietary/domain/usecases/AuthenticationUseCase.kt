@@ -4,6 +4,7 @@ import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.utils.AuthenticationState
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.Flow
+import org.cisnux.mydietary.domain.models.ChangePassword
 
 interface AuthenticationUseCase {
     val accessToken: Flow<String?>
@@ -13,6 +14,7 @@ interface AuthenticationUseCase {
     fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
     fun signInWithGoogle(token: String): Flow<UiState<Nothing>>
     fun signUpWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
-    fun resetPassword(emailAddress: String): Flow<UiState<Nothing>>
+    fun resetPassword(emailAddress: String): Flow<UiState<String>>
+    fun changePassword(changePassword: ChangePassword): Flow<UiState<String>>
     suspend fun signOut()
 }

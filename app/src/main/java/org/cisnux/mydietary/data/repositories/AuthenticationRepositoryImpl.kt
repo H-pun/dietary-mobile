@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import org.cisnux.mydietary.data.remotes.bodyrequests.GoogleTokenRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.NewPasswordBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.ResetPasswordBodyRequest
+import org.cisnux.mydietary.domain.models.ChangePassword
 import javax.inject.Inject
 
 
@@ -75,14 +78,42 @@ class AuthenticationRepositoryImpl @Inject constructor(
             )
     }
 
-    override fun resetPassword(emailAddress: String): Flow<UiState<Nothing>> =
+    override fun resetPassword(emailAddress: String): Flow<UiState<String>> =
         flow {
             emit(UiState.Loading)
-            delay(1000L)
-//            emit(UiState.Error(error = Failure.BadRequestFailure(message = "email address or password are not valid")))
-            emit(UiState.Success())
+            userAccountRemoteSource.resetPassword(
+                resetPassword = ResetPasswordBodyRequest(
+                    emailAddress = emailAddress
+                )
+            ).fold(
+                ifLeft = { exception ->
+                    emit(UiState.Error(exception))
+                },
+                ifRight = {
+                    emit(UiState.Success(it))
+                }
+            )
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
+
+    override fun updatePassword(changePassword: ChangePassword): Flow<UiState<String>> = flow {
+        emit(UiState.Loading)
+        userAccountRemoteSource.updatePassword(
+            newPassword = NewPasswordBodyRequest(
+                code = changePassword.code,
+                newPassword = changePassword.newPassword,
+                emailAddress = changePassword.emailAddress
+            )
+        )
+            .fold(
+                ifLeft = { exception ->
+                    emit(UiState.Error(exception))
+                },
+                ifRight = {
+                    emit(UiState.Success(it))
+                })
+    }.distinctUntilChanged()
+        .flowOn(Dispatchers.IO)
 
     override suspend fun deleteSession() = withContext(Dispatchers.IO) {
         userAccountLocalSource.updateAccessToken("")

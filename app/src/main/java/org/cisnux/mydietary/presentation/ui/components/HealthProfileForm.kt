@@ -29,8 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.isIntAnswerValid
-import org.cisnux.mydietary.utils.isGreaterThanZeroValid
+import org.cisnux.mydietary.utils.isIntAndGreaterThanZero
+import org.cisnux.mydietary.utils.isFloatAndGreaterThanZero
 
 @Preview(showBackground = true)
 @Composable
@@ -116,7 +116,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (age.isNotEmpty() and !age.isIntAnswerValid())
+                if (age.isNotEmpty() and !age.isIntAndGreaterThanZero())
                     Text(
                         text = stringResource(R.string.age_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -127,9 +127,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = age.isNotEmpty() and !age.isIntAnswerValid(),
+            isError = age.isNotEmpty() and !age.isIntAndGreaterThanZero(),
             trailingIcon = {
-                if (age.isNotEmpty() and !age.isIntAnswerValid())
+                if (age.isNotEmpty() and !age.isIntAndGreaterThanZero())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
@@ -169,7 +169,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (weight.isNotEmpty() and !weight.isGreaterThanZeroValid())
+                if (weight.isNotEmpty() and !weight.isFloatAndGreaterThanZero())
                     Text(
                         text = stringResource(R.string.weight_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -180,9 +180,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = weight.isNotEmpty() and !weight.isGreaterThanZeroValid(),
+            isError = weight.isNotEmpty() and !weight.isFloatAndGreaterThanZero(),
             trailingIcon = {
-                if (weight.isNotEmpty() and !weight.isGreaterThanZeroValid())
+                if (weight.isNotEmpty() and !weight.isFloatAndGreaterThanZero())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
@@ -223,7 +223,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (height.isNotEmpty() and !height.isGreaterThanZeroValid())
+                if (height.isNotEmpty() and !height.isFloatAndGreaterThanZero())
                     Text(
                         text = stringResource(R.string.height_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -234,9 +234,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = height.isNotEmpty() and !height.isGreaterThanZeroValid(),
+            isError = height.isNotEmpty() and !height.isFloatAndGreaterThanZero(),
             trailingIcon = {
-                if (height.isNotEmpty() and !height.isGreaterThanZeroValid())
+                if (height.isNotEmpty() and !height.isFloatAndGreaterThanZero())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
@@ -277,7 +277,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (waistCircumference.isNotEmpty() and !waistCircumference.isGreaterThanZeroValid())
+                if (waistCircumference.isNotEmpty() and !waistCircumference.isFloatAndGreaterThanZero())
                     Text(
                         text = stringResource(R.string.waist_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -288,9 +288,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = waistCircumference.isNotEmpty() and !waistCircumference.isGreaterThanZeroValid(),
+            isError = waistCircumference.isNotEmpty() and !waistCircumference.isFloatAndGreaterThanZero(),
             trailingIcon = {
-                if (waistCircumference.isNotEmpty() and !waistCircumference.isGreaterThanZeroValid())
+                if (waistCircumference.isNotEmpty() and !waistCircumference.isFloatAndGreaterThanZero())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,

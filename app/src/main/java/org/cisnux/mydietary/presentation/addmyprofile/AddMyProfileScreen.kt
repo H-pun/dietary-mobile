@@ -42,9 +42,9 @@ import org.cisnux.mydietary.presentation.ui.components.MyProfileForm
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.Failure
-import org.cisnux.mydietary.utils.isIntAnswerValid
-import org.cisnux.mydietary.utils.isGreaterThanZeroValid
-import org.cisnux.mydietary.utils.isFloatAnswerValid
+import org.cisnux.mydietary.utils.isIntAndGreaterThanZero
+import org.cisnux.mydietary.utils.isFloatAndGreaterThanZero
+import org.cisnux.mydietary.utils.isFloatAndGreaterAndEqualToZero
 import org.cisnux.mydietary.utils.isUsernameValid
 import org.cisnux.mydietary.utils.UiState
 
@@ -453,9 +453,9 @@ private fun MyProfileBody(
             onClick = onBuildProfile,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = username.isUsernameValid() and age.isIntAnswerValid()
-                    and weight.isGreaterThanZeroValid() and height.isGreaterThanZeroValid()
-                    and weightTarget.isFloatAnswerValid() and !isBuildProfileLoading,
+            enabled = username.isUsernameValid() and age.isIntAndGreaterThanZero()
+                    and weight.isFloatAndGreaterThanZero() and height.isFloatAndGreaterThanZero()
+                    and weightTarget.isFloatAndGreaterAndEqualToZero() and !isBuildProfileLoading,
         ) {
             if (isBuildProfileLoading)
                 CircularProgressIndicator()

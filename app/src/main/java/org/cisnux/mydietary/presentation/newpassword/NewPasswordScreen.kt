@@ -1,6 +1,7 @@
 package org.cisnux.mydietary.presentation.newpassword
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,10 +22,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,15 +50,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
+import org.cisnux.mydietary.utils.AppDestination
+import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.isPasswordSecure
+import org.cisnux.mydietary.utils.isResetCodeValid
 
 @Composable
 fun NewPasswordScreen(
     navigateToSignIn: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: NewPasswordViewModel = hiltViewModel()
 ) {
+    BackHandler {
+        navigateToSignIn(AppDestination.NewPasswordRoute.route)
+    }
+
+    var code by rememberSaveable(viewModel.code) {
+        mutableStateOf(viewModel.code)
+    }
     var password by rememberSaveable {
         mutableStateOf("")
     }
@@ -62,6 +80,37 @@ fun NewPasswordScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+    val context = LocalContext.current
+
+    val changePasswordState by viewModel.changePasswordState.collectAsState()
+
+    when (changePasswordState) {
+        is UiState.Success -> {
+            navigateToSignIn(AppDestination.NewPasswordRoute.route)
+        }
+
+        is UiState.Error -> {
+            (changePasswordState as UiState.Error).error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = context.getString(R.string.retry),
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                        if (snackbarResult == SnackbarResult.ActionPerformed)
+                            viewModel.changePassword(
+                                code = code,
+                                newPassword = password
+                            )
+                    }
+                }
+            }
+        }
+
+        else -> {}
+    }
 
     NewPasswordContent(
         body = {
@@ -70,7 +119,14 @@ fun NewPasswordScreen(
                 confirmationPassword = confirmationPassword,
                 onPasswordChange = { newValue -> password = newValue },
                 onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
-                onResetPassword = {},
+                onChangePassword = {
+                    viewModel.changePassword(
+                        code = code,
+                        newPassword = password
+                    )
+                },
+                code = code,
+                onCodeChange = { newValue -> code = newValue },
                 modifier = modifier.padding(it)
             )
         },
@@ -86,6 +142,9 @@ fun NewPasswordScreen(
 )
 @Composable
 private fun NewPasswordContentPreview() {
+    var code by rememberSaveable {
+        mutableStateOf("")
+    }
     var password by rememberSaveable {
         mutableStateOf("")
     }
@@ -101,7 +160,9 @@ private fun NewPasswordContentPreview() {
                     confirmationPassword = confirmationPassword,
                     onPasswordChange = { newValue -> password = newValue },
                     onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
-                    onResetPassword = {},
+                    onChangePassword = {},
+                    code = code,
+                    onCodeChange = { newValue -> code = newValue },
                     modifier = Modifier.padding(it)
                 )
             },
@@ -118,6 +179,9 @@ private fun NewPasswordContentPreview() {
 )
 @Composable
 private fun NewPasswordContentDarkPreview() {
+    var code by rememberSaveable {
+        mutableStateOf("")
+    }
     var password by rememberSaveable {
         mutableStateOf("")
     }
@@ -133,7 +197,9 @@ private fun NewPasswordContentDarkPreview() {
                     confirmationPassword = confirmationPassword,
                     onPasswordChange = { newValue -> password = newValue },
                     onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
-                    onResetPassword = {},
+                    onChangePassword = {},
+                    code = code,
+                    onCodeChange = { newValue -> code = newValue },
                     modifier = Modifier.padding(it)
                 )
             },
@@ -150,6 +216,9 @@ private fun NewPasswordContentDarkPreview() {
 )
 @Composable
 private fun NewPasswordContentLoadingDarkPreview() {
+    var code by rememberSaveable {
+        mutableStateOf("")
+    }
     var password by rememberSaveable {
         mutableStateOf("")
     }
@@ -165,9 +234,11 @@ private fun NewPasswordContentLoadingDarkPreview() {
                     confirmationPassword = confirmationPassword,
                     onPasswordChange = { newValue -> password = newValue },
                     onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
-                    onResetPassword = {},
+                    onChangePassword = {},
                     modifier = Modifier.padding(it),
-                    isResetPasswordLoading = true
+                    isResetPasswordLoading = true,
+                    code = code,
+                    onCodeChange = { newValue -> code = newValue }
                 )
             },
             snackbarHostState = SnackbarHostState(),
@@ -177,11 +248,13 @@ private fun NewPasswordContentLoadingDarkPreview() {
 
 @Composable
 private fun NewPasswordBody(
+    code: String,
     password: String,
     confirmationPassword: String,
     onPasswordChange: (String) -> Unit,
+    onCodeChange: (String) -> Unit,
     onConfirmationPasswordChange: (String) -> Unit,
-    onResetPassword: () -> Unit,
+    onChangePassword: () -> Unit,
     modifier: Modifier = Modifier,
     isResetPasswordLoading: Boolean = false
 ) {
@@ -192,6 +265,9 @@ private fun NewPasswordBody(
         mutableStateOf(false)
     }
     val scrollState = rememberScrollState()
+    var isCodeFocused by rememberSaveable {
+        mutableStateOf(false)
+    }
     var isPasswordFocused by rememberSaveable {
         mutableStateOf(false)
     }
@@ -202,8 +278,8 @@ private fun NewPasswordBody(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(state = scrollState),
+            .verticalScroll(state = scrollState)
+            .padding(PaddingValues(16.dp)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(32.dp))
@@ -228,6 +304,52 @@ private fun NewPasswordBody(
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.NumberPassword,
+                imeAction = ImeAction.Next
+            ),
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_number_100dp),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            },
+            value = code,
+            onValueChange = onCodeChange,
+            placeholder = {
+                Text(
+                    text = "Masukkan kode",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            supportingText = {
+                if (code.isNotEmpty() && !code.isResetCodeValid())
+                    Text(
+                        text = "Panjang dari kode harus 6 digit",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                else if (isCodeFocused)
+                    Text(
+                        text = stringResource(id = R.string.supporting_text_required),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+            },
+            singleLine = true,
+            label = {
+                Text(
+                    text = "Kode",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            isError = code.isNotEmpty() && !code.isResetCodeValid(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged {
+                    isCodeFocused = it.isFocused
+                },
+        )
         OutlinedTextField(
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
@@ -347,10 +469,10 @@ private fun NewPasswordBody(
                 },
         )
         Button(
-            onClick = onResetPassword,
+            onClick = onChangePassword,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = password.isPasswordSecure() and (password == confirmationPassword) and !isResetPasswordLoading,
+            enabled = code.isResetCodeValid() and password.isPasswordSecure() and (password == confirmationPassword) and !isResetPasswordLoading,
         ) {
             if (isResetPasswordLoading)
                 CircularProgressIndicator()

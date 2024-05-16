@@ -15,7 +15,7 @@ import javax.inject.Inject
 class ResetPasswordViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase
 ) : ViewModel() {
-    private val _resetPasswordState: MutableStateFlow<UiState<Nothing>> =
+    private val _resetPasswordState: MutableStateFlow<UiState<String>> =
         MutableStateFlow(UiState.Initialize)
     val resetPasswordState get() = _resetPasswordState.asStateFlow()
 

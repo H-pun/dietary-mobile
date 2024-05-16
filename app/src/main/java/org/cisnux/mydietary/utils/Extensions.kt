@@ -69,26 +69,28 @@ fun String.isUsernameValid(): Boolean {
     return Regex(usernameRegex).matches(this)
 }
 
-fun String.isIntAnswerValid(): Boolean = try {
+fun String.isIntAndGreaterThanZero(): Boolean = try {
     val value = this.toInt()
     value > 0
 } catch (e: NumberFormatException) {
     false
 }
 
-fun String.isGreaterThanZeroValid(): Boolean = try {
+fun String.isFloatAndGreaterThanZero(): Boolean = try {
     val number = this.toFloat()
     number > 0
 } catch (e: NumberFormatException) {
     false
 }
 
-fun String.isFloatAnswerValid(): Boolean = try {
+fun String.isFloatAndGreaterAndEqualToZero(): Boolean = try {
     val value = this.toFloat()
     value >= 0
 } catch (e: NumberFormatException) {
     false
 }
+
+fun String.isResetCodeValid(): Boolean = this.trim().length == 6
 
 fun Instant.dayDateMonthYear(): String {
     val locale = Locale("id", "ID")

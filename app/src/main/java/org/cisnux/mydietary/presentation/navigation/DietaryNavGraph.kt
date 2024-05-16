@@ -214,7 +214,10 @@ fun DietaryNavGraph(
                 )
             }
         ) {
-            ResetPasswordScreen(navigateToSignIn = navComponentAction.navigateUp)
+            ResetPasswordScreen(
+                navigateUp = navComponentAction.navigateUp,
+                navigateToNewPassword = navComponentAction.navigateToNewPassword
+            )
         }
         composable(
             route = AppDestination.AddMyProfileRoute.route,
@@ -303,8 +306,12 @@ fun DietaryNavGraph(
                 )
             },
             arguments = listOf(
-                navArgument(name = "email_address") {
+                navArgument(name = "emailAddress") {
                     nullable = false
+                    type = NavType.StringType
+                },
+                navArgument(name = "code") {
+                    nullable = true
                     type = NavType.StringType
                 },
             ),

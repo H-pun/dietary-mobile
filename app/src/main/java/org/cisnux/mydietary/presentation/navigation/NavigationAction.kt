@@ -53,6 +53,9 @@ class NavComponentAction(
     val navigateToSignUp: () -> Unit = {
         navController.navigate(AppDestination.SignUpRoute.route)
     }
+    val navigateToNewPassword: (emailAddress: String) -> Unit = {emailAddress ->
+        navController.navigate(route = AppDestination.NewPasswordRoute.createRouteUrl(emailAddress))
+    }
     val navigateToSignIn: (currentRoute: String) -> Unit = { currentRoute ->
         navController.navigate(route = AppDestination.SignInRoute.route) {
             popUpTo(currentRoute) {

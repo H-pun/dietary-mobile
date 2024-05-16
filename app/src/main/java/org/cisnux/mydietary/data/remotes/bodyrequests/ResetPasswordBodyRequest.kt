@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 // The body request to reset password
 @Serializable
 data class ResetPasswordBodyRequest(
-    @SerialName(value = "email_address")
+    @SerialName(value = "email")
     val emailAddress: String
 )

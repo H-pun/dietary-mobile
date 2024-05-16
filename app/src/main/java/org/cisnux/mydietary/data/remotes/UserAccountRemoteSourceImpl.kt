@@ -120,12 +120,12 @@ class UserAccountRemoteSourceImpl @Inject constructor(
             }
         }
 
-    override suspend fun resetPassword(resetPassword: ResetPasswordBodyRequest): Either<Exception, String?> =
+    override suspend fun resetPassword(resetPassword: ResetPasswordBodyRequest): Either<Exception, String> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.post(
-                    urlString = "$baseUrl/password"
+                    urlString = "$baseUrl/user/reset-password"
                 ) {
                     contentType(ContentType.Application.Json)
                     setBody(resetPassword)
@@ -141,7 +141,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                     } ?: Either.Left(Exception(commonResponse.message))
                     failure
                 } else {
-                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    val commonResponse: CommonResponse<String> = response.body()
                     Either.Right(commonResponse.message)
                 }
             } catch (e: UnresolvedAddressException) {
@@ -152,12 +152,12 @@ class UserAccountRemoteSourceImpl @Inject constructor(
         }
 
 
-    override suspend fun newPassword(newPassword: NewPasswordBodyRequest): Either<Exception, String?> =
+    override suspend fun updatePassword(newPassword: NewPasswordBodyRequest): Either<Exception, String> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
                 val response = client.put(
-                    urlString = "$baseUrl/password"
+                    urlString = "$baseUrl/user/verify-reset-password"
                 ) {
                     contentType(ContentType.Application.Json)
                     setBody(newPassword)
@@ -173,7 +173,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                     } ?: Either.Left(Exception(commonResponse.message))
                     failure
                 } else {
-                    val commonResponse: CommonResponse<Nothing> = response.body()
+                    val commonResponse: CommonResponse<String> = response.body()
                     Either.Right(commonResponse.message)
                 }
             } catch (e: UnresolvedAddressException) {

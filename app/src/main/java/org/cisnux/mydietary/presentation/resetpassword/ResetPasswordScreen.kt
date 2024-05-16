@@ -56,7 +56,8 @@ import org.cisnux.mydietary.utils.UiState
 
 @Composable
 fun ResetPasswordScreen(
-    navigateToSignIn: () -> Unit,
+    navigateToNewPassword: (String) -> Unit,
+    navigateUp: ()->Unit,
     modifier: Modifier = Modifier,
     viewModel: ResetPasswordViewModel = hiltViewModel()
 ) {
@@ -71,7 +72,7 @@ fun ResetPasswordScreen(
 
     when (resetPasswordState) {
         is UiState.Success -> {
-            navigateToSignIn()
+            navigateToNewPassword(emailAddress)
         }
 
         is UiState.Error -> {
@@ -97,7 +98,7 @@ fun ResetPasswordScreen(
     ResetPasswordContent(
         body = {
             ResetPasswordBody(
-                onNavigateUp = navigateToSignIn,
+                onNavigateUp = navigateUp,
                 onVerifyEmailAddress = { viewModel.resetPassword(emailAddress) },
                 emailAddress = emailAddress,
                 onEmailAddressChange = { newValue -> emailAddress = newValue },

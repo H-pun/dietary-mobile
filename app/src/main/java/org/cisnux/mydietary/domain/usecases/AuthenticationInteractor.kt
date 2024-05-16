@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
+import org.cisnux.mydietary.domain.models.ChangePassword
 
 @Suppress("DEPRECATION")
 @ExperimentalCoroutinesApi
@@ -105,8 +106,10 @@ class AuthenticationInteractor @Inject constructor(
     override fun signUpWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>> =
         authenticationRepository.addUserAccount(userAccount)
 
-    override fun resetPassword(emailAddress: String): Flow<UiState<Nothing>> =
+    override fun resetPassword(emailAddress: String): Flow<UiState<String>> =
         authenticationRepository.resetPassword(emailAddress)
+
+    override fun changePassword(changePassword: ChangePassword): Flow<UiState<String>> = authenticationRepository.updatePassword(changePassword = changePassword)
 
     override suspend fun signOut() {
         try {

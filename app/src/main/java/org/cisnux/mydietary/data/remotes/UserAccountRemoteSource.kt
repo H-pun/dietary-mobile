@@ -11,6 +11,6 @@ interface UserAccountRemoteSource {
     suspend fun verifyUserAccount(userAccount: UserAccountBodyRequest): Either<Exception, AddedUserAccountResponse>
     suspend fun verifyGoogleAccount(googleToken: GoogleTokenRequest): Either<Exception, AddedUserAccountResponse>
     suspend fun addUserAccount(userAccount: UserAccountBodyRequest): Either<Exception, Nothing?>
-    suspend fun resetPassword(resetPassword: ResetPasswordBodyRequest): Either<Exception, String?>
-    suspend fun newPassword(newPassword: NewPasswordBodyRequest): Either<Exception, String?>
+    suspend fun resetPassword(resetPassword: ResetPasswordBodyRequest): Either<Exception, String>
+    suspend fun updatePassword(newPassword: NewPasswordBodyRequest): Either<Exception, String>
 }
