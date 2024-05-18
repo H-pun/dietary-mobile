@@ -14,26 +14,25 @@ import java.io.File
 
 interface FoodRepository {
     val baseUrl: Flow<String>
-    fun getDiaryFoodsByDate(
+    fun getFoodDiaries(
+        accessToken: String,
+        userId: String,
+        date: String? = null,
+        category: FoodDiaryCategory? = null,
+        query: String? = null
+    ): Flow<UiState<List<FoodDiary>>>
+
+    fun getFoodDiaries(
         accessToken: String,
         userId: String,
         date: String,
-        category: FoodDiaryCategory
     ): Flow<UiState<List<FoodDiary>>>
 
-    fun getDiaryFoodsByDate(
+    fun getKeywordSuggestions(
         accessToken: String,
         userId: String,
-        date: String,
-    ): Flow<UiState<List<FoodDiary>>>
-
-    fun getDiaryFoodsByQuery(
-        accessToken: String,
-        userId: String,
-        query: String
-    ): Flow<UiState<List<FoodDiary>>>
-
-    fun getKeywordSuggestions(accessToken: String, userId: String): Flow<UiState<List<Keyword>>>
+        query: String,
+    ): Flow<UiState<List<Keyword>>>
 
     fun addFoodDiary(
         accessToken: String,

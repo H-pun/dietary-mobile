@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import org.cisnux.mydietary.domain.models.ChangePassword
+import org.cisnux.mydietary.domain.models.ForgotPassword
 
 @Suppress("DEPRECATION")
 @ExperimentalCoroutinesApi
@@ -109,7 +110,49 @@ class AuthenticationInteractor @Inject constructor(
     override fun resetPassword(emailAddress: String): Flow<UiState<String>> =
         authenticationRepository.resetPassword(emailAddress)
 
-    override fun changePassword(changePassword: ChangePassword): Flow<UiState<String>> = authenticationRepository.updatePassword(changePassword = changePassword)
+    override fun forgotPassword(forgotPassword: ForgotPassword): Flow<UiState<String>> =
+        authenticationRepository.updatePassword(forgotPassword = forgotPassword)
+
+    override fun changePassword(changePassword: ChangePassword): Flow<UiState<String>> =
+        isAccessTokenAndUserIdExists.flatMapLatest {
+            it?.let {
+                authenticationRepository.changePassword(
+                    accessToken = it.second,
+                    id = it.first,
+                    changePassword = changePassword
+                )
+            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
+        }
+
+    override fun changeEmail(newEmail: String): Flow<UiState<String>> =
+        isAccessTokenAndUserIdExists.flatMapLatest {
+            it?.let {
+                authenticationRepository.changeEmail(
+                    accessToken = it.second,
+                    id = it.first,
+                    email = newEmail
+                ).flatMapLatest { changeEmailState ->
+                    if (changeEmailState is UiState.Success) {
+                        userProfileRepository.getUserProfile(
+                            accessToken = it.second,
+                            userId = it.first
+                        ).map { userProfileState ->
+                            if (userProfileState is UiState.Success)
+                                UiState.Success(data = "Berhasil merubah email address")
+                            else
+                                userProfileState
+                        }
+                    } else
+                        flow { emit(changeEmailState) }
+                }
+            } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
+        }
+
+    override fun verifyEmail(email: String): Flow<UiState<String>> = accessToken.flatMapLatest {
+        it?.let { accessToken ->
+            authenticationRepository.verifyEmail(accessToken = accessToken, email = email)
+        } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
+    }
 
     override suspend fun signOut() {
         try {

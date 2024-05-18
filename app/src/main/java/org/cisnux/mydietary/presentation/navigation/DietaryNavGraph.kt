@@ -30,10 +30,12 @@ import org.cisnux.mydietary.presentation.myprofile.MyProfileScreen
 import org.cisnux.mydietary.presentation.newpassword.NewPasswordScreen
 import org.cisnux.mydietary.presentation.report.ReportScreen
 import org.cisnux.mydietary.presentation.resetpassword.ResetPasswordScreen
+import org.cisnux.mydietary.presentation.securityaccount.SecurityAccountScreen
 import org.cisnux.mydietary.presentation.signin.SignInScreen
 import org.cisnux.mydietary.presentation.signup.SignUpScreen
 import org.cisnux.mydietary.presentation.splash.SplashScreen
 import org.cisnux.mydietary.presentation.ui.components.NotificationDialog
+import org.cisnux.mydietary.presentation.verifycode.VerifyCodeScreen
 import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import org.cisnux.mydietary.utils.AppDestination
 
@@ -151,7 +153,10 @@ fun DietaryNavGraph(
                 },
                 navigateToAddMyProfile = navComponentAction.navigateToAddMyProfile,
                 navigateToResetPassword = navComponentAction.navigateToResetPassword,
-                navigateToSignUp = navComponentAction.navigateToSignUp
+                navigateToSignUp = navComponentAction.navigateToSignUp,
+                navigateUp = {
+                    activity.finish()
+                }
             )
         }
         composable(
@@ -216,7 +221,7 @@ fun DietaryNavGraph(
         ) {
             ResetPasswordScreen(
                 navigateUp = navComponentAction.navigateUp,
-                navigateToNewPassword = navComponentAction.navigateToNewPassword
+                navigateToVerifyCode = navComponentAction.navigateToVerifyCode
             )
         }
         composable(
@@ -255,7 +260,8 @@ fun DietaryNavGraph(
                         ReportWidget().updateAll(context)
                     }
                 },
-                navigateToSignIn = navComponentAction.navigateToSignIn
+                navigateToSignIn = navComponentAction.navigateToSignIn,
+                navigateUp = { activity.finish() }
             )
         }
         composable(
@@ -292,16 +298,69 @@ fun DietaryNavGraph(
         composable(
             route = AppDestination.NewPasswordRoute.route,
             enterTransition = {
-                fadeIn(
-                    animationSpec = tween(
-                        100, easing = LinearEasing
-                    )
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(durationMillis = 300)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        100, easing = LinearEasing
+                        300, easing = LinearEasing
+                    )
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            popExitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            },
+            arguments = listOf(
+                navArgument(name = "emailAddress") {
+                    nullable = false
+                    type = NavType.StringType
+                },
+                navArgument(name = "code") {
+                    nullable = false
+                    type = NavType.StringType
+                },
+            ),
+        ) {
+            NewPasswordScreen(navigateToSignIn = navComponentAction.navigateToSignIn)
+        }
+        composable(
+            route = AppDestination.VerifyCodeRoute.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            },
+            popExitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
                     )
                 )
             },
@@ -317,11 +376,14 @@ fun DietaryNavGraph(
             ),
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern = AppDestination.NewPasswordRoute.deepLinkPattern
+                    uriPattern = AppDestination.VerifyCodeRoute.deepLinkPattern
                 },
             ),
         ) {
-            NewPasswordScreen(navigateToSignIn = navComponentAction.navigateToSignIn)
+            VerifyCodeScreen(
+                navigateUp = navComponentAction.navigateUp,
+                navigateToNewPassword = navComponentAction.navigateToNewPassword
+            )
         }
         composable(
             route = AppDestination.HomeRoute.route,
@@ -355,7 +417,7 @@ fun DietaryNavGraph(
             }
         ) {
             HomeScreen(
-                navigateForBottomNav = navComponentAction.bottomNavigation,
+                navigateForBottomNav = navComponentAction.navigationDestination,
                 onFabFoodScanner = navComponentAction.navigateToFoodScanner,
                 navigateToDiaryDetail = navComponentAction.navigateToFoodDiaryDetail,
                 navigateToSignIn = navComponentAction.navigateToSignIn,
@@ -394,7 +456,7 @@ fun DietaryNavGraph(
             }
         ) {
             MyProfileScreen(
-                navigateForBottomNav = navComponentAction.bottomNavigation,
+                drawerNavigation = navComponentAction.navigationDestination,
                 navigateToSignIn = {
                     navComponentAction.navigateToSignOut()
                     coroutineScope.launch {
@@ -441,8 +503,52 @@ fun DietaryNavGraph(
             )
         ) {
             ReportScreen(
-                navigateForBottomNav = navComponentAction.bottomNavigation,
+                navigateForBottomNav = navComponentAction.navigationDestination,
                 navigateToSignIn = navComponentAction.navigateToSignIn,
+                navigateUp = { activity.finish() }
+            )
+        }
+        composable(
+            route = AppDestination.AccountSecurityRoute.route,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(
+                        100, easing = LinearEasing
+                    )
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        100, easing = LinearEasing
+                    )
+                )
+            },
+            popEnterTransition = {
+                fadeIn(
+                    animationSpec = tween(
+                        100, easing = LinearEasing
+                    )
+                )
+            },
+            popExitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        100, easing = LinearEasing
+                    )
+                )
+            },
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = AppDestination.ReportRoute.deepLinkPattern
+                },
+            )
+        ) {
+            SecurityAccountScreen(
+                drawerNavigation = navComponentAction.navigationDestination,
+                navigateToSignIn = {
+                    navComponentAction.navigateToSignIn(AppDestination.AccountSecurityRoute.route)
+                },
                 navigateUp = { activity.finish() }
             )
         }

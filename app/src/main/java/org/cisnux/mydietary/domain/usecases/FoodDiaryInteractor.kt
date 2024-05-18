@@ -1,8 +1,6 @@
 package org.cisnux.mydietary.domain.usecases
 
 import android.content.Context
-import android.graphics.Bitmap
-import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -40,12 +38,12 @@ class FoodDiaryInteractor @Inject constructor(
     private val userProfileUseCase: UserProfileUseCase,
     @ApplicationContext private val context: Context
 ) : FoodDiaryUseCase {
-    override fun getDiaryFoodsByDays(
+    override fun getDiaryFoodsByDaysAndCategory(
         date: String, category: FoodDiaryCategory
     ): Flow<UiState<List<FoodDiary>>> =
         authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
             it?.let {
-                foodRepository.getDiaryFoodsByDate(
+                foodRepository.getFoodDiaries(
                     userId = it.first, accessToken = it.second, date = date, category = category
                 )
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
@@ -54,7 +52,7 @@ class FoodDiaryInteractor @Inject constructor(
     override fun getDiaryFoodsByDaysForWidget(date: String): Flow<UiState<List<FoodDiary>>> =
         authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
             it?.let {
-                foodRepository.getDiaryFoodsByDate(
+                foodRepository.getFoodDiaries(
                     userId = it.first, accessToken = it.second, date = date
                 ).map { uiState ->
                     if (uiState is UiState.Success)
@@ -89,7 +87,7 @@ class FoodDiaryInteractor @Inject constructor(
     override fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>> =
         authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
             it?.let {
-                foodRepository.getDiaryFoodsByQuery(
+                foodRepository.getFoodDiaries(
                     userId = it.first,
                     accessToken = it.second,
                     query = query
@@ -101,15 +99,8 @@ class FoodDiaryInteractor @Inject constructor(
         authenticationUseCase.isAccessTokenAndUserIdExists.flatMapLatest {
             it?.let {
                 foodRepository.getKeywordSuggestions(
-                    userId = it.first, accessToken = it.second
+                    userId = it.first, accessToken = it.second, query = query
                 )
-                    .map { uiState ->
-                        if (uiState is UiState.Success)
-                            UiState.Success(data = uiState.data?.filter { keyword ->
-                                keyword.text.lowercase().contains(query.lowercase())
-                            })
-                        else uiState
-                    }.flowOn(Dispatchers.Default)
             } ?: flow { emit(UiState.Error(Failure.UnauthorizedFailure())) }
         }.flowOn(Dispatchers.IO)
 

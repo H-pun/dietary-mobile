@@ -47,11 +47,12 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         get() = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO)
 
 
-    override fun getDiaryFoodsByDate(
+    override fun getFoodDiaries(
         accessToken: String,
         userId: String,
-        date: String,
-        category: FoodDiaryCategory
+        date: String?,
+        category: FoodDiaryCategory?,
+        query: String?
     ): Flow<UiState<List<FoodDiary>>> = flow {
         emit(UiState.Loading)
         foodDiaryRemoteSource.getFoodDiaries(
@@ -59,30 +60,33 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             getFoodDiaryParams = GetFoodDiaryParams(
                 userId = userId,
                 date = date,
-                category = category.value,
+                category = category?.value,
+                query = query
             )
         ).fold(
             ifLeft = { exception ->
                 emit(UiState.Error(exception))
             },
             ifRight = { foodDiaries ->
-                emit(UiState.Success(foodDiaries.filter { it.category.lowercase() == category.value.lowercase() }
-                    .map { foodDiary ->
-                        FoodDiary(
-                            id = foodDiary.id,
-                            title = foodDiary.title,
-                            date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
-                            time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
-                            foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
-                            totalFoodCalories = foodDiary.totalCalories
-                        )
-                    }))
+                emit(
+                    UiState.Success(foodDiaries
+                        .map { foodDiary ->
+                            FoodDiary(
+                                id = foodDiary.id,
+                                title = foodDiary.title,
+                                date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
+                                time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
+                                foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
+                                totalFoodCalories = foodDiary.totalCalories
+                            )
+                        })
+                )
             }
         )
     }.distinctUntilChanged()
         .flowOn(Dispatchers.IO)
 
-    override fun getDiaryFoodsByDate(
+    override fun getFoodDiaries(
         accessToken: String,
         userId: String,
         date: String
@@ -114,47 +118,15 @@ class FoodDiaryRepositoryImpl @Inject constructor(
     }.distinctUntilChanged()
         .flowOn(Dispatchers.IO)
 
-    override fun getDiaryFoodsByQuery(
-        accessToken: String,
-        userId: String,
-        query: String
-    ): Flow<UiState<List<FoodDiary>>> = flow {
-        emit(UiState.Loading)
-        foodDiaryRemoteSource.getFoodDiaries(
-            accessToken = accessToken,
-            getFoodDiaryParams = GetFoodDiaryParams(
-                userId = userId,
-                query = query
-            )
-        ).fold(
-            ifLeft = { exception ->
-                emit(UiState.Error(exception))
-            },
-            ifRight = { foodDiaries ->
-                emit(UiState.Success(foodDiaries.filter {
-                    it.title.lowercase().contains(query.lowercase())
-                }.map { foodDiary ->
-                    FoodDiary(
-                        id = foodDiary.id,
-                        title = foodDiary.title,
-                        date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
-                        time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
-                        foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
-                        totalFoodCalories = foodDiary.totalCalories
-                    )
-                }))
-            }
-        )
-    }
-
     override fun getKeywordSuggestions(
         accessToken: String,
-        userId: String
+        userId: String,
+        query: String,
     ): Flow<UiState<List<Keyword>>> = flow {
         emit(UiState.Loading)
         foodDiaryRemoteSource.getKeywordSuggestions(
             accessToken = accessToken,
-            getFoodDiaryParams = GetFoodDiaryParams(userId = userId)
+            getFoodDiaryParams = GetFoodDiaryParams(userId = userId, query = query)
         )
             .fold(
                 ifLeft = { exception ->

@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
@@ -139,12 +140,14 @@ fun DiaryCard(
                         style = MaterialTheme.typography.titleMedium,
                         maxLines = 2,
                         fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.width(180.dp)
+                        modifier = Modifier.weight(2f)
                     )
                     Text(
                         text = "${String.format(locale, "%.2f", calorie)} kcal",
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.labelLarge,
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.weight(1f)
                     )
                 }
                 Spacer(modifier = Modifier.height(2.dp))

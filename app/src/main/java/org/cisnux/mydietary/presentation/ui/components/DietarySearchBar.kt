@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -65,6 +66,7 @@ fun DietarySearchBar(
     isSearch: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
+    menu: @Composable () -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -91,13 +93,19 @@ fun DietarySearchBar(
             },
             leadingIcon = {
                 if (active or isSearch) {
-                    IconButton(onClick = navigateUp) {
+                    IconButton(
+                        onClick =
+                        navigateUp
+                    ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null
                         )
                     }
-                } else Icon(Icons.Default.Search, contentDescription = null)
+                } else menu()
+            },
+            trailingIcon = {
+                Icon(Icons.Default.Search, contentDescription = null)
             },
             modifier = Modifier.align(Alignment.TopCenter),
         ) {
@@ -106,7 +114,7 @@ fun DietarySearchBar(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(keywordSuggestions, key = {it.id}, contentType = {it}) {
+                items(keywordSuggestions, key = { it.id }, contentType = { it }) {
                     ListItem(
                         headlineContent = {
                             Text(

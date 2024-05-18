@@ -14,21 +14,26 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import org.cisnux.mydietary.utils.Failure
 import io.ktor.client.call.body
+import io.ktor.client.request.headers
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
+import org.cisnux.mydietary.data.remotes.bodyrequests.ChangePasswordBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.GoogleTokenRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateEmailBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.VerifyEmailBodyRequest
 
 class UserAccountRemoteSourceImpl @Inject constructor(
     private val client: HttpClient,
     private val baseApiUrlLocalSource: BaseApiUrlLocalSource
 ) : UserAccountRemoteSource {
-    override suspend fun verifyUserAccount(userAccount: UserAccountBodyRequest): Either<Exception, AddedUserAccountResponse> =
+    override suspend fun signInUserAccount(userAccount: UserAccountBodyRequest): Either<Exception, AddedUserAccountResponse> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
@@ -54,10 +59,119 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Either.Left(e)
             }
         }
+
+    override suspend fun verifyEmailAddress(
+        accessToken: String,
+        verifyEmailBodyRequest: VerifyEmailBodyRequest
+    ): Either<Exception, String> = withContext(Dispatchers.IO) {
+        try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
+            val response = client.post(
+                urlString = "$baseUrl/user/send-email-verification"
+            ) {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $accessToken")
+                }
+                contentType(ContentType.Application.Json)
+                setBody(verifyEmailBodyRequest)
+            }
+
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse.message
+                    })
+                } ?: Either.Left(Exception(commonResponse.message))
+                failure
+            } else {
+                val commonResponse: CommonResponse<String> = response.body()
+                Either.Right(commonResponse.data!!)
+            }
+        } catch (e: UnresolvedAddressException) {
+            Either.Left(Failure.ConnectionFailure())
+        } catch (e: Exception) {
+            Either.Left(e)
+        }
+    }
+
+    override suspend fun updateEmail(
+        accessToken: String,
+        updateEmailBodyRequest: UpdateEmailBodyRequest
+    ): Either<Exception, String> = withContext(Dispatchers.IO) {
+        try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
+            val response = client.put(
+                urlString = "$baseUrl/user"
+            ) {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $accessToken")
+                }
+                contentType(ContentType.Application.Json)
+                setBody(updateEmailBodyRequest)
+            }
+
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse.message
+                    })
+                } ?: Either.Left(Exception(commonResponse.message))
+                failure
+            } else {
+                val commonResponse: CommonResponse<String> = response.body()
+                Either.Right(commonResponse.data!!)
+            }
+        } catch (e: UnresolvedAddressException) {
+            Either.Left(Failure.ConnectionFailure())
+        } catch (e: Exception) {
+            Either.Left(e)
+        }
+    }
+
+    override suspend fun updatePassword(
+        accessToken: String,
+        changePasswordBodyRequest: ChangePasswordBodyRequest
+    ): Either<Exception, String> = withContext(Dispatchers.IO) {
+        try {
+            val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
+            val response = client.post(
+                urlString = "$baseUrl/user/change-password"
+            ) {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $accessToken")
+                }
+                contentType(ContentType.Application.Json)
+                setBody(changePasswordBodyRequest)
+            }
+
+            val isSuccess = response.status.isSuccess()
+            return@withContext if (!isSuccess) {
+                val commonResponse: CommonResponse<Nothing> = response.body()
+                val failure = Failure.HTTP_FAILURES[response.status]?.let {
+                    Either.Left(it.apply {
+                        message = commonResponse.message
+                    })
+                } ?: Either.Left(Exception(commonResponse.message))
+                failure
+            } else {
+                val commonResponse: CommonResponse<String> = response.body()
+                Either.Right(commonResponse.data!!)
+            }
+        } catch (e: UnresolvedAddressException) {
+            Either.Left(Failure.ConnectionFailure())
+        } catch (e: Exception) {
+            Either.Left(e)
+        }
+    }
+
 
     override suspend fun verifyGoogleAccount(googleToken: GoogleTokenRequest): Either<Exception, AddedUserAccountResponse> =
         withContext(Dispatchers.IO) {
@@ -85,7 +199,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Either.Left(e)
             }
         }
@@ -115,7 +229,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Either.Left(e)
             }
         }
@@ -146,7 +260,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Either.Left(e)
             }
         }
@@ -156,7 +270,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
-                val response = client.put(
+                val response = client.post(
                     urlString = "$baseUrl/user/verify-reset-password"
                 ) {
                     contentType(ContentType.Application.Json)
@@ -178,7 +292,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
                 }
             } catch (e: UnresolvedAddressException) {
                 Either.Left(Failure.ConnectionFailure())
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Either.Left(e)
             }
         }

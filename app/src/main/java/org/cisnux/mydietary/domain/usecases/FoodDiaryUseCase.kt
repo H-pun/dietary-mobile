@@ -13,7 +13,7 @@ import org.cisnux.mydietary.utils.UiState
 import java.io.File
 
 interface FoodDiaryUseCase {
-    fun getDiaryFoodsByDays(date: String, category: FoodDiaryCategory): Flow<UiState<List<FoodDiary>>>
+    fun getDiaryFoodsByDaysAndCategory(date: String, category: FoodDiaryCategory): Flow<UiState<List<FoodDiary>>>
     fun getDiaryFoodsByDaysForWidget(date: String): Flow<UiState<List<FoodDiary>>>
     fun getDiaryFoodsByQuery(query: String): Flow<UiState<List<FoodDiary>>>
     fun getKeywordSuggestionsByQuery(query: String): Flow<UiState<List<Keyword>>>

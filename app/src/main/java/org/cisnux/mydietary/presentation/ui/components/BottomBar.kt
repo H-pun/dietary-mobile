@@ -1,7 +1,6 @@
 package org.cisnux.mydietary.presentation.ui.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,7 +18,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import org.cisnux.mydietary.R
-import org.cisnux.mydietary.presentation.navigation.BottomNavigationItem
+import org.cisnux.mydietary.presentation.navigation.NavigationItem
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.AppDestination
 
@@ -39,24 +38,18 @@ fun BottomBar(
     currentRoute: AppDestination,
     onSelectedDestination: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     modifier: Modifier = Modifier,
-    navigationItems: List<BottomNavigationItem<*>> = listOf(
-        BottomNavigationItem(
+    navigationItems: List<NavigationItem<*>> = listOf(
+        NavigationItem(
             title = stringResource(id = R.string.home_title),
             icon = Icons.Rounded.Home,
             destination = AppDestination.HomeRoute,
             contentDescription = stringResource(id = R.string.home_title)
         ),
-        BottomNavigationItem(
+        NavigationItem(
             title = stringResource(id = R.string.report_title),
             icon = painterResource(id = R.drawable.ic_report_24dp),
             destination = AppDestination.ReportRoute,
             contentDescription = stringResource(id = R.string.report_title)
-        ),
-        BottomNavigationItem(
-            title = stringResource(id = R.string.my_profile_title),
-            icon = Icons.Rounded.AccountCircle,
-            destination = AppDestination.MyProfileRoute,
-            contentDescription = stringResource(id = R.string.my_profile_title)
         ),
     ),
 ) {
@@ -67,7 +60,8 @@ fun BottomBar(
                     Text(
                         item.title,
                         style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.clearAndSetSemantics {})
+                        modifier = Modifier.clearAndSetSemantics {}
+                    )
                 },
                 icon = {
                     when (item.icon) {

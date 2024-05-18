@@ -56,8 +56,8 @@ import org.cisnux.mydietary.utils.UiState
 
 @Composable
 fun ResetPasswordScreen(
-    navigateToNewPassword: (String) -> Unit,
-    navigateUp: ()->Unit,
+    navigateToVerifyCode: (String) -> Unit,
+    navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ResetPasswordViewModel = hiltViewModel()
 ) {
@@ -72,7 +72,7 @@ fun ResetPasswordScreen(
 
     when (resetPasswordState) {
         is UiState.Success -> {
-            navigateToNewPassword(emailAddress)
+            navigateToVerifyCode(emailAddress)
         }
 
         is UiState.Error -> {
@@ -103,7 +103,7 @@ fun ResetPasswordScreen(
                 emailAddress = emailAddress,
                 onEmailAddressChange = { newValue -> emailAddress = newValue },
                 modifier = modifier.padding(it),
-                isVerifyEmailAddressLoading = resetPasswordState is UiState.Loading
+                isLoading = resetPasswordState is UiState.Loading
             )
         },
         snackbarHostState = snackbarHostState
@@ -186,7 +186,7 @@ private fun ResetPasswordLoadingDarkPreview() {
                     emailAddress = emailAddress,
                     onEmailAddressChange = { newValue -> emailAddress = newValue },
                     modifier = Modifier.padding(it),
-                    isVerifyEmailAddressLoading = true
+                    isLoading = true
                 )
             },
             snackbarHostState = SnackbarHostState()
@@ -201,7 +201,7 @@ private fun ResetPasswordBody(
     emailAddress: String,
     onEmailAddressChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    isVerifyEmailAddressLoading: Boolean = false,
+    isLoading: Boolean = false,
 ) {
     val scrollState = rememberScrollState()
     var isEmailAddressFocused by rememberSaveable {
@@ -302,9 +302,9 @@ private fun ResetPasswordBody(
             onClick = onVerifyEmailAddress,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = emailAddress.isEmailValid() and !isVerifyEmailAddressLoading,
+            enabled = emailAddress.isEmailValid() and !isLoading,
         ) {
-            if (isVerifyEmailAddressLoading)
+            if (isLoading)
                 CircularProgressIndicator()
             else
                 Text(text = stringResource(R.string.verify_email))

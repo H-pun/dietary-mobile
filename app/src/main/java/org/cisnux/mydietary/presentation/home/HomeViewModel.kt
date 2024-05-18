@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.Keyword
+import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import java.time.Instant
 import javax.inject.Inject
 
@@ -32,6 +33,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val foodDiaryUseCase: FoodDiaryUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
+    private val userProfileUseCase: UserProfileUseCase
 ) : ViewModel() {
     private var selectedDate = MutableStateFlow(Instant.now())
     private var foodDiaryCategory = MutableStateFlow(FoodDiaryCategory.BREAKFAST)
@@ -40,14 +42,23 @@ class HomeViewModel @Inject constructor(
     private var refreshSuggestionKeywords = MutableStateFlow(false)
     private var query = MutableStateFlow("")
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    init {
+        userProfileUseCase.refreshUserProfile()
+    }
+
+    val userProfileDetail get() = userProfileUseCase.userProfileDetail.shareIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+    )
+
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val foodDiaryState = refreshFoodDiaries.asStateFlow().flatMapMerge { isRefresh ->
         if (isRefresh) {
             selectedDate.asStateFlow()
                 .combine(foodDiaryCategory.asStateFlow()) { selectedDate, diaryFoodCategory ->
                     Pair(selectedDate, diaryFoodCategory)
-                }.flatMapLatest {
-                    foodDiaryUseCase.getDiaryFoodsByDays(
+                }.debounce(200L).flatMapLatest {
+                    foodDiaryUseCase.getDiaryFoodsByDaysAndCategory(
                         date = it.first.currentLocalDateTimeInBasicISOFormat,
                         category = it.second
                     )
@@ -71,11 +82,11 @@ class HomeViewModel @Inject constructor(
         scope = viewModelScope, started = SharingStarted.WhileSubscribed()
     )
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val searchedFoodDiaryState =
         refreshSearchedFoodDiaries.asStateFlow().flatMapMerge { isRefresh ->
             if (isRefresh)
-                query.asStateFlow().filter { it.isNotBlank() }.flatMapLatest { query ->
+                query.asStateFlow().debounce(200L).filter { it.isNotBlank() }.flatMapLatest { query ->
                     foodDiaryUseCase.getDiaryFoodsByQuery(query).also {
                         refreshSearchedFoodDiaries.value = false
                     }

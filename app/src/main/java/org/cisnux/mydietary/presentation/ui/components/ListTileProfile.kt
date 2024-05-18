@@ -1,6 +1,7 @@
 package org.cisnux.mydietary.presentation.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,18 +61,21 @@ fun ListTileProfile(
     bodyLabel: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Row {
-            icon()
-            Spacer(modifier = Modifier.width(8.dp))
-            label()
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                icon()
+                Spacer(modifier = Modifier.width(8.dp))
+                label()
+            }
+            bodyLabel()
         }
-        bodyLabel()
+        Spacer(modifier = Modifier.height(8.dp))
+        HorizontalDivider(thickness = 1.5.dp)
     }
-    Spacer(modifier = Modifier.height(8.dp))
-    HorizontalDivider(thickness = 1.5.dp)
 }

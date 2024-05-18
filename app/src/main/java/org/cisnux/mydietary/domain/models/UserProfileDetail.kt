@@ -13,4 +13,5 @@ data class UserProfileDetail(
     val weightTarget: Float = 0f,
     val activityLevel: String,
     val waistCircumference: Float,
+    val isVerified: Boolean = false
 )

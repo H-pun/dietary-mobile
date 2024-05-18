@@ -18,6 +18,7 @@ import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -64,10 +65,19 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                 // memanggil method get untuk melakukan request ke RESTful API dan
                 // dan menyimpan response ke variable response
                 val response = client.get(
-                    urlString =
-                    getFoodDiaryParams.date?.let { date -> "$baseUrl/food-diary/user?idUser=${getFoodDiaryParams.userId}&date=${date}" }
-                        ?: "$baseUrl/food-diary/user?idUser=${getFoodDiaryParams.userId}"
+                    urlString = "$baseUrl/food-diary/user/${getFoodDiaryParams.userId}"
                 ) {
+                    url {
+                        getFoodDiaryParams.date?.let {date->
+                            parameter("date", date)
+                        }
+                        getFoodDiaryParams.category?.let {category->
+                            parameter("category", category)
+                        }
+                        getFoodDiaryParams.query?.let { query ->
+                            parameter("query", query)
+                        }
+                    }
                     headers {
                         // menambahkan header authorization dengan nilai access token
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
@@ -378,8 +388,13 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
         try {
             val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
             val response = client.get(
-                urlString = "$baseUrl/food-diary/user?idUser=${getFoodDiaryParams.userId}"
+                urlString = "$baseUrl/food-diary/user/${getFoodDiaryParams.userId}"
             ) {
+                url {
+                    getFoodDiaryParams.query?.let {query->
+                        parameter("query", query)
+                    }
+                }
                 headers {
                     append(HttpHeaders.Authorization, "Bearer $accessToken")
                 }

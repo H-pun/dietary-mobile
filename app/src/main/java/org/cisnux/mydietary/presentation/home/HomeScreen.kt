@@ -10,9 +10,11 @@ import androidx.compose.animation.animateContentSize
 import org.cisnux.mydietary.utils.Failure
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,17 +23,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -49,6 +55,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -96,6 +103,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.Keyword
+import org.cisnux.mydietary.presentation.ui.components.NavigationDrawer
+import org.cisnux.mydietary.presentation.ui.components.UserAccountCard
 import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
@@ -116,6 +125,7 @@ fun HomeScreen(
         SnackbarHostState()
     }
     val coroutineScope = rememberCoroutineScope()
+    val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val context = LocalContext.current
     val cameraLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -150,6 +160,7 @@ fun HomeScreen(
     val diaryFoods by viewModel.foodDiaries.collectAsState(initial = null)
     val searchedDiaryFoodState by viewModel.searchedFoodDiaryState.collectAsState(initial = UiState.Initialize)
     val searchedDiaryFoods by viewModel.searchedFoodDiaries.collectAsState(initial = null)
+    val userProfile by viewModel.userProfileDetail.collectAsState(initial = null)
 
     when {
         diaryFoodState is UiState.Error -> (diaryFoodState as UiState.Error).error?.let { exception ->
@@ -225,10 +236,25 @@ fun HomeScreen(
     }
 
     HomeContent(
+        signOut = {
+            viewModel.signOut()
+            navigateToSignIn(AppDestination.HomeRoute.route)
+        },
+        drawerTitle = {
+            UserAccountCard(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                username = userProfile?.username,
+                email = userProfile?.emailAddress,
+                isVerified = userProfile?.isVerified
+            )
+        },
+        drawerState = drawerState,
         onSelectedDestination = navigateForBottomNav,
         body = {
             AnimatedVisibility(visible = !searchBarState.isSearch) {
                 HomeBody(
+                    menuTitle = (userProfile?.username?.getOrNull(0) ?: 'u').toString().uppercase(),
+                    onMenuClicked = { coroutineScope.launch { drawerState.open() } },
                     foodDiaries = diaryFoods,
                     onCardTapped = navigateToDiaryDetail,
                     modifier = modifier.padding(it),
@@ -377,6 +403,8 @@ private fun HomeContentPreview() {
     var searchBarState by rememberSearchBarState(
         initialQuery = "", initialActive = false, initialSearch = false
     )
+    val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val coroutineScope = rememberCoroutineScope()
     val foodDiaries = List(10) {
         FoodDiary(
             id = it.toString(),
@@ -395,7 +423,9 @@ private fun HomeContentPreview() {
     var tabState by rememberSaveable { mutableIntStateOf(0) }
 
     DietaryTheme {
-        HomeContent(onSelectedDestination = { _, _ -> },
+        HomeContent(
+            drawerState = drawerState,
+            onSelectedDestination = { _, _ -> },
             body = {
                 HomeBody(
                     query = searchBarState.query,
@@ -416,31 +446,42 @@ private fun HomeContentPreview() {
                     tabState = tabState,
                     onTabChange = { index -> tabState = index },
                     onDateRangeOpen = { openDatePickerDialog = true },
+                    onMenuClicked = {
+                        coroutineScope.launch {
+                            drawerState.open()
+                        }
+                    },
                     date = datePickerState.selectedDateMillis?.let { millis ->
                         Instant.ofEpochMilli(
                             millis
                         )?.dayDateMonthYear()
                     } ?: Instant.now().dayDateMonthYear()
                 )
-                if (openDatePickerDialog) DatePickerDialog(onDismissRequest = {
-                    openDatePickerDialog = false
-                }, confirmButton = {
-                    TextButton(
-                        onClick = {
+                if (openDatePickerDialog)
+                    DatePickerDialog(
+                        onDismissRequest = {
                             openDatePickerDialog = false
-                        }, enabled = confirmEnabled
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    openDatePickerDialog = false
+                                }, enabled = confirmEnabled
+                            ) {
+                                Text(stringResource(R.string.ok))
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(
+                                onClick = {
+                                    openDatePickerDialog = false
+                                }) {
+                                Text(stringResource(R.string.cancel))
+                            }
+                        }
                     ) {
-                        Text(stringResource(R.string.ok))
+                        DatePicker(state = datePickerState)
                     }
-                }, dismissButton = {
-                    TextButton(onClick = {
-                        openDatePickerDialog = false
-                    }) {
-                        Text(stringResource(R.string.cancel))
-                    }
-                }) {
-                    DatePicker(state = datePickerState)
-                }
             },
             shouldBottomBarOpen = true,
             snackbarHostState = SnackbarHostState(),
@@ -459,7 +500,10 @@ private fun HomeContent(
     onFabFoodScanner: () -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
-    shouldBottomBarOpen: Boolean = true
+    shouldBottomBarOpen: Boolean = true,
+    drawerTitle: @Composable ColumnScope.() -> Unit = {},
+    signOut: () -> Unit = {},
+    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
 ) {
     val state = rememberPullToRefreshState()
 
@@ -470,37 +514,45 @@ private fun HomeContent(
             state.endRefresh()
         }
 
-    Scaffold(
-        bottomBar = {
-            AnimatedVisibility(visible = shouldBottomBarOpen) {
-                BottomBar(
-                    currentRoute = AppDestination.HomeRoute,
-                    onSelectedDestination = onSelectedDestination
-                )
-            }
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
-        floatingActionButton = {
-            AnimatedVisibility(visible = shouldBottomBarOpen) {
-                FloatingActionButton(onClick = onFabFoodScanner) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_food_scanner_24dp),
-                        contentDescription = stringResource(R.string.food_scanner_title)
+    NavigationDrawer(
+        currentRoute = AppDestination.HomeRoute,
+        onSelectedDestination = onSelectedDestination,
+        title = drawerTitle,
+        signOut = signOut,
+        drawerState = drawerState
+    ) {
+        Scaffold(
+            bottomBar = {
+                AnimatedVisibility(visible = shouldBottomBarOpen) {
+                    BottomBar(
+                        currentRoute = AppDestination.HomeRoute,
+                        onSelectedDestination = onSelectedDestination
                     )
                 }
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
+            floatingActionButton = {
+                AnimatedVisibility(visible = shouldBottomBarOpen) {
+                    FloatingActionButton(onClick = onFabFoodScanner) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_food_scanner_24dp),
+                            contentDescription = stringResource(R.string.food_scanner_title)
+                        )
+                    }
+                }
+            },
+            modifier = modifier
+        ) { innerPadding ->
+            Box(Modifier.nestedScroll(state.nestedScrollConnection)) {
+                body(innerPadding)
+                PullToRefreshContainer(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    state = state,
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                )
             }
-        },
-        modifier = modifier
-    ) { innerPadding ->
-        Box(Modifier.nestedScroll(state.nestedScrollConnection)) {
-            body(innerPadding)
-            PullToRefreshContainer(
-                modifier = Modifier.align(Alignment.TopCenter),
-                state = state,
-                containerColor = MaterialTheme.colorScheme.secondaryContainer
-            )
         }
     }
 }
@@ -523,7 +575,9 @@ private fun HomeBody(
     tabState: Int,
     onTabChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    isDiaryLoading: Boolean = false
+    isDiaryLoading: Boolean = false,
+    onMenuClicked: () -> Unit = {},
+    menuTitle: String = "U"
 ) {
     val foodCategories = stringArrayResource(id = R.array.food_diary_category)
     val tabDiaries = listOf(
@@ -648,6 +702,24 @@ private fun HomeBody(
             }
         }
         DietarySearchBar(
+            menu = {
+                Box(contentAlignment = Alignment.Center) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .clickable(onClick = onMenuClicked)
+                    ) {}
+                    Text(
+                        text = menuTitle,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        style = MaterialTheme.typography.labelLarge,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            },
             query = query,
             onQueryChange = onQueryChange,
             active = active,

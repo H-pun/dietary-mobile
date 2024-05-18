@@ -206,7 +206,8 @@ class UserProfileRepositoryImpl @Inject constructor(
                 activityLevel = it.activityLevel,
                 username = it.username,
                 emailAddress = it.emailAddress,
-                waistCircumference = it.waistCircumference
+                waistCircumference = it.waistCircumference,
+                isVerified = it.isVerified
             )
         }.flowOn(Dispatchers.IO)
             .distinctUntilChanged()

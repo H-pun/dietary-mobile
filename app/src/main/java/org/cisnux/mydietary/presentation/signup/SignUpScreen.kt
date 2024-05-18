@@ -89,7 +89,16 @@ fun SignUpScreen(
 
     when (signUpWithEmailAndPasswordState) {
         is UiState.Success -> {
-            navigateToSignIn()
+            LaunchedEffect(snackbarHostState) {
+                val snackbarResult = snackbarHostState.showSnackbar(
+                    message = "Kamu berhasil mendaftar",
+                    actionLabel = context.getString(R.string.sign_in),
+                    withDismissAction = true,
+                    duration = SnackbarDuration.Long
+                )
+                if (snackbarResult == SnackbarResult.ActionPerformed)
+                    navigateToSignIn()
+            }
         }
 
         is UiState.Error -> {

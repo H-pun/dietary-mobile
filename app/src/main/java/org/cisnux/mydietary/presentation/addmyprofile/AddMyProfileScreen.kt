@@ -1,6 +1,7 @@
 package org.cisnux.mydietary.presentation.addmyprofile
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -52,9 +53,13 @@ import org.cisnux.mydietary.utils.UiState
 fun AddMyProfileScreen(
     navigateToHome: (String) -> Unit,
     navigateToSignIn: (String) -> Unit,
+    navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddMyProfileViewModel = hiltViewModel()
 ) {
+    BackHandler {
+        navigateUp()
+    }
     val genders = stringArrayResource(id = R.array.gender)
     val goals = stringArrayResource(id = R.array.goal)
     val activityLevels = stringArrayResource(id = R.array.activity_level)

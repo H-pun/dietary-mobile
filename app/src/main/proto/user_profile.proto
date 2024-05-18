@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-option java_package = "org.cisnux.mydietary";
 option java_multiple_files = true;
+option java_package = "org.cisnux.mydietary";
 
 message UserProfile {
   string user_account_id = 1;
@@ -16,4 +16,5 @@ message UserProfile {
   float weight_target = 10;
   float waist_circumference = 11;
   string activity_level = 12;
+  bool is_verified = 13;
 }

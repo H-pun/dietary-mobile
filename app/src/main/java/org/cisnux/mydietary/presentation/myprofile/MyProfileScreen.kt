@@ -4,24 +4,25 @@ import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +36,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,13 +49,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -65,9 +65,10 @@ import kotlinx.coroutines.launch
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.UserProfileDetail
 import org.cisnux.mydietary.presentation.addmyprofile.MyProfile
-import org.cisnux.mydietary.presentation.ui.components.BottomBar
 import org.cisnux.mydietary.presentation.ui.components.ListTileProfile
 import org.cisnux.mydietary.presentation.ui.components.MyProfileForm
+import org.cisnux.mydietary.presentation.ui.components.NavigationDrawer
+import org.cisnux.mydietary.presentation.ui.components.UserAccountCard
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.presentation.ui.theme.darkProgress
 import org.cisnux.mydietary.presentation.ui.theme.lightProgress
@@ -83,7 +84,7 @@ import java.util.Locale
 
 @Composable
 fun MyProfileScreen(
-    navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
+    drawerNavigation: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     navigateToSignIn: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MyProfileViewModel = hiltViewModel(),
@@ -107,7 +108,6 @@ fun MyProfileScreen(
             id = "1",
             userAccountId = "1",
             username = "",
-            emailAddress = "",
             age = 0,
             weight = 0f,
             height = 0f,
@@ -115,7 +115,8 @@ fun MyProfileScreen(
             goal = "",
             weightTarget = 0f,
             activityLevel = "",
-            waistCircumference = 0f
+            waistCircumference = 0f,
+            emailAddress = ""
         )
     )
     val userProfileState by viewModel.userProfileState.collectAsState(initial = UiState.Initialize)
@@ -125,7 +126,6 @@ fun MyProfileScreen(
     }
     var myProfile by rememberSaveable(
         userProfileDetail.username,
-        userProfileDetail.emailAddress,
         userProfileDetail.age,
         userProfileDetail.weight,
         userProfileDetail.height,
@@ -211,13 +211,24 @@ fun MyProfileScreen(
         }
     }
 
-
     MyProfileContent(
-        onSignOut = {
+        signOut = {
             viewModel.signOut()
             navigateToSignIn()
         },
-        onSelectedDestination = navigateForBottomNav,
+        drawerTitle = {
+            UserAccountCard(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                username = userProfileDetail.username.ifBlank { null },
+                email = userProfileDetail.emailAddress.ifBlank { null },
+                isVerified = userProfileDetail.isVerified
+            )
+        },
+        onEdit = {
+            isUpdateMyProfileDialogOpen = true
+        },
+        isSuccess = userProfileState is UiState.Success,
+        onSelectedDestination = drawerNavigation,
         body = {
             AnimatedVisibility(
                 visible = userProfileState is UiState.Success ||
@@ -227,7 +238,6 @@ fun MyProfileScreen(
                 val locale = Locale("id", "ID")
                 MyProfileBody(
                     username = userProfileDetail.username,
-                    emailAddress = userProfileDetail.emailAddress,
                     age = userProfileDetail.age,
                     weight = String.format(locale, "%.2f", userProfileDetail.weight),
                     height = String.format(locale, "%.2f", userProfileDetail.height),
@@ -235,15 +245,11 @@ fun MyProfileScreen(
                     gender = userProfileDetail.gender,
                     goal = userProfileDetail.goal,
                     activityLevel = userProfileDetail.activityLevel,
-                    onEdit = {
-                        isUpdateMyProfileDialogOpen = true
-                    },
                     waistCircumference = String.format(
                         locale,
                         "%.2f",
                         userProfileDetail.waistCircumference
                     ),
-                    isWeightTargetVisible = userProfileDetail.goal != goals[1],
                     modifier = modifier.padding(it)
                 )
                 UpdateMyProfileDialog(
@@ -317,7 +323,6 @@ fun MyProfileScreen(
                 MyProfileShimmer(modifier = modifier.padding(it))
             }
         },
-        shouldBottomBarOpen = true,
         snackbarHostState = snackbarHostState
     )
 }
@@ -332,7 +337,6 @@ private fun MyProfileContentPreview() {
         id = "1",
         userAccountId = "1",
         username = "yagamijaeger",
-        emailAddress = "yagami12@gmail.com",
         age = 40,
         weight = 50f,
         height = 170f,
@@ -340,7 +344,8 @@ private fun MyProfileContentPreview() {
         goal = "Menurunkan berat badan",
         weightTarget = 10f,
         activityLevel = "Very Active",
-        waistCircumference = 40.2f
+        waistCircumference = 40.2f,
+        emailAddress = ""
     )
     var isUpdateMyProfileDialogOpen by remember {
         mutableStateOf(false)
@@ -367,12 +372,14 @@ private fun MyProfileContentPreview() {
 
     DietaryTheme {
         MyProfileContent(
+            onEdit = {
+                isUpdateMyProfileDialogOpen = true
+            },
             onSelectedDestination = { _, _ -> },
             body = {
                 val locale = Locale("id", "ID")
                 MyProfileBody(
                     username = userProfileDetail.username,
-                    emailAddress = userProfileDetail.emailAddress,
                     age = userProfileDetail.age,
                     weight = String.format(locale, "%.2f", userProfileDetail.weight),
                     height = String.format(locale, "%.2f", userProfileDetail.height),
@@ -380,16 +387,12 @@ private fun MyProfileContentPreview() {
                     gender = userProfileDetail.gender,
                     goal = userProfileDetail.goal,
                     activityLevel = userProfileDetail.activityLevel,
-                    onEdit = {
-                        isUpdateMyProfileDialogOpen = true
-                    },
                     waistCircumference = String.format(
                         locale,
                         "%.2f",
                         userProfileDetail.waistCircumference
                     ),
                     modifier = Modifier.padding(it),
-                    isWeightTargetVisible = userProfileDetail.weightTarget != 0f,
                 )
                 UpdateMyProfileDialog(
                     onSave = { isUpdateMyProfileDialogOpen = false },
@@ -432,8 +435,6 @@ private fun MyProfileContentPreview() {
                     },
                 )
             },
-            shouldBottomBarOpen = true,
-            onSignOut = {},
             snackbarHostState = snackbarHostState
         )
     }
@@ -444,53 +445,59 @@ private fun MyProfileContentPreview() {
 private fun MyProfileContent(
     onSelectedDestination: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
     body: @Composable (innerPadding: PaddingValues) -> Unit,
-    shouldBottomBarOpen: Boolean,
-    onSignOut: () -> Unit,
     snackbarHostState: SnackbarHostState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onEdit: () -> Unit = {},
+    drawerTitle: @Composable ColumnScope.() -> Unit = {},
+    signOut: () -> Unit = {},
+    isSuccess: Boolean = true
 ) {
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.my_profile_title),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                },
-                actions = {
-                    IconButton(onClick = onSignOut) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_logout_24dp),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val coroutineScope = rememberCoroutineScope()
+
+    NavigationDrawer(
+        title = drawerTitle,
+        signOut = signOut,
+        currentRoute = AppDestination.MyProfileRoute,
+        onSelectedDestination = onSelectedDestination,
+        drawerState = drawerState
+    ) {
+        Scaffold(
+            topBar = {
+                CenterAlignedTopAppBar(
+                    navigationIcon = {
+                        IconButton(onClick = { coroutineScope.launch { drawerState.open() } }) {
+                            Icon(imageVector = Icons.Rounded.Menu, contentDescription = null)
+                        }
+                    },
+                    title = {
+                        Text(
+                            text = stringResource(id = R.string.my_profile_title),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.ExtraBold
                         )
-                    }
-                }
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
-        bottomBar = {
-            AnimatedVisibility(visible = shouldBottomBarOpen) {
-                BottomBar(
-                    currentRoute = AppDestination.MyProfileRoute,
-                    onSelectedDestination = onSelectedDestination
+                    },
                 )
-            }
-        },
-        modifier = modifier
-    ) { innerPadding ->
-        body(innerPadding)
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
+            floatingActionButton = {
+                if (isSuccess)
+                    FloatingActionButton(onClick = onEdit) {
+                        Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
+                    }
+            },
+            modifier = modifier
+        ) { innerPadding ->
+            body(innerPadding)
+        }
     }
 }
 
 @Composable
 private fun MyProfileBody(
     username: String,
-    emailAddress: String,
     age: Int,
     weight: String,
     height: String,
@@ -499,8 +506,6 @@ private fun MyProfileBody(
     goal: String,
     weightTarget: String,
     activityLevel: String,
-    isWeightTargetVisible: Boolean,
-    onEdit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -513,52 +518,28 @@ private fun MyProfileBody(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row {
-                Box(contentAlignment = Alignment.Center) {
-                    Surface(
-                        color = MaterialTheme.colorScheme.tertiaryContainer,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape)
-                    ) {}
+        Column(modifier = Modifier.padding(end = 9.dp)) {
+            ListTileProfile(
+                icon = {
+                    Icon(imageVector = Icons.Rounded.AccountCircle, contentDescription = null)
+                },
+                label = {
                     Text(
-                        text = username.getOrNull(0)?.uppercase() ?: "U",
-                        color = MaterialTheme.colorScheme.onTertiaryContainer,
-                        style = MaterialTheme.typography.headlineMedium,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-                Spacer(modifier = Modifier.padding(start = 16.dp))
-                Column(modifier = Modifier.padding(top = 8.dp)) {
-                    Text(
-                        text = username,
+                        text = stringResource(id = R.string.username_label),
+                        style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
+                },
+                bodyLabel = {
                     Text(
-                        text = emailAddress,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        text = username,
                         style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
-                }
-            }
-            IconButton(onClick = onEdit) {
-                Icon(
-                    imageVector = Icons.Rounded.Edit,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Column(modifier = Modifier.padding(end = 9.dp)) {
+                },
+            )
+            Spacer(modifier = Modifier.height(12.dp))
             ListTileProfile(
                 icon = {
                     Icon(
@@ -583,7 +564,7 @@ private fun MyProfileBody(
                     )
                 },
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             ListTileProfile(
                 icon = {
                     Icon(
@@ -608,7 +589,7 @@ private fun MyProfileBody(
                     )
                 }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             ListTileProfile(
                 icon = {
                     Icon(
@@ -633,7 +614,7 @@ private fun MyProfileBody(
                     )
                 }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             ListTileProfile(
                 icon = {
                     Icon(
@@ -658,7 +639,7 @@ private fun MyProfileBody(
                     )
                 }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             ListTileProfile(
                 icon = {
                     Icon(
@@ -683,7 +664,7 @@ private fun MyProfileBody(
                     )
                 }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             ListTileProfile(
                 icon = {
                     Icon(
@@ -708,34 +689,32 @@ private fun MyProfileBody(
                     )
                 }
             )
-            if (isWeightTargetVisible) {
-                Spacer(modifier = Modifier.height(16.dp))
-                ListTileProfile(
-                    icon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_scale_100dp),
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = stringResource(id = R.string.target_weight_label),
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold
-                        )
-                    },
-                    bodyLabel = {
-                        Text(
-                            text = stringResource(id = R.string.kg, weightTarget),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+            ListTileProfile(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_scale_100dp),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.target_weight_label),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                bodyLabel = {
+                    Text(
+                        text = stringResource(id = R.string.kg, weightTarget),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(12.dp))
             ListTileProfile(
                 icon = {
                     Icon(
@@ -760,7 +739,6 @@ private fun MyProfileBody(
                     )
                 }
             )
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -785,49 +763,8 @@ private fun MyProfileShimmer(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row {
-                Surface(
-                    color = placeholder,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape)
-                        .shimmer()
-                ) {}
-                Spacer(modifier = Modifier.padding(start = 16.dp))
-                Column(modifier = Modifier.padding(top = 8.dp)) {
-                    Surface(
-                        color = placeholder,
-                        modifier = Modifier
-                            .height(25.dp)
-                            .width(150.dp)
-                            .shimmer()
-                    ) {}
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Surface(
-                        color = placeholder,
-                        modifier = Modifier
-                            .height(25.dp)
-                            .width(100.dp)
-                            .shimmer()
-                    ) {}
-                }
-            }
-            Surface(
-                color = placeholder,
-                modifier = Modifier
-                    .padding(top = 8.dp, end = 9.dp)
-                    .size(24.dp)
-                    .shimmer()
-            ) {}
-        }
-        Spacer(modifier = Modifier.height(16.dp))
         Column(modifier = Modifier.padding(end = 9.dp)) {
-            repeat(7) {
+            repeat(8) {
                 Surface(
                     color = placeholder,
                     modifier = Modifier
@@ -835,7 +772,7 @@ private fun MyProfileShimmer(
                         .height(25.dp)
                         .shimmer()
                 ) {}
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 HorizontalDivider(thickness = 1.5.dp)
                 Spacer(modifier = Modifier.height(16.dp))
             }

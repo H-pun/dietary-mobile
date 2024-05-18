@@ -53,8 +53,19 @@ class NavComponentAction(
     val navigateToSignUp: () -> Unit = {
         navController.navigate(AppDestination.SignUpRoute.route)
     }
-    val navigateToNewPassword: (emailAddress: String) -> Unit = {emailAddress ->
-        navController.navigate(route = AppDestination.NewPasswordRoute.createRouteUrl(emailAddress))
+    val navigateToNewPassword: (emailAddress: String, code: String) -> Unit =
+        { emailAddress, code ->
+            navController.navigate(
+                route = AppDestination.NewPasswordRoute.createRouteUrl(
+                    emailAddress = emailAddress,
+                    code = code
+                )
+            )
+        }
+    val navigateToVerifyCode: (emailAddress: String) -> Unit = { emailAddress ->
+        navController.navigate(
+            route = AppDestination.VerifyCodeRoute.createRouteUrl(emailAddress = emailAddress)
+        )
     }
     val navigateToSignIn: (currentRoute: String) -> Unit = { currentRoute ->
         navController.navigate(route = AppDestination.SignInRoute.route) {
@@ -82,7 +93,7 @@ class NavComponentAction(
             }
         }
     }
-    val bottomNavigation: (destination: AppDestination, currentRoute: AppDestination) -> Unit =
+    val navigationDestination: (destination: AppDestination, currentRoute: AppDestination) -> Unit =
         { destination, currentRoute ->
             if (destination.route != currentRoute.route)
                 navController.navigate(route = destination.route) {

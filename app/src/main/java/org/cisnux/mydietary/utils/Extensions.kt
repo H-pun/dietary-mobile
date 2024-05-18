@@ -62,7 +62,7 @@ fun String.isEmailValid(): Boolean {
     return Regex(emailRegex).matches(this)
 }
 
-fun String.isPasswordSecure(): Boolean = this.trim().length >= 8
+fun String.isPasswordSecure(): Boolean = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,}$").matches(this)
 
 fun String.isUsernameValid(): Boolean {
     val usernameRegex = "^[a-z0-9_]{6,20}\$"

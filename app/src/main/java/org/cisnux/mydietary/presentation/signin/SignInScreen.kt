@@ -5,6 +5,7 @@ package org.cisnux.mydietary.presentation.signin
 import android.app.Activity
 import android.content.res.Configuration
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -75,7 +76,6 @@ import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.AuthenticationState
 import org.cisnux.mydietary.utils.isEmailValid
-import org.cisnux.mydietary.utils.isPasswordSecure
 import org.cisnux.mydietary.utils.UiState
 
 @Composable
@@ -84,9 +84,13 @@ fun SignInScreen(
     navigateToAddMyProfile: (String) -> Unit,
     navigateToResetPassword: () -> Unit,
     navigateToSignUp: () -> Unit,
+    navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SignInViewModel = hiltViewModel()
 ) {
+    BackHandler {
+        navigateUp()
+    }
     var emailAddress by rememberSaveable {
         mutableStateOf("")
     }
@@ -324,14 +328,14 @@ private fun SignInBody(
     isEmailPassSignInLoading: Boolean = false,
     isGoogleSignInLoading: Boolean = false,
 ) {
-    var isPasswordVisible by rememberSaveable {
-        mutableStateOf(false)
-    }
     val scrollState = rememberScrollState()
     var isEmailAddressFocused by rememberSaveable {
         mutableStateOf(false)
     }
     var isPasswordFocused by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var isPasswordVisible by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -471,12 +475,7 @@ private fun SignInBody(
                 )
             },
             supportingText = {
-                if (password.isNotEmpty() && !password.isPasswordSecure())
-                    Text(
-                        text = stringResource(R.string.password_error_text),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                else if (isPasswordFocused)
+                if (isPasswordFocused)
                     Text(
                         text = stringResource(id = R.string.supporting_text_required),
                         style = MaterialTheme.typography.bodySmall,
@@ -489,7 +488,6 @@ private fun SignInBody(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
-            isError = password.isNotEmpty() && !password.isPasswordSecure(),
             visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
@@ -532,8 +530,7 @@ private fun SignInBody(
             onClick = onEmailPasswordSignIn,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = emailAddress.isEmailValid() and password.isPasswordSecure()
-                    and !isEmailPassSignInLoading and !isGoogleSignInLoading,
+            enabled = emailAddress.isEmailValid() and password.isNotBlank() and !isEmailPassSignInLoading and !isGoogleSignInLoading,
         ) {
             if (isEmailPassSignInLoading)
                 CircularProgressIndicator()

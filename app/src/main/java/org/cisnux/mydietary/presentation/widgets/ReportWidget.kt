@@ -338,9 +338,7 @@ class ReportWidget : GlanceAppWidget() {
                         ),
                         context,
                         MainActivity::class.java
-                    ).apply {
-                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    }
+                    )
                     val action = actionStartActivity(intent = deepLinkIntent)
 
                     Column {

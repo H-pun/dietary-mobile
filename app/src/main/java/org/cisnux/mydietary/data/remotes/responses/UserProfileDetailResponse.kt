@@ -20,4 +20,5 @@ data class UserProfileDetailResponse(
     val goal: String,
     val weightTarget: Float = 0f,
     val activityLevel: String,
+    val isVerified: Boolean = false
 )

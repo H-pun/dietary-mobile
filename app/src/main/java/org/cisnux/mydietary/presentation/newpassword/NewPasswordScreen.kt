@@ -56,7 +56,6 @@ import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.isPasswordSecure
-import org.cisnux.mydietary.utils.isResetCodeValid
 
 @Composable
 fun NewPasswordScreen(
@@ -68,9 +67,6 @@ fun NewPasswordScreen(
         navigateToSignIn(AppDestination.NewPasswordRoute.route)
     }
 
-    var code by rememberSaveable(viewModel.code) {
-        mutableStateOf(viewModel.code)
-    }
     var password by rememberSaveable {
         mutableStateOf("")
     }
@@ -86,7 +82,16 @@ fun NewPasswordScreen(
 
     when (changePasswordState) {
         is UiState.Success -> {
-            navigateToSignIn(AppDestination.NewPasswordRoute.route)
+            LaunchedEffect(snackbarHostState) {
+                val snackbarResult = snackbarHostState.showSnackbar(
+                    message = "Berhasil",
+                    actionLabel = context.getString(R.string.sign_in),
+                    withDismissAction = true,
+                    duration = SnackbarDuration.Long
+                )
+                if (snackbarResult == SnackbarResult.ActionPerformed)
+                    navigateToSignIn(AppDestination.NewPasswordRoute.route)
+            }
         }
 
         is UiState.Error -> {
@@ -99,11 +104,9 @@ fun NewPasswordScreen(
                             withDismissAction = true,
                             duration = SnackbarDuration.Long
                         )
-                        if (snackbarResult == SnackbarResult.ActionPerformed)
-                            viewModel.changePassword(
-                                code = code,
-                                newPassword = password
-                            )
+                        if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.changePassword(
+                            newPassword = password
+                        )
                     }
                 }
             }
@@ -121,13 +124,11 @@ fun NewPasswordScreen(
                 onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
                 onChangePassword = {
                     viewModel.changePassword(
-                        code = code,
                         newPassword = password
                     )
                 },
-                code = code,
-                onCodeChange = { newValue -> code = newValue },
-                modifier = modifier.padding(it)
+                isLoading = changePasswordState is UiState.Loading,
+                modifier = modifier.padding(it),
             )
         },
         snackbarHostState = snackbarHostState
@@ -138,13 +139,11 @@ fun NewPasswordScreen(
     showBackground = true,
     name = "light",
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
-    wallpaper = Wallpapers.NONE, device = "id:pixel_7_pro"
+    wallpaper = Wallpapers.NONE,
+    device = "id:pixel_7_pro"
 )
 @Composable
 private fun NewPasswordContentPreview() {
-    var code by rememberSaveable {
-        mutableStateOf("")
-    }
     var password by rememberSaveable {
         mutableStateOf("")
     }
@@ -161,8 +160,6 @@ private fun NewPasswordContentPreview() {
                     onPasswordChange = { newValue -> password = newValue },
                     onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
                     onChangePassword = {},
-                    code = code,
-                    onCodeChange = { newValue -> code = newValue },
                     modifier = Modifier.padding(it)
                 )
             },
@@ -175,13 +172,12 @@ private fun NewPasswordContentPreview() {
     showBackground = true,
     name = "dark and indonesia",
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
-    wallpaper = Wallpapers.NONE, device = "id:pixel_7_pro", locale = "in"
+    wallpaper = Wallpapers.NONE,
+    device = "id:pixel_7_pro",
+    locale = "in"
 )
 @Composable
 private fun NewPasswordContentDarkPreview() {
-    var code by rememberSaveable {
-        mutableStateOf("")
-    }
     var password by rememberSaveable {
         mutableStateOf("")
     }
@@ -198,8 +194,6 @@ private fun NewPasswordContentDarkPreview() {
                     onPasswordChange = { newValue -> password = newValue },
                     onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
                     onChangePassword = {},
-                    code = code,
-                    onCodeChange = { newValue -> code = newValue },
                     modifier = Modifier.padding(it)
                 )
             },
@@ -212,13 +206,12 @@ private fun NewPasswordContentDarkPreview() {
     showBackground = true,
     name = "(loading) dark and indonesia",
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
-    wallpaper = Wallpapers.NONE, device = "id:pixel_7_pro", locale = "in"
+    wallpaper = Wallpapers.NONE,
+    device = "id:pixel_7_pro",
+    locale = "in"
 )
 @Composable
 private fun NewPasswordContentLoadingDarkPreview() {
-    var code by rememberSaveable {
-        mutableStateOf("")
-    }
     var password by rememberSaveable {
         mutableStateOf("")
     }
@@ -236,9 +229,7 @@ private fun NewPasswordContentLoadingDarkPreview() {
                     onConfirmationPasswordChange = { newValue -> confirmationPassword = newValue },
                     onChangePassword = {},
                     modifier = Modifier.padding(it),
-                    isResetPasswordLoading = true,
-                    code = code,
-                    onCodeChange = { newValue -> code = newValue }
+                    isLoading = true,
                 )
             },
             snackbarHostState = SnackbarHostState(),
@@ -248,15 +239,13 @@ private fun NewPasswordContentLoadingDarkPreview() {
 
 @Composable
 private fun NewPasswordBody(
-    code: String,
     password: String,
     confirmationPassword: String,
     onPasswordChange: (String) -> Unit,
-    onCodeChange: (String) -> Unit,
     onConfirmationPasswordChange: (String) -> Unit,
     onChangePassword: () -> Unit,
     modifier: Modifier = Modifier,
-    isResetPasswordLoading: Boolean = false
+    isLoading: Boolean = false
 ) {
     var isPasswordVisible by rememberSaveable {
         mutableStateOf(false)
@@ -265,9 +254,6 @@ private fun NewPasswordBody(
         mutableStateOf(false)
     }
     val scrollState = rememberScrollState()
-    var isCodeFocused by rememberSaveable {
-        mutableStateOf(false)
-    }
     var isPasswordFocused by rememberSaveable {
         mutableStateOf(false)
     }
@@ -279,8 +265,7 @@ private fun NewPasswordBody(
         modifier = modifier
             .fillMaxWidth()
             .verticalScroll(state = scrollState)
-            .padding(PaddingValues(16.dp)),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(PaddingValues(16.dp)), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         Image(
@@ -306,54 +291,7 @@ private fun NewPasswordBody(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.NumberPassword,
-                imeAction = ImeAction.Next
-            ),
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_number_100dp),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            value = code,
-            onValueChange = onCodeChange,
-            placeholder = {
-                Text(
-                    text = "Masukkan kode",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            },
-            supportingText = {
-                if (code.isNotEmpty() && !code.isResetCodeValid())
-                    Text(
-                        text = "Panjang dari kode harus 6 digit",
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                else if (isCodeFocused)
-                    Text(
-                        text = stringResource(id = R.string.supporting_text_required),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-            },
-            singleLine = true,
-            label = {
-                Text(
-                    text = "Kode",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            },
-            isError = code.isNotEmpty() && !code.isResetCodeValid(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged {
-                    isCodeFocused = it.isFocused
-                },
-        )
-        OutlinedTextField(
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Next
+                keyboardType = KeyboardType.Password, imeAction = ImeAction.Next
             ),
             leadingIcon = {
                 Icon(
@@ -371,16 +309,14 @@ private fun NewPasswordBody(
                 )
             },
             supportingText = {
-                if (password.isNotEmpty() && !password.isPasswordSecure())
-                    Text(
-                        text = stringResource(R.string.password_error_text),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                else if (isPasswordFocused)
-                    Text(
-                        text = stringResource(id = R.string.supporting_text_required),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
+                if (password.isNotEmpty() && !password.isPasswordSecure()) Text(
+                    text = stringResource(R.string.password_error_text),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                else if (isPasswordFocused) Text(
+                    text = stringResource(id = R.string.supporting_text_required),
+                    style = MaterialTheme.typography.bodySmall,
+                )
             },
             singleLine = true,
             label = {
@@ -395,8 +331,7 @@ private fun NewPasswordBody(
                 IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
                     Icon(
                         painter = painterResource(
-                            id = if (isPasswordVisible)
-                                R.drawable.ic_visibility_24_24dp
+                            id = if (isPasswordVisible) R.drawable.ic_visibility_24_24dp
                             else R.drawable.ic_visibility_off_24dp
                         ),
                         contentDescription = null,
@@ -411,8 +346,7 @@ private fun NewPasswordBody(
         )
         OutlinedTextField(
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
+                keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
             ),
             leadingIcon = {
                 Icon(
@@ -430,16 +364,14 @@ private fun NewPasswordBody(
                 )
             },
             supportingText = {
-                if (confirmationPassword.isNotEmpty() && confirmationPassword != password)
-                    Text(
-                        text = stringResource(R.string.confirmation_password_error_text),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                else if (isConfirmationPassFocused)
-                    Text(
-                        text = stringResource(id = R.string.supporting_text_required),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
+                if (confirmationPassword.isNotEmpty() && confirmationPassword != password) Text(
+                    text = stringResource(R.string.confirmation_password_error_text),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                else if (isConfirmationPassFocused) Text(
+                    text = stringResource(id = R.string.supporting_text_required),
+                    style = MaterialTheme.typography.bodySmall,
+                )
             },
             singleLine = true,
             label = {
@@ -454,8 +386,7 @@ private fun NewPasswordBody(
                 IconButton(onClick = { isConfirmationPassVisible = !isConfirmationPassVisible }) {
                     Icon(
                         painter = painterResource(
-                            id = if (isConfirmationPassVisible)
-                                R.drawable.ic_visibility_24_24dp
+                            id = if (isConfirmationPassVisible) R.drawable.ic_visibility_24_24dp
                             else R.drawable.ic_visibility_off_24dp
                         ),
                         contentDescription = null,
@@ -472,12 +403,10 @@ private fun NewPasswordBody(
             onClick = onChangePassword,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = code.isResetCodeValid() and password.isPasswordSecure() and (password == confirmationPassword) and !isResetPasswordLoading,
+            enabled = password.isPasswordSecure() and (password == confirmationPassword) and !isLoading,
         ) {
-            if (isResetPasswordLoading)
-                CircularProgressIndicator()
-            else
-                Text(text = "Reset Password")
+            if (isLoading) CircularProgressIndicator()
+            else Text(text = "Reset Password")
         }
     }
 }

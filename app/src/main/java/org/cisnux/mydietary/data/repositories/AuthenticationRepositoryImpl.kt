@@ -14,10 +14,14 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import org.cisnux.mydietary.data.remotes.bodyrequests.ChangePasswordBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.GoogleTokenRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.NewPasswordBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.ResetPasswordBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateEmailBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.VerifyEmailBodyRequest
 import org.cisnux.mydietary.domain.models.ChangePassword
+import org.cisnux.mydietary.domain.models.ForgotPassword
 import javax.inject.Inject
 
 
@@ -34,7 +38,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         channelFlow {
             send(UiState.Loading)
             delay(1000L)
-            userAccountRemoteSource.verifyUserAccount(userAccount.userAccountBodyRequest)
+            userAccountRemoteSource.signInUserAccount(userAccount.userAccountBodyRequest)
                 .fold(
                     ifLeft = {
                         send(UiState.Error(it))
@@ -96,13 +100,13 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
 
-    override fun updatePassword(changePassword: ChangePassword): Flow<UiState<String>> = flow {
+    override fun updatePassword(forgotPassword: ForgotPassword): Flow<UiState<String>> = flow {
         emit(UiState.Loading)
         userAccountRemoteSource.updatePassword(
             newPassword = NewPasswordBodyRequest(
-                code = changePassword.code,
-                newPassword = changePassword.newPassword,
-                emailAddress = changePassword.emailAddress
+                code = forgotPassword.code,
+                newPassword = forgotPassword.newPassword,
+                emailAddress = forgotPassword.emailAddress
             )
         )
             .fold(
@@ -114,6 +118,72 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 })
     }.distinctUntilChanged()
         .flowOn(Dispatchers.IO)
+
+    override fun changePassword(
+        accessToken: String,
+        id: String,
+        changePassword: ChangePassword
+    ): Flow<UiState<String>> = flow {
+        emit(UiState.Loading)
+        userAccountRemoteSource.updatePassword(
+            accessToken = accessToken,
+            changePasswordBodyRequest = ChangePasswordBodyRequest(
+                id = id,
+                oldPassword = changePassword.oldPassword,
+                newPassword = changePassword.newPassword
+            )
+        )
+            .fold(
+                ifLeft = { exception ->
+                    emit(UiState.Error(exception))
+                },
+                ifRight = {
+                    emit(UiState.Success(it))
+                })
+    }
+        .distinctUntilChanged()
+        .flowOn(Dispatchers.IO)
+
+    override fun changeEmail(
+        accessToken: String,
+        id: String,
+        email: String
+    ): Flow<UiState<String>> = flow {
+        emit(UiState.Loading)
+        userAccountRemoteSource.updateEmail(
+            accessToken = accessToken,
+            updateEmailBodyRequest = UpdateEmailBodyRequest(
+                id = id,
+                emailAddress = email
+            )
+        )
+            .fold(
+                ifLeft = { exception ->
+                    emit(UiState.Error(exception))
+                },
+                ifRight = {
+                    emit(UiState.Success(it))
+                })
+    }.distinctUntilChanged()
+        .flowOn(Dispatchers.IO)
+
+    override fun verifyEmail(accessToken: String, email: String): Flow<UiState<String>> =
+        flow {
+            emit(UiState.Loading)
+            userAccountRemoteSource.verifyEmailAddress(
+                accessToken = accessToken,
+                verifyEmailBodyRequest = VerifyEmailBodyRequest(emailAddress = email)
+            )
+                .fold(
+                    ifLeft = { exception ->
+                        emit(UiState.Error(exception))
+                    },
+                    ifRight = {
+                        emit(UiState.Success(it))
+                    }
+                )
+        }.distinctUntilChanged()
+            .flowOn(Dispatchers.IO)
 
     override suspend fun deleteSession() = withContext(Dispatchers.IO) {
         userAccountLocalSource.updateAccessToken("")

@@ -1,6 +1,5 @@
 package org.cisnux.mydietary.presentation.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,6 +37,7 @@ import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.addmyprofile.MyProfile
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.isFloatAndGreaterAndEqualToZero
+import org.cisnux.mydietary.utils.isFloatAndGreaterThanZero
 import org.cisnux.mydietary.utils.isUsernameValid
 
 @Preview(showBackground = true, locale = "in")
@@ -204,7 +204,7 @@ fun MyProfileForm(
             onWeightChange = onWeightChange,
             onGenderChange = onGenderChange,
             genders = genders,
-            waistCircumference =waistCircumference,
+            waistCircumference = waistCircumference,
             onWaistCircumference = onWaistCircumference,
         )
         Spacer(modifier = Modifier.height(15.dp))
@@ -253,67 +253,62 @@ fun MyProfileForm(
             }
         }
         Spacer(modifier = Modifier.height(15.dp))
-        AnimatedVisibility(visible = selectedGoal != goals[1]) {
-            OutlinedTextField(
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                leadingIcon = {
+        OutlinedTextField(
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_scale_100dp),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            },
+            value = weightTarget,
+            singleLine = true,
+            onValueChange = onTargetWeightChange,
+            placeholder = {
+                Text(
+                    text = stringResource(
+                        R.string.target_weight_placeholder
+                    ),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            label = {
+                Text(
+                    text = stringResource(R.string.target_weight_label),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            supportingText = {
+                if (weightTarget.isNotEmpty() and !weightTarget.isFloatAndGreaterThanZero())
+                    Text(
+                        text = stringResource(R.string.target_weight_error_text),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                else if (isTargetWeightFocused)
+                    Text(
+                        text = stringResource(R.string.supporting_text_required),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+            },
+            isError = weightTarget.isNotEmpty() and !weightTarget.isFloatAndGreaterThanZero(),
+            trailingIcon = {
+                if (weightTarget.isNotEmpty() and !weightTarget.isFloatAndGreaterThanZero())
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_scale_100dp),
+                        painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,
-                        modifier = Modifier.size(24.dp)
                     )
+                else Text(text = stringResource(R.string.trailing_text_kg))
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged {
+                    isTargetWeightFocused = it.isFocused
                 },
-                value = weightTarget,
-                singleLine = true,
-                onValueChange = onTargetWeightChange,
-                placeholder = {
-                    Text(
-                        text = stringResource(
-                            when (selectedGoal) {
-                                goals[0] -> R.string.target_lose_weight_placeholder
-                                else -> R.string.target_gain_weight_placeholder
-                            }
-                        ),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                },
-                label = {
-                    Text(
-                        text = stringResource(R.string.target_weight_label),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                },
-                supportingText = {
-                    if (weightTarget.isNotEmpty() and !weightTarget.isFloatAndGreaterAndEqualToZero())
-                        Text(
-                            text = stringResource(R.string.target_weight_error_text),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    else if (isTargetWeightFocused)
-                        Text(
-                            text = stringResource(R.string.supporting_text_required),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                },
-                isError = weightTarget.isNotEmpty() and !weightTarget.isFloatAndGreaterAndEqualToZero(),
-                trailingIcon = {
-                    if (weightTarget.isNotEmpty() and !weightTarget.isFloatAndGreaterAndEqualToZero())
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_round_error_24dp),
-                            contentDescription = null,
-                        )
-                    else Text(text = stringResource(R.string.trailing_text_kg))
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onFocusChanged {
-                        isTargetWeightFocused = it.isFocused
-                    },
-            )
-        }
+        )
         ExposedDropdownMenuBox(
             expanded = isActivityLevelExpanded,
             onExpandedChange = { isActivityLevelExpanded = it },

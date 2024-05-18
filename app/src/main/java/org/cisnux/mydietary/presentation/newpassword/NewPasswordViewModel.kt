@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.cisnux.mydietary.domain.models.ChangePassword
+import org.cisnux.mydietary.domain.models.ForgotPassword
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.utils.UiState
 import javax.inject.Inject
@@ -19,19 +19,20 @@ class NewPasswordViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val authenticationUseCase: AuthenticationUseCase
 ) : ViewModel() {
-    val code: String = savedStateHandle["code"] ?: ""
+    val code: String = checkNotNull(savedStateHandle["code"]) as String
     val emailAddress: String = checkNotNull(savedStateHandle["emailAddress"]) as String
     private val _changePasswordState = MutableStateFlow<UiState<String>>(UiState.Initialize)
     val changePasswordState = _changePasswordState.asStateFlow()
 
     init {
         Log.d(NewPasswordViewModel::class.simpleName, emailAddress)
+        Log.d(NewPasswordViewModel::class.simpleName, code)
     }
 
-    fun changePassword(code: String, newPassword: String) =
+    fun changePassword(newPassword: String) =
         viewModelScope.launch {
-            authenticationUseCase.changePassword(
-                changePassword = ChangePassword(
+            authenticationUseCase.forgotPassword(
+                forgotPassword = ForgotPassword(
                     code = code,
                     emailAddress = emailAddress,
                     newPassword = newPassword
