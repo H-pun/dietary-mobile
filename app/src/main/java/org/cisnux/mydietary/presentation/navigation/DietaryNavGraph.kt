@@ -389,9 +389,10 @@ fun DietaryNavGraph(
         composable(
             route = AppDestination.HomeRoute.route,
             enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 100)
+                fadeIn(
+                    animationSpec = tween(
+                        100, easing = LinearEasing
+                    )
                 )
             },
             exitTransition = {

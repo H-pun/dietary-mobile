@@ -141,7 +141,9 @@ fun SecurityAccountScreen(
                             )
                     }
                 }
-                if (exception is Failure.UnauthorizedFailure) {
+                if (exception is Failure.UnauthorizedFailure && exception.message?.lowercase()
+                        ?.contains("token") == true
+                ) {
                     viewModel.signOut()
                     navigateToSignIn()
                 }
@@ -177,7 +179,9 @@ fun SecurityAccountScreen(
                             )
                     }
                 }
-                if (exception is Failure.UnauthorizedFailure && exception.message != "Wrong old password!") {
+                if (exception is Failure.UnauthorizedFailure && exception.message?.lowercase()
+                        ?.contains("token") == true
+                ) {
                     viewModel.signOut()
                     navigateToSignIn()
                 }
