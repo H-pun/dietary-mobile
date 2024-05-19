@@ -53,6 +53,7 @@ fun DietaryNavGraph(
     val coroutineScope = rememberCoroutineScope()
     val activity = (context as Activity)
     NotificationDialog(snackbarHostState = snackbarHostState)
+
     NavHost(
         navController = navController,
         startDestination = AppDestination.SplashRoute.route
@@ -86,26 +87,26 @@ fun DietaryNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             }
@@ -120,26 +121,26 @@ fun DietaryNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             }
@@ -164,26 +165,26 @@ fun DietaryNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             }
@@ -195,26 +196,26 @@ fun DietaryNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             }
@@ -229,26 +230,26 @@ fun DietaryNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             }
@@ -269,26 +270,26 @@ fun DietaryNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             }
@@ -300,26 +301,26 @@ fun DietaryNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
@@ -341,26 +342,26 @@ fun DietaryNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
@@ -388,10 +389,9 @@ fun DietaryNavGraph(
         composable(
             route = AppDestination.HomeRoute.route,
             enterTransition = {
-                fadeIn(
-                    animationSpec = tween(
-                        100, easing = LinearEasing
-                    )
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
@@ -402,10 +402,9 @@ fun DietaryNavGraph(
                 )
             },
             popEnterTransition = {
-                fadeIn(
-                    animationSpec = tween(
-                        100, easing = LinearEasing
-                    )
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
@@ -421,7 +420,7 @@ fun DietaryNavGraph(
                 onFabFoodScanner = navComponentAction.navigateToFoodScanner,
                 navigateToDiaryDetail = navComponentAction.navigateToFoodDiaryDetail,
                 navigateToSignIn = navComponentAction.navigateToSignIn,
-                navigateUp = { activity.finish() }
+                navigateUp = { activity.finish() },
             )
         }
         composable(
@@ -540,7 +539,7 @@ fun DietaryNavGraph(
             },
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern = AppDestination.ReportRoute.deepLinkPattern
+                    uriPattern = AppDestination.AccountSecurityRoute.deepLinkPattern
                 },
             )
         ) {
@@ -554,6 +553,32 @@ fun DietaryNavGraph(
         }
         composable(
             route = AppDestination.DiaryDetailRoute.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(durationMillis = 100)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        100, easing = LinearEasing
+                    )
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(durationMillis = 100)
+                )
+            },
+            popExitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        100, easing = LinearEasing
+                    )
+                )
+            },
             arguments = listOf(
                 navArgument(name = "foodDiaryId") {
                     nullable = false
@@ -564,32 +589,6 @@ fun DietaryNavGraph(
                     type = NavType.BoolType
                 }
             ),
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
-                )
-            },
-            exitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        300, easing = LinearEasing
-                    )
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
-                )
-            },
-            popExitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        300, easing = LinearEasing
-                    )
-                )
-            },
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = AppDestination.DiaryDetailRoute.deepLinkPattern
@@ -606,7 +605,7 @@ fun DietaryNavGraph(
                         else navComponentAction.navigateToHomeClearAll()
                     }
                 },
-                navigateToSignIn = navComponentAction.navigateToSignIn
+                navigateToSignIn = navComponentAction.navigateToSignIn,
             )
         }
         composable(
@@ -614,26 +613,26 @@ fun DietaryNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             }
@@ -650,26 +649,26 @@ fun DietaryNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             exitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 100)
                 )
             },
             popExitTransition = {
                 fadeOut(
                     animationSpec = tween(
-                        300, easing = LinearEasing
+                        100, easing = LinearEasing
                     )
                 )
             },

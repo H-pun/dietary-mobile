@@ -5,10 +5,11 @@ buildscript {
 }
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    alias(libs.plugins.androidApplication) apply false
-    alias(libs.plugins.jetbrainsKotlinAndroid) apply false
-    alias(libs.plugins.daggerHiltAndroid) apply false
-    alias(libs.plugins.googleProtobuf) apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.org.jetbrains.kotlin.android) apply false
+    alias(libs.plugins.dagger.hilt.android) apply false
+    alias(libs.plugins.google.protobuf) apply false
+    alias(libs.plugins.compose.compiler) apply false
     kotlin("plugin.serialization") version libs.versions.kotlin apply false
-    alias(libs.plugins.googleGmsGoogleServices) apply false
+    alias(libs.plugins.google.gms.google.services) apply false
 }

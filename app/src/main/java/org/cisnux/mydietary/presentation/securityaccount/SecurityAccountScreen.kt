@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Email
@@ -20,7 +21,6 @@ import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -91,10 +91,6 @@ fun SecurityAccountScreen(
     val context = LocalContext.current
     val latestEmailAddress by viewModel.emailAddress.collectAsState(initial = null)
     val isVerified by viewModel.isVerified.collectAsState(initial = false)
-
-    var isChecked by rememberSaveable(isVerified) {
-        mutableStateOf(isVerified)
-    }
 
     var emailAddress by rememberSaveable(latestEmailAddress) {
         mutableStateOf(latestEmailAddress ?: "")
@@ -243,14 +239,11 @@ fun SecurityAccountScreen(
     ) {
         SecurityAccountBody(
             modifier = Modifier.padding(it),
-            isChecked = isChecked,
-            onCheckedChange = { newValue ->
-                if (newValue)
-                    viewModel.verifyEmail(emailAddress)
-                isChecked = newValue
+            onVerifyEmail = {
+                viewModel.verifyEmail(emailAddress)
             },
-            isVerified = isChecked,
-            isVerifyEmailLoading = verifyEmailState is UiState.Loading,
+            isVerified = isVerified,
+            isVerifyEmailLoading = verifyEmailState is UiState.Loading || changeEmailState is UiState.Loading,
             isChangePasswordLoading = changePasswordState is UiState.Loading,
             isChangeEmailLoading = changeEmailState is UiState.Loading,
             onChangeEmail = {
@@ -307,17 +300,10 @@ fun SecurityAccountScreen(
 @Preview(showBackground = true)
 @Composable
 private fun SecurityAccountContentPreview() {
-    var isChecked by rememberSaveable {
-        mutableStateOf(false)
-    }
     DietaryTheme {
         SecurityAccountContent(onSelectedDestination = { _, _ -> }) {
             SecurityAccountBody(
                 modifier = Modifier.padding(it),
-                isChecked = isChecked,
-                onCheckedChange = { newValue ->
-                    isChecked = newValue
-                }
             )
         }
     }
@@ -381,8 +367,7 @@ private fun SecurityAccountBody(
     isChangePasswordLoading: Boolean = false,
     onChangePassowrd: () -> Unit = {},
     onChangeEmail: () -> Unit = {},
-    isChecked: Boolean = false,
-    onCheckedChange: (Boolean) -> Unit = {},
+    onVerifyEmail: () -> Unit = {},
 ) {
     Column(modifier = modifier.padding(horizontal = 16.dp)) {
         ListTileProfile(
@@ -451,25 +436,30 @@ private fun SecurityAccountBody(
             },
             label = {
                 Text(
-                    text = "Verifikasi", style = MaterialTheme.typography.titleSmall,
+                    text = "Verifikasi Email", style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
             },
             bodyLabel = {
-                if (!isVerifyEmailLoading)
-                    Checkbox(
-                        checked = isChecked,
-                        onCheckedChange = onCheckedChange,
-                        enabled = !isVerified,
+                if (isVerifyEmailLoading) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                    return@ListTileProfile
+                }
+                if (!isVerified)
+                    Icon(imageVector = Icons.AutoMirrored.Rounded.Send, contentDescription = null)
+                else
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_verified_account_100dp),
+                        contentDescription = null,
                         modifier = Modifier
-                            .size(24.dp)
-                            .padding(end = 12.dp)
+                            .size(24.dp),
+                        tint = MaterialTheme.colorScheme.tertiary,
                     )
-                else CircularProgressIndicator(modifier = Modifier.size(24.dp))
             },
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable(onClick = onVerifyEmail, enabled = !isVerifyEmailLoading && !isVerified)
                 .padding(top = 8.dp)
         )
     }

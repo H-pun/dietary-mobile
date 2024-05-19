@@ -27,7 +27,7 @@ class DiaryDetailViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val foodDiaryId = checkNotNull(value = savedStateHandle["foodDiaryId"]) as String
+    val foodDiaryId = checkNotNull(value = savedStateHandle["foodDiaryId"]) as String
     private val _foodDiaryDetailState =
         MutableStateFlow<UiState<FoodDiaryDetail>>(UiState.Initialize)
     private val _userDailyNutritionState =

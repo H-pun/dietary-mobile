@@ -14,16 +14,19 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.Keyword
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import java.time.Instant
@@ -38,7 +41,6 @@ class HomeViewModel @Inject constructor(
     private var selectedDate = MutableStateFlow(Instant.now())
     private var foodDiaryCategory = MutableStateFlow(FoodDiaryCategory.BREAKFAST)
     private var refreshFoodDiaries = MutableStateFlow(false)
-    private var refreshSearchedFoodDiaries = MutableStateFlow(false)
     private var refreshSuggestionKeywords = MutableStateFlow(false)
     private var query = MutableStateFlow("")
 
@@ -46,10 +48,11 @@ class HomeViewModel @Inject constructor(
         userProfileUseCase.refreshUserProfile()
     }
 
-    val userProfileDetail get() = userProfileUseCase.userProfileDetail.shareIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-    )
+    val userProfileDetail
+        get() = userProfileUseCase.userProfileDetail.shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+        )
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val foodDiaryState = refreshFoodDiaries.asStateFlow().flatMapMerge { isRefresh ->
@@ -82,19 +85,9 @@ class HomeViewModel @Inject constructor(
         scope = viewModelScope, started = SharingStarted.WhileSubscribed()
     )
 
-    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val searchedFoodDiaryState =
-        refreshSearchedFoodDiaries.asStateFlow().flatMapMerge { isRefresh ->
-            if (isRefresh)
-                query.asStateFlow().debounce(200L).filter { it.isNotBlank() }.flatMapLatest { query ->
-                    foodDiaryUseCase.getDiaryFoodsByQuery(query).also {
-                        refreshSearchedFoodDiaries.value = false
-                    }
-                }
-            else flow { }
-        }.shareIn(
-            scope = viewModelScope, started = SharingStarted.WhileSubscribed()
-        )
+    private val _searchedFoodDiaryState =
+        MutableStateFlow<UiState<List<FoodDiary>>>(UiState.Initialize)
+    val searchedFoodDiaryState get() = _searchedFoodDiaryState.asSharedFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val searchedFoodDiaries = searchedFoodDiaryState.mapLatest { state ->
@@ -112,7 +105,7 @@ class HomeViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val keywordSuggestionState = refreshSuggestionKeywords.asStateFlow().flatMapMerge { isRefresh ->
         if (isRefresh)
-            query.asStateFlow().debounce(200L).flatMapLatest { query ->
+            query.asStateFlow().debounce(300L).flatMapLatest { query ->
                 if (query.isBlank())
                     flow {
                         emit(UiState.Success(listOf()))
@@ -120,7 +113,9 @@ class HomeViewModel @Inject constructor(
                     }
                 else foodDiaryUseCase.getKeywordSuggestionsByQuery(query).also {
                     refreshSuggestionKeywords.value = false
-                }
+                }.shareIn(
+                    scope = viewModelScope, started = SharingStarted.WhileSubscribed()
+                )
             }
         else flow { }
     }.shareIn(
@@ -157,8 +152,10 @@ class HomeViewModel @Inject constructor(
         refreshSuggestionKeywords.value = isRefresh
     }
 
-    fun updateRefreshSearchedMovies(isRefresh: Boolean) {
-        refreshSearchedFoodDiaries.value = isRefresh
+    fun getFoodDiariesByQuery(query: String) = viewModelScope.launch {
+        foodDiaryUseCase.getDiaryFoodsByQuery(query).distinctUntilChanged().collectLatest {
+            _searchedFoodDiaryState.value = it
+        }
     }
 
     fun updateQuery(newQuery: String) {

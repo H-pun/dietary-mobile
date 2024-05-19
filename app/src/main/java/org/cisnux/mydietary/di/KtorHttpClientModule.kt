@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
@@ -23,6 +24,9 @@ object KtorHttpClientModule {
     @Provides
     fun provideHttpClient(): HttpClient =
         HttpClient(CIO) {
+            install(HttpTimeout){
+                requestTimeoutMillis = 15_000L
+            }
             install(Logging) {
                 logger = Logger.DEFAULT
                 level = LogLevel.ALL

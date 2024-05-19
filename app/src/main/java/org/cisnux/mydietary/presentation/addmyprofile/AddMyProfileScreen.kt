@@ -58,6 +58,7 @@ fun AddMyProfileScreen(
     viewModel: AddMyProfileViewModel = hiltViewModel()
 ) {
     BackHandler {
+        viewModel.signOut()
         navigateUp()
     }
     val genders = stringArrayResource(id = R.array.gender)

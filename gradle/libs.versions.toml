@@ -1,14 +1,14 @@
 [versions]
 agp = "8.4.0"
-glanceAppwidget = "1.1.0-beta02"
+glanceAppwidget = "1.1.0-rc01"
 googleServices = "4.4.1"
-kotlin = "1.9.23"
+kotlin = "2.0.0-RC3"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 kotlinxCoroutinesPlayServices = "1.8.0"
-lifecycleRuntimeKtx = "2.7.0"
+lifecycleRuntimeKtx = "2.8.0"
 activityCompose = "1.9.0"
 composeBom = "2024.05.00"
 hilt = "2.50"
@@ -87,8 +87,9 @@ vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", ve
 leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary-android" }
 
 [plugins]
-androidApplication = { id = "com.android.application", version.ref = "agp" }
-jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-daggerHiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-googleProtobuf = { id = "com.google.protobuf", version.ref = "protobuf" }
-googleGmsGoogleServices = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+google-protobuf = { id = "com.google.protobuf", version.ref = "protobuf" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

@@ -258,6 +258,7 @@ fun DiaryDetailScreen(
     )
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(
     showBackground = true,
@@ -357,13 +358,13 @@ fun DiaryDetailBody(
     foodPictures: Any?,
     onNavigateUp: () -> Unit,
     onRemove: () -> Unit,
+    modifier: Modifier = Modifier,
     isRemoveEnable: Boolean = true,
     isSuccess: Boolean = true,
     title: String = "",
 ) {
     val context = LocalContext.current
-
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(
             visible = foodPictures == null,
             modifier = Modifier
@@ -381,11 +382,12 @@ fun DiaryDetailBody(
             var rotation by remember { mutableFloatStateOf(0f) }
             var offset by remember { mutableStateOf(Offset.Zero) }
 
-            val state = rememberTransformableState { zoomChange, offsetChange, rotationChange ->
-                scale *= zoomChange
-                rotation += rotationChange
-                offset += offsetChange
-            }
+            val state =
+                rememberTransformableState { zoomChange, offsetChange, rotationChange ->
+                    scale *= zoomChange
+                    rotation += rotationChange
+                    offset += offsetChange
+                }
 
             Box(
                 modifier = Modifier
@@ -444,9 +446,11 @@ fun DiaryDetailBody(
                 state = rememberTooltipState(),
             ) {
                 FilledIconButton(
-                    onClick = onRemove, colors = IconButtonDefaults.filledIconButtonColors(
+                    onClick = onRemove,
+                    colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = Color.Black.copy(alpha = 0.5f)
-                    ), enabled = isRemoveEnable
+                    ),
+                    enabled = isRemoveEnable
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_outline_cancel_24dp),

@@ -80,7 +80,7 @@
     <string name="target_weight_placeholder">Berapa berat badan idealmu?</string>>
     <string name="target_weight_error_text">Berat ideal harus berupa angka dan lebih besar dari 0</string>
     <string name="activity_level_label">Tingkat Aktivitas</string>
-    <string name="build_profile">Bangun Profil</string>
+    <string name="build_profile">Buat Profil</string>
     <string name="confirmation_password_label">Konfirmasi Kata Sandi</string>
     <string name="verify_email">Verifikasi Alamat Email</string>
     <string name="terms_of_use_label_button">Dengan mengklik masuk, Kamu setuju dengan</string>

@@ -1,10 +1,11 @@
 plugins {
     kotlin("plugin.serialization")
     kotlin("kapt")
-    alias(libs.plugins.daggerHiltAndroid)
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
-    alias(libs.plugins.googleProtobuf)
+    alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.google.protobuf)
+    alias(libs.plugins.compose.compiler)
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
 }
@@ -44,10 +45,6 @@ android {
     }
     buildFeatures {
         compose = true
-        viewBinding = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.13"
     }
     packaging {
         resources {
@@ -82,7 +79,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
-    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -138,6 +134,8 @@ dependencies {
     implementation(libs.androidx.glance.appwidget)
     //leakcanary
     debugImplementation(libs.leakcanary.android)
+    //firebase
+    implementation(libs.firebase.auth)
 }
 
 // Allow references to generated code

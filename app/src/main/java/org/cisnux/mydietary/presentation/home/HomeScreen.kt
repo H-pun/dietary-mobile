@@ -1,7 +1,9 @@
 package org.cisnux.mydietary.presentation.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -65,7 +67,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -107,7 +108,10 @@ import org.cisnux.mydietary.presentation.ui.components.NavigationDrawer
 import org.cisnux.mydietary.presentation.ui.components.UserAccountCard
 import java.time.Instant
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalCoroutinesApi::class
+)
 @Composable
 fun HomeScreen(
     navigateForBottomNav: (destination: AppDestination, currentRoute: AppDestination) -> Unit,
@@ -192,10 +196,9 @@ fun HomeScreen(
                         withDismissAction = true,
                         duration = SnackbarDuration.Long
                     )
-                    if (snackbarResult == SnackbarResult.ActionPerformed)
-                        viewModel.updateRefreshSearchedMovies(
-                            true
-                        )
+                    if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getFoodDiariesByQuery(
+                        query = searchBarState.query
+                    )
                 }
             }
             if (exception is Failure.UnauthorizedFailure) {
@@ -226,13 +229,7 @@ fun HomeScreen(
     }
     val onRefresh = when {
         searchBarState.active -> viewModel::updateRefreshSuggestionKeywords
-        searchBarState.isSearch -> viewModel::updateRefreshSearchedMovies
         else -> viewModel::updateRefreshDiaryFoods
-    }
-    val oneTimeRefresh by rememberUpdatedState(onRefresh)
-
-    LaunchedEffect(Unit) {
-        oneTimeRefresh(true)
     }
 
     HomeContent(
@@ -253,7 +250,8 @@ fun HomeScreen(
         body = {
             AnimatedVisibility(visible = !searchBarState.isSearch) {
                 HomeBody(
-                    menuTitle = (userProfile?.username?.getOrNull(0) ?: 'u').toString().uppercase(),
+                    menuTitle = (userProfile?.username?.getOrNull(0) ?: 'u').toString()
+                        .uppercase(),
                     onMenuClicked = { coroutineScope.launch { drawerState.open() } },
                     foodDiaries = diaryFoods,
                     onCardTapped = navigateToDiaryDetail,
@@ -288,10 +286,10 @@ fun HomeScreen(
                         searchBarState = searchBarState.copy(
                             query = query, isSearch = isSearch, active = !isSearch
                         )
-                        viewModel.updateRefreshSearchedMovies(true)
+                        viewModel.getFoodDiariesByQuery(query)
                         viewModel.updateQuery(newQuery = query)
                     },
-                    isDiaryLoading = diaryFoodState is UiState.Loading || diaryFoodState is UiState.Error
+                    isDiaryLoading = diaryFoodState is UiState.Loading || diaryFoodState is UiState.Error,
                 )
             }
             AnimatedVisibility(visible = searchBarState.isSearch) {
@@ -317,57 +315,44 @@ fun HomeScreen(
                         searchBarState = searchBarState.copy(
                             query = query, isSearch = isSearch, active = !isSearch
                         )
-                        viewModel.updateRefreshSearchedMovies(true)
+                        viewModel.getFoodDiariesByQuery(query)
                         viewModel.updateQuery(newQuery = query)
                     },
                     isSearchLoading = searchedDiaryFoodState is UiState.Loading || searchedDiaryFoodState is UiState.Error,
                     modifier = modifier.padding(it),
                 )
             }
-            CameraAccessDialog(
-                onDismissRequest = {
-                    isCameraDialogOpen = false
-                },
-                onAgree = {
-                    isCameraDialogOpen = false
-                    cameraLauncher.launch(Manifest.permission.CAMERA)
-                },
-                isDialogOpen = isCameraDialogOpen
+            CameraAccessDialog(onDismissRequest = {
+                isCameraDialogOpen = false
+            }, onAgree = {
+                isCameraDialogOpen = false
+                cameraLauncher.launch(Manifest.permission.CAMERA)
+            }, isDialogOpen = isCameraDialogOpen
             )
-            if (openDatePickerDialog)
-                DatePickerDialog(
-                    onDismissRequest = {
+            if (openDatePickerDialog) DatePickerDialog(onDismissRequest = {
+                openDatePickerDialog = false
+            }, confirmButton = {
+                TextButton(
+                    onClick = {
                         openDatePickerDialog = false
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                openDatePickerDialog = false
-                                viewModel.updateSelectedDate(
-                                    datePickerState.selectedDateMillis?.let { millis ->
-                                        Instant.ofEpochMilli(
-                                            millis
-                                        )
-                                    } ?: Instant.now()
-                                )
-                            },
-                            enabled = confirmEnabled
-                        ) {
-                            Text(stringResource(R.string.ok))
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = {
-                                openDatePickerDialog = false
-                            }
-                        ) {
-                            Text(stringResource(R.string.cancel))
-                        }
-                    }
+                        viewModel.updateSelectedDate(datePickerState.selectedDateMillis?.let { millis ->
+                            Instant.ofEpochMilli(
+                                millis
+                            )
+                        } ?: Instant.now())
+                    }, enabled = confirmEnabled
                 ) {
-                    DatePicker(state = datePickerState)
+                    Text(stringResource(R.string.ok))
                 }
+            }, dismissButton = {
+                TextButton(onClick = {
+                    openDatePickerDialog = false
+                }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }) {
+                DatePicker(state = datePickerState)
+            }
         },
         shouldBottomBarOpen = !searchBarState.active,
         snackbarHostState = snackbarHostState,
@@ -396,8 +381,12 @@ fun HomeScreen(
     )
 }
 
+@SuppressLint("UnusedContentLambdaTargetStateParameter")
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true, device = "spec:parent=pixel_5")
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
+)
 @Composable
 private fun HomeContentPreview() {
     var searchBarState by rememberSearchBarState(
@@ -423,10 +412,9 @@ private fun HomeContentPreview() {
     var tabState by rememberSaveable { mutableIntStateOf(0) }
 
     DietaryTheme {
-        HomeContent(
-            drawerState = drawerState,
+        HomeContent(drawerState = drawerState,
             onSelectedDestination = { _, _ -> },
-            body = {
+            body = { paddingValues ->
                 HomeBody(
                     query = searchBarState.query,
                     onQueryChange = { newValue ->
@@ -440,7 +428,7 @@ private fun HomeContentPreview() {
                     navigateUp = {},
                     isSearch = searchBarState.isSearch,
                     onSearchChange = { _, _ -> },
-                    modifier = Modifier.padding(it),
+                    modifier = Modifier.padding(paddingValues),
                     onCardTapped = {},
                     foodDiaries = foodDiaries,
                     tabState = tabState,
@@ -455,39 +443,32 @@ private fun HomeContentPreview() {
                         Instant.ofEpochMilli(
                             millis
                         )?.dayDateMonthYear()
-                    } ?: Instant.now().dayDateMonthYear()
+                    } ?: Instant.now().dayDateMonthYear(),
                 )
-                if (openDatePickerDialog)
-                    DatePickerDialog(
-                        onDismissRequest = {
+                if (openDatePickerDialog) DatePickerDialog(onDismissRequest = {
+                    openDatePickerDialog = false
+                }, confirmButton = {
+                    TextButton(
+                        onClick = {
                             openDatePickerDialog = false
-                        },
-                        confirmButton = {
-                            TextButton(
-                                onClick = {
-                                    openDatePickerDialog = false
-                                }, enabled = confirmEnabled
-                            ) {
-                                Text(stringResource(R.string.ok))
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(
-                                onClick = {
-                                    openDatePickerDialog = false
-                                }) {
-                                Text(stringResource(R.string.cancel))
-                            }
-                        }
+                        }, enabled = confirmEnabled
                     ) {
-                        DatePicker(state = datePickerState)
+                        Text(stringResource(R.string.ok))
                     }
+                }, dismissButton = {
+                    TextButton(onClick = {
+                        openDatePickerDialog = false
+                    }) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                }) {
+                    DatePicker(state = datePickerState)
+                }
             },
             shouldBottomBarOpen = true,
             snackbarHostState = SnackbarHostState(),
             onFabFoodScanner = {},
-            onRefresh = {}
-        )
+            onRefresh = {})
     }
 }
 
@@ -507,12 +488,11 @@ private fun HomeContent(
 ) {
     val state = rememberPullToRefreshState()
 
-    if (state.isRefreshing)
-        LaunchedEffect(true) {
-            delay(300L)
-            onRefresh()
-            state.endRefresh()
-        }
+    if (state.isRefreshing) LaunchedEffect(true) {
+        delay(300L)
+        onRefresh()
+        state.endRefresh()
+    }
 
     NavigationDrawer(
         currentRoute = AppDestination.HomeRoute,
@@ -521,29 +501,25 @@ private fun HomeContent(
         signOut = signOut,
         drawerState = drawerState
     ) {
-        Scaffold(
-            bottomBar = {
-                AnimatedVisibility(visible = shouldBottomBarOpen) {
-                    BottomBar(
-                        currentRoute = AppDestination.HomeRoute,
-                        onSelectedDestination = onSelectedDestination
+        Scaffold(bottomBar = {
+            AnimatedVisibility(visible = shouldBottomBarOpen) {
+                BottomBar(
+                    currentRoute = AppDestination.HomeRoute,
+                    onSelectedDestination = onSelectedDestination
+                )
+            }
+        }, snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }, floatingActionButton = {
+            AnimatedVisibility(visible = shouldBottomBarOpen) {
+                FloatingActionButton(onClick = onFabFoodScanner) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_food_scanner_24dp),
+                        contentDescription = stringResource(R.string.food_scanner_title)
                     )
                 }
-            },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
-            },
-            floatingActionButton = {
-                AnimatedVisibility(visible = shouldBottomBarOpen) {
-                    FloatingActionButton(onClick = onFabFoodScanner) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_food_scanner_24dp),
-                            contentDescription = stringResource(R.string.food_scanner_title)
-                        )
-                    }
-                }
-            },
-            modifier = modifier
+            }
+        }, modifier = modifier
         ) { innerPadding ->
             Box(Modifier.nestedScroll(state.nestedScrollConnection)) {
                 body(innerPadding)
@@ -557,6 +533,7 @@ private fun HomeContent(
     }
 }
 
+@SuppressLint("UnusedContentLambdaTargetStateParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HomeBody(
@@ -631,8 +608,7 @@ private fun HomeBody(
             )
             Spacer(modifier = Modifier.height(8.dp))
             TabRow(
-                selectedTabIndex = tabState,
-                modifier = Modifier.padding(end = 16.dp)
+                selectedTabIndex = tabState, modifier = Modifier.padding(end = 16.dp)
             ) {
                 List(tabDiaries.size) { index ->
                     Tab(icon = {
@@ -686,14 +662,14 @@ private fun HomeBody(
                             }
                         }
                         foodDiaries?.let {
-                            items(foodDiaries, key = { it.id }, contentType = { it }) { diaryFood ->
+                            items(foodDiaries, key = { it.id }, contentType = { it }) { foodDiary ->
                                 DiaryCard(
-                                    foodName = diaryFood.title,
-                                    date = diaryFood.date,
-                                    time = diaryFood.time,
-                                    foodImageUrl = diaryFood.foodPictureUrl,
-                                    calorie = diaryFood.totalFoodCalories,
-                                    onClick = { onCardTapped(diaryFood.id) }
+                                    foodName = foodDiary.title,
+                                    date = foodDiary.date,
+                                    time = foodDiary.time,
+                                    foodImageUrl = foodDiary.foodPictureUrl,
+                                    calorie = foodDiary.totalFoodCalories,
+                                    onClick = { onCardTapped(foodDiary.id) },
                                 )
                             }
                         }
@@ -811,6 +787,7 @@ private fun SearchBodyPreview() {
     }
 
     DietaryTheme {
+
         SearchBody(
             foodDiaries = foodDiaries,
             onCardTapped = { /*TODO*/ },
@@ -843,7 +820,7 @@ private fun SearchBody(
     isSearch: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    isSearchLoading: Boolean = false
+    isSearchLoading: Boolean = false,
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -881,7 +858,7 @@ private fun SearchBody(
                         time = foodDiary.time,
                         foodImageUrl = foodDiary.foodPictureUrl,
                         calorie = foodDiary.totalFoodCalories,
-                        onClick = { onCardTapped(foodDiary.id) }
+                        onClick = { onCardTapped(foodDiary.id) },
                     )
                 }
             }
