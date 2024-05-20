@@ -32,7 +32,6 @@ import org.cisnux.mydietary.data.remotes.bodyrequests.ReportBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.MonthlyReportResponse
 import org.cisnux.mydietary.data.remotes.responses.WeeklyReportResponse
 import org.cisnux.mydietary.domain.models.Keyword
-import org.cisnux.mydietary.domain.models.Report
 import org.cisnux.mydietary.utils.asDateAndMonth
 import org.cisnux.mydietary.utils.asDay
 import org.cisnux.mydietary.utils.fromLocalDateToDayDateAndMonth
@@ -311,7 +310,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
         accessToken: String,
         userId: String,
         category: ReportCategory
-    ): Flow<UiState<Report>> =
+    ): Flow<UiState<List<FoodDiaryReport>>> =
         flow {
             emit(UiState.Loading)
             foodDiaryRemoteSource.getFoodDiaryReports(
@@ -323,7 +322,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
             ).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
                 ifRight = {
-                    val chunkedFoodDiaries = it.map { reportResponse ->
+                    val foodDiaries = it.map { reportResponse ->
                         when (reportResponse) {
                             is MonthlyReportResponse -> {
                                 FoodDiaryReport(
@@ -346,20 +345,22 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                 date = reportResponse.date
                             )
                         }
-                    }.chunked(7)
-                    val datePages = chunkedFoodDiaries.map { foodDiaries ->
-                        val first = foodDiaries.first().date
-                        val last = foodDiaries.last().date
-                        if (first != null && last != null) {
-                            Report.DatePage(dateRange = "${first.asDateAndMonth} - ${last.asDateAndMonth}")
-                        } else Report.DatePage()
                     }
+//                        .chunked(7)
+//                    val datePages = chunkedFoodDiaries.map { foodDiaries ->
+//                        val first = foodDiaries.first().date
+//                        val last = foodDiaries.last().date
+//                        if (first != null && last != null) {
+//                            WeeklyReport.DatePage(dateRange = "${first.asDateAndMonth} - ${last.asDateAndMonth}")
+//                        } else WeeklyReport.DatePage()
+//                    }
+//                    WeeklyReport(
+//                        datePages = datePages,
+//                        chunkedFoodDiaries = chunkedFoodDiaries
+//                    )
                     emit(
                         UiState.Success(
-                            Report(
-                                datePages = datePages,
-                                chunkedFoodDiaries = chunkedFoodDiaries
-                            )
+                            foodDiaries
                         )
                     )
                 }

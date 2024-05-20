@@ -44,15 +44,8 @@ class HomeViewModel @Inject constructor(
     private var refreshSuggestionKeywords = MutableStateFlow(false)
     private var query = MutableStateFlow("")
 
-    init {
-        userProfileUseCase.refreshUserProfile()
-    }
-
     val userProfileDetail
-        get() = userProfileUseCase.userProfileDetail.shareIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-        )
+        get() = userProfileUseCase.getUserProfileDetail()
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val foodDiaryState = refreshFoodDiaries.asStateFlow().flatMapMerge { isRefresh ->
@@ -63,7 +56,8 @@ class HomeViewModel @Inject constructor(
                 }.debounce(200L).flatMapLatest {
                     foodDiaryUseCase.getDiaryFoodsByDaysAndCategory(
                         date = it.first.currentLocalDateTimeInBasicISOFormat,
-                        category = it.second
+                        category = it.second,
+                        scope = viewModelScope
                     )
                         .also {
                             refreshFoodDiaries.value = false
@@ -111,7 +105,7 @@ class HomeViewModel @Inject constructor(
                         emit(UiState.Success(listOf()))
                         refreshSuggestionKeywords.value = false
                     }
-                else foodDiaryUseCase.getKeywordSuggestionsByQuery(query).also {
+                else foodDiaryUseCase.getKeywordSuggestionsByQuery(query = query, scope = viewModelScope).also {
                     refreshSuggestionKeywords.value = false
                 }.shareIn(
                     scope = viewModelScope, started = SharingStarted.WhileSubscribed()
@@ -133,6 +127,9 @@ class HomeViewModel @Inject constructor(
             scope = viewModelScope, started = SharingStarted.WhileSubscribed(),
         )
 
+    init {
+        userProfileUseCase.refreshUserProfile(scope = viewModelScope)
+    }
 
     fun updateSelectedDate(dateTimeMillis: Instant) {
         selectedDate.value = dateTimeMillis
@@ -153,7 +150,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getFoodDiariesByQuery(query: String) = viewModelScope.launch {
-        foodDiaryUseCase.getDiaryFoodsByQuery(query).distinctUntilChanged().collectLatest {
+        foodDiaryUseCase.getDiaryFoodsByQuery(query = query, scope = viewModelScope).distinctUntilChanged().collectLatest {
             _searchedFoodDiaryState.value = it
         }
     }

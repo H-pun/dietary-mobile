@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.google.protobuf)
     alias(libs.plugins.compose.compiler)
     id("kotlin-parcelize")
-    id("com.google.gms.google-services")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -122,11 +122,6 @@ dependencies {
     implementation(libs.datastore.proto)
     implementation(libs.datastore.preferences)
     implementation(libs.protobuf.javalite)
-    // firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.play.services.auth)
-    implementation(libs.kotlinx.coroutines.play.services)
     // vico charts
     implementation(libs.vico.compose)
     implementation(libs.vico.compose.m3)
@@ -135,7 +130,7 @@ dependencies {
     //leakcanary
     debugImplementation(libs.leakcanary.android)
     //firebase
-    implementation(libs.firebase.auth)
+    implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)

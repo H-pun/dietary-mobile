@@ -1,7 +1,7 @@
 package org.cisnux.mydietary.presentation.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,11 +23,8 @@ import org.cisnux.mydietary.presentation.ui.theme.lightProgress
 
 @Composable
 fun UserNutritionCardShimmer(modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    val placeholder = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
-        else -> darkProgress
-    }
+    val placeholder = if (!isSystemInDarkTheme()) lightProgress
+    else darkProgress
 
     Row(
         modifier = modifier
@@ -39,7 +36,7 @@ fun UserNutritionCardShimmer(modifier: Modifier = Modifier) {
         repeat(4) {
             Surface(
                 color = placeholder, modifier = Modifier
-                    .size(115.dp)
+                    .size(125.dp)
                     .clip(CircleShape)
                     .shimmer()
             ) {}

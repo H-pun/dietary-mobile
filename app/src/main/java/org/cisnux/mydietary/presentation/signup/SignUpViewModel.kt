@@ -23,7 +23,7 @@ class SignUpViewModel @Inject constructor(
     fun signUpWithEmailAndPassword(emailAddress: String, password: String) {
         val userAccount = UserAccount(emailAddress = emailAddress, password = password)
         viewModelScope.launch {
-            authenticationUseCase.signUpWithEmailAndPassword(userAccount = userAccount)
+            authenticationUseCase.signUpWithEmailAndPassword(userAccount = userAccount, scope = viewModelScope)
                 .collectLatest { uiState ->
                     _signUpWithEmailAndPasswordState.value = uiState
                 }

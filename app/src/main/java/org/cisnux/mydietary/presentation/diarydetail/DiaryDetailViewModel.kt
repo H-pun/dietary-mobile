@@ -7,7 +7,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.FoodDiaryUseCase
-import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -17,14 +16,15 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.AddFoodDiary
 import org.cisnux.mydietary.domain.models.UserNutrition
+import org.cisnux.mydietary.domain.usecases.ReportUseCase
 import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class DiaryDetailViewModel @Inject constructor(
     private val foodDiaryUseCase: FoodDiaryUseCase,
-    private val userProfileUseCase: UserProfileUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
+    private val reportUseCase: ReportUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     val foodDiaryId = checkNotNull(value = savedStateHandle["foodDiaryId"]) as String
@@ -34,18 +34,22 @@ class DiaryDetailViewModel @Inject constructor(
         MutableStateFlow<UiState<UserNutrition>>(UiState.Initialize)
     val userDailyNutritionState = _userDailyNutritionState.asSharedFlow()
 
-    init {
-        viewModelScope.launch {
-            userProfileUseCase.userDailyNutrition.distinctUntilChanged().collectLatest {
-                _userDailyNutritionState.value = it
-            }
-        }
-    }
-
     val foodDiaryDetailState get() = _foodDiaryDetailState.asStateFlow()
     private val _addFoodDiaryState =
         MutableStateFlow<UiState<String>>(UiState.Initialize)
     val addFoodDiaryState get() = _addFoodDiaryState.asStateFlow()
+
+    private val _removeState = MutableStateFlow<UiState<Nothing>>(UiState.Initialize)
+    val removeState get() = _removeState.asStateFlow()
+
+    init {
+        getFoodDiaryDetailById()
+        viewModelScope.launch {
+            reportUseCase.getDailyNutrition(scope = viewModelScope).distinctUntilChanged().collectLatest {
+                _userDailyNutritionState.value = it
+            }
+        }
+    }
 
     fun addFoodDiary(
         title: String,
@@ -69,26 +73,19 @@ class DiaryDetailViewModel @Inject constructor(
             totalFat = totalFat,
             totalCarbohydrate = totalCarbohydrate,
         )
-        foodDiaryUseCase.addFoodDiary(addFoodDiary).collectLatest { uiState ->
+        foodDiaryUseCase.addFoodDiary(addFoodDiary = addFoodDiary, scope = viewModelScope).collectLatest { uiState ->
             _addFoodDiaryState.value = uiState
         }
     }
 
-    private val _removeState = MutableStateFlow<UiState<Nothing>>(UiState.Initialize)
-    val removeState get() = _removeState.asStateFlow()
-
-    init {
-        getFoodDiaryDetailById()
-    }
-
     fun getFoodDiaryDetailById() = viewModelScope.launch {
-        foodDiaryUseCase.getFoodDiaryDetailById(foodDiaryId = foodDiaryId).collectLatest { uiState ->
+        foodDiaryUseCase.getFoodDiaryDetailById(foodDiaryId = foodDiaryId, scope = viewModelScope).collectLatest { uiState ->
             _foodDiaryDetailState.value = uiState
         }
     }
 
     fun deleteFoodDiaryById() = viewModelScope.launch {
-        foodDiaryUseCase.deleteFoodDiaryById(foodDiaryId = foodDiaryId).collectLatest { uiState ->
+        foodDiaryUseCase.deleteFoodDiaryById(foodDiaryId = foodDiaryId, scope = viewModelScope).collectLatest { uiState ->
             _removeState.value = uiState
         }
     }

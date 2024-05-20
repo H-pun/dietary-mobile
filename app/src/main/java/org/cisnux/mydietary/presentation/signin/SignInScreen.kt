@@ -100,7 +100,7 @@ fun SignInScreen(
 
     when (signInWithEmailAndPasswordState) {
         is UiState.Success -> {
-            val authenticationState by viewModel.authenticationState.collectAsState()
+            val authenticationState by viewModel.authenticationState.collectAsState(initial = AuthenticationState.INITIALIZE)
             when (authenticationState) {
                 AuthenticationState.HAS_NOT_USER_PROFILE -> navigateToAddMyProfile(AppDestination.SignInRoute.route)
                 AuthenticationState.HAS_SIGNED_IN_AND_USER_PROFILE -> navigateToHome(AppDestination.SignInRoute.route)
@@ -133,7 +133,7 @@ fun SignInScreen(
 
     when (signInWithGoogleState) {
         is UiState.Success -> {
-            val authenticationState by viewModel.authenticationState.collectAsState()
+            val authenticationState by viewModel.authenticationState.collectAsState(initial = AuthenticationState.INITIALIZE)
             when (authenticationState) {
                 AuthenticationState.HAS_NOT_USER_PROFILE -> navigateToAddMyProfile(AppDestination.SignInRoute.route)
                 AuthenticationState.HAS_SIGNED_IN_AND_USER_PROFILE -> navigateToHome(AppDestination.SignInRoute.route)

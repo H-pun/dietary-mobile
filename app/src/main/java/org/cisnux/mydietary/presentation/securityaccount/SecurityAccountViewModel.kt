@@ -23,13 +23,16 @@ class SecurityAccountViewModel @Inject constructor(
     private val userProfileUseCase: UserProfileUseCase,
 ) : ViewModel() {
     val emailAddress
-        get() = userProfileUseCase.userProfileDetail.map { it.emailAddress }
+        get() = userProfileUseCase.getUserProfileDetail().map { it.emailAddress }
             .shareIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed())
     val isVerified
-        get() = userProfileUseCase.userProfileDetail.map { it.isVerified }
+        get() = userProfileUseCase.getUserProfileDetail().map { it.isVerified }
             .shareIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed())
     val userProfile
-        get() = userProfileUseCase.userProfileDetail.shareIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed())
+        get() = userProfileUseCase.getUserProfileDetail().shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed()
+        )
     private val _changeEmailState = MutableStateFlow<UiState<String>>(UiState.Initialize)
     val changeEmailState = _changeEmailState.asSharedFlow()
     private val _changePasswordState = MutableStateFlow<UiState<String>>(UiState.Initialize)
@@ -38,11 +41,11 @@ class SecurityAccountViewModel @Inject constructor(
     val verifyEmailState = _verifyEmailState.asSharedFlow()
 
     init {
-        userProfileUseCase.refreshUserProfile()
+        userProfileUseCase.refreshUserProfile(scope = viewModelScope)
     }
 
     fun verifyEmail(email: String) = viewModelScope.launch {
-        authenticationUseCase.verifyEmail(email = email)
+        authenticationUseCase.verifyEmail(email = email, scope = viewModelScope)
             .distinctUntilChanged()
             .collectLatest {
                 _verifyEmailState.value = it
@@ -50,7 +53,7 @@ class SecurityAccountViewModel @Inject constructor(
     }
 
     fun changeEmail(newEmail: String) = viewModelScope.launch {
-        authenticationUseCase.changeEmail(newEmail = newEmail)
+        authenticationUseCase.changeEmail(newEmail = newEmail, scope = viewModelScope)
             .distinctUntilChanged()
             .collectLatest {
                 _changeEmailState.value = it
@@ -62,7 +65,8 @@ class SecurityAccountViewModel @Inject constructor(
             changePassword = ChangePassword(
                 oldPassword = oldPassword,
                 newPassword = newPassword
-            )
+            ),
+            scope = viewModelScope
         )
             .distinctUntilChanged()
             .collectLatest {

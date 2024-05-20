@@ -1,8 +1,8 @@
 package org.cisnux.mydietary.presentation.myprofile
 
-import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -749,11 +749,8 @@ private fun MyProfileShimmer(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
-    val context = LocalContext.current
-    val placeholder = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
-        else -> darkProgress
-    }
+    val placeholder = if (!isSystemInDarkTheme()) lightProgress
+    else darkProgress
 
     Column(
         modifier = modifier

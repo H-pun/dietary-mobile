@@ -640,7 +640,7 @@ fun DietaryNavGraph(
         ) {
             FoodScannerScreen(
                 onNavigateUp = navComponentAction.navigateUp,
-                navigateFoodDiaryDetail = navComponentAction.navigateToFoodDiaryDetail,
+                navigateFoodDiaryDetail = navComponentAction.navigateToFoodDiaryDetailFromFoodScanner,
                 onGalleryButton = navComponentAction.takePictureFromGallery,
                 navigateToSignIn = navComponentAction.navigateToSignIn
             )

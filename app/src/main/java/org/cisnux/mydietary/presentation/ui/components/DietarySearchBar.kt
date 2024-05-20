@@ -68,7 +68,7 @@ fun DietarySearchBar(
     menu: @Composable () -> Unit = {}
 ) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .semantics {
                 isTraversalGroup = true
             }
@@ -108,7 +108,7 @@ fun DietarySearchBar(
                     Icon(Icons.Default.Search, contentDescription = null)
                 }
             },
-            modifier = Modifier.align(Alignment.TopCenter),
+            modifier = modifier.align(Alignment.TopCenter),
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),

@@ -23,9 +23,9 @@ class AddMyProfileViewModel @Inject constructor(
     val addMyProfileState get() = _addMyProfileState.asStateFlow()
 
     fun addMyProfile(myProfile: MyProfile) {
-        val userProfile = myProfile.asAddUserProfile
+        val addUserProfile = myProfile.asAddUserProfile
         viewModelScope.launch {
-            userProfileUseCase.addUserProfile(userProfile).collectLatest { uiState ->
+            userProfileUseCase.addUserProfile(addUserProfile = addUserProfile, scope = viewModelScope).collectLatest { uiState ->
                 _addMyProfileState.value = uiState
             }
         }

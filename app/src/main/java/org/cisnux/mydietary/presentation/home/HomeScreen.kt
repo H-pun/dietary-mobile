@@ -153,7 +153,9 @@ fun HomeScreen(
     )
     var openDatePickerDialog by remember { mutableStateOf(false) }
     val datePickerState =
-        rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())
+        rememberDatePickerState(
+            initialSelectedDateMillis = null
+        )
     val confirmEnabled by remember {
         derivedStateOf { datePickerState.selectedDateMillis != null }
     }
@@ -258,6 +260,7 @@ fun HomeScreen(
                     modifier = modifier.padding(it),
                     onDateRangeOpen = { openDatePickerDialog = true },
                     date = datePickerState.selectedDateMillis?.let { millis ->
+                        millis.toString()
                         Instant.ofEpochMilli(
                             millis
                         )?.dayDateMonthYear()
@@ -562,8 +565,11 @@ private fun HomeBody(
         foodCategories[1] to painterResource(id = R.drawable.ic_lunch_24dp),
         foodCategories[2] to painterResource(id = R.drawable.ic_dinner_24dp),
     )
-    val searchBarPadding by animateDpAsState(
-        if (!active) 76.dp else 0.dp, label = "searchbar_padding"
+    val topBarSearchBarPadding by animateDpAsState(
+        if (!active) 76.dp else 0.dp, label = "top_searchbar_padding"
+    )
+    val horizontalSearchBarPadding by animateDpAsState(
+        if (active) 0.dp else 16.dp, label = "horizontal_searchbar_padding"
     )
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabDiaries.size })
 
@@ -706,7 +712,12 @@ private fun HomeBody(
             onSearchChange = onSearchChange,
             modifier = Modifier
                 .animateContentSize()
-                .padding(top = searchBarPadding)
+                .padding(
+                    top = topBarSearchBarPadding,
+                    end = horizontalSearchBarPadding,
+                    start = horizontalSearchBarPadding
+                )
+                .fillMaxWidth()
         )
     }
 }
@@ -822,6 +833,10 @@ private fun SearchBody(
     modifier: Modifier = Modifier,
     isSearchLoading: Boolean = false,
 ) {
+    val horizontalSearchBarPadding by animateDpAsState(
+        if (active) 0.dp else 16.dp, label = "horizontal_searchbar_padding"
+    )
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -842,15 +857,6 @@ private fun SearchBody(
                 }
             }
             foodDiaries?.let {
-                item {
-                    AnimatedVisibility(visible = foodDiaries.isEmpty()) {
-                        EmptyContents(
-                            label = stringResource(R.string.empty_content_search),
-                            painter = painterResource(id = R.drawable.empty_foods),
-                            contentDescription = stringResource(R.string.empty_content_search)
-                        )
-                    }
-                }
                 items(foodDiaries, key = { it.id }, contentType = { it }) { foodDiary ->
                     DiaryCard(
                         foodName = foodDiary.title,
@@ -872,7 +878,17 @@ private fun SearchBody(
             navigateUp = navigateUp,
             isSearch = isSearch,
             onSearchChange = onSearchChange,
-            modifier = Modifier.animateContentSize()
+            modifier = Modifier
+                .animateContentSize()
+                .padding(horizontal = horizontalSearchBarPadding)
+                .fillMaxWidth()
         )
+        if (foodDiaries?.isEmpty() == true)
+            EmptyContents(
+                label = stringResource(R.string.empty_content_search),
+                painter = painterResource(id = R.drawable.empty_foods),
+                contentDescription = stringResource(R.string.empty_content_search),
+                modifier = Modifier.align(Alignment.Center)
+            )
     }
 }

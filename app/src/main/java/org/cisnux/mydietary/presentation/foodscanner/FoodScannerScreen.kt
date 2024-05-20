@@ -494,7 +494,8 @@ private fun FoodScannerContentPreview() {
                     onCaptureByCamera = { /*TODO*/ },
                     onGalleryButton = { /*TODO*/ },
                     onRotateButton = { /*TODO*/ },
-                    cameraPreview = {},
+                    cameraPreview = {
+                    },
                     modifier = Modifier.padding(it),
                 )
             },

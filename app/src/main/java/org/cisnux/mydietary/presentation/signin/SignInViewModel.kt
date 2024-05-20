@@ -6,13 +6,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
-import org.cisnux.mydietary.utils.AuthenticationState
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,16 +23,12 @@ class SignInViewModel @Inject constructor(
     private val _signInWithGoogleState: MutableStateFlow<UiState<Nothing>> =
         MutableStateFlow(UiState.Initialize)
     val signInWithGoogleState get() = _signInWithGoogleState.asStateFlow()
-    val authenticationState = authenticationUseCase.authenticationState.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = AuthenticationState.INITIALIZE
-    )
+    val authenticationState = authenticationUseCase.getAuthenticationState(scope = viewModelScope)
 
     fun signInWithEmailAndPassword(emailAddress: String, password: String) {
         val userAccount = UserAccount(emailAddress = emailAddress, password = password)
         viewModelScope.launch {
-            authenticationUseCase.signInWithEmailAndPassword(userAccount = userAccount)
+            authenticationUseCase.signInWithEmailAndPassword(userAccount = userAccount, scope = viewModelScope)
                 .collectLatest { uiState ->
                     _signInWithEmailAndPasswordState.value = uiState
                 }
@@ -43,7 +36,7 @@ class SignInViewModel @Inject constructor(
     }
 
     fun signInWithGoogle(context: Context) = viewModelScope.launch {
-        authenticationUseCase.signInWithGoogle(context)
+        authenticationUseCase.signInWithGoogle(context = context, scope = viewModelScope)
             .collectLatest { uiState ->
                 _signInWithGoogleState.value = uiState
             }

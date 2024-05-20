@@ -1,7 +1,7 @@
 package org.cisnux.mydietary.presentation.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -70,11 +70,8 @@ fun DiaryCard(
     modifier: Modifier = Modifier
 ) {
     val locale = Locale("id", "ID")
-    val context = LocalContext.current
-    val placeholder = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
-        else -> darkProgress
-    }
+    val placeholder = if(!isSystemInDarkTheme())lightProgress
+        else darkProgress
 
     Column(
         modifier = modifier

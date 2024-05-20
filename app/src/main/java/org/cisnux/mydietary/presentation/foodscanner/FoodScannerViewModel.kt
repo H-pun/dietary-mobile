@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
+import org.cisnux.mydietary.domain.usecases.ReportUseCase
 import java.io.File
 import javax.inject.Inject
 
@@ -26,16 +26,8 @@ class FoodScannerViewModel @Inject constructor(
     private val fileUseCase: FileUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     private val foodDiaryUseCase: FoodDiaryUseCase,
-    private val userProfileUseCase: UserProfileUseCase,
+    private val reportUseCase: ReportUseCase
 ) : ViewModel() {
-    init {
-        viewModelScope.launch {
-            userProfileUseCase.userDailyNutrition.distinctUntilChanged().collectLatest {
-                _userDailyNutritionState.value = it
-            }
-        }
-    }
-
     private var _cameraFile: MutableStateFlow<File?> = MutableStateFlow(null)
     val cameraFile get() = _cameraFile.asStateFlow()
     private var _galleryFile: MutableStateFlow<File?> = MutableStateFlow(null)
@@ -51,6 +43,15 @@ class FoodScannerViewModel @Inject constructor(
 
     private val _addFoodDiaryState = MutableStateFlow<UiState<String>>(UiState.Initialize)
     val addFoodDiaryState get() = _addFoodDiaryState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            reportUseCase.getDailyNutrition(scope = viewModelScope).distinctUntilChanged()
+                .collectLatest {
+                    _userDailyNutritionState.value = it
+                }
+        }
+    }
 
     fun createFile() = viewModelScope.launch {
         _cameraFile.value = fileUseCase.createFile()
@@ -70,9 +71,10 @@ class FoodScannerViewModel @Inject constructor(
     }
 
     fun predictFoods(foodPicture: File) = viewModelScope.launch {
-        foodDiaryUseCase.predictFoods(foodPicture).collectLatest { uiState ->
-            _predictedResultState.value = uiState
-        }
+        foodDiaryUseCase.predictFoods(foodPicture = foodPicture, scope = viewModelScope)
+            .collectLatest { uiState ->
+                _predictedResultState.value = uiState
+            }
     }
 
     fun addFoodDiary(
@@ -97,9 +99,10 @@ class FoodScannerViewModel @Inject constructor(
             totalFat = totalFat,
             totalCarbohydrate = totalCarbohydrate,
         )
-        foodDiaryUseCase.addFoodDiary(addFoodDiary).collectLatest { uiState ->
-            _addFoodDiaryState.value = uiState
-        }
+        foodDiaryUseCase.addFoodDiary(addFoodDiary = addFoodDiary, scope = viewModelScope)
+            .distinctUntilChanged().collectLatest { uiState ->
+                _addFoodDiaryState.value = uiState
+            }
     }
 
     fun signOut() = viewModelScope.launch {

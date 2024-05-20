@@ -26,12 +26,12 @@ class VerifyCodeViewModel @Inject constructor(
 
     init {
         Log.d(VerifyCodeViewModel::class.simpleName, emailAddress)
-        Log.d(VerifyCodeViewModel::class.simpleName, code ?: "null")
+        Log.d(VerifyCodeViewModel::class.simpleName, code.toString())
     }
 
     fun resetPassword() =
         viewModelScope.launch {
-            authenticationUseCase.resetPassword(emailAddress)
+            authenticationUseCase.sendResetPassword(emailAddress = emailAddress, scope = viewModelScope)
                 .collectLatest { uiState ->
                     _resetPasswordState.value = uiState
                 }

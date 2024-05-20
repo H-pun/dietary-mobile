@@ -36,7 +36,8 @@ class NewPasswordViewModel @Inject constructor(
                     code = code,
                     emailAddress = emailAddress,
                     newPassword = newPassword
-                )
+                ),
+                scope = viewModelScope
             )
                 .collectLatest {
                     _changePasswordState.value = it

@@ -1,17 +1,22 @@
 package org.cisnux.mydietary.domain.usecases
 
-import org.cisnux.mydietary.domain.models.UserNutrition
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.cisnux.mydietary.domain.models.AddUserProfile
 import org.cisnux.mydietary.domain.models.UserProfileDetail
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.Flow
-import org.cisnux.mydietary.domain.models.DietProgress
 
 interface UserProfileUseCase {
-    val userProfileDetail: Flow<UserProfileDetail>
-    val userDailyNutrition: Flow<UiState<UserNutrition>>
-    fun addUserProfile(addUserProfile: AddUserProfile): Flow<UiState<Nothing>>
-    fun updateUserProfile(addUserProfile: AddUserProfile): Flow<UiState<Nothing>>
-    fun getDietProgress(): Flow<UiState<List<DietProgress>>>
-    fun refreshUserProfile(): Flow<UiState<Nothing>>
+    fun getUserProfileDetail(scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)): Flow<UserProfileDetail>
+    fun addUserProfile(
+        addUserProfile: AddUserProfile, scope: CoroutineScope
+    ): Flow<UiState<Nothing>>
+
+    fun updateUserProfile(
+        addUserProfile: AddUserProfile, scope: CoroutineScope
+    ): Flow<UiState<Nothing>>
+
+    fun refreshUserProfile(scope: CoroutineScope): Flow<UiState<Nothing>>
 }

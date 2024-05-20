@@ -7,7 +7,6 @@ import org.cisnux.mydietary.domain.repositories.AuthenticationRepository
 import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.userAccountBodyRequest
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -35,18 +34,17 @@ class AuthenticationRepositoryImpl @Inject constructor(
         get() = userAccountLocalSource.userId
 
     override fun verifyUserAccount(userAccount: UserAccount): Flow<UiState<Nothing>> =
-        channelFlow {
-            send(UiState.Loading)
-            delay(1000L)
+        flow {
+            emit(UiState.Loading)
             userAccountRemoteSource.signInUserAccount(userAccount.userAccountBodyRequest)
                 .fold(
                     ifLeft = {
-                        send(UiState.Error(it))
+                        emit(UiState.Error(it))
                     },
                     ifRight = {
                         userAccountLocalSource.updateUserId(it.id)
                         userAccountLocalSource.updateAccessToken(it.accessToken)
-                        send(UiState.Success(null))
+                        emit(UiState.Success(null))
                     }
                 )
         }.distinctUntilChanged()

@@ -21,7 +21,10 @@ class ResetPasswordViewModel @Inject constructor(
 
     fun resetPassword(emailAddress: String) =
         viewModelScope.launch {
-            authenticationUseCase.resetPassword(emailAddress)
+            authenticationUseCase.sendResetPassword(
+                emailAddress = emailAddress,
+                scope = viewModelScope
+            )
                 .collectLatest { uiState ->
                     _resetPasswordState.value = uiState
                 }

@@ -16,13 +16,27 @@ class NavComponentAction(
             route = AppDestination.FoodScannerRoute.route
         )
     }
-    val navigateToFoodDiaryDetail: (foodDiaryId: String) -> Unit = { foodDiaryId ->
+    val navigateToFoodDiaryDetail: (foodDiaryId: String) -> Unit =
+        { foodDiaryId ->
+            navController.navigate(
+                route = AppDestination.DiaryDetailRoute.createRouteUrl(
+                    foodDiaryId = foodDiaryId,
+                    isWidget = false
+                )
+            )
+        }
+    val navigateToFoodDiaryDetailFromFoodScanner: (foodDiaryId: String) -> Unit = { foodDiaryId ->
         navController.navigate(
             route = AppDestination.DiaryDetailRoute.createRouteUrl(
                 foodDiaryId = foodDiaryId,
                 isWidget = false
             )
-        )
+        ) {
+            popUpTo(AppDestination.FoodScannerRoute.route) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
     }
     val navigateUp: () -> Unit = {
         navController.navigateUp()

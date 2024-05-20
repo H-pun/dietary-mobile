@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import org.cisnux.mydietary.domain.models.AddFoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
+import org.cisnux.mydietary.domain.models.FoodDiaryReport
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.Keyword
-import org.cisnux.mydietary.domain.models.Report
 import org.cisnux.mydietary.utils.FoodDiaryCategory
 import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
@@ -55,7 +55,7 @@ interface FoodRepository {
         accessToken: String,
         userId: String,
         category: ReportCategory
-    ): Flow<UiState<Report>>
+    ): Flow<UiState<List<FoodDiaryReport>>>
 
     suspend fun updateBaseUrlApi(baseUrl: String)
 }

@@ -5,6 +5,7 @@ import android.text.Layout
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -74,7 +75,8 @@ import com.valentinilk.shimmer.shimmer
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.DietProgress
 import org.cisnux.mydietary.domain.models.FoodDiaryReport
-import org.cisnux.mydietary.domain.models.Report
+import org.cisnux.mydietary.domain.models.MonthlyNutritionReport
+import org.cisnux.mydietary.domain.models.WeeklyNutritionReport
 import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.presentation.ui.components.BottomBar
 import org.cisnux.mydietary.presentation.ui.components.UserNutritionCard
@@ -92,7 +94,9 @@ import org.cisnux.mydietary.presentation.ui.theme.primaryContainerDark
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerLight
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.Failure
+import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.utils.reportCategory
 import kotlin.random.Random
 
 @Composable
@@ -105,12 +109,13 @@ fun ReportScreen(
 ) {
     var tabState by rememberSaveable { mutableIntStateOf(0) }
     var rangeState by rememberSaveable { mutableIntStateOf(0) }
-    val userNutritionState by viewModel.userDailyNutritionState.collectAsState(UiState.Initialize)
+    val userNutritionState by viewModel.userDailyNutritionState.collectAsState(initial = UiState.Initialize)
     val snackbarHostState = remember {
         SnackbarHostState()
     }
-    val nutritionReportState by viewModel.nutritionReportState.collectAsState()
-    val dietProgressState by viewModel.dietProgressState.collectAsState()
+    val weeklyNutritionReportState by viewModel.weeklyNutritionReportState.collectAsState(initial = UiState.Initialize)
+    val monthlyNutritionReportState by viewModel.monthlyNutritionReportState.collectAsState(initial = UiState.Initialize)
+    val dietProgressState by viewModel.dietProgressState.collectAsState(initial = UiState.Initialize)
     val context = LocalContext.current
 
     BackHandler {
@@ -118,8 +123,30 @@ fun ReportScreen(
     }
 
     when {
-        nutritionReportState is UiState.Error -> {
-            (nutritionReportState as UiState.Error).error?.let { exception ->
+        weeklyNutritionReportState is UiState.Error -> {
+            (weeklyNutritionReportState as UiState.Error).error?.let { exception ->
+                LaunchedEffect(snackbarHostState) {
+                    exception.message?.let {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = it,
+                            actionLabel = context.getString(R.string.retry),
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Long
+                        )
+                        if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getReports(
+                            index = tabState
+                        )
+                    }
+                }
+                if (exception is Failure.UnauthorizedFailure) {
+                    viewModel.signOut()
+                    navigateToSignIn(AppDestination.ReportRoute.route)
+                }
+            }
+        }
+
+        monthlyNutritionReportState is UiState.Error -> {
+            (monthlyNutritionReportState as UiState.Error).error?.let { exception ->
                 LaunchedEffect(snackbarHostState) {
                     exception.message?.let {
                         val snackbarResult = snackbarHostState.showSnackbar(
@@ -180,42 +207,46 @@ fun ReportScreen(
     ReportContent(
         onSelectedDestination = navigateForBottomNav,
         body = {
-            val userDailyNutrition = if (userNutritionState is UiState.Success)
+            val dailyNutritionReports = if (userNutritionState is UiState.Success)
                 (userNutritionState as UiState.Success<UserNutrition>).data!!
             else null
 
-            val datePages = if (nutritionReportState is UiState.Success)
-                (nutritionReportState as UiState.Success<Report>).data?.datePages
+            val weeklyNutritionReports = if (weeklyNutritionReportState is UiState.Success)
+                (weeklyNutritionReportState as UiState.Success<WeeklyNutritionReport>).data?.weekFoodDiaryReports
+                    ?: listOf()
             else listOf()
 
-            val chunkedFoodDiaries = if (nutritionReportState is UiState.Success)
-                (nutritionReportState as UiState.Success<Report>).data?.chunkedFoodDiaries
+            val weeks = if (weeklyNutritionReportState is UiState.Success)
+                (weeklyNutritionReportState as UiState.Success<WeeklyNutritionReport>).data?.weeks
+                    ?: listOf()
+            else listOf()
+
+            val monthlyNutritionReports = if (monthlyNutritionReportState is UiState.Success)
+                (monthlyNutritionReportState as UiState.Success<MonthlyNutritionReport>).data?.foodDiaryReports
+                    ?: listOf()
             else listOf()
 
             val dietProgress = if (dietProgressState is UiState.Success)
                 (dietProgressState as UiState.Success<List<DietProgress>>).data!!
             else listOf()
 
-            val reports by remember(chunkedFoodDiaries, rangeState, tabState) {
+            val reports by remember(
+                weeklyNutritionReports,
+                monthlyNutritionReports,
+                rangeState,
+                tabState
+            ) {
                 derivedStateOf {
-                    if (chunkedFoodDiaries?.isNotEmpty() == true)
-                        if (tabState == 0)
-                            chunkedFoodDiaries[rangeState]
-                        else chunkedFoodDiaries.first()
+                    if (tabState.reportCategory == ReportCategory.WEEKLY)
+                        weeklyNutritionReports.getOrNull(rangeState) ?: listOf()
                     else
-                        listOf()
+                        monthlyNutritionReports
                 }
             }
 
-            val selectedDate by remember(datePages, rangeState) {
+            val selectedDate by remember(weeks, rangeState) {
                 derivedStateOf {
-                    when {
-                        (datePages?.isNotEmpty() == true) && datePages.size > 1 ->
-                            datePages[rangeState].dateRange
-
-                        (datePages?.isNotEmpty() == true) && datePages.size == 1 -> datePages[0].dateRange
-                        else -> ""
-                    }
+                    weeks.getOrNull(rangeState)?.dateRange ?: ""
                 }
             }
 
@@ -227,21 +258,21 @@ fun ReportScreen(
                     rangeState = 0
                 },
                 modifier = Modifier.padding(it),
-                maxDailyProtein = userDailyNutrition?.maxDailyProtein ?: 0f,
-                maxDailyFat = userDailyNutrition?.maxDailyFat ?: 0f,
-                maxDailyCarbohydrate = userDailyNutrition?.maxDailyCarbohydrate ?: 0f,
-                maxDailyCalories = userDailyNutrition?.maxDailyCalories ?: 0f,
-                totalCaloriesToday = userDailyNutrition?.totalCaloriesToday ?: 0f,
-                totalFatToday = userDailyNutrition?.totalFatToday ?: 0f,
-                totalProteinToday = userDailyNutrition?.totalProteinToday ?: 0f,
-                totalCarbohydrateToday = userDailyNutrition?.totalCarbohydrateToday ?: 0f,
+                maxDailyProtein = dailyNutritionReports?.maxDailyProtein ?: 0f,
+                maxDailyFat = dailyNutritionReports?.maxDailyFat ?: 0f,
+                maxDailyCarbohydrate = dailyNutritionReports?.maxDailyCarbohydrate ?: 0f,
+                maxDailyCalories = dailyNutritionReports?.maxDailyCalories ?: 0f,
+                totalCaloriesToday = dailyNutritionReports?.totalCaloriesToday ?: 0f,
+                totalFatToday = dailyNutritionReports?.totalFatToday ?: 0f,
+                totalProteinToday = dailyNutritionReports?.totalProteinToday ?: 0f,
+                totalCarbohydrateToday = dailyNutritionReports?.totalCarbohydrateToday ?: 0f,
                 nutritionReports = reports,
-                isNutritionReportLoading = nutritionReportState is UiState.Loading || nutritionReportState is UiState.Error,
+                isNutritionReportLoading = weeklyNutritionReportState is UiState.Loading || weeklyNutritionReportState is UiState.Error || monthlyNutritionReportState is UiState.Loading || monthlyNutritionReportState is UiState.Error,
                 isUserNutritionLoading = userNutritionState is UiState.Loading || userNutritionState is UiState.Error,
                 isDietProgressLoading = dietProgressState is UiState.Loading || dietProgressState is UiState.Error,
                 dietProgressReport = dietProgress,
                 selectedDate = selectedDate,
-                datePages = datePages ?: listOf(),
+                datePages = weeks,
                 onSelectedRange = { newValue ->
                     rangeState = newValue
                 }
@@ -254,7 +285,7 @@ fun ReportScreen(
 
 @Preview(
     showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
 )
 @Composable
 private fun ReportContentPreview() {
@@ -268,8 +299,8 @@ private fun ReportContentPreview() {
                     ReportBody(
                         totalCaloriesToday = 200f,
                         totalFatToday = 211f,
-                        totalProteinToday = 242.23f,
-                        totalCarbohydrateToday = 241.11f,
+                        totalProteinToday = 842.23f,
+                        totalCarbohydrateToday = 1241.11f,
                         nutritionReports = List(20) { index ->
                             FoodDiaryReport(
                                 averageCarbohydrate = Random.nextDouble(80.0, 100.0).toFloat(),
@@ -297,9 +328,9 @@ private fun ReportContentPreview() {
                         },
                         selectedDate = "17 Feb - 21 Feb",
                         datePages = listOf(
-                            Report.DatePage(dateRange = "17 Feb - 21 Feb"),
-                            Report.DatePage(dateRange = "22 Feb - 29 Feb"),
-                            Report.DatePage(dateRange = "30 Feb - 7 Mar")
+                            WeeklyNutritionReport.DatePage(dateRange = "17 Feb - 21 Feb"),
+                            WeeklyNutritionReport.DatePage(dateRange = "22 Feb - 29 Feb"),
+                            WeeklyNutritionReport.DatePage(dateRange = "30 Feb - 7 Mar")
                         )
                     )
                 },
@@ -346,40 +377,33 @@ private fun ReportBody(
     nutritionReports: List<FoodDiaryReport>,
     dietProgressReport: List<DietProgress>,
     modifier: Modifier = Modifier,
-    datePages: List<Report.DatePage> = listOf(),
+    datePages: List<WeeklyNutritionReport.DatePage> = listOf(),
     isNutritionReportLoading: Boolean = false,
     isUserNutritionLoading: Boolean = false,
     isDietProgressLoading: Boolean = false
 ) {
-    val context = LocalContext.current
-    val placeholder = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
-        else -> darkProgress
-    }
-    val caloriesColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> primaryContainerLight
-        else -> primaryContainerDark
-    }
-    val carbohydrateColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightBlue
-        else -> darkBlue
-    }
-    val proteinColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightYellow
-        else -> darkYellow
-    }
-    val fatColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightMagenta
-        else -> darkMagenta
-    }
-    val weightColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> primaryContainerLight
-        else -> primaryContainerDark
-    }
-    val waistCircumferenceColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightMagenta
-        else -> darkMagenta
-    }
+    val placeholder = if (!isSystemInDarkTheme()) lightProgress
+    else darkProgress
+
+    val caloriesColor = if (!isSystemInDarkTheme()) primaryContainerLight
+    else primaryContainerDark
+
+    val carbohydrateColor = if (!isSystemInDarkTheme()) lightBlue
+    else darkBlue
+
+    val proteinColor = if(!isSystemInDarkTheme()) lightYellow
+        else darkYellow
+
+    val fatColor = if(!isSystemInDarkTheme()) lightMagenta
+        else darkMagenta
+
+    val weightColor = if (!isSystemInDarkTheme())
+        primaryContainerLight
+    else primaryContainerDark
+
+    val waistCircumferenceColor = if (!isSystemInDarkTheme()) lightMagenta
+    else darkMagenta
+
     var isExpanded by rememberSaveable {
         mutableStateOf(false)
     }

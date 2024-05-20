@@ -8,6 +8,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.unit.dp
@@ -47,13 +48,15 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.usecases.FoodDiaryUseCase
-import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
+import org.cisnux.mydietary.domain.usecases.ReportUseCase
 import org.cisnux.mydietary.presentation.MainActivity
 import org.cisnux.mydietary.presentation.ui.theme.DietaryGlanceTheme
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTypeScaleTokens
@@ -75,7 +78,7 @@ class ReportWidget : GlanceAppWidget() {
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     interface ReportWidgetEntryPoint {
-        fun userProfileUseCase(): UserProfileUseCase
+        fun reportUseCase(): ReportUseCase
         fun foodDiaryUseCase(): FoodDiaryUseCase
     }
 
@@ -86,16 +89,24 @@ class ReportWidget : GlanceAppWidget() {
         )
 
         provideContent {
-            val userProfileUseCase = remember {
-                hiltEntryPoint.userProfileUseCase()
+            val reportUseCase = remember {
+                hiltEntryPoint.reportUseCase()
             }
             val foodDiaryUseCase = remember {
                 hiltEntryPoint.foodDiaryUseCase()
             }
-            val oneTimeDailyNutrition by rememberUpdatedState(userProfileUseCase.userDailyNutrition)
+            val coroutineScope = rememberCoroutineScope {
+                SupervisorJob() + Dispatchers.IO
+            }
+            val oneTimeDailyNutrition by rememberUpdatedState(
+                reportUseCase.getDailyNutrition(
+                    coroutineScope
+                )
+            )
             val oneTimeFoodDiary by rememberUpdatedState(
                 foodDiaryUseCase.getDiaryFoodsByDaysForWidget(
-                    Instant.now().currentLocalDateTimeInBasicISOFormat
+                    date = Instant.now().currentLocalDateTimeInBasicISOFormat,
+                    scope = coroutineScope
                 )
             )
 
@@ -352,7 +363,7 @@ class ReportWidget : GlanceAppWidget() {
                                 modifier = GlanceModifier.fillMaxWidth()
                             ) {
                                 val foodPictureFile = foodDiaries[it].foodPictureFile
-                                foodPictureFile?.let {bitmap ->
+                                foodPictureFile?.let { bitmap ->
                                     Image(
                                         provider = ImageProvider(bitmap),
                                         contentDescription = null,

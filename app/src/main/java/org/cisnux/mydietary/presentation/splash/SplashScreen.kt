@@ -40,8 +40,8 @@ fun SplashScreen(
     val onNavigateToSignIn by rememberUpdatedState(navigateToSignIn)
     val onNavigateToAddMyProfile by rememberUpdatedState(navigateToAddMyProfile)
     val onNavigateToHome by rememberUpdatedState(navigateToHome)
-    val hasLandingShowed by viewModel.hasLandingShowed.collectAsState()
-    val authenticationState by viewModel.authenticationState.collectAsState()
+    val hasLandingShowed by viewModel.hasLandingShowed.collectAsState(initial = null)
+    val authenticationState by viewModel.authenticationState.collectAsState(initial = AuthenticationState.INITIALIZE)
 
     LaunchedEffect(Unit) {
         delay(SplashWaitTimeMillis)

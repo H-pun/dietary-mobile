@@ -1,6 +1,7 @@
 package org.cisnux.mydietary.presentation.ui.components
 
 import android.content.res.Configuration
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -61,11 +61,8 @@ fun UserAccountCard(
     email: String? = null,
     isVerified: Boolean? = null
 ) {
-    val context = LocalContext.current
-    val placeholder = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
-        else -> darkProgress
-    }
+    val placeholder = if(!isSystemInDarkTheme())lightProgress
+        else darkProgress
 
     Surface {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {

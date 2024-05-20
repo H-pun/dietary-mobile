@@ -24,10 +24,11 @@ class MyProfileViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
     private val useCase: UserProfileUseCase
 ) : ViewModel() {
-    val userProfileDetail get() = useCase.userProfileDetail.shareIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-    )
+    val userProfileDetail
+        get() = useCase.getUserProfileDetail().shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+        )
     private val _updateMyProfileState: MutableStateFlow<UiState<Nothing>> =
         MutableStateFlow(UiState.Initialize)
     val updateMyProfileState get() = _updateMyProfileState.asStateFlow()
@@ -36,7 +37,7 @@ class MyProfileViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val userProfileState = refreshUserProfile.asStateFlow().flatMapMerge {
         if (it)
-            useCase.refreshUserProfile().also {
+            useCase.refreshUserProfile(scope = viewModelScope).also {
                 refreshUserProfile.value = false
             }
         else flow { }
@@ -45,18 +46,23 @@ class MyProfileViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed()
     )
 
+    init {
+        useCase.refreshUserProfile(scope = viewModelScope)
+    }
+
     fun updateRefreshUserProfile(isRefresh: Boolean) {
         refreshUserProfile.value = isRefresh
     }
 
     fun updateMyProfile(id: String, myProfile: MyProfile) {
-        val userProfile = myProfile.asAddUserProfile.copy(id = id)
+        val addUserProfile = myProfile.asAddUserProfile.copy(id = id)
         viewModelScope.launch {
-            useCase.updateUserProfile(userProfile).collectLatest { uiState ->
-                _updateMyProfileState.value = uiState
-                if (uiState is UiState.Success)
-                    refreshUserProfile.value = true
-            }
+            useCase.updateUserProfile(addUserProfile = addUserProfile, scope = viewModelScope)
+                .collectLatest { uiState ->
+                    _updateMyProfileState.value = uiState
+                    if (uiState is UiState.Success)
+                        refreshUserProfile.value = true
+                }
         }
     }
 

@@ -1,7 +1,7 @@
 package org.cisnux.mydietary.presentation.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,59 +45,15 @@ fun UserNutritionCard(
     maxDailyProtein: Float,
     maxDailyFat: Float,
     modifier: Modifier = Modifier
-){
-    val context = LocalContext.current
-    val caloriePercentage = totalCaloriesToday / maxDailyCalories
-    val carbohydratePercentage = totalCarbohydrateToday / maxDailyCarbohydrate
-    val proteinPercentage = totalProteinToday / maxDailyProtein
-    val fatPercentage = totalFatToday / maxDailyFat
+) {
     val locale = rememberSaveable {
         Locale("id", "ID")
     }
-    val calorieDarkColor = when {
-        caloriePercentage > 1.0f -> darkRed
-        caloriePercentage > 0.5f -> darkYellow
-        else -> primaryContainerDark
-    }
-    val carbohydrateDarkColor = when {
-        carbohydratePercentage > 1.0f -> darkRed
-        carbohydratePercentage > 0.5f -> darkYellow
-        else -> primaryContainerDark
-    }
-    val proteinDarkColor = when {
-        proteinPercentage > 1.0f -> darkRed
-        proteinPercentage > 0.5f -> darkYellow
-        else -> primaryContainerDark
-    }
-    val fatDarkColor = when {
-        fatPercentage > 1.0f -> darkRed
-        fatPercentage > 0.5f -> darkYellow
-        else -> primaryContainerDark
-    }
-    val calorieLightColor = when {
-        caloriePercentage > 1.0f -> lightRed
-        caloriePercentage > 0.5f -> lightYellow
-        else -> primaryContainerLight
-    }
-    val carbohydrateLightColor = when {
-        carbohydratePercentage > 1.0f -> lightRed
-        carbohydratePercentage > 0.5f -> lightYellow
-        else -> primaryContainerLight
-    }
-    val proteinLightColor = when {
-        proteinPercentage > 1.0f -> lightRed
-        proteinPercentage > 0.5f -> lightYellow
-        else -> primaryContainerLight
-    }
-    val fatLightColor = when {
-        fatPercentage > 1.0f -> lightRed
-        fatPercentage > 0.5f -> lightYellow
-        else -> primaryContainerLight
-    }
-    val onSurfaceColor = when (context.resources.configuration.uiMode) {
-        Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> lightProgress
-        else -> darkProgress
-    }
+    val onSurfaceColor = if (!isSystemInDarkTheme()) lightProgress
+    else darkProgress
+
+    val surfaceColor = if (!isSystemInDarkTheme()) surfaceLight
+    else surfaceDark
 
     Row(
         modifier = modifier
@@ -107,230 +62,88 @@ fun UserNutritionCard(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Spacer(modifier = Modifier
-                .size(115.dp)
-                .drawBehind {
-                    drawCircle(
-                        color = onSurfaceColor
-                    )
-                })
-            Spacer(modifier = Modifier
-                .size(115.dp)
-                .drawBehind {
-                    drawArc(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> calorieLightColor
-                            else -> calorieDarkColor
-                        },
-                        startAngle = 270f,
-                        sweepAngle = 360f * caloriePercentage,
-                        useCenter = true
-                    )
-                })
-            Spacer(modifier = Modifier
-                .size(105.dp)
-                .drawBehind {
-                    drawCircle(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> surfaceLight
-                            else -> surfaceDark
-                        }
-                    )
-                })
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.size(90.dp)
-            ) {
-                Text(
-                    text = String.format(locale, "%.2f", totalCaloriesToday),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.ExtraBold,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = String.format(locale, "%.2f kcal", maxDailyCalories),
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Kalori/\nMaks Kalori",
-                    style = MaterialTheme.typography.labelSmall,
-                    textAlign = TextAlign.Center
-                )
+        repeat(4) {
+            val label = when (it) {
+                0 -> "Kalori"
+                1 -> "Karbohidrat"
+                2 -> "Protein"
+                else -> "Lemak"
             }
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        Box(contentAlignment = Alignment.Center) {
-            Spacer(modifier = Modifier
-                .size(115.dp)
-                .drawBehind {
-                    drawCircle(
-                        color = onSurfaceColor
-                    )
-                })
-            Spacer(modifier = Modifier
-                .size(115.dp)
-                .drawBehind {
-                    drawArc(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> carbohydrateLightColor
-                            else -> carbohydrateDarkColor
-                        },
-                        startAngle = 270f,
-                        sweepAngle = 360f * carbohydratePercentage,
-                        useCenter = true
-                    )
-                })
-            Spacer(modifier = Modifier
-                .size(105.dp)
-                .drawBehind {
-                    drawCircle(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> surfaceLight
-                            else -> surfaceDark
-                        }
-                    )
-                })
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .height(90.dp)
-                    .width(100.dp)
-            ) {
-                Text(
-                    text = String.format(locale, "%.2f", totalCarbohydrateToday),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.ExtraBold,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = String.format(locale, "%.2f g", maxDailyCarbohydrate),
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Karbohidrat/\nMaks Karbo",
-                    style = MaterialTheme.typography.labelSmall,
-                    textAlign = TextAlign.Center
-                )
+            val unit = if (it != 0) "g" else "kcal"
+            val totalNutrition = when (it) {
+                0 -> totalCaloriesToday
+                1 -> totalCarbohydrateToday
+                2 -> totalProteinToday
+                else -> totalFatToday
             }
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        Box(contentAlignment = Alignment.Center) {
-            Spacer(modifier = Modifier
-                .size(115.dp)
-                .drawBehind {
-                    drawCircle(
-                        color = onSurfaceColor
-                    )
-                })
-            Spacer(modifier = Modifier
-                .size(115.dp)
-                .drawBehind {
-                    drawArc(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> proteinLightColor
-                            else -> proteinDarkColor
-                        },
-                        startAngle = 270f,
-                        sweepAngle = 360f * proteinPercentage,
-                        useCenter = true
-                    )
-                })
-            Spacer(modifier = Modifier
-                .size(105.dp)
-                .drawBehind {
-                    drawCircle(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> surfaceLight
-                            else -> surfaceDark
-                        }
-                    )
-                })
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.size(90.dp)
-            ) {
-                Text(
-                    text = String.format(locale, "%.2f", totalProteinToday),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.ExtraBold,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = String.format(locale, "%.2f g", maxDailyProtein),
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Protein/\nMaks Protein",
-                    style = MaterialTheme.typography.labelSmall,
-                    textAlign = TextAlign.Center
-                )
+            val maxNutrition = when (it) {
+                0 -> maxDailyCalories
+                1 -> maxDailyCarbohydrate
+                2 -> maxDailyProtein
+                else -> maxDailyFat
             }
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        Box(contentAlignment = Alignment.Center) {
-            Spacer(modifier = Modifier
-                .size(115.dp)
-                .drawBehind {
-                    drawCircle(
-                        color = onSurfaceColor
-                    )
-                })
-            Spacer(modifier = Modifier
-                .size(115.dp)
-                .drawBehind {
-                    drawArc(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> fatLightColor
-                            else -> fatDarkColor
-                        },
-                        startAngle = 270f,
-                        sweepAngle = 360f * fatPercentage,
-                        useCenter = true
-                    )
-                })
-            Spacer(modifier = Modifier
-                .size(105.dp)
-                .drawBehind {
-                    drawCircle(
-                        color = when (context.resources.configuration.uiMode) {
-                            Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL -> surfaceLight
-                            else -> surfaceDark
-                        }
-                    )
-                })
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.size(90.dp)
-            ) {
-                Text(
-                    text = String.format(locale, "%.2f", totalFatToday),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.ExtraBold,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = String.format(locale, "%.2f g", maxDailyFat),
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Lemak/\nMaks Lemak",
-                    style = MaterialTheme.typography.labelSmall,
-                    textAlign = TextAlign.Center
-                )
+            val percentage = when (it) {
+                0 -> totalCaloriesToday / maxDailyCalories
+                1 -> totalCarbohydrateToday / maxDailyCarbohydrate
+                2 -> totalProteinToday / maxDailyProtein
+                else -> totalFatToday / maxDailyFat
             }
+            val wheelColor = when {
+                percentage > 1.0f -> if (!isSystemInDarkTheme()) lightRed else darkRed
+                percentage > 0.5f -> if (!isSystemInDarkTheme()) lightYellow else darkYellow
+                else -> if (!isSystemInDarkTheme()) primaryContainerLight else primaryContainerDark
+            }
+
+            Box(contentAlignment = Alignment.Center) {
+                Spacer(modifier = Modifier
+                    .size(125.dp)
+                    .drawBehind {
+                        drawCircle(
+                            color = onSurfaceColor
+                        )
+                    })
+                Spacer(modifier = Modifier
+                    .size(125.dp)
+                    .drawBehind {
+                        drawArc(
+                            color = wheelColor,
+                            startAngle = 270f,
+                            sweepAngle = 360f * percentage,
+                            useCenter = true
+                        )
+                    })
+                Spacer(modifier = Modifier
+                    .size(115.dp)
+                    .drawBehind {
+                        drawCircle(
+                            color = surfaceColor
+                        )
+                    })
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.size(90.dp)
+                ) {
+                    Text(
+                        text = String.format(locale, "%.2f", totalNutrition),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.ExtraBold,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = String.format(locale, "%.2f $unit", maxNutrition),
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "$label/\nMaks $label",
+                        style = MaterialTheme.typography.labelSmall,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(16.dp))
         }
     }
 }

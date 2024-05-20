@@ -1,6 +1,7 @@
 package org.cisnux.mydietary.domain.usecases
 
 import android.content.Context
+import kotlinx.coroutines.CoroutineScope
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.utils.AuthenticationState
 import org.cisnux.mydietary.utils.UiState
@@ -9,17 +10,18 @@ import org.cisnux.mydietary.domain.models.ChangePassword
 import org.cisnux.mydietary.domain.models.ForgotPassword
 
 interface AuthenticationUseCase {
-    val accessToken: Flow<String?>
-    val userId: Flow<String?>
-    val isAccessTokenAndUserIdExists: Flow<Pair<String, String>?>
-    val authenticationState: Flow<AuthenticationState>
-    fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
-    fun signInWithGoogle(context: Context): Flow<UiState<Nothing>>
-    fun signUpWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
-    fun resetPassword(emailAddress: String): Flow<UiState<String>>
-    fun forgotPassword(forgotPassword: ForgotPassword): Flow<UiState<String>>
-    fun changePassword(changePassword: ChangePassword): Flow<UiState<String>>
-    fun changeEmail(newEmail: String): Flow<UiState<String>>
-    fun verifyEmail(email: String): Flow<UiState<String>>
+    fun getAuthenticationState(scope: CoroutineScope): Flow<AuthenticationState>
+    fun getAccessTokenAndUserId(scope: CoroutineScope): Flow<Pair<String, String>?>
+    fun getAccessToken(scope: CoroutineScope): Flow<String?>
+    fun getUserId(scope: CoroutineScope): Flow<String?>
+
+    fun signInWithEmailAndPassword(userAccount: UserAccount, scope: CoroutineScope): Flow<UiState<Nothing>>
+    fun signInWithGoogle(context: Context, scope: CoroutineScope): Flow<UiState<Nothing>>
+    fun signUpWithEmailAndPassword(userAccount: UserAccount, scope: CoroutineScope): Flow<UiState<Nothing>>
+    fun sendResetPassword(emailAddress: String, scope: CoroutineScope): Flow<UiState<String>>
+    fun forgotPassword(forgotPassword: ForgotPassword, scope: CoroutineScope): Flow<UiState<String>>
+    fun changePassword(changePassword: ChangePassword, scope: CoroutineScope): Flow<UiState<String>>
+    fun changeEmail(newEmail: String, scope: CoroutineScope): Flow<UiState<String>>
+    fun verifyEmail(email: String, scope: CoroutineScope): Flow<UiState<String>>
     suspend fun signOut()
 }
