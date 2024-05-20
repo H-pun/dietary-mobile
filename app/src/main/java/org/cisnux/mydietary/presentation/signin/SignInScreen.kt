@@ -70,6 +70,7 @@ import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.AuthenticationState
 import org.cisnux.mydietary.utils.isEmailValid
 import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.utils.activity
 
 @Composable
 fun SignInScreen(
@@ -163,7 +164,7 @@ fun SignInScreen(
                     viewModel.clearAllStates()
                     navigateToSignUp()
                 },
-                onGoogleSignIn = { viewModel.signInWithGoogle() },
+                onGoogleSignIn = { context.activity?.let(viewModel::signInWithGoogle) },
                 onEmailPasswordSignIn = {
                     viewModel.signInWithEmailAndPassword(
                         emailAddress = emailAddress,

@@ -1,5 +1,6 @@
 package org.cisnux.mydietary.domain.usecases
 
+import android.content.Context
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.utils.AuthenticationState
 import org.cisnux.mydietary.utils.UiState
@@ -13,7 +14,7 @@ interface AuthenticationUseCase {
     val isAccessTokenAndUserIdExists: Flow<Pair<String, String>?>
     val authenticationState: Flow<AuthenticationState>
     fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
-    fun signInWithGoogle(): Flow<UiState<Nothing>>
+    fun signInWithGoogle(context: Context): Flow<UiState<Nothing>>
     fun signUpWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
     fun resetPassword(emailAddress: String): Flow<UiState<String>>
     fun forgotPassword(forgotPassword: ForgotPassword): Flow<UiState<String>>

@@ -1,5 +1,6 @@
 package org.cisnux.mydietary.presentation.signin
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,8 +42,8 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun signInWithGoogle() = viewModelScope.launch {
-        authenticationUseCase.signInWithGoogle()
+    fun signInWithGoogle(context: Context) = viewModelScope.launch {
+        authenticationUseCase.signInWithGoogle(context)
             .collectLatest { uiState ->
                 _signInWithGoogleState.value = uiState
             }

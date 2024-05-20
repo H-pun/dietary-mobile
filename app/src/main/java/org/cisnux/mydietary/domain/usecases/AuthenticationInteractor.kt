@@ -14,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.utils.io.errors.IOException
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.domain.repositories.AuthenticationRepository
@@ -46,7 +45,6 @@ class AuthenticationInteractor @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val credentialRequest: GetCredentialRequest,
     private val credentialManager: CredentialManager,
-    @ApplicationContext private val context: Context
 ) : AuthenticationUseCase {
     override val accessToken: Flow<String?>
         get() = authenticationRepository.accessToken
@@ -86,10 +84,10 @@ class AuthenticationInteractor @Inject constructor(
     override fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>> =
         authenticationRepository.verifyUserAccount(userAccount)
 
-    override fun signInWithGoogle(): Flow<UiState<Nothing>> = channelFlow {
+    override fun signInWithGoogle(context: Context): Flow<UiState<Nothing>> = channelFlow {
         trySend(UiState.Loading)
         try {
-            handleSignInWithGoogle()?.let { googleIdToken ->
+            handleSignInWithGoogle(context = context)?.let { googleIdToken ->
                 val credential = GoogleAuthProvider.getCredential(googleIdToken, null)
                 val authResult = firebaseAuth.signInWithCredential(credential).await()
                 val authUser = authResult.user
@@ -115,7 +113,7 @@ class AuthenticationInteractor @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    private suspend fun handleSignInWithGoogle(): String? = withContext(Dispatchers.IO) {
+    private suspend fun handleSignInWithGoogle(context: Context): String? = withContext(Dispatchers.IO) {
         try {
             val result = credentialManager.getCredential(
                 request = credentialRequest,
