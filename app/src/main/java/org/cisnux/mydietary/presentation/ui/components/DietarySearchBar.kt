@@ -104,7 +104,7 @@ fun DietarySearchBar(
                 } else menu()
             },
             trailingIcon = {
-                IconButton(onClick = { onSearchChange(query, true) }) {
+                IconButton(onClick = { onSearchChange(query, true) }, enabled = query.isNotBlank()) {
                     Icon(Icons.Default.Search, contentDescription = null)
                 }
             },
