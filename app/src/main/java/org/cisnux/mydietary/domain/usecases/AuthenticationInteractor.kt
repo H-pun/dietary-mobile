@@ -1,13 +1,20 @@
-@file:Suppress("DEPRECATION")
-
 package org.cisnux.mydietary.domain.usecases
 
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import android.content.Context
+import android.util.Log
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.utils.io.errors.IOException
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.domain.repositories.AuthenticationRepository
@@ -28,16 +35,18 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import org.cisnux.mydietary.domain.models.ChangePassword
 import org.cisnux.mydietary.domain.models.ForgotPassword
 
-@Suppress("DEPRECATION")
 @ExperimentalCoroutinesApi
 class AuthenticationInteractor @Inject constructor(
     private val authenticationRepository: AuthenticationRepository,
     private val userProfileRepository: UserProfileRepository,
     private val firebaseAuth: FirebaseAuth,
-    private val googleClient: GoogleSignInClient
+    private val credentialRequest: GetCredentialRequest,
+    private val credentialManager: CredentialManager,
+    @ApplicationContext private val context: Context
 ) : AuthenticationUseCase {
     override val accessToken: Flow<String?>
         get() = authenticationRepository.accessToken
@@ -77,20 +86,22 @@ class AuthenticationInteractor @Inject constructor(
     override fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>> =
         authenticationRepository.verifyUserAccount(userAccount)
 
-    override fun signInWithGoogle(token: String): Flow<UiState<Nothing>> = channelFlow {
+    override fun signInWithGoogle(): Flow<UiState<Nothing>> = channelFlow {
         trySend(UiState.Loading)
         try {
+            handleSignInWithGoogle()?.let { googleIdToken ->
+                val credential = GoogleAuthProvider.getCredential(googleIdToken, null)
+                val authResult = firebaseAuth.signInWithCredential(credential).await()
+                val authUser = authResult.user
+                val googleToken = authUser?.getIdToken(true)?.await()?.token
+                googleToken?.let {
+                    authenticationRepository.verifyGoogleAccount(token = it).distinctUntilChanged()
+                        .collectLatest { uiState ->
+                            trySend(uiState)
+                        }
+                } ?: trySend(UiState.Error(Failure.UnauthorizedFailure("token is invalid")))
+            }
             // change to flow
-            val credential = GoogleAuthProvider.getCredential(token, null)
-            val authResult = firebaseAuth.signInWithCredential(credential).await()
-            val authUser = authResult.user
-            val googleToken = authUser?.getIdToken(true)?.await()?.token
-            googleToken?.let {
-                authenticationRepository.verifyGoogleAccount(token = it).distinctUntilChanged()
-                    .collectLatest { uiState ->
-                        trySend(uiState)
-                    }
-            } ?: trySend(UiState.Error(Failure.UnauthorizedFailure("token is invalid")))
         } catch (e: FirebaseAuthInvalidUserException) {
             trySend(UiState.Error(e))
         } catch (e: FirebaseAuthUserCollisionException) {
@@ -103,6 +114,54 @@ class AuthenticationInteractor @Inject constructor(
             trySend(UiState.Error(e))
         }
     }.flowOn(Dispatchers.IO)
+
+    private suspend fun handleSignInWithGoogle(): String? = withContext(Dispatchers.IO) {
+        try {
+            val result = credentialManager.getCredential(
+                request = credentialRequest,
+                context = context,
+            )
+            when (val credential = result.credential) {
+                is CustomCredential -> {
+                    if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                        try {
+                            // Use googleIdTokenCredential and extract id to validate and
+                            // authenticate on your server.
+                            val googleIdTokenCredential = GoogleIdTokenCredential
+                                .createFrom(credential.data)
+                            googleIdTokenCredential.idToken
+                        } catch (e: GoogleIdTokenParsingException) {
+                            Log.e(
+                                AuthenticationUseCase::class.simpleName,
+                                "Received an invalid google id token response",
+                                e
+                            )
+                            null
+                        }
+                    } else {
+                        // Catch any unrecognized credential type here.
+                        Log.e(
+                            AuthenticationUseCase::class.simpleName,
+                            "Unexpected type of credential"
+                        )
+                        null
+                    }
+                }
+
+                else -> {
+                    // Catch any unrecognized credential type here.
+                    Log.e(AuthenticationUseCase::class.simpleName, "Unexpected type of credential")
+                    null
+                }
+            }
+        } catch (e: GetCredentialException) {
+            Log.e(
+                AuthenticationUseCase::class.simpleName,
+                e.message.toString()
+            )
+            null
+        }
+    }
 
     override fun signUpWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>> =
         authenticationRepository.addUserAccount(userAccount)
@@ -156,7 +215,7 @@ class AuthenticationInteractor @Inject constructor(
 
     override suspend fun signOut() {
         try {
-            googleClient.signOut().await()
+            credentialManager.clearCredentialState(request = ClearCredentialStateRequest())
         } finally {
             authenticationRepository.deleteSession()
         }

@@ -13,7 +13,7 @@ interface AuthenticationUseCase {
     val isAccessTokenAndUserIdExists: Flow<Pair<String, String>?>
     val authenticationState: Flow<AuthenticationState>
     fun signInWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
-    fun signInWithGoogle(token: String): Flow<UiState<Nothing>>
+    fun signInWithGoogle(): Flow<UiState<Nothing>>
     fun signUpWithEmailAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>>
     fun resetPassword(emailAddress: String): Flow<UiState<String>>
     fun forgotPassword(forgotPassword: ForgotPassword): Flow<UiState<String>>

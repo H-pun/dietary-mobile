@@ -1,13 +1,8 @@
-@file:Suppress("DEPRECATION")
 
 package org.cisnux.mydietary.presentation.signin
 
-import android.app.Activity
 import android.content.res.Configuration
-import android.util.Log
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -69,8 +64,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.api.ApiException
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.AppDestination
@@ -103,23 +96,6 @@ fun SignInScreen(
     val signInWithEmailAndPasswordState by viewModel.signInWithEmailAndPasswordState.collectAsState()
     val signInWithGoogleState by viewModel.signInWithGoogleState.collectAsState()
     val context = LocalContext.current
-    val googleSignInLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = { result ->
-            Log.d("SignInScreen", result.resultCode.toString())
-            if (result.resultCode == Activity.RESULT_OK) {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                try {
-                    // Google Sign In was successful, authenticate with firebase
-                    val account = task.getResult(ApiException::class.java)!!
-                    Log.d("SignInScreen", account.idToken ?: "null")
-                    account.idToken?.let(viewModel::signInWithGoogle)
-                } catch (e: ApiException) {
-                    Log.d("google login", e.message.toString())
-                }
-            }
-        }
-    )
 
     when (signInWithEmailAndPasswordState) {
         is UiState.Success -> {
@@ -187,9 +163,7 @@ fun SignInScreen(
                     viewModel.clearAllStates()
                     navigateToSignUp()
                 },
-                onGoogleSignIn = {
-                    googleSignInLauncher.launch(viewModel.googleSignInClient.signInIntent)
-                },
+                onGoogleSignIn = { viewModel.signInWithGoogle() },
                 onEmailPasswordSignIn = {
                     viewModel.signInWithEmailAndPassword(
                         emailAddress = emailAddress,

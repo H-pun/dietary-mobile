@@ -1,28 +1,23 @@
-@file:Suppress("DEPRECATION")
-
 package org.cisnux.mydietary.di
 
 import android.content.Context
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import androidx.credentials.CredentialManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
 @Module
 @InstallIn(SingletonComponent::class)
-object GoogleClientModule {
+object CredentialManagerModule {
 
     @Singleton
     @Provides
-    fun provideGoogleSignInClient(
+    fun provideCredentialManager(
         @ApplicationContext context: Context,
-        gso: GoogleSignInOptions
-    ): GoogleSignInClient {
-        return GoogleSignIn.getClient(context, gso)
+    ): CredentialManager {
+        return CredentialManager.create(context)
     }
 }

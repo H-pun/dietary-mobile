@@ -136,6 +136,9 @@ dependencies {
     debugImplementation(libs.leakcanary.android)
     //firebase
     implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 }
 
 // Allow references to generated code

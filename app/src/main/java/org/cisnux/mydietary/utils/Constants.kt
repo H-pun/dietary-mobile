@@ -2,6 +2,7 @@ package org.cisnux.mydietary.utils
 
 const val DIETARY_API = "https://api.dietary.cloud"
 const val IMAGE_LOCATION = "https://storage.googleapis.com/dietary-app-407405.appspot.com"
+const val WEB_CLIENT_ID = "871244307697-17fmcgek3i0ol6jp7a3ik214kjlqdk14.apps.googleusercontent.com"
 // nilai faktor untuk masing-masing level aktivitas
 val ACTIVITY_FACTOR = mapOf(
     "sedentary" to 1.2,

@@ -1,10 +1,7 @@
-@file:Suppress("DEPRECATION")
-
 package org.cisnux.mydietary.presentation.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
@@ -18,11 +15,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@Suppress("DEPRECATION")
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
-    val googleSignInClient: GoogleSignInClient,
 ) : ViewModel() {
     private val _signInWithEmailAndPasswordState: MutableStateFlow<UiState<Nothing>> =
         MutableStateFlow(UiState.Initialize)
@@ -46,8 +41,8 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun signInWithGoogle(token: String) = viewModelScope.launch {
-        authenticationUseCase.signInWithGoogle(token)
+    fun signInWithGoogle() = viewModelScope.launch {
+        authenticationUseCase.signInWithGoogle()
             .collectLatest { uiState ->
                 _signInWithGoogleState.value = uiState
             }
