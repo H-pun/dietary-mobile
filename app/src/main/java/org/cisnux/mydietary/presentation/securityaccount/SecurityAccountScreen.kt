@@ -432,7 +432,7 @@ private fun SecurityAccountBody(
         ListTileProfile(
             icon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_verified_account_100dp),
+                    painter = painterResource(id = R.drawable.ic_verification_100dp),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
                     tint = MaterialTheme.colorScheme.onSurface
