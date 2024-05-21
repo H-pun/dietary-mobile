@@ -20,13 +20,11 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -35,7 +33,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -68,7 +65,6 @@ import kotlinx.coroutines.launch
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.isResetCodeValid
 
 @Composable
 fun VerifyCodeScreen(
@@ -132,9 +128,10 @@ fun VerifyCodeScreen(
                 },
                 onResend = viewModel::resetPassword,
                 modifier = Modifier.padding(it),
-                isLoading = resetPasswordState is UiState.Loading
+                isLoading = resetPasswordState is UiState.Loading,
+                onNavigateUp = navigateUp
             )
-        }, snackbarHostState = snackbarHostState, navigateUp = navigateUp, modifier = modifier
+        }, snackbarHostState = snackbarHostState, modifier = modifier
     )
 }
 
@@ -189,6 +186,7 @@ private fun VerifyPasswordBody(
     onCodeChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
+    onNavigateUp: () -> Unit = {}
 ) {
     val focusRequester = remember { FocusRequester() }
     var timeLeft by rememberSaveable {
@@ -222,12 +220,22 @@ private fun VerifyPasswordBody(
             .verticalScroll(rememberScrollState())
             .padding(PaddingValues(16.dp))
     ) {
+        FilledIconButton(
+            onClick = onNavigateUp,
+            modifier = Modifier.align(Alignment.Start),
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
         Image(
             painter = painterResource(id = R.drawable.verify_code_illustration),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp)
+                .height(350.dp)
         )
         Text(
             text = buildAnnotatedString {
@@ -308,36 +316,16 @@ private fun VerifyPasswordBody(
                 ) else CircularProgressIndicator(modifier = Modifier.size(18.dp))
             }
         }
-        Button(
-            onClick = onDone,
-            enabled = code.isResetCodeValid(),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Verifikasi")
-        }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun VerifyPasswordContent(
     body: @Composable (PaddingValues) -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    navigateUp: () -> Unit = {}
 ) {
     Scaffold(
-        topBar = {
-            TopAppBar(title = { }, navigationIcon = {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            })
-        },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },

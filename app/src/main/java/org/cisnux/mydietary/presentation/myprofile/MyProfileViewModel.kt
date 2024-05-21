@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
@@ -25,10 +26,10 @@ import javax.inject.Inject
 @HiltViewModel
 class MyProfileViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
-    private val useCase: UserProfileUseCase
+    private val userProfileUseCase: UserProfileUseCase
 ) : ViewModel() {
     val userProfileDetail
-        get() = useCase.getUserProfileDetail(viewModelScope).shareIn(
+        get() = userProfileUseCase.getUserProfileDetail(viewModelScope).shareIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
         )
@@ -40,7 +41,7 @@ class MyProfileViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val userProfileState = refreshUserProfile.asStateFlow().flatMapMerge {
         if (it)
-            useCase.refreshUserProfile(scope = viewModelScope).also {
+            userProfileUseCase.refreshUserProfile(scope = viewModelScope).also {
                 refreshUserProfile.value = false
             }
         else flow { }
@@ -50,7 +51,9 @@ class MyProfileViewModel @Inject constructor(
     )
 
     init {
-        useCase.refreshUserProfile(scope = viewModelScope)
+        viewModelScope.launch {
+            userProfileUseCase.refreshUserProfile(scope = viewModelScope).firstOrNull()
+        }
     }
 
     fun updateRefreshUserProfile(isRefresh: Boolean) {
@@ -60,7 +63,7 @@ class MyProfileViewModel @Inject constructor(
     fun updateMyProfile(id: String, myProfile: MyProfile) {
         val addUserProfile = myProfile.asAddUserProfile.copy(id = id)
         viewModelScope.launch {
-            useCase.updateUserProfile(addUserProfile = addUserProfile, scope = viewModelScope)
+            userProfileUseCase.updateUserProfile(addUserProfile = addUserProfile, scope = viewModelScope)
                 .collectLatest { uiState ->
                     _updateMyProfileState.value = uiState
                     if (uiState is UiState.Success)

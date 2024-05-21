@@ -122,87 +122,81 @@ fun ReportScreen(
         navigateUp()
     }
 
-    when {
-        weeklyNutritionReportState is UiState.Error -> {
-            (weeklyNutritionReportState as UiState.Error).error?.let { exception ->
-                LaunchedEffect(snackbarHostState) {
-                    exception.message?.let {
-                        val snackbarResult = snackbarHostState.showSnackbar(
-                            message = it,
-                            actionLabel = context.getString(R.string.retry),
-                            withDismissAction = true,
-                            duration = SnackbarDuration.Long
-                        )
-                        if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getReports(
-                            index = tabState
-                        )
-                    }
+    if (weeklyNutritionReportState is UiState.Error)
+        (weeklyNutritionReportState as UiState.Error).error?.let { exception ->
+            LaunchedEffect(snackbarHostState) {
+                exception.message?.let {
+                    val snackbarResult = snackbarHostState.showSnackbar(
+                        message = it,
+                        actionLabel = context.getString(R.string.retry),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long
+                    )
+                    if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getReports(
+                        index = tabState
+                    )
                 }
-                if (exception is Failure.UnauthorizedFailure) {
-                    viewModel.signOut()
-                    navigateToSignIn(AppDestination.ReportRoute.route)
-                }
+            }
+            if (exception is Failure.UnauthorizedFailure) {
+                viewModel.signOut()
+                navigateToSignIn(AppDestination.ReportRoute.route)
             }
         }
 
-        monthlyNutritionReportState is UiState.Error -> {
-            (monthlyNutritionReportState as UiState.Error).error?.let { exception ->
-                LaunchedEffect(snackbarHostState) {
-                    exception.message?.let {
-                        val snackbarResult = snackbarHostState.showSnackbar(
-                            message = it,
-                            actionLabel = context.getString(R.string.retry),
-                            withDismissAction = true,
-                            duration = SnackbarDuration.Long
-                        )
-                        if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getReports(
-                            index = tabState
-                        )
-                    }
-                }
-                if (exception is Failure.UnauthorizedFailure) {
-                    viewModel.signOut()
-                    navigateToSignIn(AppDestination.ReportRoute.route)
+    if (monthlyNutritionReportState is UiState.Error) {
+        (monthlyNutritionReportState as UiState.Error).error?.let { exception ->
+            LaunchedEffect(snackbarHostState) {
+                exception.message?.let {
+                    val snackbarResult = snackbarHostState.showSnackbar(
+                        message = it,
+                        actionLabel = context.getString(R.string.retry),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long
+                    )
+                    if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getReports(
+                        index = tabState
+                    )
                 }
             }
-        }
-
-        userNutritionState is UiState.Error -> {
-            (userNutritionState as UiState.Error).error?.let { exception ->
-                LaunchedEffect(snackbarHostState) {
-                    exception.message?.let {
-                        snackbarHostState.showSnackbar(
-                            message = it,
-                            withDismissAction = true,
-                            duration = SnackbarDuration.Long
-                        )
-                    }
-                }
-                if (exception is Failure.UnauthorizedFailure) {
-                    viewModel.signOut()
-                    navigateToSignIn(AppDestination.ReportRoute.route)
-                }
-            }
-        }
-
-        dietProgressState is UiState.Error -> {
-            (dietProgressState as UiState.Error).error?.let { exception ->
-                LaunchedEffect(snackbarHostState) {
-                    exception.message?.let {
-                        snackbarHostState.showSnackbar(
-                            message = it,
-                            withDismissAction = true,
-                            duration = SnackbarDuration.Long
-                        )
-                    }
-                }
-                if (exception is Failure.UnauthorizedFailure) {
-                    viewModel.signOut()
-                    navigateToSignIn(AppDestination.ReportRoute.route)
-                }
+            if (exception is Failure.UnauthorizedFailure) {
+                viewModel.signOut()
+                navigateToSignIn(AppDestination.ReportRoute.route)
             }
         }
     }
+    if (userNutritionState is UiState.Error)
+        (userNutritionState as UiState.Error).error?.let { exception ->
+            LaunchedEffect(snackbarHostState) {
+                exception.message?.let {
+                    snackbarHostState.showSnackbar(
+                        message = it,
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long
+                    )
+                }
+            }
+            if (exception is Failure.UnauthorizedFailure) {
+                viewModel.signOut()
+                navigateToSignIn(AppDestination.ReportRoute.route)
+            }
+        }
+
+    if (dietProgressState is UiState.Error)
+        (dietProgressState as UiState.Error).error?.let { exception ->
+            LaunchedEffect(snackbarHostState) {
+                exception.message?.let {
+                    snackbarHostState.showSnackbar(
+                        message = it,
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long
+                    )
+                }
+            }
+            if (exception is Failure.UnauthorizedFailure) {
+                viewModel.signOut()
+                navigateToSignIn(AppDestination.ReportRoute.route)
+            }
+        }
 
     ReportContent(
         onSelectedDestination = navigateForBottomNav,
@@ -391,11 +385,11 @@ private fun ReportBody(
     val carbohydrateColor = if (!isSystemInDarkTheme()) lightBlue
     else darkBlue
 
-    val proteinColor = if(!isSystemInDarkTheme()) lightYellow
-        else darkYellow
+    val proteinColor = if (!isSystemInDarkTheme()) lightYellow
+    else darkYellow
 
-    val fatColor = if(!isSystemInDarkTheme()) lightMagenta
-        else darkMagenta
+    val fatColor = if (!isSystemInDarkTheme()) lightMagenta
+    else darkMagenta
 
     val weightColor = if (!isSystemInDarkTheme())
         primaryContainerLight

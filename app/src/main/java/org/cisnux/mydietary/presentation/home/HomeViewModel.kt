@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
@@ -134,7 +135,9 @@ class HomeViewModel @Inject constructor(
         )
 
     init {
-        userProfileUseCase.refreshUserProfile(scope = viewModelScope)
+        viewModelScope.launch {
+            userProfileUseCase.refreshUserProfile(scope = viewModelScope).firstOrNull()
+        }
     }
 
     fun updateSelectedDate(dateTimeMillis: Instant) {

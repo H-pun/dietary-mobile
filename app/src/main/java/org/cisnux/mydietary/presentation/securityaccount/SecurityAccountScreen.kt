@@ -1,5 +1,6 @@
 package org.cisnux.mydietary.presentation.securityaccount
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -112,8 +113,8 @@ fun SecurityAccountScreen(
     val verifyEmailState by viewModel.verifyEmailState.collectAsState(initial = UiState.Initialize)
     val userProfile by viewModel.userProfile.collectAsState(initial = null)
 
-    when {
-        changeEmailState is UiState.Success -> {
+    when (changeEmailState) {
+        is UiState.Success -> {
             (changeEmailState as UiState.Success).data?.let {
                 LaunchedEffect(snackbarHostState) {
                     snackbarHostState.showSnackbar(
@@ -125,7 +126,7 @@ fun SecurityAccountScreen(
             }
         }
 
-        changeEmailState is UiState.Error -> {
+        is UiState.Error -> {
             (changeEmailState as UiState.Error).error?.let { exception ->
                 LaunchedEffect(snackbarHostState) {
                     exception.message?.let {
@@ -150,7 +151,11 @@ fun SecurityAccountScreen(
             }
         }
 
-        changePasswordState is UiState.Success -> {
+        else -> {}
+    }
+
+    when (changePasswordState) {
+        is UiState.Success -> {
             (changePasswordState as UiState.Success).data?.let {
                 LaunchedEffect(snackbarHostState) {
                     snackbarHostState.showSnackbar(
@@ -162,7 +167,7 @@ fun SecurityAccountScreen(
             }
         }
 
-        changePasswordState is UiState.Error -> {
+        is UiState.Error -> {
             (changePasswordState as UiState.Error).error?.let { exception ->
                 LaunchedEffect(snackbarHostState) {
                     exception.message?.let {
@@ -188,8 +193,13 @@ fun SecurityAccountScreen(
             }
         }
 
-        verifyEmailState is UiState.Success -> {
+         else -> {}
+    }
+
+    when (verifyEmailState) {
+        is UiState.Success -> {
             (verifyEmailState as UiState.Success).data?.let {
+                Log.d("VerifyEmailScreen", "Successfully verified")
                 LaunchedEffect(snackbarHostState) {
                     snackbarHostState.showSnackbar(
                         message = "Periksa inbox email anda",
@@ -200,7 +210,7 @@ fun SecurityAccountScreen(
             }
         }
 
-        verifyEmailState is UiState.Error -> {
+        is UiState.Error -> {
             (verifyEmailState as UiState.Error).error?.let { exception ->
                 LaunchedEffect(snackbarHostState) {
                     exception.message?.let {
@@ -222,6 +232,8 @@ fun SecurityAccountScreen(
                 }
             }
         }
+
+        else -> {}
     }
 
     SecurityAccountContent(

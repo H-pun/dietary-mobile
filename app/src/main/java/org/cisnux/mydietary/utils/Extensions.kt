@@ -90,8 +90,6 @@ fun String.isFloatAndGreaterAndEqualToZero(): Boolean = try {
     false
 }
 
-fun String.isResetCodeValid(): Boolean = this.trim().length == 6
-
 fun Instant.dayDateMonthYear(): String {
     val locale = Locale("id", "ID")
     val clock = Clock.fixed(this, ZoneId.systemDefault())

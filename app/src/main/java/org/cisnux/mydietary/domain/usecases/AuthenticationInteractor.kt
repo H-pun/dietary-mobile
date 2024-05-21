@@ -313,18 +313,24 @@ class AuthenticationInteractor @Inject constructor(
                     accessToken = it.second,
                     id = it.first,
                     email = newEmail
-                ).map { uiState ->
-                    userProfileRepository.getUserProfile(accessToken = it.second, userId = it.first)
-                        .stateIn(
-                            scope = scope,
-                            started = SharingStarted.Eagerly,
-                            initialValue = UiState.Initialize
-                        )
-                    if (uiState is UiState.Success) {
-                        UiState.Success(data = "Berhasil merubah email address")
-                    } else
-                        uiState
-                }.distinctUntilChanged()
+                ).distinctUntilChanged()
+                    .flatMapLatest { uiState ->
+                        when (uiState) {
+                            is UiState.Success -> userProfileRepository.getUserProfile(
+                                accessToken = it.second,
+                                userId = it.first
+                            ).map { userProfileState ->
+                                if (userProfileState is UiState.Success)
+                                    UiState.Success("Berhasil mengubah email")
+                                else
+                                    userProfileState
+                            }
+
+                            is UiState.Error -> flow { emit(uiState) }
+                            is UiState.Loading -> flow { emit(uiState) }
+                            is UiState.Initialize -> flow { emit(uiState) }
+                        }
+                    }
                     .flowOn(Dispatchers.IO)
                     .stateIn(
                         scope = scope,

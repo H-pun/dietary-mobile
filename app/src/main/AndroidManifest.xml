@@ -34,7 +34,6 @@
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MyDietary"
             android:windowSoftInputMode="adjustResize"
@@ -53,7 +52,8 @@
 
                 <data android:scheme="https" />
                 <data android:host="api.dietary.cloud" />
-                <data android:pathPrefix="/user" />
+                <data android:pathPrefix="/user/email-verified" />
+                <data android:pathPrefix="/user/verify-otp" />
             </intent-filter>
         </activity>
     </application>

@@ -75,7 +75,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
                             parameter("category", category)
                         }
                         getFoodDiaryParams.query?.let { query ->
-                            parameter("query", query)
+                            parameter("keyword", query)
                         }
                     }
                     headers {

@@ -155,30 +155,29 @@ fun MyProfileScreen(
     val activityDescriptions = stringArrayResource(id = R.array.activity_description)
     val context = LocalContext.current
 
-    when {
-        userProfileState is UiState.Error -> {
-            (userProfileState as UiState.Error).error?.let { exception ->
-                LaunchedEffect(snackbarHostState) {
-                    exception.message?.let {
-                        val snackbarResult = snackbarHostState.showSnackbar(
-                            message = it,
-                            actionLabel = context.getString(R.string.retry),
-                            withDismissAction = true,
-                            duration = SnackbarDuration.Long
-                        )
-                        if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.updateRefreshUserProfile(
-                            true
-                        )
-                    }
-                }
-                if (exception is Failure.UnauthorizedFailure) {
-                    viewModel.signOut()
-                    navigateToSignIn()
+    if (userProfileState is UiState.Error)
+        (userProfileState as UiState.Error).error?.let { exception ->
+            LaunchedEffect(snackbarHostState) {
+                exception.message?.let {
+                    val snackbarResult = snackbarHostState.showSnackbar(
+                        message = it,
+                        actionLabel = context.getString(R.string.retry),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long
+                    )
+                    if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.updateRefreshUserProfile(
+                        true
+                    )
                 }
             }
+            if (exception is Failure.UnauthorizedFailure) {
+                viewModel.signOut()
+                navigateToSignIn()
+            }
         }
-
-        updateUserProfileState is UiState.Error -> {
+    
+    when (updateUserProfileState) {
+        is UiState.Error -> {
             (updateUserProfileState as UiState.Error).error?.let { exception ->
                 LaunchedEffect(snackbarHostState) {
                     exception.message?.let {
@@ -201,7 +200,7 @@ fun MyProfileScreen(
             }
         }
 
-        updateUserProfileState is UiState.Success -> {
+        is UiState.Success -> {
             val coroutineScope = rememberCoroutineScope()
             LaunchedEffect(updateUserProfileState) {
                 coroutineScope.launch {
@@ -209,6 +208,8 @@ fun MyProfileScreen(
                 }
             }
         }
+
+        else -> {}
     }
 
     MyProfileContent(

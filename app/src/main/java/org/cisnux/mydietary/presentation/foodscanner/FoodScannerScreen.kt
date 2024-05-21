@@ -1,6 +1,5 @@
 package org.cisnux.mydietary.presentation.foodscanner
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
@@ -319,8 +318,12 @@ fun FoodScannerScreen(
                                 controller = cameraController
                                 afterMeasured {
                                     setOnTouchListener { _, event ->
+                                        performClick()
                                         return@setOnTouchListener when (event.action) {
-                                            MotionEvent.ACTION_DOWN -> true
+                                            MotionEvent.ACTION_DOWN -> {
+                                                true
+                                            }
+
                                             MotionEvent.ACTION_UP -> {
                                                 try {
                                                     val autoFocusPoint =

@@ -8,9 +8,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
@@ -37,14 +38,16 @@ class SecurityAccountViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed()
         )
     private val _changeEmailState = MutableStateFlow<UiState<String>>(UiState.Initialize)
-    val changeEmailState = _changeEmailState.asSharedFlow()
+    val changeEmailState = _changeEmailState.asStateFlow()
     private val _changePasswordState = MutableStateFlow<UiState<String>>(UiState.Initialize)
-    val changePasswordState = _changePasswordState.asSharedFlow()
+    val changePasswordState = _changePasswordState.asStateFlow()
     private val _verifyEmailState = MutableStateFlow<UiState<String>>(UiState.Initialize)
-    val verifyEmailState = _verifyEmailState.asSharedFlow()
+    val verifyEmailState = _verifyEmailState.asStateFlow()
 
     init {
-        userProfileUseCase.refreshUserProfile(scope = viewModelScope)
+        viewModelScope.launch {
+            userProfileUseCase.refreshUserProfile(scope = viewModelScope).firstOrNull()
+        }
     }
 
     fun verifyEmail(email: String) = viewModelScope.launch {

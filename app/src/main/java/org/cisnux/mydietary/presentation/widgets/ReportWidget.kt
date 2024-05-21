@@ -95,9 +95,7 @@ class ReportWidget : GlanceAppWidget() {
             val foodDiaryUseCase = remember {
                 hiltEntryPoint.foodDiaryUseCase()
             }
-            val coroutineScope = rememberCoroutineScope {
-                SupervisorJob() + Dispatchers.IO
-            }
+            val coroutineScope = rememberCoroutineScope()
             val oneTimeDailyNutrition by rememberUpdatedState(
                 reportUseCase.getDailyNutrition(
                     coroutineScope

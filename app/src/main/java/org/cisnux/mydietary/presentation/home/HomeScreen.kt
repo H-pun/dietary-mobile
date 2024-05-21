@@ -167,8 +167,8 @@ fun HomeScreen(
     val searchedDiaryFoods by viewModel.searchedFoodDiaries.collectAsState(initial = null)
     val userProfile by viewModel.userProfileDetail.collectAsState(initial = null)
 
-    when {
-        diaryFoodState is UiState.Error -> (diaryFoodState as UiState.Error).error?.let { exception ->
+    if (diaryFoodState is UiState.Error)
+        (diaryFoodState as UiState.Error).error?.let { exception ->
             LaunchedEffect(snackbarHostState) {
                 exception.message?.let {
                     val snackbarResult = snackbarHostState.showSnackbar(
@@ -188,7 +188,8 @@ fun HomeScreen(
             }
         }
 
-        searchedDiaryFoodState is UiState.Error -> (searchedDiaryFoodState as UiState.Error).error?.let { exception ->
+    if (searchedDiaryFoodState is UiState.Error)
+        (searchedDiaryFoodState as UiState.Error).error?.let { exception ->
             LaunchedEffect(snackbarHostState) {
                 exception.message?.let {
                     val snackbarResult = snackbarHostState.showSnackbar(
@@ -207,8 +208,8 @@ fun HomeScreen(
                 navigateToSignIn(AppDestination.HomeRoute.route)
             }
         }
-
-        keywordSuggestionState is UiState.Error -> (keywordSuggestionState as UiState.Error).error?.let { exception ->
+    if (keywordSuggestionState is UiState.Error)
+        (keywordSuggestionState as UiState.Error).error?.let { exception ->
             LaunchedEffect(snackbarHostState) {
                 exception.message?.let {
                     val snackbarResult = snackbarHostState.showSnackbar(
@@ -227,7 +228,7 @@ fun HomeScreen(
                 navigateToSignIn(AppDestination.HomeRoute.route)
             }
         }
-    }
+
     val onRefresh = when {
         searchBarState.active -> viewModel::updateRefreshSuggestionKeywords
         else -> viewModel::updateRefreshDiaryFoods

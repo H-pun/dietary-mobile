@@ -109,23 +109,8 @@ fun DiaryDetailScreen(
         navigateUp()
     }
 
-    when {
-        foodDiaryDetailState is UiState.Error -> (foodDiaryDetailState as UiState.Error).error?.let { exception ->
-            LaunchedEffect(snackbarHostState) {
-                exception.message?.let {
-                    val snackbarResult = snackbarHostState.showSnackbar(
-                        message = it,
-                        actionLabel = context.getString(R.string.retry),
-                        withDismissAction = true,
-                        duration = SnackbarDuration.Long
-                    )
-                    if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getFoodDiaryDetailById()
-                }
-            }
-            if (exception is Failure.UnauthorizedFailure) navigateToSignIn(AppDestination.DiaryDetailRoute.route)
-        }
-
-        removeState is UiState.Error -> (removeState as UiState.Error).error?.let { exception ->
+    when (removeState) {
+        is UiState.Error -> (removeState as UiState.Error).error?.let { exception ->
             LaunchedEffect(snackbarHostState) {
                 exception.message?.let {
                     val snackbarResult = snackbarHostState.showSnackbar(
@@ -139,7 +124,12 @@ fun DiaryDetailScreen(
             }
         }
 
-        addFoodDiaryState is UiState.Error -> (addFoodDiaryState as UiState.Error).error?.let { exception ->
+        is UiState.Success -> navigateUp()
+        else -> {}
+    }
+
+    when (addFoodDiaryState) {
+        is UiState.Error -> (addFoodDiaryState as UiState.Error).error?.let { exception ->
             LaunchedEffect(snackbarHostState) {
                 exception.message?.let {
                     snackbarHostState.showSnackbar(
@@ -149,10 +139,25 @@ fun DiaryDetailScreen(
             }
         }
 
-        removeState is UiState.Success -> navigateUp()
-
-        addFoodDiaryState is UiState.Success -> navigateUp()
+        is UiState.Success -> navigateUp()
+        else -> {}
     }
+
+    if (foodDiaryDetailState is UiState.Error)
+        (foodDiaryDetailState as UiState.Error).error?.let { exception ->
+            LaunchedEffect(snackbarHostState) {
+                exception.message?.let {
+                    val snackbarResult = snackbarHostState.showSnackbar(
+                        message = it,
+                        actionLabel = context.getString(R.string.retry),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long
+                    )
+                    if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getFoodDiaryDetailById()
+                }
+            }
+            if (exception is Failure.UnauthorizedFailure) navigateToSignIn(AppDestination.DiaryDetailRoute.route)
+        }
 
 
     val foodDiaryCategories = stringArrayResource(id = R.array.food_diary_category)
