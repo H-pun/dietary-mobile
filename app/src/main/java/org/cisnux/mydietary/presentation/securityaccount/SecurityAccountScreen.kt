@@ -1,6 +1,5 @@
 package org.cisnux.mydietary.presentation.securityaccount
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -199,7 +198,6 @@ fun SecurityAccountScreen(
     when (verifyEmailState) {
         is UiState.Success -> {
             (verifyEmailState as UiState.Success).data?.let {
-                Log.d("VerifyEmailScreen", "Successfully verified")
                 LaunchedEffect(snackbarHostState) {
                     snackbarHostState.showSnackbar(
                         message = "Periksa inbox email anda",

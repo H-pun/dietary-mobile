@@ -47,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -140,7 +141,7 @@ fun VerifyCodeScreen(
     name = "light",
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
     wallpaper = Wallpapers.NONE,
-    device = "id:pixel_7_pro"
+    device = "id:pixel_3a"
 )
 @Composable
 private fun VerifyPasswordContentPreview() {
@@ -192,6 +193,7 @@ private fun VerifyPasswordBody(
     var timeLeft by rememberSaveable {
         mutableIntStateOf(60)
     }
+    val configuration = LocalConfiguration.current
 
     LaunchedEffect(isLoading) {
         if (!isLoading) timeLeft = 60
@@ -235,7 +237,7 @@ private fun VerifyPasswordBody(
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(350.dp)
+                .height((configuration.screenHeightDp * 0.38f).dp)
         )
         Text(
             text = buildAnnotatedString {

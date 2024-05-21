@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -207,6 +208,8 @@ private fun ResetPasswordBody(
     var isEmailAddressFocused by rememberSaveable {
         mutableStateOf(false)
     }
+    val configuration = LocalConfiguration.current
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -229,7 +232,7 @@ private fun ResetPasswordBody(
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(330.dp)
+                .height((configuration.screenHeightDp * 0.38f).dp)
         )
         Text(
             text = stringResource(R.string.reset_password),

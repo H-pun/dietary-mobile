@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -260,6 +261,7 @@ private fun NewPasswordBody(
     var isConfirmationPassFocused by rememberSaveable {
         mutableStateOf(false)
     }
+    val configuration = LocalConfiguration.current
 
     Column(
         modifier = modifier
@@ -273,7 +275,7 @@ private fun NewPasswordBody(
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(130.dp)
+                .height((configuration.screenHeightDp * 0.14f).dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(

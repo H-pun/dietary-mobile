@@ -1,14 +1,13 @@
 package org.cisnux.mydietary.domain.usecases
 
 import android.app.Activity
-import android.content.Context
 import kotlinx.coroutines.CoroutineScope
-import org.cisnux.mydietary.domain.models.UserAccount
-import org.cisnux.mydietary.utils.AuthenticationState
-import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.Flow
 import org.cisnux.mydietary.domain.models.ChangePassword
 import org.cisnux.mydietary.domain.models.ForgotPassword
+import org.cisnux.mydietary.domain.models.UserAccount
+import org.cisnux.mydietary.utils.AuthenticationState
+import org.cisnux.mydietary.utils.UiState
 
 interface AuthenticationUseCase {
     fun getAuthenticationState(scope: CoroutineScope): Flow<AuthenticationState>

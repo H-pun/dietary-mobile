@@ -1,18 +1,16 @@
 package org.cisnux.mydietary.presentation.signin
 
 import android.app.Activity
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ActivityContext
-import org.cisnux.mydietary.domain.models.UserAccount
-import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
-import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.cisnux.mydietary.domain.models.UserAccount
+import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
+import org.cisnux.mydietary.utils.UiState
 import javax.inject.Inject
 
 @HiltViewModel

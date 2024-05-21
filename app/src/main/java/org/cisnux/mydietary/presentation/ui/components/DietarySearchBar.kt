@@ -79,7 +79,8 @@ fun DietarySearchBar(
             query = query,
             onQueryChange = onQueryChange,
             onSearch = {
-                onSearchChange(it, true)
+                if(query.isNotBlank())
+                    onSearchChange(it, true)
             },
             active = active,
             onActiveChange = onActiveChange,

@@ -660,7 +660,7 @@ private fun HomeBody(
                             Column {
                                 AnimatedVisibility(visible = isDiaryLoading) {
                                     Column {
-                                        repeat(6) {
+                                        repeat(8) {
                                             DiaryCardShimmer()
                                         }
                                     }
@@ -850,7 +850,7 @@ private fun SearchBody(
             item {
                 AnimatedVisibility(visible = isSearchLoading) {
                     Column {
-                        repeat(6) {
+                        repeat(8) {
                             DiaryCardShimmer()
                         }
                     }

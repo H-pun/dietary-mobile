@@ -48,8 +48,6 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.cisnux.mydietary.R
@@ -60,11 +58,11 @@ import org.cisnux.mydietary.domain.usecases.ReportUseCase
 import org.cisnux.mydietary.presentation.MainActivity
 import org.cisnux.mydietary.presentation.ui.theme.DietaryGlanceTheme
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTypeScaleTokens
-import org.cisnux.mydietary.presentation.ui.theme.darkRed
 import org.cisnux.mydietary.presentation.ui.theme.darkProgress
+import org.cisnux.mydietary.presentation.ui.theme.darkRed
 import org.cisnux.mydietary.presentation.ui.theme.darkYellow
-import org.cisnux.mydietary.presentation.ui.theme.lightRed
 import org.cisnux.mydietary.presentation.ui.theme.lightProgress
+import org.cisnux.mydietary.presentation.ui.theme.lightRed
 import org.cisnux.mydietary.presentation.ui.theme.lightYellow
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerDark
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerLight

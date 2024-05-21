@@ -7,9 +7,7 @@ import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.Keyword
-import org.cisnux.mydietary.domain.models.WeeklyNutritionReport
 import org.cisnux.mydietary.utils.FoodDiaryCategory
-import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
 import java.io.File
 
