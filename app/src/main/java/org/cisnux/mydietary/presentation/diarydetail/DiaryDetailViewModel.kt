@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.FoodDiaryUseCase
@@ -90,7 +93,7 @@ class DiaryDetailViewModel @Inject constructor(
         }
     }
 
-    fun signOut() = viewModelScope.launch {
+    fun signOut() = CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {
         authenticationUseCase.signOut()
     }
 }

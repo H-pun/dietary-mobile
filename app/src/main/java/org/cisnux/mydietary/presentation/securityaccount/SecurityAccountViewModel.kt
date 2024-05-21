@@ -3,6 +3,9 @@ package org.cisnux.mydietary.presentation.securityaccount
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
@@ -74,7 +77,7 @@ class SecurityAccountViewModel @Inject constructor(
             }
     }
 
-    fun signOut() = viewModelScope.launch {
+    fun signOut() = CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {
         authenticationUseCase.signOut()
     }
 }

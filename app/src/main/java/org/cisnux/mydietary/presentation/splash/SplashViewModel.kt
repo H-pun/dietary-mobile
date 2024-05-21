@@ -3,6 +3,9 @@ package org.cisnux.mydietary.presentation.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.LandingUseCase
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,7 +25,7 @@ class SplashViewModel @Inject constructor(
     val authenticationState = authenticationUseCase
         .getAuthenticationState(scope = viewModelScope)
 
-    fun signOut() = viewModelScope.launch {
+    fun signOut() = CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {
         authenticationUseCase.signOut()
     }
 }

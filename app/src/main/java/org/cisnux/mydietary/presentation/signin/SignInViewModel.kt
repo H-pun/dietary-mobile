@@ -1,9 +1,11 @@
 package org.cisnux.mydietary.presentation.signin
 
+import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ActivityContext
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.utils.UiState
@@ -35,8 +37,8 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun signInWithGoogle(context: Context) = viewModelScope.launch {
-        authenticationUseCase.signInWithGoogle(context = context, scope = viewModelScope)
+    fun signInWithGoogle(context: Activity) = viewModelScope.launch {
+        authenticationUseCase.signInWithGoogle(scope = viewModelScope, context = context)
             .collectLatest { uiState ->
                 _signInWithGoogleState.value = uiState
             }

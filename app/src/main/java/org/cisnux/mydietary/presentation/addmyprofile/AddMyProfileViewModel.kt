@@ -3,6 +3,9 @@ package org.cisnux.mydietary.presentation.addmyprofile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import org.cisnux.mydietary.utils.asAddUserProfile
@@ -31,7 +34,7 @@ class AddMyProfileViewModel @Inject constructor(
         }
     }
 
-    fun signOut() = viewModelScope.launch {
+    fun signOut() = CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {
         authenticationUseCase.signOut()
     }
 }

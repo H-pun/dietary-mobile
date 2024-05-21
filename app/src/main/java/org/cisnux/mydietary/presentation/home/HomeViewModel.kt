@@ -3,6 +3,8 @@ package org.cisnux.mydietary.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.FoodDiaryUseCase
 import org.cisnux.mydietary.utils.FoodDiaryCategory
@@ -11,6 +13,7 @@ import org.cisnux.mydietary.utils.currentLocalDateTimeInBasicISOFormat
 import org.cisnux.mydietary.utils.foodDiaryCategory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -45,7 +48,7 @@ class HomeViewModel @Inject constructor(
     private var query = MutableStateFlow("")
 
     val userProfileDetail
-        get() = userProfileUseCase.getUserProfileDetail()
+        get() = userProfileUseCase.getUserProfileDetail(scope = viewModelScope)
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val foodDiaryState = refreshFoodDiaries.asStateFlow().flatMapMerge { isRefresh ->
@@ -105,7 +108,10 @@ class HomeViewModel @Inject constructor(
                         emit(UiState.Success(listOf()))
                         refreshSuggestionKeywords.value = false
                     }
-                else foodDiaryUseCase.getKeywordSuggestionsByQuery(query = query, scope = viewModelScope).also {
+                else foodDiaryUseCase.getKeywordSuggestionsByQuery(
+                    query = query,
+                    scope = viewModelScope
+                ).also {
                     refreshSuggestionKeywords.value = false
                 }.shareIn(
                     scope = viewModelScope, started = SharingStarted.WhileSubscribed()
@@ -150,9 +156,10 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getFoodDiariesByQuery(query: String) = viewModelScope.launch {
-        foodDiaryUseCase.getDiaryFoodsByQuery(query = query, scope = viewModelScope).distinctUntilChanged().collectLatest {
-            _searchedFoodDiaryState.value = it
-        }
+        foodDiaryUseCase.getDiaryFoodsByQuery(query = query, scope = viewModelScope)
+            .distinctUntilChanged().collectLatest {
+                _searchedFoodDiaryState.value = it
+            }
     }
 
     fun updateQuery(newQuery: String) {
@@ -160,7 +167,7 @@ class HomeViewModel @Inject constructor(
         refreshSuggestionKeywords.value = true
     }
 
-    fun signOut() = viewModelScope.launch {
+    fun signOut() = CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {
         authenticationUseCase.signOut()
     }
 }

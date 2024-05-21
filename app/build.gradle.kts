@@ -1,6 +1,7 @@
+import com.google.protobuf.gradle.GenerateProtoTask
+
 plugins {
     kotlin("plugin.serialization")
-    kotlin("kapt")
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
@@ -8,6 +9,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     id("kotlin-parcelize")
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.com.google.devtools.ksp)
 }
 
 android {
@@ -55,7 +57,7 @@ android {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.24.1"
+        artifact = "com.google.protobuf:protoc:4.26.1"
     }
 
     generateProtoTasks {
@@ -64,6 +66,22 @@ protobuf {
                 create("java") {
                     option("lite")
                 }
+            }
+        }
+    }
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        afterEvaluate {
+            val protoTask =
+                project.tasks.getByName("generate" + variant.name.replaceFirstChar { it.uppercaseChar() } + "Proto") as GenerateProtoTask
+
+            project.tasks.getByName("ksp" + variant.name.replaceFirstChar { it.uppercaseChar() } + "Kotlin") {
+                dependsOn(protoTask)
+                (this as org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool<*>).setSource(
+                    protoTask.outputBaseDir
+                )
             }
         }
     }
@@ -90,7 +108,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose)
     // hilt
     implementation(libs.google.dagger.hilt.android)
-    kapt(libs.google.dagger.hilt.android.compiler)
+    ksp(libs.google.dagger.hilt.android.compiler)
     // navigation compose
     implementation(libs.androidx.navigation.compose)
     // hilt navigation compose
@@ -127,16 +145,9 @@ dependencies {
     implementation(libs.vico.compose.m3)
     //widget
     implementation(libs.androidx.glance.appwidget)
-    //leakcanary
-    debugImplementation(libs.leakcanary.android)
     //firebase
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
-}
-
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
 }

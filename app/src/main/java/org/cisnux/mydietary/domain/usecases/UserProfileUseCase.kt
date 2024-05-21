@@ -9,7 +9,7 @@ import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.Flow
 
 interface UserProfileUseCase {
-    fun getUserProfileDetail(scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)): Flow<UserProfileDetail>
+    fun getUserProfileDetail(scope: CoroutineScope = CoroutineScope(context = SupervisorJob() + Dispatchers.IO)): Flow<UserProfileDetail>
     fun addUserProfile(
         addUserProfile: AddUserProfile, scope: CoroutineScope
     ): Flow<UiState<Nothing>>

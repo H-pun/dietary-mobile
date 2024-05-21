@@ -129,7 +129,7 @@ import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-@SuppressLint("ClickableViewAccessibility")
+
 @Composable
 fun FoodScannerScreen(
     onNavigateUp: () -> Unit,

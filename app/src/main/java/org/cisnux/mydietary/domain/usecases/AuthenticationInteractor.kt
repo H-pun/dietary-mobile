@@ -1,6 +1,6 @@
 package org.cisnux.mydietary.domain.usecases
 
-import android.content.Context
+import android.app.Activity
 import android.util.Log
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
@@ -51,7 +51,6 @@ class AuthenticationInteractor @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val credentialRequest: GetCredentialRequest,
     private val credentialManager: CredentialManager,
-    private val userProfileUseCase: UserProfileUseCase
 ) : AuthenticationUseCase {
 
     override fun getAuthenticationState(scope: CoroutineScope): Flow<AuthenticationState> =
@@ -99,7 +98,8 @@ class AuthenticationInteractor @Inject constructor(
             .distinctUntilChanged()
             .flowOn(Dispatchers.IO)
             .combine(
-                getAccessToken(scope = scope).filterNotNull().filter { it.isNotBlank() }.distinctUntilChanged()
+                getAccessToken(scope = scope).filterNotNull().filter { it.isNotBlank() }
+                    .distinctUntilChanged()
             ) { userId, accessToken ->
                 Pair(first = userId, second = accessToken)
             }
@@ -139,8 +139,11 @@ class AuthenticationInteractor @Inject constructor(
                 initialValue = UiState.Initialize
             )
 
-    override fun signInWithGoogle(context: Context, scope: CoroutineScope): Flow<UiState<Nothing>> =
-        channelFlow {
+    override fun signInWithGoogle(
+        scope: CoroutineScope,
+        context: Activity
+    ): Flow<UiState<Nothing>> {
+        return channelFlow {
             trySend(UiState.Loading)
             try {
                 handleSignInWithGoogle(context = context)?.let { googleIdToken ->
@@ -148,8 +151,8 @@ class AuthenticationInteractor @Inject constructor(
                     val authResult = firebaseAuth.signInWithCredential(credential).await()
                     val authUser = authResult.user
                     val googleToken = authUser?.getIdToken(true)?.await()?.token
-                    googleToken?.let {
-                        authenticationRepository.verifyGoogleAccount(token = it)
+                    googleToken?.let { token ->
+                        authenticationRepository.verifyGoogleAccount(token = token)
                             .distinctUntilChanged()
                             .flowOn(Dispatchers.IO)
                             .stateIn(
@@ -161,7 +164,7 @@ class AuthenticationInteractor @Inject constructor(
                                 trySend(uiState)
                             }
                     } ?: trySend(UiState.Error(Failure.UnauthorizedFailure("token is invalid")))
-                }
+                } ?: trySend(UiState.Initialize)
                 // change to flow
             } catch (e: FirebaseAuthInvalidUserException) {
                 trySend(UiState.Error(e))
@@ -182,8 +185,9 @@ class AuthenticationInteractor @Inject constructor(
                 started = SharingStarted.Lazily,
                 initialValue = UiState.Initialize
             )
+    }
 
-    private suspend fun handleSignInWithGoogle(context: Context): String? =
+    private suspend fun handleSignInWithGoogle(context: Activity): String? =
         withContext(Dispatchers.IO) {
             try {
                 val result = credentialManager.getCredential(
@@ -310,7 +314,12 @@ class AuthenticationInteractor @Inject constructor(
                     id = it.first,
                     email = newEmail
                 ).map { uiState ->
-                    userProfileUseCase.refreshUserProfile(scope = scope)
+                    userProfileRepository.getUserProfile(accessToken = it.second, userId = it.first)
+                        .stateIn(
+                            scope = scope,
+                            started = SharingStarted.Eagerly,
+                            initialValue = UiState.Initialize
+                        )
                     if (uiState is UiState.Success) {
                         UiState.Success(data = "Berhasil merubah email address")
                     } else

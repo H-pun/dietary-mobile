@@ -12,4 +12,5 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     kotlin("plugin.serialization") version libs.versions.kotlin apply false
     alias(libs.plugins.google.gms.google.services) apply false
+    alias(libs.plugins.com.google.devtools.ksp) version libs.versions.ksp apply false
 }

@@ -4,6 +4,9 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.cisnux.mydietary.domain.models.AddFoodDiary
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.UserNutrition
@@ -105,7 +108,7 @@ class FoodScannerViewModel @Inject constructor(
             }
     }
 
-    fun signOut() = viewModelScope.launch {
+    fun signOut() = CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {
         authenticationUseCase.signOut()
     }
 }

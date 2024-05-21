@@ -11,6 +11,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class UserAccountLocalSourceModule {
+
     @Singleton
     @Binds
     abstract fun bindUserAccountLocalSourceImpl(userAccountLocalSourceImpl: UserAccountLocalSourceImpl): UserAccountLocalSource

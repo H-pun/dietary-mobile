@@ -1,5 +1,6 @@
 [versions]
-agp = "8.4.0"
+agp = "8.4.1"
+ksp = "2.0.0-RC3-1.0.20"
 credentials = "1.3.0-alpha04"
 glanceAppwidget = "1.1.0-rc01"
 googleid = "1.1.0"
@@ -12,7 +13,7 @@ espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.8.0"
 activityCompose = "1.9.0"
 composeBom = "2024.05.00"
-hilt = "2.50"
+hilt = "2.51.1"
 navigation = "2.7.7"
 hiltNavigationCompose = "1.2.0"
 camerax = "1.3.3"
@@ -32,7 +33,6 @@ protobufJavalite = "4.26.0-RC2"
 firebaseAuthKtx = "23.0.0"
 googleGmsGoogleServices = "4.4.1"
 vico = "2.0.0-alpha.19"
-leakcanary-android = "2.12"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -82,7 +82,6 @@ protobuf-javalite = { group = "com.google.protobuf", name = "protobuf-javalite",
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
-leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary-android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -91,3 +90,4 @@ dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hi
 google-protobuf = { id = "com.google.protobuf", version.ref = "protobuf" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

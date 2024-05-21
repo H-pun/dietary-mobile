@@ -1,7 +1,6 @@
 package org.cisnux.mydietary.presentation.home
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
@@ -384,7 +383,7 @@ fun HomeScreen(
     )
 }
 
-@SuppressLint("UnusedContentLambdaTargetStateParameter")
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(
     showBackground = true,
@@ -536,7 +535,7 @@ private fun HomeContent(
     }
 }
 
-@SuppressLint("UnusedContentLambdaTargetStateParameter")
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HomeBody(

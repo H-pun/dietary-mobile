@@ -1,4 +1,3 @@
-
 package org.cisnux.mydietary.presentation.signin
 
 import android.content.res.Configuration
@@ -97,6 +96,9 @@ fun SignInScreen(
     val signInWithEmailAndPasswordState by viewModel.signInWithEmailAndPasswordState.collectAsState()
     val signInWithGoogleState by viewModel.signInWithGoogleState.collectAsState()
     val context = LocalContext.current
+    val activity = remember {
+        context.activity
+    }
 
     when (signInWithEmailAndPasswordState) {
         is UiState.Success -> {
@@ -164,7 +166,7 @@ fun SignInScreen(
                     viewModel.clearAllStates()
                     navigateToSignUp()
                 },
-                onGoogleSignIn = { context.activity?.let(viewModel::signInWithGoogle) },
+                onGoogleSignIn = { activity?.let(viewModel::signInWithGoogle) },
                 onEmailPasswordSignIn = {
                     viewModel.signInWithEmailAndPassword(
                         emailAddress = emailAddress,

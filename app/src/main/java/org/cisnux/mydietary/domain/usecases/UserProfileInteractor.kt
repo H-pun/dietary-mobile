@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
-
 class UserProfileInteractor @Inject constructor(
     private val userProfileRepository: UserProfileRepository,
     private val authenticationUseCase: AuthenticationUseCase

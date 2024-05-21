@@ -1,5 +1,6 @@
 package org.cisnux.mydietary.domain.usecases
 
+import android.app.Activity
 import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import org.cisnux.mydietary.domain.models.UserAccount
@@ -16,7 +17,7 @@ interface AuthenticationUseCase {
     fun getUserId(scope: CoroutineScope): Flow<String?>
 
     fun signInWithEmailAndPassword(userAccount: UserAccount, scope: CoroutineScope): Flow<UiState<Nothing>>
-    fun signInWithGoogle(context: Context, scope: CoroutineScope): Flow<UiState<Nothing>>
+    fun signInWithGoogle(scope: CoroutineScope, context: Activity): Flow<UiState<Nothing>>
     fun signUpWithEmailAndPassword(userAccount: UserAccount, scope: CoroutineScope): Flow<UiState<Nothing>>
     fun sendResetPassword(emailAddress: String, scope: CoroutineScope): Flow<UiState<String>>
     fun forgotPassword(forgotPassword: ForgotPassword, scope: CoroutineScope): Flow<UiState<String>>
