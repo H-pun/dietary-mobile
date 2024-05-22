@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -69,8 +70,8 @@ fun NotificationDialog(
                     R.drawable.ic_launcher_foreground
                 )
             )
-            setContentTitle("Dev Mode")
-            setContentText("Open dev mode menu")
+            setContentTitle(context.getString(R.string.dev_mode_notif_title))
+            setContentText(context.getString(R.string.open_dev_mode_menu))
             setAutoCancel(true)
             setOngoing(true)
 
@@ -111,41 +112,41 @@ fun NotificationDialog(
                 context as Activity,
                 Manifest.permission.POST_NOTIFICATIONS
             ) -> {
-                openDialog = true
-                AlertDialog(
-                    onDismissRequest = {
-                        openDialog = false
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar("Berikan izin notifikasi melalui pengaturan Android anda")
-                        }
-                    },
-                    title = {
-                        Text(text = "Notifikasi Dev Mode")
-                    },
-                    text = {
-                        Text(
-                            text = "Untuk mengakses dev mode menu tolong berikan izin akses terhadap notifikasi Anda"
-                        )
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                openDialog = false
+                if (openDialog)
+                    AlertDialog(
+                        onDismissRequest = {
+                            openDialog = false
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(context.getString(R.string.dev_mode_dismiss_message))
                             }
-                        ) {
-                            Text("Izinkan")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = {
-                                openDialog = false
+                        },
+                        title = {
+                            Text(text = stringResource(R.string.dev_mode_notification))
+                        },
+                        text = {
+                            Text(
+                                text = stringResource(R.string.dev_mode_body)
+                            )
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    openDialog = false
+                                }
+                            ) {
+                                Text(stringResource(R.string.allow))
                             }
-                        ) {
-                            Text("Batalkan")
+                        },
+                        dismissButton = {
+                            TextButton(
+                                onClick = {
+                                    openDialog = false
+                                }
+                            ) {
+                                Text(stringResource(id = R.string.cancel))
+                            }
                         }
-                    }
-                )
+                    )
             }
 
             else -> {

@@ -92,7 +92,7 @@ fun SignUpScreen(
         is UiState.Success -> {
             LaunchedEffect(snackbarHostState) {
                 val snackbarResult = snackbarHostState.showSnackbar(
-                    message = "Kamu berhasil mendaftar",
+                    message = context.getString(R.string.successfully_signed_up),
                     actionLabel = context.getString(R.string.sign_in),
                     withDismissAction = true,
                     duration = SnackbarDuration.Long

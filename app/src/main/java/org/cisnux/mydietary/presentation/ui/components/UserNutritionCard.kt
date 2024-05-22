@@ -19,9 +19,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.darkRed
 import org.cisnux.mydietary.presentation.ui.theme.darkProgress
 import org.cisnux.mydietary.presentation.ui.theme.darkYellow
@@ -47,7 +49,7 @@ fun UserNutritionCard(
     modifier: Modifier = Modifier
 ) {
     val locale = rememberSaveable {
-        Locale("id", "ID")
+        Locale.getDefault()
     }
     val onSurfaceColor = if (!isSystemInDarkTheme()) lightProgress
     else darkProgress
@@ -137,7 +139,7 @@ fun UserNutritionCard(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "$label/\nMaks $label",
+                        text = stringResource(R.string.wheel_max_label, label, label),
                         style = MaterialTheme.typography.labelSmall,
                         textAlign = TextAlign.Center
                     )

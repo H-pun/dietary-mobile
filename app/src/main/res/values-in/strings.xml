@@ -1,0 +1,202 @@
+<resources>
+    <string name="app_name">Dietary</string>
+    <string name="take_photo_button">tangkap gambar</string>
+    <string name="gallery_button">Galeri</string>
+    <string name="rotate_button">Rotasi</string>
+    <string name="camera_supporting_text">Pastikan semua makanan berada dalam lingkaran</string>
+    <string name="home_title">Beranda</string>
+    <string name="report_title">Laporan</string>
+    <string name="my_profile_title">Profil Saya</string>
+    <string name="account_and_security_title">Akun dan Keamanan</string>
+    <string name="sign_out_title">Keluar</string>
+    <string name="health_profile_dialog_title">Profil Kesehatan</string>
+    <string name="health_profile_dialog_negative_btn">Perbarui</string>
+    <string name="health_profile_dialog_positive_btn">Selesai</string>
+    <string name="health_profile_dialog_message">Tinjau profil kesehatanmu: verifikasi dan perbarui informasimu untuk akurasi.</string>
+    <string name="age_label">Usia</string>
+    <string name="dummy_dialog_age">40 tahun</string>
+    <string name="weight_label">Berat</string>
+    <string name="dummy_dialog_weight">70 kg</string>
+    <string name="height_label">Tinggi</string>
+    <string name="dummy_dialog_height">170 cm</string>
+    <string name="gender_label">Jenis Kelamin</string>
+    <string name="dummy_dialog_gender">Pria</string>
+    <string name="save">Simpan</string>
+    <string name="dummy_age">40</string>
+    <string name="dummy_height">170</string>
+    <string name="dummy_gender">Pria</string>
+    <string name="dummy_weight">70</string>
+    <string-array name="gender">
+        <item>Pria</item>
+        <item>Wanita</item>
+    </string-array>
+    <string name="food_scanner_title">Food Scanner</string>
+    <string name="camera_permission_message">Food scanner tidak tersedia karena kamu menolak akses ke kamera. kamu dapat memberikan izin melalui pengaturan</string>
+    <string name="yes">Ya</string>
+    <string name="no_thanks">Tidak, terimakasih</string>
+    <string name="camera_access_dialog_message">Akses kamera diperlukan untuk mengakses fitur food scanner. Apakah kamu ingin memberikan izin?</string>
+    <string name="sign_in_with_google">Masuk dengan Google</string>
+    <string name="or">Atau</string>
+    <string name="email_address_placeholder">Apa alamat emailmu?</string>
+    <string name="email_address_label">Alamat Email</string>
+    <string name="email_address_error_text">Tolong masukkan alamat email yang valid</string>
+    <string name="supporting_text_required">*wajib</string>
+    <string name="password_placeholder">Buat kata sandimu</string>
+    <string name="old_password_placeholder">Masukkan kata sandi lamamu</string>
+    <string name="api_url_placeholder">Masukkan API URL</string>>
+    <string name="new_password_placeholder">Buat kata sandi barumu</string>
+    <string name="password_error_text">Kata sandi minimal 8 karakter serta terdiri dari huruf kecil, huruf besar, angka, spesial karakter dan tanpa spasi</string>
+    <string name="password_label">Kata Sandi</string>
+    <string name="welcome_back">Selamat datang kembali!</string>
+    <string name="you_ve_been_missed">Kamu sudah ditunggu 🤗</string>
+    <string name="sign_in">Masuk</string>
+    <string name="don_t_have_an_account">Tidak punya akun?</string>
+    <string name="sign_up_here">Daftar disini</string>
+    <string name="forgot_password">Lupa Kata Sandi?</string>
+    <string name="join_us_today">🌟 Bergabunglah! 🌟</string>
+    <string name="confirmation_password_placeholder">Masukkan ulang kata sandimu</string>
+    <string name="confirmation_password_error_text">Tolong konfirmasi kata sandimu dengan benar</string>
+    <string name="sign_up">Daftar</string>
+    <string name="sign_up_with_google">Daftar dengan Google</string>
+    <string name="have_an_account">Punya akun?</string>
+    <string name="sign_in_here">Masuk disini</string>
+    <string name="reset_password">Atur Ulang Kata Sandi!</string>
+    <string name="reset_password_message">Lupa kata sandi? Jangan khawatir,\nkami akan mengirimkan kamu instruksi pengaturan ulang</string>
+    <string name="new_password_message">Masukkan kata sandi barumu</string>
+    <string name="add_my_profile_label">Mari kita membuat\nmakan sehat menjadi\nmenarik dan mudah 🥗💪</string>
+    <string name="username_placeholder">Buat usernamemu</string>
+    <string name="username_label">Username</string>
+    <string name="username_error_text">Tolong masukkan username dengan minimum 6 karakter dan maximum 20 karakter tanpa spasi dan spesial karakter seperti  @, $, dan lainnya</string>
+    <string name="age_placeholder">Berapa usiamu?</string>
+    <string name="age_error_text">Usia harus bilangan bulat dan lebih besar dari 0</string>
+    <string name="weight_placeholder">Berapa beratmu?</string>
+    <string name="weight_error_text">Berat harus berupa angka dan lebih besar dari 0</string>
+    <string name="height_placeholder">Berapa tinggimu?</string>
+    <string name="height_error_text">Tinggi harus berupa angka dan lebih besar dari 0</string>
+    <string name="waist_error_text">Lingkar pinggang harus berupa angka dan lebih besar dari 0</string>
+    <string name="trailing_text_kg">kg</string>
+    <string name="trailing_text_cm">cm</string>
+    <string name="goal_label">Tujuan</string>
+    <string name="target_weight_label">Berat Ideal</string>
+    <string name="target_weight_placeholder">Berapa berat badan idealmu?</string>>
+    <string name="target_weight_error_text">Berat ideal harus berupa angka dan lebih besar dari 0</string>
+    <string name="activity_level_label">Tingkat Aktivitas</string>
+    <string name="build_profile">Buat Profil</string>
+    <string name="confirmation_password_label">Konfirmasi Kata Sandi</string>
+    <string name="verify_email">Verifikasi Email</string>
+    <string name="terms_of_use_label_button">Dengan mengklik masuk, Kamu setuju dengan</string>
+    <string name="terms_of_use">Syarat Penggunaaan</string>
+    <string name="welcome_to">Selamat Datang di</string>
+    <string name="dietary">" Dietary!"</string>
+    <string name="your_diet_s_best_ally">" Teman terbaik dietmu 🌟"</string>
+    <string name="landing_message">Lihat Diary Makananmu:\nPantau Makananmu! 🥘🍱.</string>
+    <string name="get_started">Mulai</string>
+    <string name="failed_to_took_picture">Gagal mengambil gambar</string>
+    <string-array name="goal">
+        <item>Menurunkan berat badan</item>
+        <item>Pertahankan berat saat ini</item>
+        <item>Menambah berat badan</item>
+    </string-array>
+    <string-array name="activity_level">
+        <item>Sedentary</item>
+        <item>Low Active</item>
+        <item>Active</item>
+        <item>Very Active</item>
+    </string-array>
+    <string-array name="activity_description">
+        <item>Aktivitas sehari-hari membutuhkan usaha minimal seperti beristirahat, bekerja di meja atau mengemudi.</item>
+        <item>Aktivitas sehari-hari membutuhkan beberapa usaha seperti berdiri, pekerjaan rumah tangga atau beberapa latihan ringan.</item>
+        <item>Aktivitas sehari-hari memerlukan upaya yang wajar seperti berdiri, kerja fisik, atau olahraga ringan yang teratur.</item>
+        <item>Aktivitas sehari-hari memerlukan upaya fisik yang intens seperti pekerjaan konstruksi atau olahraga berat yang teratur.</item>
+    </string-array>
+    <string name="retry">Ulangi</string>
+    <string name="searchbar_hint">Temukan diary makananmu!</string>
+    <string name="cancel">Batal</string>
+    <string name="ok">OK</string>
+    <string name="diary_display">Lihat Diary Makananmu:\nPantau Makananmu! 🥘🍱</string>
+    <string name="empty_content_label">Belum ada diary makanan</string>
+    <string name="empty_content_search">Makanan yang kamu yang cari tidak dapat ditemukan</string>
+    <string name="cm">%1$s cm</string>
+    <string name="year">%1$s tahun</string>
+    <string name="error_text_float">%1$s harus berupa angka dan lebih besar dari atau sama dengan 0</string>
+    <string name="error_text_int">%1$s harus bilangan bulat dan lebih besar dari 0</string>
+    <string name="error_text_text">%1$s tidak boleh kosong</string>
+    <string name="kg">%1$s kg</string>
+    <string name="title">Judul</string>
+    <string name="title_error_text">Judul tidak boleh kosong</string>
+    <string name="title_placeholder">Masukkan judul diary makanan</string>
+    <string name="food">Makanan</string>
+    <string name="calorie">Kalori</string>
+    <string name="kcal">%1$s kcal</string>
+    <string name="fat">Lemak</string>
+    <string name="g">%1$s g</string>
+    <string name="protein">Protein</string>
+    <string name="carbohydrate">Karbohidrat</string>
+    <string name="sugar">Gula</string>
+    <string name="feedback">Feedback</string>
+    <string name="add">Tambah</string>
+    <string name="no">Tidak</string>
+    <string name="status">Status</string>
+    <string name="total_food_calories">Total Kalori Makanan</string>
+    <string name="category_label">Kategori</string>
+    <string name="question">Pertanyaan</string>
+    <string-array name="food_diary_category">
+        <item>Sarapan</item>
+        <item>Makan Siang</item>
+        <item>Makan Malam</item>
+    </string-array>
+    <string-array name="food_status_level">
+        <item>boleh dimakan</item>
+        <item>kurang disarankan</item>
+        <item>tidak disarankan</item>
+    </string-array>
+    <string-array name="report_category">
+        <item>Hari Ini</item>
+        <item>Minggu Ini</item>
+        <item>Bulan Ini</item>
+    </string-array>
+    <string name="appwidget_text">Dietary</string>
+    <string name="api_url_label">API URL</string>
+    <string name="api_url_error_text">URL harus dalam format https</string>
+    <string name="serving_unit">✧ %1$s (100 g)</string>
+    <string name="food_nutrition_label">Kandungan</string>
+    <string name="continue_button">Lanjutkan</string>
+    <string name="re_add">Tambahkan Ulang</string>
+    <string name="wheel_max_label">%1$s/\nMaks %2$s</string>
+    <string name="waist_circumference_placeholder">Masukkan lingkar pinggang anda</string>
+    <string name="waist_circumference_label">Lingkar Pinggang</string>
+    <string name="food_diary">Diary Makanan</string>
+    <string name="progress">✦ Kemajuan</string>
+    <string name="your_nutrition_today">✦ Nutrisimu hari ini</string>
+    <string name="dev_mode_notification">Notifikasi Dev Mode</string>
+    <string name="dev_mode_notif_title">Dev Mode</string>
+    <string name="open_dev_mode_menu">Buka dev mode menu</string>
+    <string name="dev_mode_dismiss_message">Berikan izin notifikasi melalui pengaturan Android anda</string>
+    <string name="dev_mode_body">Untuk mengakses dev mode menu tolong berikan izin akses terhadap notifikasi Anda</string>
+    <string name="allow">Izinkan</string>
+    <string name="reset">Atur Ulang</string>
+    <string name="weight_legend">Berat Badan (kg)</string>
+    <string name="waist_circumeference_legend">Lingkar Pinggang (cm)</string>
+    <string name="calorie_legend">Kalori (kcal)</string>
+    <string name="carbo_legend">Karbohidrat (g)</string>
+    <string name="nutrition">✦ Nutrisi</string>
+    <string name="protein_legend">Protein (g)</string>
+    <string name="fat_legend">Lemak (g)</string>
+    <string name="change_email">Ubah Email</string>
+    <string name="change_password">Ubah Password</string>
+    <string name="renew">Perbarui</string>
+    <string name="total_carbo">Total Karbohidrat Makanan</string>
+    <string name="total_protein">Total Protein Makanan</string>
+    <string name="total_fat">Total Lemak Makanan</string>
+    <string name="didnt_receive">Belum diterima?</string>
+    <string name="resend">Kirim Ulang %1$s</string>
+    <string name="your_food_diaries">✦ Diary makananmu</string>
+    <string name="progress_max_label">Maks %1$s</string>
+    <string name="empty_data">Belum ada data yang dapat ditampilkan</string>
+    <string name="verify_code_label">"Masukkan 6-digit kode yang dikirim ke "</string>
+    <string name="successfully_signed_up">Kamu berhasil mendaftar</string>
+    <string name="success">Berhasil</string>
+    <string name="check_your_mailbox">Periksa inbox email anda</string>
+    <string name="successfully_changed_email_address">Berhasil mengubah email address</string>
+    <string name="successfully_changed_password">Berhasil mengubah password</string>
+</resources>

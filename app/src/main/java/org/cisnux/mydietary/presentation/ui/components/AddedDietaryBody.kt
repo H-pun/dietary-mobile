@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -54,8 +55,8 @@ fun AddedDietaryBody(
     bottomContent: @Composable LazyItemScope.() -> Unit = {},
     feedback: List<String> = listOf()
 ) {
-    val locale = rememberSaveable {
-        Locale("id", "ID")
+    val locale = remember {
+        Locale.getDefault()
     }
 
     LazyColumn(
@@ -67,7 +68,7 @@ fun AddedDietaryBody(
     ) {
         item {
             Text(
-                text = "✧ Nutrisimu saat ini",
+                text = stringResource(id = R.string.your_nutrition_today),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.fillMaxWidth()
@@ -130,7 +131,7 @@ fun AddedDietaryBody(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "Total Karbohidrat Makanan",
+                    text = stringResource(R.string.total_carbo),
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface
@@ -151,7 +152,7 @@ fun AddedDietaryBody(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "Total Protein Makanan",
+                    text = stringResource(R.string.total_protein),
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface
@@ -172,7 +173,7 @@ fun AddedDietaryBody(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "Total Lemak Makanan",
+                    text = stringResource(R.string.total_fat),
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface

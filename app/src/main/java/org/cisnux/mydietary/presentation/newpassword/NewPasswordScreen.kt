@@ -85,7 +85,7 @@ fun NewPasswordScreen(
         is UiState.Success -> {
             LaunchedEffect(snackbarHostState) {
                 val snackbarResult = snackbarHostState.showSnackbar(
-                    message = "Berhasil",
+                    message = context.getString(R.string.success),
                     actionLabel = context.getString(R.string.sign_in),
                     withDismissAction = true,
                     duration = SnackbarDuration.Long
@@ -408,7 +408,7 @@ private fun NewPasswordBody(
             enabled = password.isPasswordSecure() and (password == confirmationPassword) and !isLoading,
         ) {
             if (isLoading) CircularProgressIndicator()
-            else Text(text = "Reset Password")
+            else Text(text = stringResource(R.string.reset))
         }
     }
 }

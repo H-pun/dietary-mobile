@@ -10,7 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -172,7 +172,7 @@ class ReportWidget : GlanceAppWidget() {
                 item {
                     Column(modifier = GlanceModifier.fillMaxWidth()) {
                         Text(
-                            text = "✦ Nutrisimu saat ini",
+                            text = stringResource(R.string.your_nutrition_today),
                             style = TextStyle(
                                 fontFamily = FontFamily("roboto"),
                                 fontWeight = FontWeight.Medium,
@@ -234,8 +234,8 @@ class ReportWidget : GlanceAppWidget() {
                                 percentage > 0.5f -> lightYellow
                                 else -> primaryContainerLight
                             }
-                            val locale = rememberSaveable {
-                                Locale("id", "ID")
+                            val locale = remember {
+                                Locale.getDefault()
                             }
 
                             Column {
@@ -301,7 +301,7 @@ class ReportWidget : GlanceAppWidget() {
                                         ), modifier = GlanceModifier.defaultWeight()
                                     )
                                     Text(
-                                        text = "Maks $label", style = TextStyle(
+                                        text = stringResource(R.string.progress_max_label, label), style = TextStyle(
                                             fontFamily = FontFamily("roboto"),
                                             fontWeight = FontWeight.Medium,
                                             fontSize = DietaryTypeScaleTokens.LabelMediumSize,
@@ -319,7 +319,7 @@ class ReportWidget : GlanceAppWidget() {
                     if (foodDiaries.isNotEmpty())
                         Column(modifier = GlanceModifier.fillMaxWidth()) {
                             Text(
-                                text = "✦ Diary makananmu",
+                                text = stringResource(R.string.your_food_diaries),
                                 style = TextStyle(
                                     fontFamily = FontFamily("roboto"),
                                     fontWeight = FontWeight.Medium,
@@ -336,7 +336,9 @@ class ReportWidget : GlanceAppWidget() {
                     itemId = {
                         foodDiaries[it].hashCode().toLong()
                     }) {
-                    val locale = Locale("id", "ID")
+                    val locale = remember {
+                        Locale.getDefault()
+                    }
                     val deepLinkIntent = Intent(
                         Intent.ACTION_VIEW,
                         AppDestination.DiaryDetailRoute.createDeepLinkUrl(
@@ -445,7 +447,7 @@ class ReportWidget : GlanceAppWidget() {
                     )
                     Spacer(GlanceModifier.height(4.dp))
                     Text(
-                        text = "Belum ada data yang dapat ditampilkan",
+                        text = stringResource(R.string.empty_data),
                         style = TextStyle(
                             fontFamily = FontFamily("roboto"),
                             fontWeight = FontWeight.Medium,

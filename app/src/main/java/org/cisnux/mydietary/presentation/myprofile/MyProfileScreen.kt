@@ -237,7 +237,7 @@ fun MyProfileScreen(
                         (userProfileState is UiState.Error && (userProfileState as UiState.Error).error is Failure.ConnectionFailure
                                 && userProfileDetail.username.isNotBlank())
             ) {
-                val locale = Locale("id", "ID")
+                val locale = Locale.getDefault()
                 MyProfileBody(
                     username = userProfileDetail.username,
                     age = userProfileDetail.age,
@@ -383,7 +383,7 @@ private fun MyProfileContentPreview() {
             },
             onSelectedDestination = { _, _ -> },
             body = {
-                val locale = Locale("id", "ID")
+                val locale = Locale.getDefault()
                 MyProfileBody(
                     username = userProfileDetail.username,
                     age = userProfileDetail.age,
@@ -631,7 +631,7 @@ private fun MyProfileBody(
                 },
                 label = {
                     Text(
-                        text = "Lingkar Pinggang",
+                        text = stringResource(id = R.string.waist_circumference_label),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold

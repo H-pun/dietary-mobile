@@ -117,7 +117,7 @@ fun SecurityAccountScreen(
             (changeEmailState as UiState.Success).data?.let {
                 LaunchedEffect(snackbarHostState) {
                     snackbarHostState.showSnackbar(
-                        message = "Berhasil mengubah email address",
+                        message = context.getString(R.string.successfully_changed_email_address),
                         withDismissAction = true,
                         duration = SnackbarDuration.Long
                     )
@@ -158,7 +158,7 @@ fun SecurityAccountScreen(
             (changePasswordState as UiState.Success).data?.let {
                 LaunchedEffect(snackbarHostState) {
                     snackbarHostState.showSnackbar(
-                        message = "Berhasil mengubah password",
+                        message = context.getString(R.string.successfully_changed_password),
                         withDismissAction = true,
                         duration = SnackbarDuration.Long
                     )
@@ -192,7 +192,7 @@ fun SecurityAccountScreen(
             }
         }
 
-         else -> {}
+        else -> {}
     }
 
     when (verifyEmailState) {
@@ -200,7 +200,7 @@ fun SecurityAccountScreen(
             (verifyEmailState as UiState.Success).data?.let {
                 LaunchedEffect(snackbarHostState) {
                     snackbarHostState.showSnackbar(
-                        message = "Periksa inbox email anda",
+                        message = context.getString(R.string.check_your_mailbox),
                         withDismissAction = true,
                         duration = SnackbarDuration.Long
                     )
@@ -394,7 +394,8 @@ private fun SecurityAccountBody(
             },
             label = {
                 Text(
-                    text = "Ubah Email", style = MaterialTheme.typography.titleSmall,
+                    text = stringResource(R.string.change_email),
+                    style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
@@ -420,7 +421,8 @@ private fun SecurityAccountBody(
             },
             label = {
                 Text(
-                    text = "Ubah Password", style = MaterialTheme.typography.titleSmall,
+                    text = stringResource(R.string.change_password),
+                    style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
@@ -450,7 +452,8 @@ private fun SecurityAccountBody(
             },
             label = {
                 Text(
-                    text = "Verifikasi Email", style = MaterialTheme.typography.titleSmall,
+                    text = stringResource(id = R.string.verify_email),
+                    style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
@@ -507,7 +510,7 @@ private fun ChangeEmailDialog(
                     TopAppBar(
                         title = {
                             Text(
-                                text = "Ubah Email",
+                                text = stringResource(id = R.string.change_email),
                                 color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.ExtraBold
                             )
@@ -595,7 +598,7 @@ private fun ChangeEmailDialog(
                         if (isLoading)
                             CircularProgressIndicator()
                         else
-                            Text(text = "Perbarui")
+                            Text(text = stringResource(R.string.renew))
                     }
                 }
             }
@@ -641,7 +644,7 @@ private fun ChangePasswordDialog(
                     TopAppBar(
                         title = {
                             Text(
-                                text = "Ubah Password",
+                                text = stringResource(id = R.string.change_password),
                                 color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.ExtraBold
                             )
@@ -788,7 +791,7 @@ private fun ChangePasswordDialog(
                         if (isLoading)
                             CircularProgressIndicator()
                         else
-                            Text(text = "Perbarui")
+                            Text(text = stringResource(id = R.string.renew))
                     }
                 }
             }

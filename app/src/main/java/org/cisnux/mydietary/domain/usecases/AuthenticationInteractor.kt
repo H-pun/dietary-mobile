@@ -319,13 +319,7 @@ class AuthenticationInteractor @Inject constructor(
                             is UiState.Success -> userProfileRepository.getUserProfile(
                                 accessToken = it.second,
                                 userId = it.first
-                            ).map { userProfileState ->
-                                if (userProfileState is UiState.Success)
-                                    UiState.Success(data = "Berhasil mengubah email")
-                                else
-                                    userProfileState
-                            }
-
+                            )
                             is UiState.Error -> flow { emit(uiState) }
                             is UiState.Loading -> flow { emit(uiState) }
                             is UiState.Initialize -> flow { emit(uiState) }

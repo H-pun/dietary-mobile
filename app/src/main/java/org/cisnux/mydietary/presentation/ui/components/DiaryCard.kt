@@ -15,16 +15,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.valentinilk.shimmer.shimmer
+import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.presentation.ui.theme.darkProgress
@@ -68,7 +71,9 @@ fun DiaryCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val locale = Locale("id", "ID")
+    val locale = remember {
+        Locale.getDefault()
+    }
     val placeholder = if(!isSystemInDarkTheme())lightProgress
         else darkProgress
 
@@ -139,7 +144,7 @@ fun DiaryCard(
                         modifier = Modifier.weight(2f)
                     )
                     Text(
-                        text = "${String.format(locale, "%.2f", calorie)} kcal",
+                        text = stringResource(id = R.string.kcal, String.format(locale, "%.2f", calorie)),
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.labelLarge,
                         textAlign = TextAlign.End,

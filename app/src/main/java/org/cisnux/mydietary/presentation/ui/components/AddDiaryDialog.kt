@@ -71,7 +71,7 @@ fun AddDiaryDialog(
                     TopAppBar(
                         title = {
                             Text(
-                                text = "Food Diary",
+                                text = stringResource(R.string.food_diary),
                                 color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.ExtraBold
                             )

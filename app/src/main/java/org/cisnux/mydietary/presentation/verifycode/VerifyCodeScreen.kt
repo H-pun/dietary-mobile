@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
@@ -51,6 +52,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -91,7 +93,7 @@ fun VerifyCodeScreen(
             (resetPasswordState as UiState.Success).data?.let {
                 LaunchedEffect(snackbarHostState) {
                     snackbarHostState.showSnackbar(
-                        message = "Periksa inbox email anda",
+                        message = context.getString(R.string.check_your_mailbox),
                         withDismissAction = true,
                         duration = SnackbarDuration.Long
                     )
@@ -244,7 +246,7 @@ private fun VerifyPasswordBody(
         Text(
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
-                    append("Masukkan 6-digit kode yang dikirim ke ")
+                    append(stringResource(R.string.verify_code_label))
                 }
                 withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
                     append(emailAddress)
@@ -314,17 +316,27 @@ private fun VerifyPasswordBody(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Belum dapat?",
+                text = stringResource(R.string.didnt_receive),
                 style = MaterialTheme.typography.labelLarge,
             )
             Spacer(modifier = Modifier.width(4.dp))
             TextButton(onClick = onResend, enabled = timeLeft == 0 && !isLoading) {
                 if (!isLoading) Text(
-                    text = "Kirim Ulang ${
+                    text = stringResource(
+                        R.string.resend,
                         if (timeLeft == 0) "" else "(${timeLeft})s"
-                    }",
+                    ),
                 ) else CircularProgressIndicator(modifier = Modifier.size(18.dp))
             }
+        }
+        Spacer(modifier = Modifier.height(2.dp))
+        Button(
+            onClick = onDone,
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.medium,
+            enabled = code.isResetCodeValid(),
+        ) {
+            Text(text = stringResource(R.string.continue_button))
         }
     }
 }

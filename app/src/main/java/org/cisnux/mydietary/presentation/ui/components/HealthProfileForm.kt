@@ -266,13 +266,13 @@ fun HealthProfileForm(
             onValueChange = onWaistCircumference,
             placeholder = {
                 Text(
-                    text = "Masukkan lingkar pinggang anda",
+                    text = stringResource(R.string.waist_circumference_placeholder),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             label = {
                 Text(
-                    text = "Lingkar Pinggang",
+                    text = stringResource(R.string.waist_circumference_label),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },

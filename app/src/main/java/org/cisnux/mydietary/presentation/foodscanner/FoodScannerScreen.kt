@@ -930,7 +930,7 @@ private fun PredictedResultDialog(
                                 ) {
                                     if (addFoodDiaryState is UiState.Loading)
                                         CircularProgressIndicator()
-                                    else Text(text = "Lanjutkan")
+                                    else Text(stringResource(id = R.string.continue_button))
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
                             }

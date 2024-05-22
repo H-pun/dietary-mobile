@@ -113,14 +113,14 @@ val String.asInstant: Instant
 val String.fromDateMonthYearToDateAndMonth: String
     get() =
         DateTimeFormatter.ofPattern(DATE_MONTH_YEAR).run {
-            val locale = Locale("id", "ID")
+            val locale = Locale.getDefault()
             LocalDate.parse(this@fromDateMonthYearToDateAndMonth, this@run)
                 .format(DateTimeFormatter.ofPattern(FULL_DATE_MONTH, locale))
         }
 
 val String.fromDateMonthYearToDayDateMonth: String
     get() = DateTimeFormatter.ofPattern(DATE_MONTH_YEAR).run {
-        val locale = Locale("id", "ID")
+        val locale = Locale.getDefault()
         LocalDate.parse(this@fromDateMonthYearToDayDateMonth, this@run)
             .format(DateTimeFormatter.ofPattern(DAY_DATE_MONTH, locale))
     }
@@ -129,20 +129,20 @@ val String.fromDateMonthYearToDayDateMonth: String
 val String.fromDateMonthYearToDay: String
     get() =
         DateTimeFormatter.ofPattern(DATE_MONTH_YEAR).run {
-            val locale = Locale("id", "ID")
+            val locale = Locale.getDefault()
             LocalDate.parse(this@fromDateMonthYearToDay, this@run)
                 .format(DateTimeFormatter.ofPattern("EE", locale))
         }
 val String.fromIsoOffsetDateTimeToDayDateMonth: String
     get() = DateTimeFormatter.ISO_OFFSET_DATE_TIME.run {
-        val locale = Locale("id", "ID")
+        val locale = Locale.getDefault()
         LocalDate.parse(this@fromIsoOffsetDateTimeToDayDateMonth, this@run)
             .format(DateTimeFormatter.ofPattern(DAY_DATE_MONTH, locale))
     }
 
 val Instant.fromMillisToDayDateMonthYear: String
     get() {
-        val locale = Locale("id", "ID")
+        val locale = Locale.getDefault()
         val clock = Clock.fixed(this, ZoneId.systemDefault())
         val localDate = LocalDate.now(clock)
         return DateTimeFormatter.ofPattern(DAY_DATE_MONTH_YEAR, locale).format(localDate)
@@ -150,7 +150,7 @@ val Instant.fromMillisToDayDateMonthYear: String
 
 val Instant.fromMillisToHoursAndMinutes: String
     get() {
-        val locale = Locale("id", "ID")
+        val locale = Locale.getDefault()
         val clock = Clock.fixed(this, ZoneId.systemDefault())
         val localTime = LocalTime.now(clock)
         return DateTimeFormatter.ofPattern(HOURS_AND_MINUTES, locale).format(localTime)

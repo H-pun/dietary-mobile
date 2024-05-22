@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -411,7 +412,7 @@ private fun ReportBody(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "✦ Kemajuan",
+            text = stringResource(R.string.progress),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.fillMaxWidth()
@@ -503,7 +504,7 @@ private fun ReportBody(
                                         color = weightColor
                                     ),
                                     label = rememberAxisLabelComponent(),
-                                    labelText = "Berat Badan (kg)"
+                                    labelText = stringResource(R.string.weight_legend)
                                 ),
                                 rememberLegendItem(
                                     icon = rememberShapeComponent(
@@ -513,7 +514,7 @@ private fun ReportBody(
                                         color = waistCircumferenceColor
                                     ),
                                     label = rememberAxisLabelComponent(),
-                                    labelText = "Lingkar Pinggang (cm)"
+                                    labelText = stringResource(R.string.waist_circumeference_legend)
                                 ),
 
                                 ),
@@ -544,7 +545,7 @@ private fun ReportBody(
             }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "✦ Nutrisi",
+            text = stringResource(R.string.nutrition),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.fillMaxWidth()
@@ -726,7 +727,7 @@ private fun ReportBody(
                                             color = caloriesColor
                                         ),
                                         label = rememberAxisLabelComponent(),
-                                        labelText = "Kalori (kcal)"
+                                        labelText = stringResource(R.string.calorie_legend)
                                     ),
                                     rememberLegendItem(
                                         icon = rememberShapeComponent(
@@ -736,7 +737,7 @@ private fun ReportBody(
                                             color = carbohydrateColor
                                         ),
                                         label = rememberAxisLabelComponent(),
-                                        labelText = "Karbohidrat (g)"
+                                        labelText = stringResource(R.string.carbo_legend)
                                     ),
 
                                     ),
@@ -805,7 +806,7 @@ private fun ReportBody(
                                             color = proteinColor
                                         ),
                                         label = rememberAxisLabelComponent(),
-                                        labelText = "Protein (g)"
+                                        labelText = stringResource(R.string.protein_legend)
                                     ),
                                     rememberLegendItem(
                                         icon = rememberShapeComponent(
@@ -815,7 +816,7 @@ private fun ReportBody(
                                             color = fatColor
                                         ),
                                         label = rememberAxisLabelComponent(),
-                                        labelText = "Lemak (g)"
+                                        labelText = stringResource(R.string.fat_legend)
                                     ),
 
                                     ),
