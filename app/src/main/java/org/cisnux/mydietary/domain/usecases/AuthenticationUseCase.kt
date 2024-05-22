@@ -14,7 +14,6 @@ interface AuthenticationUseCase {
     fun getAccessTokenAndUserId(scope: CoroutineScope): Flow<Pair<String, String>?>
     fun getAccessToken(scope: CoroutineScope): Flow<String?>
     fun getUserId(scope: CoroutineScope): Flow<String?>
-
     fun signInWithEmailAndPassword(userAccount: UserAccount, scope: CoroutineScope): Flow<UiState<Nothing>>
     fun signInWithGoogle(scope: CoroutineScope, context: Activity): Flow<UiState<Nothing>>
     fun signUpWithEmailAndPassword(userAccount: UserAccount, scope: CoroutineScope): Flow<UiState<Nothing>>
