@@ -3,9 +3,9 @@ package org.cisnux.mydietary.data.repositories
 import org.cisnux.mydietary.data.locals.UserProfileLocalSource
 import org.cisnux.mydietary.data.remotes.UserProfileRemoteSource
 import org.cisnux.mydietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
-import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileWithoutUsernameBodyRequest
 import org.cisnux.mydietary.domain.models.UserNutrition
-import org.cisnux.mydietary.domain.models.AddUserProfile
+import org.cisnux.mydietary.domain.models.EditableUserProfile
 import org.cisnux.mydietary.domain.models.UserProfileDetail
 import org.cisnux.mydietary.domain.repositories.UserProfileRepository
 import org.cisnux.mydietary.utils.UiState
@@ -17,10 +17,11 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileWithUsernameBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.UserProfileDetailResponse
 import org.cisnux.mydietary.domain.models.DietProgress
-import org.cisnux.mydietary.utils.fromLocalDateTimeToDayDateAndMonth
-import org.cisnux.mydietary.utils.getCurrentDateTimeInISOFormat
+import org.cisnux.mydietary.utils.currentLocalDateTime
+import org.cisnux.mydietary.utils.fromIsoOffsetDateTimeToDayDateMonth
 
 class UserProfileRepositoryImpl @Inject constructor(
     private val userProfileRemoteSource: UserProfileRemoteSource,
@@ -30,7 +31,7 @@ class UserProfileRepositoryImpl @Inject constructor(
     override fun addUserProfile(
         accessToken: String,
         userId: String,
-        addUserProfile: AddUserProfile
+        editableUserProfile: EditableUserProfile
     ): Flow<UiState<Nothing>> =
         flow {
             emit(UiState.Loading)
@@ -38,15 +39,15 @@ class UserProfileRepositoryImpl @Inject constructor(
                 accessToken = accessToken,
                 userProfile = NewUserProfileBodyRequest(
                     userAccountId = userId,
-                    username = addUserProfile.username,
-                    activityLevel = addUserProfile.activityLevel,
-                    goal = addUserProfile.goal,
-                    weightTarget = addUserProfile.weightTarget,
-                    gender = addUserProfile.gender,
-                    height = addUserProfile.height,
-                    weight = addUserProfile.weight,
-                    age = addUserProfile.age,
-                    waistCircumference = addUserProfile.waistCircumference
+                    username = editableUserProfile.username,
+                    activityLevel = editableUserProfile.activityLevel,
+                    goal = editableUserProfile.goal,
+                    weightTarget = editableUserProfile.weightTarget,
+                    gender = editableUserProfile.gender,
+                    height = editableUserProfile.height,
+                    weight = editableUserProfile.weight,
+                    age = editableUserProfile.age,
+                    waistCircumference = editableUserProfile.waistCircumference
                 )
             ).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
@@ -55,25 +56,25 @@ class UserProfileRepositoryImpl @Inject constructor(
                         accessToken = accessToken,
                         dietProgressBodyRequest = DietProgressBodyRequest(
                             id = userId,
-                            weight = addUserProfile.weight,
-                            waistCircumference = addUserProfile.waistCircumference,
-                            updatedAt = getCurrentDateTimeInISOFormat()
+                            weight = editableUserProfile.weight,
+                            waistCircumference = editableUserProfile.waistCircumference,
+                            updatedAt = currentLocalDateTime
                         )
                     )
                     userProfileLocalSource.updateUserProfile(
                         UserProfileDetailResponse(
                             id = id,
                             userAccountId = userId,
-                            username = addUserProfile.username,
-                            activityLevel = addUserProfile.activityLevel,
-                            goal = addUserProfile.goal,
-                            weightTarget = addUserProfile.weightTarget,
-                            waistCircumference = addUserProfile.waistCircumference,
+                            username = editableUserProfile.username,
+                            activityLevel = editableUserProfile.activityLevel,
+                            goal = editableUserProfile.goal,
+                            weightTarget = editableUserProfile.weightTarget,
+                            waistCircumference = editableUserProfile.waistCircumference,
                             emailAddress = "",
-                            weight = addUserProfile.weight,
-                            height = addUserProfile.height,
-                            gender = addUserProfile.gender,
-                            age = addUserProfile.age
+                            weight = editableUserProfile.weight,
+                            height = editableUserProfile.height,
+                            gender = editableUserProfile.gender,
+                            age = editableUserProfile.age
                         )
                     )
                     emit(UiState.Success(null))
@@ -101,23 +102,36 @@ class UserProfileRepositoryImpl @Inject constructor(
     override fun updateUserProfile(
         accessToken: String,
         userId: String,
-        addUserProfile: AddUserProfile
+        editableUserProfile: EditableUserProfile,
+        isUsernameChanged: Boolean
     ): Flow<UiState<Nothing>> =
         flow {
             emit(UiState.Loading)
             userProfileRemoteSource.updateUserProfile(
                 accessToken = accessToken,
-                userProfile = UpdateUserProfileBodyRequest(
-                    id = addUserProfile.id,
-                    username = addUserProfile.username,
-                    activityLevel = addUserProfile.activityLevel,
-                    goal = addUserProfile.goal,
-                    weightTarget = addUserProfile.weightTarget,
-                    gender = addUserProfile.gender,
-                    height = addUserProfile.height,
-                    weight = addUserProfile.weight,
-                    age = addUserProfile.age,
-                    waistCircumference = addUserProfile.waistCircumference
+                userProfile = if (!isUsernameChanged)
+                    UpdateUserProfileWithoutUsernameBodyRequest(
+                        id = editableUserProfile.id,
+                        activityLevel = editableUserProfile.activityLevel,
+                        goal = editableUserProfile.goal,
+                        weightTarget = editableUserProfile.weightTarget,
+                        gender = editableUserProfile.gender,
+                        height = editableUserProfile.height,
+                        weight = editableUserProfile.weight,
+                        age = editableUserProfile.age,
+                        waistCircumference = editableUserProfile.waistCircumference
+                    )
+                else UpdateUserProfileWithUsernameBodyRequest(
+                    id = editableUserProfile.id,
+                    activityLevel = editableUserProfile.activityLevel,
+                    goal = editableUserProfile.goal,
+                    username = editableUserProfile.username,
+                    weightTarget = editableUserProfile.weightTarget,
+                    gender = editableUserProfile.gender,
+                    height = editableUserProfile.height,
+                    weight = editableUserProfile.weight,
+                    age = editableUserProfile.age,
+                    waistCircumference = editableUserProfile.waistCircumference,
                 )
             ).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
@@ -126,9 +140,9 @@ class UserProfileRepositoryImpl @Inject constructor(
                         accessToken = accessToken,
                         dietProgressBodyRequest = DietProgressBodyRequest(
                             id = userId,
-                            weight = addUserProfile.weight,
-                            waistCircumference = addUserProfile.waistCircumference,
-                            updatedAt = getCurrentDateTimeInISOFormat()
+                            weight = editableUserProfile.weight,
+                            waistCircumference = editableUserProfile.waistCircumference,
+                            updatedAt = currentLocalDateTime
                         )
                     )
                     emit(UiState.Success(null))
@@ -182,7 +196,7 @@ class UserProfileRepositoryImpl @Inject constructor(
                             DietProgress(
                                 weight = dietProgressResponse.weight,
                                 waistCircumference = dietProgressResponse.waistCircumference,
-                                description = dietProgressResponse.updatedAt.fromLocalDateTimeToDayDateAndMonth
+                                description = dietProgressResponse.updatedAt.fromIsoOffsetDateTimeToDayDateMonth
                             )
                         }
                     )

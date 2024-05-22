@@ -11,4 +11,4 @@ data class MonthlyReportResponse(
     override val averageCarbohydrate: Float,
     override val averageProtein: Float,
     override val averageFat: Float,
-):ReportResponse
+) : ReportResponse

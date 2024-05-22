@@ -4,7 +4,6 @@ import arrow.core.Either
 import org.cisnux.mydietary.data.locals.BaseApiUrlLocalSource
 import org.cisnux.mydietary.data.remotes.responses.CommonResponse
 import org.cisnux.mydietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
-import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.NutrientResponse
 import org.cisnux.mydietary.data.remotes.responses.UserProfileDetailResponse
 import org.cisnux.mydietary.utils.Failure
@@ -26,6 +25,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.DietProgressResponse
 import javax.inject.Inject
 

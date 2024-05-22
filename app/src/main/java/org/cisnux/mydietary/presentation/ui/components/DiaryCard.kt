@@ -29,8 +29,8 @@ import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.presentation.ui.theme.darkProgress
 import org.cisnux.mydietary.presentation.ui.theme.lightProgress
-import org.cisnux.mydietary.utils.dayDateMonthYear
-import org.cisnux.mydietary.utils.hoursAndMinutes
+import org.cisnux.mydietary.utils.fromMillisToDayDateMonthYear
+import org.cisnux.mydietary.utils.fromMillisToHoursAndMinutes
 import java.time.Instant
 import java.util.Locale
 
@@ -40,8 +40,8 @@ private fun DiaryCardPreview() {
     val food = FoodDiary(
         id = "1",
         title = "Nasi Padang ayam sambal ijo",
-        date = Instant.now().dayDateMonthYear(),
-        time = Instant.now().hoursAndMinutes(),
+        date = Instant.now().fromMillisToDayDateMonthYear,
+        time = Instant.now().fromMillisToHoursAndMinutes,
         foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
         totalFoodCalories = 500f,
     )

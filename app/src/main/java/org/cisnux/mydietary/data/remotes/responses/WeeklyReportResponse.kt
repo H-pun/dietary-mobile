@@ -9,4 +9,4 @@ data class WeeklyReportResponse(
     override val averageCarbohydrate: Float,
     override val averageProtein: Float,
     override val averageFat: Float,
-):ReportResponse
+) : ReportResponse

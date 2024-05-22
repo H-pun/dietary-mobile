@@ -1,4 +1,5 @@
 import com.google.protobuf.gradle.GenerateProtoTask
+import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
 
 plugins {
     kotlin("plugin.serialization")
@@ -39,11 +40,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_19
-        targetCompatibility = JavaVersion.VERSION_19
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "19"
+        jvmTarget = "21"
     }
     buildFeatures {
         compose = true
@@ -79,7 +80,7 @@ androidComponents {
 
             project.tasks.getByName("ksp" + variant.name.replaceFirstChar { it.uppercaseChar() } + "Kotlin") {
                 dependsOn(protoTask)
-                (this as org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool<*>).setSource(
+                (this as AbstractKotlinCompileTool<*>).setSource(
                     protoTask.outputBaseDir
                 )
             }

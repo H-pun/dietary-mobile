@@ -13,14 +13,11 @@ import org.cisnux.mydietary.domain.models.Option
 import org.cisnux.mydietary.domain.models.Food
 import org.cisnux.mydietary.domain.models.Question
 import org.cisnux.mydietary.domain.repositories.FoodRepository
-import org.cisnux.mydietary.utils.dayDateMonthYear
-import org.cisnux.mydietary.utils.hoursAndMinutes
-import org.cisnux.mydietary.utils.FoodDiaryCategory
+import org.cisnux.mydietary.utils.fromMillisToDayDateMonthYear
+import org.cisnux.mydietary.utils.fromMillisToHoursAndMinutes
 import org.cisnux.mydietary.utils.IMAGE_LOCATION
 import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.convertISOToInstant
-import org.cisnux.mydietary.utils.getCurrentDateTimeInISOFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -32,9 +29,12 @@ import org.cisnux.mydietary.data.remotes.bodyrequests.ReportBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.MonthlyReportResponse
 import org.cisnux.mydietary.data.remotes.responses.WeeklyReportResponse
 import org.cisnux.mydietary.domain.models.Keyword
-import org.cisnux.mydietary.utils.asDateAndMonth
-import org.cisnux.mydietary.utils.asDay
-import org.cisnux.mydietary.utils.fromLocalDateToDayDateAndMonth
+import org.cisnux.mydietary.utils.FoodDiaryCategory
+import org.cisnux.mydietary.utils.fromDateMonthYearToDateAndMonth
+import org.cisnux.mydietary.utils.fromDateMonthYearToDay
+import org.cisnux.mydietary.utils.asInstant
+import org.cisnux.mydietary.utils.currentLocalDateTime
+import org.cisnux.mydietary.utils.fromDateMonthYearToDayDateMonth
 import java.io.File
 
 class FoodDiaryRepositoryImpl @Inject constructor(
@@ -73,8 +73,8 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                             FoodDiary(
                                 id = foodDiary.id,
                                 title = foodDiary.title,
-                                date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
-                                time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
+                                date = foodDiary.addedAt.asInstant.fromMillisToDayDateMonthYear,
+                                time = foodDiary.addedAt.asInstant.fromMillisToHoursAndMinutes,
                                 foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
                                 totalFoodCalories = foodDiary.totalCalories
                             )
@@ -106,8 +106,8 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                     FoodDiary(
                         id = foodDiary.id,
                         title = foodDiary.title,
-                        date = convertISOToInstant(foodDiary.addedAt).dayDateMonthYear(),
-                        time = convertISOToInstant(foodDiary.addedAt).hoursAndMinutes(),
+                        date = foodDiary.addedAt.asInstant.fromMillisToDayDateMonthYear,
+                        time = foodDiary.addedAt.asInstant.fromMillisToHoursAndMinutes,
                         foodPictureUrl = "$IMAGE_LOCATION/${foodDiary.filePath}",
                         totalFoodCalories = foodDiary.totalCalories
                     )
@@ -150,7 +150,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
     ): Flow<UiState<String>> =
         flow {
             emit(UiState.Loading)
-            val addedAt = getCurrentDateTimeInISOFormat()
+            val addedAt = currentLocalDateTime
             foodDiaryRemoteSource.addFoodDiary(
                 accessToken = accessToken,
                 foodDiary = FoodDiaryBodyRequest(
@@ -331,7 +331,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                     averageFat = reportResponse.averageFat,
                                     averageProtein = reportResponse.averageProtein,
                                     label = reportResponse.week.toString(),
-                                    description = "${reportResponse.startDate.asDateAndMonth} - ${reportResponse.endDate.asDateAndMonth}",
+                                    description = "${reportResponse.startDate.fromDateMonthYearToDateAndMonth} - ${reportResponse.endDate.fromDateMonthYearToDateAndMonth}",
                                 )
                             }
 
@@ -340,24 +340,12 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                                 averageCalories = reportResponse.averageCalories,
                                 averageFat = reportResponse.averageFat,
                                 averageProtein = reportResponse.averageProtein,
-                                label = reportResponse.date.asDay,
-                                description = reportResponse.date.fromLocalDateToDayDateAndMonth,
+                                label = reportResponse.date.fromDateMonthYearToDay,
+                                description = reportResponse.date.fromDateMonthYearToDayDateMonth,
                                 date = reportResponse.date
                             )
                         }
                     }
-//                        .chunked(7)
-//                    val datePages = chunkedFoodDiaries.map { foodDiaries ->
-//                        val first = foodDiaries.first().date
-//                        val last = foodDiaries.last().date
-//                        if (first != null && last != null) {
-//                            WeeklyReport.DatePage(dateRange = "${first.asDateAndMonth} - ${last.asDateAndMonth}")
-//                        } else WeeklyReport.DatePage()
-//                    }
-//                    WeeklyReport(
-//                        datePages = datePages,
-//                        chunkedFoodDiaries = chunkedFoodDiaries
-//                    )
                     emit(
                         UiState.Success(
                             foodDiaries

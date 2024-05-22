@@ -4,6 +4,7 @@ import arrow.core.Either
 import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileWithoutUsernameBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.DietProgressResponse
 import org.cisnux.mydietary.data.remotes.responses.NutrientResponse
 import org.cisnux.mydietary.data.remotes.responses.UserProfileDetailResponse

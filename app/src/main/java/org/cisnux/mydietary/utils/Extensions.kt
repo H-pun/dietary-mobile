@@ -7,9 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import org.cisnux.mydietary.data.remotes.bodyrequests.UserAccountBodyRequest
 import org.cisnux.mydietary.domain.models.UserAccount
-import org.cisnux.mydietary.domain.models.UserNutrition
-import org.cisnux.mydietary.domain.models.AddUserProfile
-import org.cisnux.mydietary.domain.models.UserProfileDetail
+import org.cisnux.mydietary.domain.models.EditableUserProfile
 import org.cisnux.mydietary.presentation.addmyprofile.MyProfile
 import java.time.Clock
 import java.time.Instant
@@ -39,8 +37,8 @@ val Context.isDevModeActive: Boolean
         0
     ) != 0
 
-val MyProfile.asAddUserProfile: AddUserProfile
-    get() = AddUserProfile(
+val MyProfile.asEditableUserProfile: EditableUserProfile
+    get() = EditableUserProfile(
         username = username,
         age = age.toInt(),
         weight = weight.toFloat(),
@@ -62,7 +60,8 @@ fun String.isEmailValid(): Boolean {
     return Regex(emailRegex).matches(this)
 }
 
-fun String.isPasswordSecure(): Boolean = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,}$").matches(this)
+fun String.isPasswordSecure(): Boolean =
+    Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,}$").matches(this)
 
 fun String.isUsernameValid(): Boolean {
     val usernameRegex = "^[a-z0-9_]{6,20}\$"
@@ -90,21 +89,6 @@ fun String.isFloatAndGreaterAndEqualToZero(): Boolean = try {
     false
 }
 
-fun Instant.dayDateMonthYear(): String {
-    val locale = Locale("id", "ID")
-    val clock = Clock.fixed(this, ZoneId.systemDefault())
-    val localDate = LocalDate.now(clock)
-    return DateTimeFormatter.ofPattern("EEEE, dd MMM yyyy", locale).format(localDate)
-}
-
-fun Instant.hoursAndMinutes(): String {
-    val locale = Locale("id", "ID")
-    val clock = Clock.fixed(this, ZoneId.systemDefault())
-    val localTime = LocalTime.now(clock)
-    return DateTimeFormatter.ofPattern("HH:mm", locale).format(localTime)
-}
-
-
 val Int.foodDiaryCategory: FoodDiaryCategory
     get() = when (this) {
         0 -> FoodDiaryCategory.BREAKFAST
@@ -118,90 +102,63 @@ val Int.reportCategory: ReportCategory
         else -> ReportCategory.MONTHLY
     }
 
-fun convertISOToInstant(isoDateTime: String): Instant {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    val parsedDateTime = LocalDateTime.parse(isoDateTime, formatter)
+val String.asInstant: Instant
+    get() = DateTimeFormatter.ISO_OFFSET_DATE_TIME.run {
+        // Convert LocalDateTime to milliseconds
+        LocalDateTime.parse(this@asInstant, this).atZone(ZoneId.systemDefault()).toInstant()
+    }
 
-    // Convert LocalDateTime to milliseconds
-    return parsedDateTime.atZone(ZoneId.systemDefault()).toInstant()
-}
-
-fun UserProfileDetail.calculateMaxDailyNutrition(userNutrition: UserNutrition): UserNutrition {
-    // user profile
-    val userProfile = this
-    val height = userProfile.height // tinggi badan
-    val weight = userProfile.weight // berat badan
-    val age = userProfile.age // umur
-    val isWoman =
-        userProfile.gender.lowercase() == "wanita" // menentukan pria atau wanita
-    // menghitung bmr berdasarkan tinggi, berat badan, umur dan jenis kelamin
-    val bmr = if (!isWoman)
-        66 + (13.7 * weight) + (5 * height) - (6.8 * age)
-    else 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)
-    // mengambil nilai faktor level aktivitas
-    val activityFactor =
-        ACTIVITY_FACTOR[userProfile.activityLevel.lowercase()] ?: 1.0
-    // mengambil nilai faktor goals
-    val goalsFactor = GOALS_FACTOR[userProfile.goal] ?: 1.0
-    // menghitung maksimal kalori
-    val userMaxDailyCalories =
-        (bmr * activityFactor * goalsFactor).toFloat()
-    // menghitung maksimal protein (15% dari maksimal kalori_
-    val userMaxDailyProtein = 0.15f * userMaxDailyCalories
-    // menghitung maksimal lemak (25% dari maksimal kalori)
-    val userMaxDailyFat = 0.25f * userMaxDailyCalories
-    // menghitung maksimal karbohidrat (60% dari maksimal kalori)
-    val userMaxDailyCarbohydrate = 0.6f * userMaxDailyCalories
-
-    return userNutrition.copy(
-        maxDailyCalories = userMaxDailyCalories,
-        maxDailyProtein = userMaxDailyProtein,
-        maxDailyFat = userMaxDailyFat,
-        maxDailyCarbohydrate = userMaxDailyCarbohydrate,
-    )
-}
-
-val String.asDateAndMonth: String
+val String.fromDateMonthYearToDateAndMonth: String
     get() =
-        DateTimeFormatter.ofPattern("dd/MM/yyyy").run {
+        DateTimeFormatter.ofPattern(DATE_MONTH_YEAR).run {
             val locale = Locale("id", "ID")
-            LocalDate.parse(this@asDateAndMonth, this@run)
-                .format(DateTimeFormatter.ofPattern("dd MMMM", locale))
+            LocalDate.parse(this@fromDateMonthYearToDateAndMonth, this@run)
+                .format(DateTimeFormatter.ofPattern(FULL_DATE_MONTH, locale))
         }
-val String.fromLocalDateTimeToDayDateAndMonth: String
-    get() = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").run {
+
+val String.fromDateMonthYearToDayDateMonth: String
+    get() = DateTimeFormatter.ofPattern(DATE_MONTH_YEAR).run {
         val locale = Locale("id", "ID")
-        LocalDate.parse(this@fromLocalDateTimeToDayDateAndMonth, this@run)
-            .format(DateTimeFormatter.ofPattern("EEEE, dd MMM", locale))
+        LocalDate.parse(this@fromDateMonthYearToDayDateMonth, this@run)
+            .format(DateTimeFormatter.ofPattern(DAY_DATE_MONTH, locale))
     }
 
-val String.fromLocalDateToDayDateAndMonth: String
-    get() = DateTimeFormatter.ofPattern("dd/MM/yyyy").run {
-        val locale = Locale("id", "ID")
-        LocalDate.parse(this@fromLocalDateToDayDateAndMonth, this@run)
-            .format(DateTimeFormatter.ofPattern("EEEE, dd MMM", locale))
-    }
 
-val String.asDay: String
+val String.fromDateMonthYearToDay: String
     get() =
-        DateTimeFormatter.ofPattern("dd/MM/yyyy").run {
+        DateTimeFormatter.ofPattern(DATE_MONTH_YEAR).run {
             val locale = Locale("id", "ID")
-            LocalDate.parse(this@asDay, this@run)
+            LocalDate.parse(this@fromDateMonthYearToDay, this@run)
                 .format(DateTimeFormatter.ofPattern("EE", locale))
         }
+val String.fromIsoOffsetDateTimeToDayDateMonth: String
+    get() = DateTimeFormatter.ISO_OFFSET_DATE_TIME.run {
+        val locale = Locale("id", "ID")
+        LocalDate.parse(this@fromIsoOffsetDateTimeToDayDateMonth, this@run)
+            .format(DateTimeFormatter.ofPattern(DAY_DATE_MONTH, locale))
+    }
 
-fun getCurrentDateTimeInISOFormat(): String {
-    // Convert current time to Instant
-    val currentInstant = Clock.systemDefaultZone()
+val Instant.fromMillisToDayDateMonthYear: String
+    get() {
+        val locale = Locale("id", "ID")
+        val clock = Clock.fixed(this, ZoneId.systemDefault())
+        val localDate = LocalDate.now(clock)
+        return DateTimeFormatter.ofPattern(DAY_DATE_MONTH_YEAR, locale).format(localDate)
+    }
 
-    // Format Instant to custom Date Time Format without the offset
-    val formatter =
-        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withLocale(Locale.getDefault())
+val Instant.fromMillisToHoursAndMinutes: String
+    get() {
+        val locale = Locale("id", "ID")
+        val clock = Clock.fixed(this, ZoneId.systemDefault())
+        val localTime = LocalTime.now(clock)
+        return DateTimeFormatter.ofPattern(HOURS_AND_MINUTES, locale).format(localTime)
+    }
 
-    return formatter.format(LocalDateTime.now(currentInstant))
-}
+val currentLocalDateTime: String
+    get() =
+        DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now(Clock.systemDefaultZone()))
 
-val Instant.currentLocalDateTimeInBasicISOFormat: String
+val Instant.fromMillisToIsoLocalDate: String
     get() {
         // Convert current time to Instant
         val currentInstant = Clock.fixed(this, ZoneId.systemDefault())

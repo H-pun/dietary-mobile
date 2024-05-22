@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
-import org.cisnux.mydietary.utils.asAddUserProfile
+import org.cisnux.mydietary.utils.asEditableUserProfile
 import org.cisnux.mydietary.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,9 +26,9 @@ class AddMyProfileViewModel @Inject constructor(
     val addMyProfileState get() = _addMyProfileState.asStateFlow()
 
     fun addMyProfile(myProfile: MyProfile) {
-        val addUserProfile = myProfile.asAddUserProfile
+        val addUserProfile = myProfile.asEditableUserProfile
         viewModelScope.launch {
-            userProfileUseCase.addUserProfile(addUserProfile = addUserProfile, scope = viewModelScope).collectLatest { uiState ->
+            userProfileUseCase.addUserProfile(editableUserProfile = addUserProfile, scope = viewModelScope).collectLatest { uiState ->
                 _addMyProfileState.value = uiState
             }
         }

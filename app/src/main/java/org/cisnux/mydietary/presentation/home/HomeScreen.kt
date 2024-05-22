@@ -97,14 +97,14 @@ import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.activity
-import org.cisnux.mydietary.utils.dayDateMonthYear
-import org.cisnux.mydietary.utils.hoursAndMinutes
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.Keyword
 import org.cisnux.mydietary.presentation.ui.components.NavigationDrawer
 import org.cisnux.mydietary.presentation.ui.components.UserAccountCard
+import org.cisnux.mydietary.utils.fromMillisToDayDateMonthYear
+import org.cisnux.mydietary.utils.fromMillisToHoursAndMinutes
 import java.time.Instant
 
 @OptIn(
@@ -263,8 +263,8 @@ fun HomeScreen(
                         millis.toString()
                         Instant.ofEpochMilli(
                             millis
-                        )?.dayDateMonthYear()
-                    } ?: Instant.now().dayDateMonthYear(),
+                        )?.fromMillisToDayDateMonthYear
+                    } ?: Instant.now().fromMillisToDayDateMonthYear,
                     query = searchBarState.query,
                     onQueryChange = { newValue ->
                         searchBarState = searchBarState.copy(query = newValue)
@@ -401,8 +401,8 @@ private fun HomeContentPreview() {
         FoodDiary(
             id = it.toString(),
             title = "Nasi Padang",
-            date = Instant.now().dayDateMonthYear(),
-            time = Instant.now().hoursAndMinutes(),
+            date = Instant.now().fromMillisToDayDateMonthYear,
+            time = Instant.now().fromMillisToHoursAndMinutes,
             foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
             totalFoodCalories = 500f
         )
@@ -445,8 +445,8 @@ private fun HomeContentPreview() {
                     date = datePickerState.selectedDateMillis?.let { millis ->
                         Instant.ofEpochMilli(
                             millis
-                        )?.dayDateMonthYear()
-                    } ?: Instant.now().dayDateMonthYear(),
+                        )?.fromMillisToDayDateMonthYear
+                    } ?: Instant.now().fromMillisToDayDateMonthYear,
                 )
                 if (openDatePickerDialog) DatePickerDialog(onDismissRequest = {
                     openDatePickerDialog = false
@@ -790,8 +790,8 @@ private fun SearchBodyPreview() {
         FoodDiary(
             id = it.toString(),
             title = "Nasi Padang",
-            date = Instant.now().dayDateMonthYear(),
-            time = Instant.now().hoursAndMinutes(),
+            date = Instant.now().fromMillisToDayDateMonthYear,
+            time = Instant.now().fromMillisToHoursAndMinutes,
             foodPictureUrl = "https://awsimages.detik.net.id/community/media/visual/2020/07/06/nasi-padang.jpeg?w=600&q=90",
             totalFoodCalories = 500f
         )

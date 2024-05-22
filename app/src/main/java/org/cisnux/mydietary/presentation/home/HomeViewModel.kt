@@ -9,7 +9,7 @@ import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.FoodDiaryUseCase
 import org.cisnux.mydietary.utils.FoodDiaryCategory
 import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.currentLocalDateTimeInBasicISOFormat
+import org.cisnux.mydietary.utils.fromMillisToIsoLocalDate
 import org.cisnux.mydietary.utils.foodDiaryCategory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -59,7 +59,7 @@ class HomeViewModel @Inject constructor(
                     Pair(selectedDate, diaryFoodCategory)
                 }.debounce(200L).flatMapLatest {
                     foodDiaryUseCase.getDiaryFoodsByDaysAndCategory(
-                        date = it.first.currentLocalDateTimeInBasicISOFormat,
+                        date = it.first.fromMillisToIsoLocalDate,
                         category = it.second,
                         scope = viewModelScope
                     )

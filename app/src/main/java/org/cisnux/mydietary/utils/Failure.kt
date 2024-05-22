@@ -3,25 +3,29 @@ package org.cisnux.mydietary.utils
 import io.ktor.http.HttpStatusCode
 
 sealed class Failure(override var message: String?) : Exception(message) {
+    sealed class HttpFailure(
+        override var message: String? = null,
+    ) : Failure(message)
+
     data class ConnectionFailure(
         override var message: String? = "😞No internet connection",
-    ) : Failure(message)
+    ) : HttpFailure(message)
 
     data class NotFoundFailure(
         override var message: String? = null,
-    ) : Failure(message)
+    ) : HttpFailure(message)
 
     data class ServerFailure(
         override var message: String? = null,
-    ) : Failure(message)
+    ) : HttpFailure(message)
 
     class BadRequestFailure(
         override var message: String? = null,
-    ) : Failure(message)
+    ) : HttpFailure(message)
 
     class UnauthorizedFailure(
         override var message: String? = null,
-    ) : Failure(message)
+    ) : HttpFailure(message)
 
     companion object {
         val HTTP_FAILURES = mapOf(

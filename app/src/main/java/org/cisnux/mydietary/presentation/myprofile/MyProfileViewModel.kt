@@ -9,7 +9,7 @@ import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import org.cisnux.mydietary.presentation.addmyprofile.MyProfile
 import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.asAddUserProfile
+import org.cisnux.mydietary.utils.asEditableUserProfile
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import org.cisnux.mydietary.domain.models.UserProfileDetail
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,10 +30,7 @@ class MyProfileViewModel @Inject constructor(
     private val userProfileUseCase: UserProfileUseCase
 ) : ViewModel() {
     val userProfileDetail
-        get() = userProfileUseCase.getUserProfileDetail(viewModelScope).shareIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-        )
+        get() = userProfileUseCase.getUserProfileDetail(viewModelScope)
     private val _updateMyProfileState: MutableStateFlow<UiState<Nothing>> =
         MutableStateFlow(UiState.Initialize)
     val updateMyProfileState get() = _updateMyProfileState.asStateFlow()
@@ -60,10 +58,10 @@ class MyProfileViewModel @Inject constructor(
         refreshUserProfile.value = isRefresh
     }
 
-    fun updateMyProfile(id: String, myProfile: MyProfile) {
-        val addUserProfile = myProfile.asAddUserProfile.copy(id = id)
+    fun updateMyProfile(id: String, myProfile: MyProfile, oldUserProfileDetail: UserProfileDetail) {
+        val newUserProfile = myProfile.asEditableUserProfile.copy(id = id)
         viewModelScope.launch {
-            userProfileUseCase.updateUserProfile(addUserProfile = addUserProfile, scope = viewModelScope)
+            userProfileUseCase.updateUserProfile(newUserProfile = newUserProfile, scope = viewModelScope, oldUserProfileDetail = oldUserProfileDetail)
                 .collectLatest { uiState ->
                     _updateMyProfileState.value = uiState
                     if (uiState is UiState.Success)

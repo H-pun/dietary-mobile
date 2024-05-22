@@ -166,7 +166,7 @@ fun MyProfileScreen(
                         duration = SnackbarDuration.Long
                     )
                     if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.updateRefreshUserProfile(
-                        true
+                        isRefresh = true
                     )
                 }
             }
@@ -175,7 +175,7 @@ fun MyProfileScreen(
                 navigateToSignIn()
             }
         }
-    
+
     when (updateUserProfileState) {
         is UiState.Error -> {
             (updateUserProfileState as UiState.Error).error?.let { exception ->
@@ -189,7 +189,8 @@ fun MyProfileScreen(
                         )
                         if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.updateMyProfile(
                             id = userProfileDetail.id,
-                            myProfile = myProfile
+                            myProfile = myProfile,
+                            oldUserProfileDetail = userProfileDetail
                         )
                     }
                 }
@@ -256,7 +257,11 @@ fun MyProfileScreen(
                 UpdateMyProfileDialog(
                     onSave = {
                         isUpdateMyProfileDialogOpen = false
-                        viewModel.updateMyProfile(id = userProfileDetail.id, myProfile = myProfile)
+                        viewModel.updateMyProfile(
+                            id = userProfileDetail.id,
+                            myProfile = myProfile,
+                            oldUserProfileDetail = userProfileDetail
+                        )
                     },
                     onCancel = {
                         isUpdateMyProfileDialogOpen = false

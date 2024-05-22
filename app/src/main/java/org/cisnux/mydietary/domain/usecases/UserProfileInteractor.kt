@@ -1,7 +1,7 @@
 package org.cisnux.mydietary.domain.usecases
 
 import kotlinx.coroutines.CoroutineScope
-import org.cisnux.mydietary.domain.models.AddUserProfile
+import org.cisnux.mydietary.domain.models.EditableUserProfile
 import org.cisnux.mydietary.domain.models.UserProfileDetail
 import org.cisnux.mydietary.domain.repositories.UserProfileRepository
 import org.cisnux.mydietary.utils.UiState
@@ -28,7 +28,7 @@ class UserProfileInteractor @Inject constructor(
             .shareIn(scope = scope, started = SharingStarted.WhileSubscribed())
 
     override fun addUserProfile(
-        addUserProfile: AddUserProfile,
+        editableUserProfile: EditableUserProfile,
         scope: CoroutineScope
     ): Flow<UiState<Nothing>> =
         authenticationUseCase.getAccessTokenAndUserId(scope = scope)
@@ -37,7 +37,7 @@ class UserProfileInteractor @Inject constructor(
                 userProfileRepository.addUserProfile(
                     accessToken = it.second,
                     userId = it.first,
-                    addUserProfile = addUserProfile
+                    editableUserProfile = editableUserProfile
                 )
                     .flowOn(Dispatchers.IO)
                     .stateIn(
@@ -55,8 +55,9 @@ class UserProfileInteractor @Inject constructor(
 
 
     override fun updateUserProfile(
-        addUserProfile: AddUserProfile,
-        scope: CoroutineScope
+        newUserProfile: EditableUserProfile,
+        oldUserProfileDetail: UserProfileDetail,
+        scope: CoroutineScope,
     ): Flow<UiState<Nothing>> =
         authenticationUseCase.getAccessTokenAndUserId(scope = scope)
             .filterNotNull()
@@ -64,7 +65,8 @@ class UserProfileInteractor @Inject constructor(
                 userProfileRepository.updateUserProfile(
                     accessToken = it.second,
                     userId = it.first,
-                    addUserProfile = addUserProfile
+                    editableUserProfile = newUserProfile,
+                    isUsernameChanged = newUserProfile.username.lowercase() != oldUserProfileDetail.username.lowercase()
                 )
                     .flowOn(Dispatchers.IO)
                     .stateIn(

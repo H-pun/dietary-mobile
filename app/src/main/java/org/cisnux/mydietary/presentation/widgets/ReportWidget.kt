@@ -68,7 +68,7 @@ import org.cisnux.mydietary.presentation.ui.theme.primaryContainerDark
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerLight
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.currentLocalDateTimeInBasicISOFormat
+import org.cisnux.mydietary.utils.fromMillisToIsoLocalDate
 import java.time.Instant
 import java.util.Locale
 
@@ -101,7 +101,7 @@ class ReportWidget : GlanceAppWidget() {
             )
             val oneTimeFoodDiary by rememberUpdatedState(
                 foodDiaryUseCase.getDiaryFoodsByDaysForWidget(
-                    date = Instant.now().currentLocalDateTimeInBasicISOFormat,
+                    date = Instant.now().fromMillisToIsoLocalDate,
                     scope = coroutineScope
                 )
             )
