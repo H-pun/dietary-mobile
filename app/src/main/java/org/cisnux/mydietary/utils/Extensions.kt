@@ -115,7 +115,7 @@ val Int.foodDiaryCategory: FoodDiaryCategory
 val Int.reportCategory: ReportCategory
     get() = when (this) {
         0 -> ReportCategory.WEEKLY
-        else -> ReportCategory.WEEK
+        else -> ReportCategory.MONTHLY
     }
 
 fun convertISOToInstant(isoDateTime: String): Instant {

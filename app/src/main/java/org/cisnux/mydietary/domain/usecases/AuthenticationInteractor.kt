@@ -321,7 +321,7 @@ class AuthenticationInteractor @Inject constructor(
                                 userId = it.first
                             ).map { userProfileState ->
                                 if (userProfileState is UiState.Success)
-                                    UiState.Success("Berhasil mengubah email")
+                                    UiState.Success(data = "Berhasil mengubah email")
                                 else
                                     userProfileState
                             }

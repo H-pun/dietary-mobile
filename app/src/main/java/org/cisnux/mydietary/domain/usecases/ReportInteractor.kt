@@ -158,7 +158,7 @@ class ReportInteractor @Inject constructor(
                 foodRepository.getFoodDiaryReports(
                     accessToken = it.second,
                     userId = it.first,
-                    category = ReportCategory.WEEKLY
+                    category = ReportCategory.MONTHLY
                 ).map { uiState ->
                     when (uiState) {
                         is UiState.Success -> {
