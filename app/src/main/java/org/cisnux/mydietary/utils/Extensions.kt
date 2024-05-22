@@ -37,6 +37,8 @@ val Context.isDevModeActive: Boolean
         0
     ) != 0
 
+fun String.isResetCodeValid(): Boolean = this.trim().length == 6
+
 val MyProfile.asEditableUserProfile: EditableUserProfile
     get() = EditableUserProfile(
         username = username,

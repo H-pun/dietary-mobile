@@ -67,6 +67,7 @@ import kotlinx.coroutines.launch
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.utils.isResetCodeValid
 
 @Composable
 fun VerifyCodeScreen(
@@ -212,7 +213,7 @@ private fun VerifyPasswordBody(
     }
 
     LaunchedEffect(code) {
-        if (code.length == 6) onDone()
+        if (code.isResetCodeValid()) onDone()
     }
 
     Column(
@@ -261,7 +262,7 @@ private fun VerifyPasswordBody(
             onValueChange = onCodeChange,
             keyboardActions = KeyboardActions(
                 onDone = {
-                    if (code.length == 6)
+                    if (code.isResetCodeValid())
                         onDone()
                 }
             ),
