@@ -564,7 +564,7 @@ private fun MyProfileBody(
                 },
                 bodyLabel = {
                     Text(
-                        text = stringResource(R.string.tahun, age),
+                        text = stringResource(R.string.year, age),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )

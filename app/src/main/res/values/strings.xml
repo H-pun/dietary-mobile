@@ -43,6 +43,7 @@
     <string name="supporting_text_required">*wajib</string>
     <string name="password_placeholder">Buat kata sandimu</string>
     <string name="old_password_placeholder">Masukkan kata sandi lamamu</string>
+    <string name="api_url_placeholder">Masukkan API URL</string>>
     <string name="new_password_placeholder">Buat kata sandi barumu</string>
     <string name="password_error_text">Kata sandi minimal 8 karakter serta terdiri dari huruf kecil, huruf besar, angka, spesial karakter dan tanpa spasi</string>
     <string name="password_label">Kata Sandi</string>
@@ -116,7 +117,7 @@
     <string name="empty_content_label">Belum ada diary makanan</string>
     <string name="empty_content_search">Makanan yang kamu yang cari tidak dapat ditemukan</string>
     <string name="cm">%1$s cm</string>
-    <string name="tahun">%1$s tahun</string>
+    <string name="year">%1$s tahun</string>
     <string name="error_text_float">%1$s harus berupa angka dan lebih besar dari atau sama dengan 0</string>
     <string name="error_text_int">%1$s harus bilangan bulat dan lebih besar dari 0</string>
     <string name="error_text_text">%1$s tidak boleh kosong</string>
@@ -137,6 +138,7 @@
     <string name="no">Tidak</string>
     <string name="status">Status</string>
     <string name="total_food_calories">Total Kalori Makanan</string>
+    <string name="category_label">Kategori</string>
     <string name="question">Pertanyaan</string>
     <string-array name="food_diary_category">
         <item>Sarapan</item>
@@ -154,4 +156,8 @@
         <item>Bulan Ini</item>
     </string-array>
     <string name="appwidget_text">Dietary</string>
+    <string name="api_url_label">API URL</string>
+    <string name="api_url_error_text">URL harus dalam format https</string>
+    <string name="serving_unit">✧ %1$s (100 g)</string>
+    <string name="food_nutrition_label">Kandungan</string>
 </resources>

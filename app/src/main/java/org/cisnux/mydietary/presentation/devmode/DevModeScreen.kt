@@ -123,13 +123,13 @@ private fun DevModeContent(
                 singleLine = true,
                 placeholder = {
                     Text(
-                        text = "Masukkan API URL",
+                        text = stringResource(id = R.string.api_url_placeholder),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 label = {
                     Text(
-                        text = "API URL",
+                        text = stringResource(R.string.api_url_label),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
@@ -143,7 +143,7 @@ private fun DevModeContent(
                 supportingText = {
                     if (baseUrl.isNotEmpty() and !baseUrl.isHttps())
                         Text(
-                            text = "URL harus dalam format https",
+                            text = stringResource(R.string.api_url_error_text),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     else if (isBaseUrlFocused)

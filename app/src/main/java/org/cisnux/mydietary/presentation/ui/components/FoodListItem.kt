@@ -77,7 +77,7 @@ fun FoodListItem(
     Surface {
         Column(modifier = modifier) {
             Text(
-                text = "✧ $foodName (100 g)",
+                text = stringResource(R.string.serving_unit, foodName),
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
@@ -96,7 +96,7 @@ fun FoodListItem(
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(
-                            text = "Kandungan",
+                            text = stringResource(R.string.food_nutrition_label),
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onSurface
                         )

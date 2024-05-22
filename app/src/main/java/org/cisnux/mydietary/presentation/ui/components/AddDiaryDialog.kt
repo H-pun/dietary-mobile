@@ -184,7 +184,7 @@ fun AddDiaryDialog(
                             onValueChange = {},
                             label = {
                                 Text(
-                                    text = "Category",
+                                    text = stringResource(id = R.string.category_label),
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             },

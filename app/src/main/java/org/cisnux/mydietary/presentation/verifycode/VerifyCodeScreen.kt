@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -187,7 +188,7 @@ private fun VerifyPasswordBody(
     onCodeChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
-    onNavigateUp: () -> Unit = {}
+    onNavigateUp: () -> Unit = {},
 ) {
     val focusRequester = remember { FocusRequester() }
     var timeLeft by rememberSaveable {
@@ -258,6 +259,12 @@ private fun VerifyPasswordBody(
         BasicTextField(
             value = code,
             onValueChange = onCodeChange,
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    if (code.length == 6)
+                        onDone()
+                }
+            ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.NumberPassword, imeAction = ImeAction.Done
             ),
