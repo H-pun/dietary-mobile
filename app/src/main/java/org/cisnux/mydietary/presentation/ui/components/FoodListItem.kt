@@ -122,7 +122,7 @@ fun FoodListItem(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = stringResource(R.string.calorie),
+                                        text = stringResource(R.string.calories),
                                         style = MaterialTheme.typography.labelMedium,
                                         color = MaterialTheme.colorScheme.onSurface
                                     )
@@ -182,7 +182,7 @@ fun FoodListItem(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = stringResource(R.string.carbohydrate),
+                                        text = stringResource(R.string.carbohydrates),
                                         style = MaterialTheme.typography.labelMedium,
                                         color = MaterialTheme.colorScheme.onSurface
                                     )

@@ -35,7 +35,7 @@ fun UserNutritionCardShimmer(modifier: Modifier = Modifier) {
         repeat(4) {
             Surface(
                 color = placeholder, modifier = Modifier
-                    .size(125.dp)
+                    .size(135.dp)
                     .clip(CircleShape)
                     .shimmer()
             ) {}

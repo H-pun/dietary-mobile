@@ -483,14 +483,14 @@ private fun ReportBody(
                             ),
                         ),
                         startAxis = rememberStartAxis(
-                            title = "Berat dan Lingkar Pinggang",
+                            title = stringResource(R.string.weight_and_waist_line_chart_title),
                             titleComponent = rememberAxisLabelComponent(
                                 textAlignment = Layout.Alignment.ALIGN_CENTER,
                                 lineCount = 2
                             ),
                         ),
                         bottomAxis = rememberBottomAxis(
-                            title = "Hari",
+                            title = stringResource(id = R.string.day),
                             titleComponent = rememberAxisLabelComponent(),
                             valueFormatter = { x, _, _ -> (x.toInt() + 1).toString() }
                         ),
@@ -585,8 +585,8 @@ private fun ReportBody(
                     },
                     label = {
                         Text(
-                            text = if (it == 0) "Mingguan"
-                            else "Bulanan"
+                            text = if (it == 0) stringResource(R.string.weekly)
+                            else stringResource(R.string.monthly)
                         )
                     }
                 )
@@ -707,13 +707,13 @@ private fun ReportBody(
                                 ),
                             ),
                             startAxis = rememberStartAxis(
-                                title = "Kalori dan Karbohidrat",
+                                title = stringResource(R.string.calories_and_carbohydrates_line_chart_title),
                                 titleComponent = rememberAxisLabelComponent(
                                     textAlignment = Layout.Alignment.ALIGN_CENTER,
                                 ),
                             ),
                             bottomAxis = rememberBottomAxis(
-                                title = if (selectedFilter == 0) "Hari" else "Minggu",
+                                title = stringResource(id = if (selectedFilter == 0) R.string.day else R.string.week),
                                 titleComponent = rememberAxisLabelComponent(),
                                 valueFormatter = { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
                             ),
@@ -792,7 +792,9 @@ private fun ReportBody(
                                 ),
                             ),
                             bottomAxis = rememberBottomAxis(
-                                title = if (selectedFilter == 0) "Hari" else "Minggu",
+                                title = if (selectedFilter == 0) stringResource(R.string.day) else stringResource(
+                                    R.string.week
+                                ),
                                 titleComponent = rememberAxisLabelComponent(),
                                 valueFormatter = { x, chartValues, _ -> chartValues.model.extraStore[labelListKey][x.toInt()] }
                             ),

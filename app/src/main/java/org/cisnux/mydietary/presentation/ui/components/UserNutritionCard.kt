@@ -65,12 +65,12 @@ fun UserNutritionCard(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         repeat(4) {
-            val label = when (it) {
-                0 -> "Kalori"
-                1 -> "Karbohidrat"
-                2 -> "Protein"
-                else -> "Lemak"
-            }
+            val label = stringResource(id =when (it) {
+                0 -> R.string.calories
+                1 -> R.string.carbohydrates
+                2 -> R.string.protein
+                else -> R.string.fat
+            })
             val unit = if (it != 0) "g" else "kcal"
             val totalNutrition = when (it) {
                 0 -> totalCaloriesToday
@@ -98,14 +98,14 @@ fun UserNutritionCard(
 
             Box(contentAlignment = Alignment.Center) {
                 Spacer(modifier = Modifier
-                    .size(125.dp)
+                    .size(135.dp)
                     .drawBehind {
                         drawCircle(
                             color = onSurfaceColor
                         )
                     })
                 Spacer(modifier = Modifier
-                    .size(125.dp)
+                    .size(135.dp)
                     .drawBehind {
                         drawArc(
                             color = wheelColor,
@@ -115,7 +115,7 @@ fun UserNutritionCard(
                         )
                     })
                 Spacer(modifier = Modifier
-                    .size(115.dp)
+                    .size(125.dp)
                     .drawBehind {
                         drawCircle(
                             color = surfaceColor

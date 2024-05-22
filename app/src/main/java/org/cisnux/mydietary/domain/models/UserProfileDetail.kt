@@ -25,7 +25,7 @@ data class UserProfileDetail(
         val weight = userProfile.weight // berat badan
         val age = userProfile.age // umur
         val isWoman =
-            userProfile.gender.lowercase() == "wanita" // menentukan pria atau wanita
+            userProfile.gender.lowercase() == "wanita" || userProfile.gender.lowercase() == "female" // menentukan pria atau wanita
         // menghitung bmr berdasarkan tinggi, berat badan, umur dan jenis kelamin
         val bmr = if (!isWoman)
             66 + (13.7 * weight) + (5 * height) - (6.8 * age)
