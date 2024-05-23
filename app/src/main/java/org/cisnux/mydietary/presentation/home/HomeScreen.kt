@@ -325,12 +325,15 @@ fun HomeScreen(
                     modifier = modifier.padding(it),
                 )
             }
-            CameraAccessDialog(onDismissRequest = {
-                isCameraDialogOpen = false
-            }, onAgree = {
-                isCameraDialogOpen = false
-                cameraLauncher.launch(Manifest.permission.CAMERA)
-            }, isDialogOpen = isCameraDialogOpen
+            CameraAccessDialog(
+                onDismissRequest = {
+                    isCameraDialogOpen = false
+                },
+                onAgree = {
+                    isCameraDialogOpen = false
+                    cameraLauncher.launch(Manifest.permission.CAMERA)
+                },
+                isDialogOpen = isCameraDialogOpen
             )
             if (openDatePickerDialog) DatePickerDialog(onDismissRequest = {
                 openDatePickerDialog = false

@@ -42,8 +42,10 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -69,14 +71,15 @@ import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.Food
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.UserNutrition
-import org.cisnux.mydietary.presentation.ui.components.AddDiaryDialog
-import org.cisnux.mydietary.presentation.ui.components.AddedDietaryBody
+import org.cisnux.mydietary.presentation.ui.components.AddFoodDiaryDialog
+import org.cisnux.mydietary.presentation.ui.components.FoodNutritionModal
 import org.cisnux.mydietary.presentation.ui.components.AddedDiaryShimmer
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.presentation.ui.theme.surfaceDark
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.Failure
 import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.utils.foodDiaryCategory
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -165,8 +168,13 @@ fun DiaryDetailScreen(
     var title by rememberSaveable {
         mutableStateOf("")
     }
-    var selectedFoodDiaryCategory by rememberSaveable {
-        mutableStateOf(foodDiaryCategories[0])
+    var selectedFoodDiaryCategoryIndex by rememberSaveable {
+        mutableIntStateOf(0)
+    }
+    val selectedFoodDiaryCategory by rememberSaveable(selectedFoodDiaryCategoryIndex) {
+        derivedStateOf {
+            foodDiaryCategories[selectedFoodDiaryCategoryIndex]
+        }
     }
     var isAddDiaryDialogOpen by remember {
         mutableStateOf(false)
@@ -193,7 +201,7 @@ fun DiaryDetailScreen(
                 val userDailyNutrition =
                     (userDailyNutritionState as UiState.Success<UserNutrition>).data!!
 
-                AddedDietaryBody(
+                FoodNutritionModal(
                     totalCaloriesToday = userDailyNutrition.totalCaloriesToday,
                     totalFatToday = userDailyNutrition.totalFatToday,
                     totalProteinToday = userDailyNutrition.totalProteinToday,
@@ -222,7 +230,7 @@ fun DiaryDetailScreen(
                     totalFoodCarbohydrate = foodDiaryDetail.foodNutrition.totalCarbohydrate
                 )
 
-                AddDiaryDialog(
+                AddFoodDiaryDialog(
                     onCancel = {
                         title = ""
                         isAddDiaryDialogOpen = false
@@ -236,14 +244,14 @@ fun DiaryDetailScreen(
                     selectedFoodDiaryCategory = selectedFoodDiaryCategory,
                     onTitleChange = { newValue -> title = newValue },
                     onFoodDiaryCategoryChange = { newValue ->
-                        selectedFoodDiaryCategory = newValue
+                        selectedFoodDiaryCategoryIndex = newValue
                     },
                     foodDiaryCategories = foodDiaryCategories,
                     onSave = {
                         isAddDiaryDialogOpen = false
                         viewModel.addFoodDiary(
                             title = title,
-                            category = selectedFoodDiaryCategory,
+                            category = selectedFoodDiaryCategoryIndex.foodDiaryCategory.value,
                             foodPicture = foodDiaryDetail.foodNutrition.image as File,
                             totalProtein = foodDiaryDetail.foodNutrition.totalProtein,
                             totalCarbohydrate = foodDiaryDetail.foodNutrition.totalCarbohydrate,
@@ -337,7 +345,7 @@ private fun DiaryDetailContentPreview() {
                 onRemove = { /*TODO*/ },
             )
         }, sheetContent = {
-            AddedDietaryBody(
+            FoodNutritionModal(
                 totalCaloriesToday = userDailyNutrition.totalCaloriesToday,
                 totalFatToday = userDailyNutrition.totalFatToday,
                 totalProteinToday = userDailyNutrition.totalProteinToday,

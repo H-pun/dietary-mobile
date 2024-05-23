@@ -77,6 +77,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -114,7 +115,7 @@ import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.models.Food
 import org.cisnux.mydietary.presentation.ui.components.AddedDiaryShimmer
-import org.cisnux.mydietary.presentation.ui.components.AddedDietaryBody
+import org.cisnux.mydietary.presentation.ui.components.FoodNutritionModal
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.presentation.ui.theme.surfaceDark
 import org.cisnux.mydietary.utils.AppDestination
@@ -123,8 +124,9 @@ import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.afterMeasured
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.cisnux.mydietary.presentation.ui.components.AddDiaryDialog
+import org.cisnux.mydietary.presentation.ui.components.AddFoodDiaryDialog
 import org.cisnux.mydietary.presentation.widgets.ReportWidget
+import org.cisnux.mydietary.utils.foodDiaryCategory
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -169,8 +171,13 @@ fun FoodScannerScreen(
     var title by rememberSaveable {
         mutableStateOf("")
     }
-    var selectedFoodDiaryCategory by rememberSaveable {
-        mutableStateOf(foodDiaryCategories[0])
+    var selectedFoodDiaryCategoryIndex by rememberSaveable {
+        mutableIntStateOf(0)
+    }
+    val selectedFoodDiaryCategory by rememberSaveable(selectedFoodDiaryCategoryIndex) {
+        derivedStateOf {
+            foodDiaryCategories[selectedFoodDiaryCategoryIndex]
+        }
     }
     var isPredictedResultDialogOpen by rememberSaveable {
         mutableStateOf(false)
@@ -368,7 +375,7 @@ fun FoodScannerScreen(
                 modifier = modifier.padding(it),
             )
 
-            AddDiaryDialog(
+            AddFoodDiaryDialog(
                 onCancel = {
                     onNavigateUp()
                     title = ""
@@ -381,7 +388,7 @@ fun FoodScannerScreen(
                 title = title,
                 selectedFoodDiaryCategory = selectedFoodDiaryCategory,
                 onTitleChange = { newValue -> title = newValue },
-                onFoodDiaryCategoryChange = { newValue -> selectedFoodDiaryCategory = newValue },
+                onFoodDiaryCategoryChange = { newValue -> selectedFoodDiaryCategoryIndex = newValue },
                 foodDiaryCategories = foodDiaryCategories,
                 onSave = { isAddDiaryDialogOpen = false },
             )
@@ -401,7 +408,7 @@ fun FoodScannerScreen(
                     if (!isQuestionDialogOpen) {
                         viewModel.addFoodDiary(
                             title = title,
-                            category = selectedFoodDiaryCategory,
+                            category = selectedFoodDiaryCategoryIndex.foodDiaryCategory.value,
                             foodPicture = foodNutrition!!.image as File,
                             totalProtein = foodNutrition.totalProtein,
                             totalCarbohydrate = foodNutrition.totalCarbohydrate,
@@ -447,7 +454,7 @@ fun FoodScannerScreen(
                         }
                         viewModel.addFoodDiary(
                             title = title,
-                            category = selectedFoodDiaryCategory,
+                            category = selectedFoodDiaryCategoryIndex.foodDiaryCategory.value,
                             foodPicture = foodNutrition!!.image as File,
                             totalProtein = foodNutrition.totalProtein,
                             totalCarbohydrate = foodNutrition.totalCarbohydrate,
@@ -906,7 +913,7 @@ private fun PredictedResultDialog(
                         AddedDiaryShimmer()
                     }
                     AnimatedVisibility(visible = !isLoading and foods.isNotEmpty()) {
-                        AddedDietaryBody(
+                        FoodNutritionModal(
                             totalCaloriesToday = totalCaloriesToday,
                             maxDailyCalories = maxDailyCalories,
                             maxDailyCarbohydrate = maxDailyCarbohydrate,

@@ -306,8 +306,6 @@ fun MyProfileScreen(
                     },
                     onGoalChange = { newValue ->
                         myProfile = myProfile.copy(goal = newValue)
-                        if (myProfile.goal == goals[1])
-                            myProfile = myProfile.copy(weightTarget = 0f.toString())
                     },
                     onTargetWeightChange = { newValue ->
                         myProfile = myProfile.copy(weightTarget = newValue)
@@ -426,8 +424,6 @@ private fun MyProfileContentPreview() {
                     onGenderChange = { newValue -> myProfile = myProfile.copy(gender = newValue) },
                     onGoalChange = { newValue ->
                         myProfile = myProfile.copy(goal = newValue)
-                        if (myProfile.goal == goals[1])
-                            myProfile = myProfile.copy(weightTarget = "0")
                     },
                     onTargetWeightChange = { newValue ->
                         myProfile = myProfile.copy(weightTarget = newValue)

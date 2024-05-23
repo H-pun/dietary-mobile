@@ -205,4 +205,5 @@
     <string name="monthly">Bulanan</string>
     <string name="weight_and_waist_line_chart_title">Berat dan Lingkar Pinggang</string>
     <string name="calories_and_carbohydrates_line_chart_title">Kalori dan Karbohidrat</string>
+    <string name="proteins_and_fats_line_chart_title">Protein dan Lemak</string>
 </resources>

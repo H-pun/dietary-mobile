@@ -55,8 +55,8 @@ class HomeViewModel @Inject constructor(
     val foodDiaryState = refreshFoodDiaries.asStateFlow().flatMapMerge { isRefresh ->
         if (isRefresh) {
             selectedDate.asStateFlow()
-                .combine(foodDiaryCategory.asStateFlow()) { selectedDate, diaryFoodCategory ->
-                    Pair(selectedDate, diaryFoodCategory)
+                .combine(foodDiaryCategory.asStateFlow()) { selectedDate, foodDiaryCategory ->
+                    Pair(selectedDate, foodDiaryCategory)
                 }.debounce(200L).flatMapLatest {
                     foodDiaryUseCase.getDiaryFoodsByDaysAndCategory(
                         date = it.first.fromMillisToIsoLocalDate,

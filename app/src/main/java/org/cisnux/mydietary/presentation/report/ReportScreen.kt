@@ -710,6 +710,7 @@ private fun ReportBody(
                                 title = stringResource(R.string.calories_and_carbohydrates_line_chart_title),
                                 titleComponent = rememberAxisLabelComponent(
                                     textAlignment = Layout.Alignment.ALIGN_CENTER,
+                                    lineCount = 2
                                 ),
                             ),
                             bottomAxis = rememberBottomAxis(
@@ -786,9 +787,10 @@ private fun ReportBody(
                                 ),
                             ),
                             startAxis = rememberStartAxis(
-                                title = "Protein dan Lemak",
+                                title = stringResource(R.string.proteins_and_fats_line_chart_title),
                                 titleComponent = rememberAxisLabelComponent(
                                     textAlignment = Layout.Alignment.ALIGN_CENTER,
+                                    lineCount = 2
                                 ),
                             ),
                             bottomAxis = rememberBottomAxis(

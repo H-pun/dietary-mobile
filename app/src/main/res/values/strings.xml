@@ -180,8 +180,8 @@
     <string name="calorie_legend">Calories (kcal)</string>
     <string name="carbo_legend">Carbohydrates (g)</string>
     <string name="nutrition">✦ Nutrition</string>
-    <string name="protein_legend">Protein (g)</string>
-    <string name="fat_legend">Fat (g)</string>
+    <string name="protein_legend">Proteins (g)</string>
+    <string name="fat_legend">Fats (g)</string>
     <string name="change_email">Change Email</string>
     <string name="change_password">Change Password</string>
     <string name="renew">Update</string>
@@ -205,4 +205,5 @@
     <string name="monthly">Monthly</string>
     <string name="weight_and_waist_line_chart_title">Weight and Waist Circumference</string>
     <string name="calories_and_carbohydrates_line_chart_title">Calories and Carbohydrates</string>
+    <string name="proteins_and_fats_line_chart_title">Proteins and Fats</string>
 </resources>
