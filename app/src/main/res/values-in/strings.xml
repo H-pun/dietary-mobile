@@ -14,18 +14,10 @@
     <string name="health_profile_dialog_positive_btn">Selesai</string>
     <string name="health_profile_dialog_message">Tinjau profil kesehatanmu: verifikasi dan perbarui informasimu untuk akurasi.</string>
     <string name="age_label">Usia</string>
-    <string name="dummy_dialog_age">40 tahun</string>
     <string name="weight_label">Berat</string>
-    <string name="dummy_dialog_weight">70 kg</string>
     <string name="height_label">Tinggi</string>
-    <string name="dummy_dialog_height">170 cm</string>
     <string name="gender_label">Jenis Kelamin</string>
-    <string name="dummy_dialog_gender">Pria</string>
     <string name="save">Simpan</string>
-    <string name="dummy_age">40</string>
-    <string name="dummy_height">170</string>
-    <string name="dummy_gender">Pria</string>
-    <string name="dummy_weight">70</string>
     <string-array name="gender">
         <item>Pria</item>
         <item>Wanita</item>

@@ -14,18 +14,10 @@
     <string name="health_profile_dialog_positive_btn">Done</string>
     <string name="health_profile_dialog_message">Review your health profile: verify and update your info for accuracy.</string>
     <string name="age_label">Age</string>
-    <string name="dummy_dialog_age">40 years</string>
     <string name="weight_label">Weight</string>
-    <string name="dummy_dialog_weight">70 kg</string>
     <string name="height_label">Height</string>
-    <string name="dummy_dialog_height">170 cm</string>
     <string name="gender_label">Gender</string>
-    <string name="dummy_dialog_gender">Male</string>
     <string name="save">Save</string>
-    <string name="dummy_age">40</string>
-    <string name="dummy_height">170</string>
-    <string name="dummy_gender">Male</string>
-    <string name="dummy_weight">70</string>
     <string-array name="gender">
         <item>Male</item>
         <item>Female</item>
@@ -93,9 +85,9 @@
     <string name="get_started">Get Started</string>
     <string name="failed_to_took_picture">Failed to take picture</string>
     <string-array name="goal">
-        <item>Lose weight</item>
+        <item>Weight Loss</item>
         <item>Maintain current weight</item>
-        <item>Gain weight</item>
+        <item>Weight Gain</item>
     </string-array>
     <string-array name="activity_level">
         <item>Sedentary</item>
