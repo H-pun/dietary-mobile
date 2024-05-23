@@ -165,7 +165,6 @@ fun DiaryDetailScreen(
                         duration = SnackbarDuration.Short
                     )
                     if (it.lowercase().contains("not found")) {
-                        delay(200L)
                         navigateUp()
                     }
                     if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getFoodDiaryDetailById()

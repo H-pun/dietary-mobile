@@ -625,7 +625,7 @@ private fun FoodScannerBody(
                 .fillMaxWidth()
                 .height(120.dp)
                 .blur(radius = 2.dp)) {}
-        TextButton(onClick = onGalleryButton, modifier = Modifier.constrainAs(galleryButton) {
+        TextButton(onClick = onGalleryButton, enabled = !isLoading, modifier = Modifier.constrainAs(galleryButton) {
             top.linkTo(buttonContainer.top)
             start.linkTo(buttonContainer.start)
             end.linkTo(takePictureButton.start)
@@ -639,6 +639,7 @@ private fun FoodScannerBody(
             )
         }
         IconButton(onClick = onCaptureByCamera,
+            enabled = !isLoading,
             modifier = Modifier.constrainAs(takePictureButton) {
                 top.linkTo(buttonContainer.top)
                 start.linkTo(buttonContainer.start)
