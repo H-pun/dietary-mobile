@@ -110,7 +110,7 @@ fun FoodNutritionModal(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = stringResource(R.string.total_food_calories),
+                    text = stringResource(R.string.total_calories),
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface
@@ -131,7 +131,7 @@ fun FoodNutritionModal(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = stringResource(R.string.total_carbo),
+                    text = stringResource(R.string.total_carbohydrates),
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface

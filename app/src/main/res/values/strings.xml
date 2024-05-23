@@ -129,7 +129,7 @@
     <string name="add">Add</string>
     <string name="no">No</string>
     <string name="status">Status</string>
-    <string name="total_food_calories">Total Food Calories</string>
+    <string name="total_calories">Total Food Calories</string>
     <string name="category_label">Category</string>
     <string name="question">Question</string>
     <string-array name="food_diary_category">
@@ -177,9 +177,9 @@
     <string name="change_email">Change Email</string>
     <string name="change_password">Change Password</string>
     <string name="renew">Update</string>
-    <string name="total_carbo">Total Carbohydrates</string>
-    <string name="total_protein">Total Protein</string>
-    <string name="total_fat">Total Fat</string>
+    <string name="total_carbohydrates">Total Food Carbohydrates</string>
+    <string name="total_protein">Total Food Proteins</string>
+    <string name="total_fat">Total Food Fats</string>
     <string name="didnt_receive">Didn\'t receive it?</string>
     <string name="resend">Resend %1$s</string>
     <string name="your_food_diaries">✦ Your Food Diaries</string>
