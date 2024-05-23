@@ -1,11 +1,8 @@
 package org.cisnux.mydietary.presentation.myprofile
 
-import android.content.Context
-import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
@@ -25,14 +22,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.UserProfileDetail
-import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import javax.inject.Inject
 
 @HiltViewModel
 class MyProfileViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
     private val userProfileUseCase: UserProfileUseCase,
-    @ApplicationContext private val context: Context
 ) : ViewModel() {
     val userProfileDetail
         get() = userProfileUseCase.getUserProfileDetail(viewModelScope)
@@ -77,6 +72,5 @@ class MyProfileViewModel @Inject constructor(
 
     fun signOut() = CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {
         authenticationUseCase.signOut()
-        ReportWidget().updateAll(context = context)
     }
 }

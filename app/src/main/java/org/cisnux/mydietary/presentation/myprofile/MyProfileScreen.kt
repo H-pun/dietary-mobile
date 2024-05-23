@@ -154,6 +154,7 @@ fun MyProfileScreen(
     val activityLevels = stringArrayResource(id = R.array.activity_level)
     val activityDescriptions = stringArrayResource(id = R.array.activity_description)
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     if (userProfileState is UiState.Error)
         (userProfileState as UiState.Error).error?.let { exception ->
@@ -202,7 +203,6 @@ fun MyProfileScreen(
         }
 
         is UiState.Success -> {
-            val coroutineScope = rememberCoroutineScope()
             LaunchedEffect(updateUserProfileState) {
                 coroutineScope.launch {
                     ReportWidget().updateAll(context)
@@ -215,7 +215,11 @@ fun MyProfileScreen(
 
     MyProfileContent(
         signOut = {
-            viewModel.signOut()
+            viewModel.signOut().invokeOnCompletion {
+                coroutineScope.launch {
+                    ReportWidget().updateAll(context = context)
+                }
+            }
             navigateToSignIn()
         },
         drawerTitle = {

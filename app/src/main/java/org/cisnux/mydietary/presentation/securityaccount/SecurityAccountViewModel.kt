@@ -1,11 +1,8 @@
 package org.cisnux.mydietary.presentation.securityaccount
 
-import android.content.Context
-import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -21,7 +18,6 @@ import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.ChangePassword
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
-import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import org.cisnux.mydietary.utils.UiState
 import javax.inject.Inject
 
@@ -29,7 +25,6 @@ import javax.inject.Inject
 class SecurityAccountViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
     private val userProfileUseCase: UserProfileUseCase,
-    @ApplicationContext private val context: Context
 ) : ViewModel() {
     val emailAddress
         get() = userProfileUseCase.getUserProfileDetail().map { it.emailAddress }
@@ -87,6 +82,5 @@ class SecurityAccountViewModel @Inject constructor(
 
     fun signOut() = CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {
         authenticationUseCase.signOut()
-        ReportWidget().updateAll(context = context)
     }
 }

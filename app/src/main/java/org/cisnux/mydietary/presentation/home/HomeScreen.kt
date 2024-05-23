@@ -84,6 +84,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.glance.appwidget.updateAll
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.FoodDiary
@@ -103,6 +104,7 @@ import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.Keyword
 import org.cisnux.mydietary.presentation.ui.components.NavigationDrawer
 import org.cisnux.mydietary.presentation.ui.components.UserAccountCard
+import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import org.cisnux.mydietary.utils.fromMillisToDayDateMonthYear
 import org.cisnux.mydietary.utils.fromMillisToHoursAndMinutes
 import java.time.Instant
@@ -236,7 +238,11 @@ fun HomeScreen(
 
     HomeContent(
         signOut = {
-            viewModel.signOut()
+            viewModel.signOut().invokeOnCompletion {
+                coroutineScope.launch {
+                    ReportWidget().updateAll(context = context)
+                }
+            }
             navigateToSignIn(AppDestination.HomeRoute.route)
         },
         drawerTitle = {
