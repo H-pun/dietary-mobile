@@ -421,9 +421,9 @@ fun DietaryNavGraph(
                 onFabFoodScanner = navComponentAction.navigateToFoodScanner,
                 navigateToDiaryDetail = navComponentAction.navigateToFoodDiaryDetail,
                 navigateToSignIn = {
-                    navComponentAction.navigateToSignIn(it)
                     coroutineScope.launch {
                         ReportWidget().updateAll(context)
+                        navComponentAction.navigateToSignIn(it)
                     }
                 },
                 navigateUp = { activity.finish() },
@@ -463,9 +463,9 @@ fun DietaryNavGraph(
             MyProfileScreen(
                 drawerNavigation = navComponentAction.navigationDestination,
                 navigateToSignIn = {
-                    navComponentAction.navigateToSignIn(AppDestination.MyProfileRoute.route)
                     coroutineScope.launch {
                         ReportWidget().updateAll(context)
+                        navComponentAction.navigateToSignIn(AppDestination.MyProfileRoute.route)
                     }
                 },
                 navigateUp = { activity.finish() }
@@ -552,9 +552,9 @@ fun DietaryNavGraph(
             SecurityAccountScreen(
                 drawerNavigation = navComponentAction.navigationDestination,
                 navigateToSignIn = {
-                    navComponentAction.navigateToSignIn(AppDestination.AccountSecurityRoute.route)
                     coroutineScope.launch {
                         ReportWidget().updateAll(context)
+                        navComponentAction.navigateToSignIn(AppDestination.AccountSecurityRoute.route)
                     }
                 },
                 navigateUp = { activity.finish() }
