@@ -1,8 +1,11 @@
 package org.cisnux.mydietary.presentation.home
 
+import android.content.Context
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
@@ -33,6 +36,7 @@ import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.Keyword
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
+import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import java.time.Instant
 import javax.inject.Inject
 
@@ -40,7 +44,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val foodDiaryUseCase: FoodDiaryUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
-    private val userProfileUseCase: UserProfileUseCase
+    private val userProfileUseCase: UserProfileUseCase,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
     private var selectedDate = MutableStateFlow(Instant.now())
     private var foodDiaryCategory = MutableStateFlow(FoodDiaryCategory.BREAKFAST)
@@ -172,5 +177,6 @@ class HomeViewModel @Inject constructor(
 
     fun signOut() = CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {
         authenticationUseCase.signOut()
+        ReportWidget().updateAll(context = context)
     }
 }
