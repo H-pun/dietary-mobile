@@ -1,6 +1,5 @@
 package org.cisnux.mydietary.presentation.verifycode
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,11 +22,6 @@ class VerifyCodeViewModel @Inject constructor(
     val resetPasswordState get() = _resetPasswordState.asStateFlow()
     val emailAddress: String = checkNotNull(savedStateHandle["emailAddress"]) as String
     val code: String? = savedStateHandle["code"]
-
-    init {
-        Log.d(VerifyCodeViewModel::class.simpleName, emailAddress)
-        Log.d(VerifyCodeViewModel::class.simpleName, code.toString())
-    }
 
     fun resetPassword() =
         viewModelScope.launch {

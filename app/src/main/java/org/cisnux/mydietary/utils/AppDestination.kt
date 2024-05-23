@@ -30,7 +30,7 @@ sealed class AppDestination(val route: String) {
     data object SignUpRoute : AppDestination(route = "sign_up")
     data object AddMyProfileRoute : AppDestination(route = "add_my_profile")
     data object ResetPasswordRoute : AppDestination(route = "reset_password")
-    data object AccountSecurityRoute : AppDestination(route = "user/email-verified") {
+    data object SecurityAccountRoute : AppDestination(route = "user/email-verified") {
         val deepLinkPattern = "$DIETARY_API/$route"
     }
 

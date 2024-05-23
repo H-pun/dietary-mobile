@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import kotlinx.coroutines.delay
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.Food
@@ -151,12 +152,22 @@ fun DiaryDetailScreen(
         (foodDiaryDetailState as UiState.Error).error?.let { exception ->
             LaunchedEffect(snackbarHostState) {
                 exception.message?.let {
-                    val snackbarResult = snackbarHostState.showSnackbar(
+                    val snackbarResult = if (!it.lowercase()
+                            .contains("not found")
+                    ) snackbarHostState.showSnackbar(
                         message = it,
                         actionLabel = context.getString(R.string.retry),
                         withDismissAction = true,
                         duration = SnackbarDuration.Long
+                    ) else snackbarHostState.showSnackbar(
+                        message = context.getString(R.string.food_diary_is_not_found),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
                     )
+                    if (it.lowercase().contains("not found")) {
+                        delay(200L)
+                        navigateUp()
+                    }
                     if (snackbarResult == SnackbarResult.ActionPerformed) viewModel.getFoodDiaryDetailById()
                 }
             }

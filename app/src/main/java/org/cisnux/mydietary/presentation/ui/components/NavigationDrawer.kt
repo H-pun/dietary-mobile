@@ -80,7 +80,7 @@ fun NavigationDrawer(
         NavigationItem(
             title = stringResource(id = R.string.account_and_security_title),
             icon = painterResource(id = R.drawable.ic_protect_100dp),
-            destination = AppDestination.AccountSecurityRoute,
+            destination = AppDestination.SecurityAccountRoute,
             contentDescription = stringResource(id = R.string.account_and_security_title)
         ),
         NavigationItem(

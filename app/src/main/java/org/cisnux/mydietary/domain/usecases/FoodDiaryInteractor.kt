@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import org.cisnux.mydietary.domain.models.Keyword
 import java.io.File
@@ -37,7 +38,7 @@ class FoodDiaryInteractor @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
     @ApplicationContext private val context: Context
 ) : FoodDiaryUseCase {
-    override fun getDiaryFoodsByDaysAndCategory(
+    override fun getFoodDiariesByDaysAndCategory(
         date: String, category: FoodDiaryCategory, scope: CoroutineScope
     ): Flow<UiState<List<FoodDiary>>> =
         authenticationUseCase.getAccessTokenAndUserId(scope = scope)
@@ -58,7 +59,7 @@ class FoodDiaryInteractor @Inject constructor(
                 initialValue = UiState.Initialize
             )
 
-    override fun getDiaryFoodsByDaysForWidget(
+    override fun getFoodDiariesByDaysForWidget(
         date: String,
         scope: CoroutineScope
     ): Flow<UiState<List<FoodDiary>>> =
@@ -94,20 +95,12 @@ class FoodDiaryInteractor @Inject constructor(
                         } ?: listOf())
                     else uiState
                 }.flowOn(Dispatchers.IO)
-                    .stateIn(
-                        scope = scope,
-                        started = SharingStarted.Lazily,
-                        initialValue = UiState.Initialize
-                    )
+                    .shareIn(scope = scope, SharingStarted.WhileSubscribed(replayExpirationMillis = 1000L))
             }
             .flowOn(Dispatchers.IO)
-            .stateIn(
-                scope = scope,
-                started = SharingStarted.Lazily,
-                initialValue = UiState.Initialize
-            )
+            .shareIn(scope = scope, SharingStarted.WhileSubscribed(replayExpirationMillis = 1000L))
 
-    override fun getDiaryFoodsByQuery(
+    override fun getFoodDiariesByQuery(
         query: String,
         scope: CoroutineScope
     ): Flow<UiState<List<FoodDiary>>> =

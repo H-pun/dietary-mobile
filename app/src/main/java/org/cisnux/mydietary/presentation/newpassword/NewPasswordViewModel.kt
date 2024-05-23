@@ -1,6 +1,5 @@
 package org.cisnux.mydietary.presentation.newpassword
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,11 +22,6 @@ class NewPasswordViewModel @Inject constructor(
     val emailAddress: String = checkNotNull(savedStateHandle["emailAddress"]) as String
     private val _changePasswordState = MutableStateFlow<UiState<String>>(UiState.Initialize)
     val changePasswordState = _changePasswordState.asStateFlow()
-
-    init {
-        Log.d(NewPasswordViewModel::class.simpleName, emailAddress)
-        Log.d(NewPasswordViewModel::class.simpleName, code)
-    }
 
     fun changePassword(newPassword: String) =
         viewModelScope.launch {

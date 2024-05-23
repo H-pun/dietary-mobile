@@ -58,7 +58,7 @@ class HomeViewModel @Inject constructor(
                 .combine(foodDiaryCategory.asStateFlow()) { selectedDate, foodDiaryCategory ->
                     Pair(selectedDate, foodDiaryCategory)
                 }.debounce(200L).flatMapLatest {
-                    foodDiaryUseCase.getDiaryFoodsByDaysAndCategory(
+                    foodDiaryUseCase.getFoodDiariesByDaysAndCategory(
                         date = it.first.fromMillisToIsoLocalDate,
                         category = it.second,
                         scope = viewModelScope
@@ -159,7 +159,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getFoodDiariesByQuery(query: String) = viewModelScope.launch {
-        foodDiaryUseCase.getDiaryFoodsByQuery(query = query, scope = viewModelScope)
+        foodDiaryUseCase.getFoodDiariesByQuery(query = query, scope = viewModelScope)
             .distinctUntilChanged().collectLatest {
                 _searchedFoodDiaryState.value = it
             }

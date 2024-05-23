@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.UserNutrition
+import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.FoodDiaryUseCase
 import org.cisnux.mydietary.domain.usecases.ReportUseCase
 import org.cisnux.mydietary.presentation.MainActivity
@@ -77,6 +79,7 @@ class ReportWidget : GlanceAppWidget() {
     interface ReportWidgetEntryPoint {
         fun reportUseCase(): ReportUseCase
         fun foodDiaryUseCase(): FoodDiaryUseCase
+        fun authenticationUseCase(): AuthenticationUseCase
     }
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -92,14 +95,18 @@ class ReportWidget : GlanceAppWidget() {
             val foodDiaryUseCase = remember {
                 hiltEntryPoint.foodDiaryUseCase()
             }
+            val authenticationUseCase = remember {
+                hiltEntryPoint.authenticationUseCase()
+            }
             val coroutineScope = rememberCoroutineScope()
+            val accessToken by authenticationUseCase.getAccessToken(coroutineScope).collectAsState(initial = null)
             val oneTimeDailyNutrition by rememberUpdatedState(
                 reportUseCase.getDailyNutrition(
                     coroutineScope
                 )
             )
             val oneTimeFoodDiary by rememberUpdatedState(
-                foodDiaryUseCase.getDiaryFoodsByDaysForWidget(
+                foodDiaryUseCase.getFoodDiariesByDaysForWidget(
                     date = Instant.now().fromMillisToIsoLocalDate,
                     scope = coroutineScope
                 )
@@ -125,9 +132,10 @@ class ReportWidget : GlanceAppWidget() {
                 if (userDailyNutritionState.value is UiState.Success) (userDailyNutritionState.value as UiState.Success<UserNutrition>).data
                     ?: UserNutrition()
                 else UserNutrition()
-            val foodDiaries = if (foodDiaryState.value is UiState.Success)
-                (foodDiaryState.value as UiState.Success<List<FoodDiary>>).data ?: listOf()
-            else listOf()
+            val foodDiaries =
+                if (foodDiaryState.value is UiState.Success) (foodDiaryState.value as UiState.Success<List<FoodDiary>>).data
+                    ?: listOf()
+                else listOf()
 
             DietaryGlanceTheme {
                 WidgetContent(
@@ -139,7 +147,7 @@ class ReportWidget : GlanceAppWidget() {
                     maxDailyProtein = userNutrition.maxDailyProtein,
                     maxDailyCalories = userNutrition.maxDailyCalories,
                     maxDailyFat = userNutrition.maxDailyFat,
-                    isSuccess = userDailyNutritionState.value is UiState.Success && foodDiaryState.value is UiState.Success,
+                    isSuccess = userDailyNutritionState.value is UiState.Success && accessToken?.isNotBlank() == true,
                     foodDiaries = foodDiaries,
                     context = context
                 )
@@ -245,36 +253,28 @@ class ReportWidget : GlanceAppWidget() {
                                     Text(
                                         text = "${
                                             String.format(
-                                                locale,
-                                                "%.2f",
-                                                totalNutrition
+                                                locale, "%.2f", totalNutrition
                                             )
-                                        } $unit",
-                                        style = TextStyle(
+                                        } $unit", style = TextStyle(
                                             fontFamily = FontFamily("roboto"),
                                             fontWeight = FontWeight.Medium,
                                             fontSize = DietaryTypeScaleTokens.LabelMediumSize,
                                             color = GlanceTheme.colors.onSurface,
                                             textAlign = TextAlign.Start
-                                        ),
-                                        modifier = GlanceModifier.defaultWeight()
+                                        ), modifier = GlanceModifier.defaultWeight()
                                     )
                                     Text(
                                         text = "${
                                             String.format(
-                                                locale,
-                                                "%.2f",
-                                                maxNutrition
+                                                locale, "%.2f", maxNutrition
                                             )
-                                        } $unit",
-                                        style = TextStyle(
+                                        } $unit", style = TextStyle(
                                             fontFamily = FontFamily("roboto"),
                                             fontWeight = FontWeight.Medium,
                                             fontSize = DietaryTypeScaleTokens.LabelMediumSize,
                                             color = GlanceTheme.colors.onSurface,
                                             textAlign = TextAlign.End
-                                        ),
-                                        modifier = GlanceModifier.defaultWeight()
+                                        ), modifier = GlanceModifier.defaultWeight()
                                     )
                                 }
                                 Spacer(GlanceModifier.height(2.dp))
@@ -300,7 +300,9 @@ class ReportWidget : GlanceAppWidget() {
                                         ), modifier = GlanceModifier.defaultWeight()
                                     )
                                     Text(
-                                        text = context.resources.getString(R.string.progress_max_label, label), style = TextStyle(
+                                        text = context.resources.getString(
+                                            R.string.progress_max_label, label
+                                        ), style = TextStyle(
                                             fontFamily = FontFamily("roboto"),
                                             fontWeight = FontWeight.Medium,
                                             fontSize = DietaryTypeScaleTokens.LabelMediumSize,
@@ -315,37 +317,30 @@ class ReportWidget : GlanceAppWidget() {
                     }
                 }
                 item {
-                    if (foodDiaries.isNotEmpty())
-                        Column(modifier = GlanceModifier.fillMaxWidth()) {
-                            Text(
-                                text = context.resources.getString(R.string.your_food_diaries),
-                                style = TextStyle(
-                                    fontFamily = FontFamily("roboto"),
-                                    fontWeight = FontWeight.Medium,
-                                    fontSize = DietaryTypeScaleTokens.TitleMediumSize,
-                                    color = GlanceTheme.colors.onSurface,
-                                    textAlign = TextAlign.Start
-                                ),
-                            )
-                            Spacer(GlanceModifier.height(4.dp))
-                        }
+                    if (foodDiaries.isNotEmpty()) Column(modifier = GlanceModifier.fillMaxWidth()) {
+                        Text(
+                            text = context.resources.getString(R.string.your_food_diaries),
+                            style = TextStyle(
+                                fontFamily = FontFamily("roboto"),
+                                fontWeight = FontWeight.Medium,
+                                fontSize = DietaryTypeScaleTokens.TitleMediumSize,
+                                color = GlanceTheme.colors.onSurface,
+                                textAlign = TextAlign.Start
+                            ),
+                        )
+                        Spacer(GlanceModifier.height(4.dp))
+                    }
                 }
-                items(
-                    foodDiaries.size,
-                    itemId = {
-                        foodDiaries[it].hashCode().toLong()
-                    }) {
+                items(foodDiaries.size, itemId = {
+                    foodDiaries[it].hashCode().toLong()
+                }) {
                     val locale = remember {
                         Locale.getDefault()
                     }
                     val deepLinkIntent = Intent(
-                        Intent.ACTION_VIEW,
-                        AppDestination.DiaryDetailRoute.createDeepLinkUrl(
-                            foodDiaries[it].id,
-                            isWidget = true
-                        ),
-                        context,
-                        MainActivity::class.java
+                        Intent.ACTION_VIEW, AppDestination.DiaryDetailRoute.createDeepLinkUrl(
+                            foodDiaries[it].id, isWidget = true
+                        ), context, MainActivity::class.java
                     )
                     val action = actionStartActivity(intent = deepLinkIntent)
 
@@ -370,8 +365,7 @@ class ReportWidget : GlanceAppWidget() {
                                 } ?: Spacer(
                                     GlanceModifier.size(24.dp).cornerRadius(8.dp).background(
                                         ColorProvider(
-                                            day = lightProgress,
-                                            night = darkProgress
+                                            day = lightProgress, night = darkProgress
                                         )
                                     )
                                 )
@@ -413,8 +407,7 @@ class ReportWidget : GlanceAppWidget() {
                             }
                             Spacer(modifier = GlanceModifier.height(2.dp))
                             Text(
-                                text = foodDiaries[it].date,
-                                style = TextStyle(
+                                text = foodDiaries[it].date, style = TextStyle(
                                     fontFamily = FontFamily("roboto"),
                                     fontSize = DietaryTypeScaleTokens.BodySmallSize,
                                     color = GlanceTheme.colors.onSurface
@@ -422,8 +415,7 @@ class ReportWidget : GlanceAppWidget() {
                             )
                             Spacer(modifier = GlanceModifier.height(2.dp))
                             Text(
-                                text = foodDiaries[it].time,
-                                style = TextStyle(
+                                text = foodDiaries[it].time, style = TextStyle(
                                     fontFamily = FontFamily("roboto"),
                                     fontSize = DietaryTypeScaleTokens.LabelSmallSize,
                                     color = GlanceTheme.colors.onSurface

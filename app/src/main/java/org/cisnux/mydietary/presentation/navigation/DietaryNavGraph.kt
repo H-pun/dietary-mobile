@@ -261,7 +261,12 @@ fun DietaryNavGraph(
                         ReportWidget().updateAll(context)
                     }
                 },
-                navigateToSignIn = navComponentAction.navigateToSignIn,
+                navigateToSignIn = {
+                    navComponentAction.navigateToSignIn(it)
+                    coroutineScope.launch {
+                        ReportWidget().updateAll(context)
+                    }
+                },
                 navigateUp = { activity.finish() }
             )
         }
@@ -422,6 +427,9 @@ fun DietaryNavGraph(
                 navigateToDiaryDetail = navComponentAction.navigateToFoodDiaryDetail,
                 navigateToSignIn = {
                     navComponentAction.navigateToSignIn(it)
+                    coroutineScope.launch {
+                        ReportWidget().updateAll(context)
+                    }
                 },
                 navigateUp = { activity.finish() },
             )
@@ -461,6 +469,9 @@ fun DietaryNavGraph(
                 drawerNavigation = navComponentAction.navigationDestination,
                 navigateToSignIn = {
                     navComponentAction.navigateToSignIn(AppDestination.MyProfileRoute.route)
+                    coroutineScope.launch {
+                        ReportWidget().updateAll(context)
+                    }
                 },
                 navigateUp = { activity.finish() }
             )
@@ -508,7 +519,7 @@ fun DietaryNavGraph(
             )
         }
         composable(
-            route = AppDestination.AccountSecurityRoute.route,
+            route = AppDestination.SecurityAccountRoute.route,
             enterTransition = {
                 fadeIn(
                     animationSpec = tween(
@@ -539,14 +550,17 @@ fun DietaryNavGraph(
             },
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern = AppDestination.AccountSecurityRoute.deepLinkPattern
+                    uriPattern = AppDestination.SecurityAccountRoute.deepLinkPattern
                 },
             )
         ) {
             SecurityAccountScreen(
                 drawerNavigation = navComponentAction.navigationDestination,
                 navigateToSignIn = {
-                    navComponentAction.navigateToSignIn(AppDestination.AccountSecurityRoute.route)
+                    navComponentAction.navigateToSignIn(AppDestination.SecurityAccountRoute.route)
+                    coroutineScope.launch {
+                        ReportWidget().updateAll(context)
+                    }
                 },
                 navigateUp = { activity.finish() }
             )

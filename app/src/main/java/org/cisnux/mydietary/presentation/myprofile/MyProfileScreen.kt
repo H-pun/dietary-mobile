@@ -215,11 +215,7 @@ fun MyProfileScreen(
 
     MyProfileContent(
         signOut = {
-            viewModel.signOut().invokeOnCompletion {
-                coroutineScope.launch {
-                    ReportWidget().updateAll(context = context)
-                }
-            }
+            viewModel.signOut()
             navigateToSignIn()
         },
         drawerTitle = {

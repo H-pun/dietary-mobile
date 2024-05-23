@@ -60,7 +60,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.glance.appwidget.updateAll
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.R
@@ -68,7 +67,6 @@ import org.cisnux.mydietary.presentation.ui.components.ListTileProfile
 import org.cisnux.mydietary.presentation.ui.components.NavigationDrawer
 import org.cisnux.mydietary.presentation.ui.components.UserAccountCard
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.presentation.widgets.ReportWidget
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.Failure
 import org.cisnux.mydietary.utils.UiState
@@ -113,7 +111,6 @@ fun SecurityAccountScreen(
     val changePasswordState by viewModel.changePasswordState.collectAsState(initial = UiState.Initialize)
     val verifyEmailState by viewModel.verifyEmailState.collectAsState(initial = UiState.Initialize)
     val userProfile by viewModel.userProfile.collectAsState(initial = null)
-    val coroutineScope = rememberCoroutineScope()
 
     when (changeEmailState) {
         is UiState.Success -> {
@@ -240,11 +237,7 @@ fun SecurityAccountScreen(
     SecurityAccountContent(
         snackbarHostState = snackbarHostState,
         signOut = {
-            viewModel.signOut().invokeOnCompletion {
-                coroutineScope.launch {
-                    ReportWidget().updateAll(context = context)
-                }
-            }
+            viewModel.signOut()
             navigateToSignIn()
         },
         onSelectedDestination = drawerNavigation,
@@ -348,7 +341,7 @@ private fun SecurityAccountContent(
     NavigationDrawer(
         title = drawerTitle,
         signOut = signOut,
-        currentRoute = AppDestination.AccountSecurityRoute,
+        currentRoute = AppDestination.SecurityAccountRoute,
         onSelectedDestination = onSelectedDestination,
         drawerState = drawerState
     ) {

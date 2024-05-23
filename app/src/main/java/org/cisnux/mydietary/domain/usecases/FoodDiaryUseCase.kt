@@ -1,6 +1,8 @@
 package org.cisnux.mydietary.domain.usecases
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import org.cisnux.mydietary.domain.models.AddFoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiary
@@ -12,12 +14,28 @@ import org.cisnux.mydietary.utils.UiState
 import java.io.File
 
 interface FoodDiaryUseCase {
-    fun getDiaryFoodsByDaysAndCategory(date: String, category: FoodDiaryCategory, scope: CoroutineScope): Flow<UiState<List<FoodDiary>>>
-    fun getDiaryFoodsByDaysForWidget(date: String, scope: CoroutineScope): Flow<UiState<List<FoodDiary>>>
-    fun getDiaryFoodsByQuery(query: String, scope: CoroutineScope): Flow<UiState<List<FoodDiary>>>
-    fun getKeywordSuggestionsByQuery(query: String, scope: CoroutineScope): Flow<UiState<List<Keyword>>>
+    fun getFoodDiariesByDaysAndCategory(
+        date: String,
+        category: FoodDiaryCategory,
+        scope: CoroutineScope
+    ): Flow<UiState<List<FoodDiary>>>
+
+    fun getFoodDiariesByDaysForWidget(
+        date: String,
+        scope: CoroutineScope = CoroutineScope(context = SupervisorJob() + Dispatchers.IO)
+    ): Flow<UiState<List<FoodDiary>>>
+
+    fun getFoodDiariesByQuery(query: String, scope: CoroutineScope): Flow<UiState<List<FoodDiary>>>
+    fun getKeywordSuggestionsByQuery(
+        query: String,
+        scope: CoroutineScope
+    ): Flow<UiState<List<Keyword>>>
+
     fun addFoodDiary(addFoodDiary: AddFoodDiary, scope: CoroutineScope): Flow<UiState<String>>
-    fun getFoodDiaryDetailById(foodDiaryId: String, scope: CoroutineScope): Flow<UiState<FoodDiaryDetail>>
+    fun getFoodDiaryDetailById(
+        foodDiaryId: String,
+        scope: CoroutineScope
+    ): Flow<UiState<FoodDiaryDetail>>
 
     fun deleteFoodDiaryById(foodDiaryId: String, scope: CoroutineScope): Flow<UiState<Nothing>>
 
