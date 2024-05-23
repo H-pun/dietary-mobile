@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -172,7 +171,7 @@ class ReportWidget : GlanceAppWidget() {
                 item {
                     Column(modifier = GlanceModifier.fillMaxWidth()) {
                         Text(
-                            text = stringResource(R.string.your_nutrition_today),
+                            text = context.resources.getString(R.string.your_nutrition_today),
                             style = TextStyle(
                                 fontFamily = FontFamily("roboto"),
                                 fontWeight = FontWeight.Medium,
@@ -301,7 +300,7 @@ class ReportWidget : GlanceAppWidget() {
                                         ), modifier = GlanceModifier.defaultWeight()
                                     )
                                     Text(
-                                        text = stringResource(R.string.progress_max_label, label), style = TextStyle(
+                                        text = context.resources.getString(R.string.progress_max_label, label), style = TextStyle(
                                             fontFamily = FontFamily("roboto"),
                                             fontWeight = FontWeight.Medium,
                                             fontSize = DietaryTypeScaleTokens.LabelMediumSize,
@@ -319,7 +318,7 @@ class ReportWidget : GlanceAppWidget() {
                     if (foodDiaries.isNotEmpty())
                         Column(modifier = GlanceModifier.fillMaxWidth()) {
                             Text(
-                                text = stringResource(R.string.your_food_diaries),
+                                text = context.resources.getString(R.string.your_food_diaries),
                                 style = TextStyle(
                                     fontFamily = FontFamily("roboto"),
                                     fontWeight = FontWeight.Medium,
@@ -447,7 +446,7 @@ class ReportWidget : GlanceAppWidget() {
                     )
                     Spacer(GlanceModifier.height(4.dp))
                     Text(
-                        text = stringResource(R.string.empty_data),
+                        text = context.resources.getString(R.string.empty_data),
                         style = TextStyle(
                             fontFamily = FontFamily("roboto"),
                             fontWeight = FontWeight.Medium,
