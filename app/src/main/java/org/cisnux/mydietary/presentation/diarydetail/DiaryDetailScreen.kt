@@ -171,7 +171,7 @@ fun DiaryDetailScreen(
     var selectedFoodDiaryCategoryIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
-    val selectedFoodDiaryCategory by rememberSaveable(selectedFoodDiaryCategoryIndex) {
+    val selectedFoodDiaryCategory by remember(selectedFoodDiaryCategoryIndex) {
         derivedStateOf {
             foodDiaryCategories[selectedFoodDiaryCategoryIndex]
         }
