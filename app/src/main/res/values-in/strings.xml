@@ -33,8 +33,8 @@
     <string name="email_address_label">Alamat Email</string>
     <string name="email_address_error_text">Tolong masukkan alamat email yang valid</string>
     <string name="supporting_text_required">*wajib</string>
-    <string name="password_placeholder">Buat kata sandimu</string>
-    <string name="old_password_placeholder">Masukkan kata sandi lamamu</string>
+    <string name="password_placeholder">Apa kata sandimu?</string>
+    <string name="old_password_placeholder">Apa kata sandi lamamu?</string>
     <string name="api_url_placeholder">Masukkan API URL</string>>
     <string name="new_password_placeholder">Buat kata sandi barumu</string>
     <string name="password_error_text">Kata sandi minimal 8 karakter serta terdiri dari huruf kecil, huruf besar, angka, spesial karakter dan tanpa spasi</string>
