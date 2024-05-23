@@ -169,7 +169,7 @@ private fun LandingContent(
                 modifier = Modifier
                     .wrapContentWidth()
                     .clip(MaterialTheme.shapes.extraLarge)
-                    .clickable(onClick = navigateToSignIn)
+                    .clickable(onClick = {})
                     .padding(4.dp)
             )
         }
