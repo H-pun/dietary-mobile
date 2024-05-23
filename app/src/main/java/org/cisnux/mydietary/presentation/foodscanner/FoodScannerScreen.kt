@@ -727,7 +727,6 @@ private fun QuestionDialog(
             }
         ) { paddingValues ->
             LazyColumn(
-                reverseLayout = true,
                 contentPadding = paddingValues,
                 verticalArrangement = Arrangement.Bottom,
                 modifier = Modifier
