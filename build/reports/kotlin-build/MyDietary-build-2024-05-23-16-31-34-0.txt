@@ -1,0 +1,492 @@
+Gradle start parameters:
+  tasks = [:app:assembleRelease]
+  excluded tasks = []
+  current dir = /Users/cisnux/temp/dietary-capstone
+  project properties args = [android.studio.version: 233.14808.21.2331.11842104, android.injected.signing.store.password: fajrapredator12, android.injected.attribution.file.location: /Users/cisnux/temp/dietary-capstone/.gradle, android.injected.signing.key.password: @Fajrapredator12, android.injected.invoked.from.ide: true, android.injected.apk.location: /Users/cisnux/my-capstones/Dietary/app, android.injected.signing.key.alias: key0, android.injected.signing.store.file: /Users/cisnux/my-capstones/cisnux]
+  system properties args = [idea.active: true, idea.version: 2023.3, idea.vendor.name: Google]
+
+Time metrics:
+  Total Gradle task time: 34.09 s
+  Spent time before task action: 0.23 s
+  Task action before worker execution: 0.34 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 7.77 s
+    Clear output: 0.05 s
+    Precise backup output: 0.00 s
+    Cleaning up the backup stash: 0.00 s
+    Connect to Kotlin daemon: 0.66 s
+    Run compilation: 2.84 s
+      Non incremental compilation in daemon: 4.27 s
+      Incremental compilation in daemon: 2.82 s
+        Calculate initial dirty sources set: 0.01 s
+          Detect removed classes: 0.01 s
+        Update caches: 0.01 s
+        Sources compilation round: 2.69 s
+          Compiler initialization time: 0.11 s
+          Compiler code analysis: 1.33 s
+          Compiler IR translation: 0.75 s
+          Compiler code generation: 0.48 s
+            Compiler IR lowering: 0.09 s
+            Compiler IR generation: 0.39 s
+        Shrink and save current classpath snapshot after compilation: 0.01 s
+  Start gradle worker: 0.01 s
+
+Size metrics:
+  Total size of the cache directory: 2.2 MB
+    ABI snapshot size: 8.9 KB
+  Increase memory usage: 427.2 MB
+  Total memory usage at the end of build: 715.9 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 431
+    Number of lines for code generation: 431
+    Analysis lines per second: 324
+    Code generation lines per second: 896
+    Compiler IR translation line number: 431
+    Compiler IR lowering line number: 431
+    Compiler IR generation line number: 431
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 146
+    Size of classpath snapshot: 7.7 MB
+    Size of shrunk classpath snapshot: 189.9 KB
+  Start time of task action: 2078-10-13T19:02:30
+
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Total time for Kotlin tasks: 3.05 s (9.0 % of all tasks time)
+Time  |% of Kotlin time|Task                     
+3.05 s|100.0 %         |:app:compileReleaseKotlin
+
+Task ':app:lintVitalAnalyzeRelease' finished in 11.63 s
+Time metrics:
+  Total Gradle task time: 11.63 s
+
+Task ':app:mergeDexRelease' finished in 7.83 s
+Time metrics:
+  Total Gradle task time: 7.83 s
+
+Task ':app:kspReleaseKotlin' finished in 5.38 s
+Task info:
+  Kotlin language version: 1.9
+Compilation log for task ':app:kspReleaseKotlin':
+  Compiler perf stats:
+  INIT: Compiler initialized in 1386 ms
+          ANALYZE    2830 ms    6648.763 loc/s
+  Find Java class performed 66 times, total time 44 ms
+  Type info performed 1386 times, total time 1965 ms
+  Call resolve performed 1592 times, total time 1783 ms
+  Binary class from Kotlin file performed 31288 times, total time 7890 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 66 times, total time 7 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 66 times, total time 19 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 2 ms
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 0 ms
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 0 ms
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 1 ms
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 1 ms
+  Find Java class performed 52 times, total time 10 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 1 ms
+  Find Java class performed 15 times, total time 145 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 3 ms
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 5 ms
+  Find Java class performed 52 times, total time 11 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 0 ms
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 3 times, total time 13 ms
+  Find Java class performed 15 times, total time 2 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 2 ms
+  Find Java class performed 15 times, total time 6 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 30 ms
+  Find Java class performed 15 times, total time 7 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 7 ms
+  Find Java class performed 15 times, total time 1 ms
+Time metrics:
+  Total Gradle task time: 5.38 s
+  Spent time before task action: 0.15 s
+  Task action before worker execution: 0.28 s
+  Run compilation in Gradle worker: 4.93 s
+    Clear output: 0.05 s
+    Connect to Kotlin daemon: 0.66 s
+    Non incremental compilation in daemon: 4.27 s
+  Start gradle worker: 0.00 s
+Size metrics:
+  Increase memory usage: 187.4 MB
+  Total memory usage at the end of build: 236.9 MB
+  Start time of task action: 2024-05-23T09:31:12
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Task ':app:compileReleaseKotlin' finished in 3.05 s
+Task info:
+  Kotlin language version: 2.0
+Compilation log for task ':app:compileReleaseKotlin':
+  Classpath changes info passed from Gradle task: NoChanges
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordContent.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordContent.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordBody.1.5.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordBody.1.2.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordContentDarkPreview.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordContentDarkPreview.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordScreen.3.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordContentLoadingDarkPreview.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.ComposableSingletons.NewPasswordScreenKt)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.ComposableSingletons.NewPasswordScreenKt.lambda-1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.ComposableSingletons.NewPasswordScreenKt.lambda-2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.ComposableSingletons.NewPasswordScreenKt.lambda-3.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.ComposableSingletons.NewPasswordScreenKt.lambda-4.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordBody.1.7)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordBody.1.6)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordBody.1.5)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordBody.1.3)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordBody.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.ComposableSingletons.NewPasswordScreenKt.lambda-5.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordContentPreview.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.ComposableSingletons.NewPasswordScreenKt.lambda-6.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordScreen.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordScreen.4)
+  Process SignatureChanged(fqName = .kotlin_module)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordContentPreview.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.newpassword.NewPasswordScreenKt.NewPasswordContentLoadingDarkPreview.1.1)
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/0.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/1.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/2.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-3$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-3$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/3.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-4$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-4$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/4.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-5$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-5$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/5.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-6$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/ComposableSingletons$NewPasswordScreenKt$lambda-6$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/6.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/7.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordScreen$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordScreen$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/8.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordScreen$3$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordScreen$3$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/9.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordScreen$4.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordScreen$4.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/10.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentPreview$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentPreview$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/11.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentPreview$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentPreview$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/12.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentDarkPreview$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentDarkPreview$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/13.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentDarkPreview$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentDarkPreview$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/14.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentLoadingDarkPreview$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentLoadingDarkPreview$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/15.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentLoadingDarkPreview$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContentLoadingDarkPreview$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/16.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/17.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$2$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$2$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/18.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$3.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$3.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/19.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$5.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$5.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/20.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$5$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$5$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/21.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$6.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$6.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/22.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$7.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordBody$1$7.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/23.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContent$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContent$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/24.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContent$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreenKt$NewPasswordContent$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/25.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/META-INF/app_release.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/release/META-INF/app_release.kotlin_module to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/26.backup
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileReleaseKotlin/cacheable/dirty-sources.txt file as newly added
+  Compile iteration:
+    app/src/main/java/org/cisnux/mydietary/presentation/newpassword/NewPasswordScreen.kt <- was modified since last time
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileReleaseKotlin/cacheable/dirty-sources.txt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileReleaseKotlin/cacheable/last-build.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/27.backup
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileReleaseKotlin/local-state/build-history.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/28.backup
+  [ClasspathSnapshot] Shrunk current classpath snapshot after compilation (shrink mode = UnchangedLookupsUnchangedClasspath), no updates since previous run
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileReleaseKotlin/cacheable/caches-jvm/lookups/counters.tab to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4326156026331166023/29.backup
+  Cleaning up stash
+  Incremental compilation completed
+Time metrics:
+  Total Gradle task time: 3.05 s
+  Spent time before task action: 0.09 s
+  Task action before worker execution: 0.06 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 2.85 s
+    Precise backup output: 0.00 s
+    Cleaning up the backup stash: 0.00 s
+    Connect to Kotlin daemon: 0.01 s
+    Run compilation: 2.84 s
+      Incremental compilation in daemon: 2.82 s
+        Calculate initial dirty sources set: 0.01 s
+          Detect removed classes: 0.01 s
+        Update caches: 0.01 s
+        Sources compilation round: 2.69 s
+          Compiler initialization time: 0.11 s
+          Compiler code analysis: 1.33 s
+          Compiler IR translation: 0.75 s
+          Compiler code generation: 0.48 s
+            Compiler IR lowering: 0.09 s
+            Compiler IR generation: 0.39 s
+        Shrink and save current classpath snapshot after compilation: 0.01 s
+  Start gradle worker: 0.01 s
+Size metrics:
+  Total size of the cache directory: 2.2 MB
+    ABI snapshot size: 8.9 KB
+  Increase memory usage: 239.8 MB
+  Total memory usage at the end of build: 479.0 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 431
+    Number of lines for code generation: 431
+    Analysis lines per second: 324
+    Code generation lines per second: 896
+    Compiler IR translation line number: 431
+    Compiler IR lowering line number: 431
+    Compiler IR generation line number: 431
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 146
+    Size of classpath snapshot: 7.7 MB
+    Size of shrunk classpath snapshot: 189.9 KB
+  Start time of task action: 2024-05-23T09:31:17
+GC metrics:
+  PS MarkSweep:
+    GC count: 0
+    GC time: 0.00 s
+  PS Scavenge:
+    GC count: 0
+    GC time: 0.00 s
+
+Task ':app:dexBuilderRelease' finished in 1.50 s
+Time metrics:
+  Total Gradle task time: 1.50 s
+
+Task ':app:hiltAggregateDepsRelease' finished in 1.24 s
+Time metrics:
+  Total Gradle task time: 1.24 s
+
+Task ':app:transformReleaseClassesWithAsm' finished in 1.00 s
+Time metrics:
+  Total Gradle task time: 1.00 s
+
+Task ':app:packageRelease' finished in 0.85 s
+Time metrics:
+  Total Gradle task time: 0.85 s
+
+Task ':app:compileReleaseArtProfile' finished in 0.43 s
+Time metrics:
+  Total Gradle task time: 0.43 s
+
+Task ':app:extractIncludeReleaseProto' finished in 0.28 s
+Time metrics:
+  Total Gradle task time: 0.28 s
+
+Task ':app:generateReleaseLintVitalReportModel' finished in 0.24 s
+Time metrics:
+  Total Gradle task time: 0.24 s
+
+Task ':app:mergeExtDexRelease' finished in 0.10 s
+Time metrics:
+  Total Gradle task time: 0.10 s
+
+Task ':app:checkReleaseDuplicateClasses' finished in 0.09 s
+Time metrics:
+  Total Gradle task time: 0.09 s
+
+Task ':app:hiltJavaCompileRelease' finished in 0.09 s
+Time metrics:
+  Total Gradle task time: 0.09 s
+
+Task ':app:lintVitalRelease' finished in 0.07 s
+Time metrics:
+  Total Gradle task time: 0.07 s
+
+Task ':app:mergeReleaseGlobalSynthetics' finished in 0.06 s
+Time metrics:
+  Total Gradle task time: 0.06 s
+
+Task ':app:processReleaseMainManifest' finished in 0.05 s
+Time metrics:
+  Total Gradle task time: 0.05 s
+
+Task ':app:compileReleaseJavaWithJavac' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:mapReleaseSourceSetPaths' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:mergeReleaseJavaResource' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:processReleaseResources' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:checkReleaseAarMetadata' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeReleaseNativeLibs' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeReleaseResources' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:buildKotlinToolingMetadata' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:processReleaseJavaRes' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:lintVitalReportRelease' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:extractDeepLinksRelease' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeReleaseArtProfile' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeReleaseAssets' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:collectReleaseDependencies' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeReleaseNativeDebugMetadata' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:packageReleaseResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:desugarReleaseFileDependencies' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeReleaseStartupProfile' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateReleaseProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:parseReleaseLocalResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:javaPreCompileRelease' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractReleaseProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateReleaseResValues' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processReleaseGoogleServices' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:createReleaseCompatibleScreenManifests' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:stripReleaseDebugSymbols' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractReleaseNativeSymbolTables' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:optimizeReleaseResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:validateSigningRelease' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:checkKotlinGradlePluginConfigurationErrors' was skipped: SKIPPED
+
+Task ':app:preBuild' finished in 0.00 s
+
+Task ':app:preReleaseBuild' finished in 0.00 s
+
+Task ':app:generateReleaseResources' finished in 0.00 s
+
+Task ':app:processReleaseManifest' finished in 0.00 s
+
+Task ':app:processReleaseManifestForPackage' finished in 0.00 s
+
+Task ':app:extractProguardFiles' finished in 0.00 s
+
+Task ':app:mergeReleaseJniLibFolders' finished in 0.00 s
+
+Task ':app:mergeReleaseShaders' finished in 0.00 s
+
+Task ':app:compileReleaseShaders' was skipped: NO-SOURCE
+
+Task ':app:generateReleaseAssets' finished in 0.00 s
+
+Task ':app:compressReleaseAssets' finished in 0.00 s
+
+Task ':app:extractReleaseVersionControlInfo' finished in 0.00 s
+
+Task ':app:sdkReleaseDependencyData' finished in 0.00 s
+
+Task ':app:writeReleaseAppMetadata' finished in 0.00 s
+
+Task ':app:writeReleaseSigningConfigVersions' finished in 0.00 s
+
+Task ':app:createReleaseApkListingFileRedirect' finished in 0.00 s
+
+Task ':app:assembleRelease' finished in 0.00 s
+

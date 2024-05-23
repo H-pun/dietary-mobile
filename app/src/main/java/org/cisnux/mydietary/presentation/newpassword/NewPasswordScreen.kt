@@ -141,7 +141,7 @@ fun NewPasswordScreen(
     name = "light",
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
     wallpaper = Wallpapers.NONE,
-    device = "id:pixel_7_pro"
+    device = "id:pixel_7_pro", locale = "in"
 )
 @Composable
 private fun NewPasswordContentPreview() {
