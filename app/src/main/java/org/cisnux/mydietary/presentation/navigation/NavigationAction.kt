@@ -88,15 +88,6 @@ class NavComponentAction(
             }
         }
     }
-    val navigateToSignOut: () -> Unit = {
-        navController.navigate(route = AppDestination.SignInRoute.route) {
-            popUpTo(AppDestination.MyProfileRoute.route) {
-                inclusive = true
-            }
-            launchSingleTop = true
-            restoreState = true
-        }
-    }
     val navigateToResetPassword: () -> Unit = {
         navController.navigate(AppDestination.ResetPasswordRoute.route)
     }
