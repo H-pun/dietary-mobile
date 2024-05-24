@@ -3,6 +3,7 @@
 
     <style name="Theme.MyDietary" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorScheme">@color/md_theme_light_on_secondary_container</item>
         <item name="background">@color/md_theme_light_surface</item>
         <item name="colorAccent">@color/md_theme_light_surface_variant</item>
         <item name="colorPrimaryDark">@color/md_theme_light_on_surface</item>

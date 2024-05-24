@@ -8,8 +8,6 @@
     <color name="md_theme_dark_surface_variant">#FF424940</color>
     <color name="md_theme_light_on_surface">#FF181D17</color>
     <color name="md_theme_dark_on_surface">#FFE0E4DB</color>
-    <color name="light_blue_50">#FFE1F5FE</color>
-    <color name="light_blue_200">#FF81D4FA</color>
-    <color name="light_blue_600">#FF039BE5</color>
-    <color name="light_blue_900">#FF01579B</color>
+    <color name="md_theme_light_on_secondary_container">#FFD5E8CF</color>
+    <color name="md_theme_dark_on_secondary_container">#FFD5E8CF</color>
 </resources>

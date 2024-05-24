@@ -49,7 +49,10 @@ fun LandingScreen(
             landingViewModel.updateLandingStatus(true)
             navigateToSignIn(AppDestination.LandingRoute.route)
         },
-        navigateToIntroduction = navigateToIntroduction,
+        navigateToIntroduction = {
+            landingViewModel.updateLandingStatus(true)
+            navigateToIntroduction()
+        },
         modifier = modifier
     )
 }

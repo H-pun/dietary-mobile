@@ -199,4 +199,10 @@
     <string name="calories_and_carbohydrates_line_chart_title">Kalori dan Karbohidrat</string>
     <string name="proteins_and_fats_line_chart_title">Protein dan Lemak</string>
     <string name="food_diary_is_not_found">Diary makanan tidak ditemukan</string>
+    <string name="food_introduction_title"><![CDATA[Temukan Keseimbangan Sempurna: Pilihan Lezat & Sehat Menantimu]]></string>
+    <string name="take_picture_introduction_title">Foto untuk Tahu: Rahasia Nutrisi Makananmu Terungkap</string>
+    <string name="report_introduction_title">Lihat Kemajuanmu, Kendalikan Kesehatanmu: Pantau Perjalananmu Menuju Hidup Sehat!</string>
+    <string name="food_introduction_description">Lagi pengen makan enak tanpa mengganggu tujuan kesehatanmu? Jangan khawatir! Aplikasi kami adalah panduan pribadimu untuk menjelajahi dunia makanan, di mana rasa dan nutrisi berjalan beriringan.</string>
+    <string name="take_picture_introduction_description">Foto makananmu dan kami akan mengurai nutrisinya, kalorinya, dan semua yang perlu kamu tahu untuk tetap pada jalur tujuan kesehatanmu!</string>
+    <string name="report_introduction_description">Kamu sudah catat makananmu, sekarang saatnya lihat kemajuanmu! Pantau nutrisi, berat badan, dan perubahan lingkar pinggang dari waktu ke waktu untuk membuat pilihan yang tepat dan merayakan pencapaianmu!</string>
 </resources>

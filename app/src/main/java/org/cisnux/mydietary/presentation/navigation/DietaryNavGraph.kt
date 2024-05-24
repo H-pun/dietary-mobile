@@ -25,6 +25,7 @@ import org.cisnux.mydietary.presentation.devmode.DevModeScreen
 import org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreen
 import org.cisnux.mydietary.presentation.foodscanner.FoodScannerScreen
 import org.cisnux.mydietary.presentation.home.HomeScreen
+import org.cisnux.mydietary.presentation.introduction.IntroductionScreen
 import org.cisnux.mydietary.presentation.landing.LandingScreen
 import org.cisnux.mydietary.presentation.myprofile.MyProfileScreen
 import org.cisnux.mydietary.presentation.newpassword.NewPasswordScreen
@@ -113,8 +114,41 @@ fun DietaryNavGraph(
         ) {
             LandingScreen(
                 navigateToSignIn = navComponentAction.navigateToSignIn,
-                navigateToIntroduction = {},
+                navigateToIntroduction = navComponentAction.navigateToIntroduction,
             )
+        }
+        composable(
+            route = AppDestination.IntroductionRoute.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(durationMillis = 100)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        100, easing = LinearEasing
+                    )
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(durationMillis = 100)
+                )
+            },
+            popExitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        100, easing = LinearEasing
+                    )
+                )
+            }
+        ) {
+            IntroductionScreen(navigateUp = navComponentAction.navigateUp) {
+                navComponentAction.navigateToSignIn(AppDestination.IntroductionRoute.route)
+            }
         }
         composable(
             route = AppDestination.SignInRoute.route,

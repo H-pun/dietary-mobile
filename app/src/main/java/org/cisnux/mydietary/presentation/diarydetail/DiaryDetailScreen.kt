@@ -66,7 +66,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import kotlinx.coroutines.delay
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.Food

@@ -88,6 +88,9 @@ class NavComponentAction(
             }
         }
     }
+    val navigateToIntroduction: () -> Unit = {
+        navController.navigate(route = AppDestination.IntroductionRoute.route)
+    }
     val navigateToResetPassword: () -> Unit = {
         navController.navigate(AppDestination.ResetPasswordRoute.route)
     }

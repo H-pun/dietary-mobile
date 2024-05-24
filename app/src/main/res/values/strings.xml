@@ -199,4 +199,10 @@
     <string name="calories_and_carbohydrates_line_chart_title">Calories and Carbohydrates</string>
     <string name="proteins_and_fats_line_chart_title">Proteins and Fats</string>
     <string name="food_diary_is_not_found">Food diary is not found</string>
+    <string name="food_introduction_title"><![CDATA[Discover Your Perfect Balance: Flavorful & Healthy Choices Await]]></string>
+    <string name="take_picture_introduction_title">Snap It to Know It: Your Food\'s Nutritional Secrets Revealed</string>
+    <string name="report_introduction_title">See Your Progress, Own Your Health: Track Your Journey to a Healthier You!</string>
+    <string name="food_introduction_description">Craving a delicious meal that won\'t derail your health goals? Look no further! Our app is your personalized guide to navigating the world of food, where taste and nutrition go hand in hand.</string>
+    <string name="take_picture_introduction_description">Snap a pic and we\'ll break down the nutrients, calories, and everything else you need to know to keep your health goals on track!</string>
+    <string name="report_introduction_description">You\'ve logged your meals, now let\'s visualize your progress! Track your nutrition, weight, and waistline changes over time to make informed choices and celebrate your achievements!</string>
 </resources>

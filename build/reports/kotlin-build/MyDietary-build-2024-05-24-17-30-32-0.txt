@@ -1,0 +1,290 @@
+Gradle start parameters:
+  tasks = [:app:compileDebugSources]
+  excluded tasks = []
+  current dir = /Users/cisnux/temp/dietary-capstone
+  project properties args = [android.studio.version: 233.14808.21.2331.11842104, android.injected.attribution.file.location: /Users/cisnux/temp/dietary-capstone/.gradle, android.injected.invoked.from.ide: true]
+  system properties args = [idea.active: true, idea.version: 2023.3, idea.vendor.name: Google]
+
+Time metrics:
+  Total Gradle task time: 9.48 s
+  Spent time before task action: 0.41 s
+  Task action before worker execution: 0.32 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 5.20 s
+    Clear jar cache: 0.00 s
+    Clear output: 0.02 s
+    Precise backup output: 0.00 s
+    Cleaning up the backup stash: 0.00 s
+    Connect to Kotlin daemon: 0.39 s
+    Run compilation: 2.52 s
+      Non incremental compilation in daemon: 2.28 s
+      Incremental compilation in daemon: 2.49 s
+        Calculate initial dirty sources set: 0.02 s
+          Detect removed classes: 0.01 s
+        Update caches: 0.02 s
+        Sources compilation round: 2.36 s
+          Compiler initialization time: 0.07 s
+          Compiler code analysis: 1.09 s
+          Compiler IR translation: 0.45 s
+          Compiler code generation: 0.71 s
+            Compiler IR lowering: 0.31 s
+            Compiler IR generation: 0.40 s
+        Write history file: 0.00 s
+        Shrink and save current classpath snapshot after compilation: 0.00 s
+  Start gradle worker: 0.02 s
+
+Size metrics:
+  Total size of the cache directory: 2.9 MB
+    ABI snapshot size: 589 B
+  Increase memory usage: 57.5 MB
+  Total memory usage at the end of build: 195.5 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 210
+    Number of lines for code generation: 210
+    Analysis lines per second: 192
+    Code generation lines per second: 295
+    Compiler IR translation line number: 210
+    Compiler IR lowering line number: 210
+    Compiler IR generation line number: 210
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 150
+    Size of classpath snapshot: 7.8 MB
+    Size of shrunk classpath snapshot: 191.6 KB
+  Start time of task action: 2078-10-15T21:00:55
+
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Total time for Kotlin tasks: 2.75 s (29.0 % of all tasks time)
+Time  |% of Kotlin time|Task                   
+2.75 s|100.0 %         |:app:compileDebugKotlin
+
+Task ':app:kspDebugKotlin' finished in 3.25 s
+Task info:
+  Kotlin language version: 1.9
+Compilation log for task ':app:kspDebugKotlin':
+  Compiler perf stats:
+  INIT: Compiler initialized in 506 ms
+          ANALYZE    1724 ms   11038.863 loc/s
+  Find Java class performed 15 times, total time 1 ms
+  Type info performed 0 times
+  Call resolve performed 0 times
+  Binary class from Kotlin file performed 204 times, total time 47 ms
+Time metrics:
+  Total Gradle task time: 3.25 s
+  Spent time before task action: 0.27 s
+  Task action before worker execution: 0.28 s
+  Run compilation in Gradle worker: 2.67 s
+    Clear jar cache: 0.00 s
+    Clear output: 0.02 s
+    Connect to Kotlin daemon: 0.38 s
+    Non incremental compilation in daemon: 2.28 s
+  Start gradle worker: 0.01 s
+Size metrics:
+  Increase memory usage: 85.6 MB
+  Total memory usage at the end of build: 110.3 MB
+  Start time of task action: 2024-05-24T10:30:26
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Task ':app:compileDebugKotlin' finished in 2.75 s
+Task info:
+  Kotlin language version: 2.0
+Compilation log for task ':app:compileDebugKotlin':
+  Classpath changes info passed from Gradle task: NoChanges
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.ComposableSingletons.IntroductionScreenKt.lambda-8.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.IntroductionScreenKt)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.ComposableSingletons.IntroductionScreenKt.lambda-7.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.ComposableSingletons.IntroductionScreenKt.lambda-9.1)
+  Process SignatureChanged(fqName = .kotlin_module)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.IntroductionScreenKt.IntroductionBody.4.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.IntroductionScreenKt.IntroductionBody.5.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.IntroductionScreenKt.IntroductionBody.3.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.ComposableSingletons.IntroductionScreenKt.lambda-4.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.ComposableSingletons.IntroductionScreenKt.lambda-3.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.IntroductionScreenKt.IntroductionContent.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.ComposableSingletons.IntroductionScreenKt.lambda-6.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.ComposableSingletons.IntroductionScreenKt.lambda-5.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.ComposableSingletons.IntroductionScreenKt.lambda-2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.ComposableSingletons.IntroductionScreenKt)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.introduction.ComposableSingletons.IntroductionScreenKt.lambda-1.1)
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/0.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/1.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/2.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-3$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-3$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/3.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-4$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-4$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/4.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-5$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-5$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/5.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-6$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-6$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/6.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-7$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-7$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/7.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-8$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-8$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/8.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-9$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/ComposableSingletons$IntroductionScreenKt$lambda-9$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/9.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/IntroductionScreenKt.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/IntroductionScreenKt.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/10.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/IntroductionScreenKt$IntroductionContent$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/IntroductionScreenKt$IntroductionContent$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/11.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/IntroductionScreenKt$IntroductionBody$3$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/IntroductionScreenKt$IntroductionBody$3$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/12.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/IntroductionScreenKt$IntroductionBody$4$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/IntroductionScreenKt$IntroductionBody$4$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/13.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/IntroductionScreenKt$IntroductionBody$5$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/introduction/IntroductionScreenKt$IntroductionBody$5$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/14.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/15.backup
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/dirty-sources.txt file as newly added
+  Compile iteration:
+    app/src/main/java/org/cisnux/mydietary/presentation/introduction/IntroductionScreen.kt <- was modified since last time
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/dirty-sources.txt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/last-build.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/16.backup
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/local-state/build-history.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/17.backup
+  [ClasspathSnapshot] Shrunk current classpath snapshot after compilation (shrink mode = UnchangedLookupsUnchangedClasspath), no updates since previous run
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/lookups/counters.tab to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups17380113719304669402/18.backup
+  Cleaning up stash
+  Incremental compilation completed
+Time metrics:
+  Total Gradle task time: 2.75 s
+  Spent time before task action: 0.13 s
+  Task action before worker execution: 0.04 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 2.53 s
+    Precise backup output: 0.00 s
+    Cleaning up the backup stash: 0.00 s
+    Connect to Kotlin daemon: 0.01 s
+    Run compilation: 2.52 s
+      Incremental compilation in daemon: 2.49 s
+        Calculate initial dirty sources set: 0.02 s
+          Detect removed classes: 0.01 s
+        Update caches: 0.02 s
+        Sources compilation round: 2.36 s
+          Compiler initialization time: 0.07 s
+          Compiler code analysis: 1.09 s
+          Compiler IR translation: 0.45 s
+          Compiler code generation: 0.71 s
+            Compiler IR lowering: 0.31 s
+            Compiler IR generation: 0.40 s
+        Write history file: 0.00 s
+        Shrink and save current classpath snapshot after compilation: 0.00 s
+  Start gradle worker: 0.01 s
+Size metrics:
+  Total size of the cache directory: 2.9 MB
+    ABI snapshot size: 589 B
+  Increase memory usage: -29471104 B
+  Total memory usage at the end of build: 85.3 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 210
+    Number of lines for code generation: 210
+    Analysis lines per second: 192
+    Code generation lines per second: 295
+    Compiler IR translation line number: 210
+    Compiler IR lowering line number: 210
+    Compiler IR generation line number: 210
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 150
+    Size of classpath snapshot: 7.8 MB
+    Size of shrunk classpath snapshot: 191.6 KB
+  Start time of task action: 2024-05-24T10:30:29
+GC metrics:
+  PS MarkSweep:
+    GC count: 2
+    GC time: 0.16 s
+  PS Scavenge:
+    GC count: 4
+    GC time: 0.06 s
+
+Task ':app:processDebugResources' finished in 1.27 s
+Time metrics:
+  Total Gradle task time: 1.27 s
+
+Task ':app:mergeDebugResources' finished in 0.77 s
+Time metrics:
+  Total Gradle task time: 0.77 s
+
+Task ':app:compileDebugJavaWithJavac' finished in 0.51 s
+Time metrics:
+  Total Gradle task time: 0.51 s
+
+Task ':app:extractIncludeDebugProto' finished in 0.24 s
+Time metrics:
+  Total Gradle task time: 0.24 s
+
+Task ':app:parseDebugLocalResources' finished in 0.20 s
+Time metrics:
+  Total Gradle task time: 0.20 s
+
+Task ':app:processDebugMainManifest' finished in 0.17 s
+Time metrics:
+  Total Gradle task time: 0.17 s
+
+Task ':app:mapDebugSourceSetPaths' finished in 0.10 s
+Time metrics:
+  Total Gradle task time: 0.10 s
+
+Task ':app:checkDebugAarMetadata' finished in 0.06 s
+Time metrics:
+  Total Gradle task time: 0.06 s
+
+Task ':app:packageDebugResources' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:javaPreCompileDebug' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:extractDebugProto' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:generateDebugProto' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:generateDebugResources' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:processDebugGoogleServices' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:generateDebugResValues' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:extractDeepLinksDebug' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:createDebugCompatibleScreenManifests' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugManifestForPackage' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugManifest' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:checkKotlinGradlePluginConfigurationErrors' was skipped: SKIPPED
+
+Task ':app:preBuild' finished in 0.00 s
+
+Task ':app:preDebugBuild' finished in 0.00 s
+
+Task ':app:compileDebugSources' finished in 0.00 s
+
