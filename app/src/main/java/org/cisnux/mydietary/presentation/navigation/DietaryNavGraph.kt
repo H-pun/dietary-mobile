@@ -548,7 +548,12 @@ fun DietaryNavGraph(
         ) {
             ReportScreen(
                 navigateForBottomNav = navComponentAction.navigationDestination,
-                navigateToSignIn = navComponentAction.navigateToSignIn,
+                navigateToSignIn = {
+                    navComponentAction.navigateToSignIn(it)
+                    coroutineScope.launch {
+                        ReportWidget().updateAll(context)
+                    }
+                },
                 navigateUp = { activity.finish() }
             )
         }
@@ -653,7 +658,12 @@ fun DietaryNavGraph(
                         else navComponentAction.navigateToHomeClearAll()
                     }
                 },
-                navigateToSignIn = navComponentAction.navigateToSignIn,
+                navigateToSignIn = { destination ->
+                    navComponentAction.navigateToSignIn(destination)
+                    coroutineScope.launch {
+                        ReportWidget().updateAll(context)
+                    }
+                },
             )
         }
         composable(

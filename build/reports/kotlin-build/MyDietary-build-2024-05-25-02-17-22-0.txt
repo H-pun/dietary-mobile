@@ -1,0 +1,435 @@
+Gradle start parameters:
+  tasks = [:app:assembleDebug]
+  excluded tasks = []
+  current dir = /Users/cisnux/temp/dietary-capstone
+  project properties args = [android.studio.version: 233.14808.21.2331.11842104, android.injected.enableStableIds: true, android.injected.attribution.file.location: /Users/cisnux/temp/dietary-capstone/.gradle, android.injected.build.api: 34, android.injected.build.abi: arm64-v8a, android.injected.invoked.from.ide: true]
+  system properties args = [idea.active: true, idea.version: 2023.3, idea.vendor.name: Google]
+
+Time metrics:
+  Total Gradle task time: 3.72 s
+  Spent time before task action: 0.10 s
+  Task action before worker execution: 0.46 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 2.09 s
+    Clear output: 0.01 s
+    Precise backup output: 0.00 s
+    Cleaning up the backup stash: 0.00 s
+    Connect to Kotlin daemon: 0.07 s
+    Run compilation: 0.73 s
+      Non incremental compilation in daemon: 1.29 s
+      Incremental compilation in daemon: 0.71 s
+        Calculate initial dirty sources set: 0.01 s
+          Detect removed classes: 0.01 s
+        Update caches: 0.01 s
+        Sources compilation round: 0.62 s
+          Compiler initialization time: 0.08 s
+          Compiler code analysis: 0.31 s
+          Compiler IR translation: 0.14 s
+          Compiler code generation: 0.08 s
+            Compiler IR lowering: 0.04 s
+            Compiler IR generation: 0.04 s
+  Start gradle worker: 0.01 s
+
+Size metrics:
+  Total size of the cache directory: 4.3 MB
+    ABI snapshot size: 6.4 KB
+  Increase memory usage: 62.1 MB
+  Total memory usage at the end of build: 829.0 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 742
+    Number of lines for code generation: 742
+    Analysis lines per second: 2370
+    Code generation lines per second: 9392
+    Compiler IR translation line number: 742
+    Compiler IR lowering line number: 742
+    Compiler IR generation line number: 742
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 150
+    Size of classpath snapshot: 7.7 MB
+    Size of shrunk classpath snapshot: 191.4 KB
+  Start time of task action: 2078-10-16T14:34:40
+
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Total time for Kotlin tasks: 0.85 s (22.9 % of all tasks time)
+Time  |% of Kotlin time|Task                   
+0.85 s|100.0 %         |:app:compileDebugKotlin
+
+Task ':app:kspDebugKotlin' finished in 1.86 s
+Task info:
+  Kotlin language version: 1.9
+Compilation log for task ':app:kspDebugKotlin':
+  Compiler perf stats:
+  INIT: Compiler initialized in 216 ms
+          ANALYZE    1027 ms   18730.282 loc/s
+  Find Java class performed 66 times, total time 54 ms
+  Type info performed 515 times, total time 868 ms
+  Call resolve performed 603 times, total time 862 ms
+  Binary class from Kotlin file performed 11349 times, total time 1552 ms
+  Find Java class performed 0 times
+  Find Java class performed 33 times, total time 13 ms
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 1 ms
+  Find Java class performed 27 times, total time 1 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 1 ms
+  Find Java class performed 27 times, total time 1 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 1 ms
+  Find Java class performed 15 times, total time 0 ms
+Time metrics:
+  Total Gradle task time: 1.86 s
+  Spent time before task action: 0.05 s
+  Task action before worker execution: 0.43 s
+  Run compilation in Gradle worker: 1.36 s
+    Clear output: 0.01 s
+    Connect to Kotlin daemon: 0.07 s
+    Non incremental compilation in daemon: 1.29 s
+  Start gradle worker: 0.01 s
+Size metrics:
+  Increase memory usage: 187.0 MB
+  Total memory usage at the end of build: 476.5 MB
+  Start time of task action: 2024-05-24T19:17:19
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Task ':app:compileDebugKotlin' finished in 0.85 s
+Task info:
+  Kotlin language version: 2.0
+Compilation log for task ':app:compileDebugKotlin':
+  Classpath changes info passed from Gradle task: NoChanges
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.58)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.13)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.38)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.18)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.18.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.83)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.63)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.83.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.23)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.45)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.88)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.75.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.58.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.3)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.63.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.69)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.8)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.83.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.28)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.33.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.33.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.94)
+  Process SignatureChanged(fqName = .kotlin_module)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.53)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.75)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.33)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.navigation.DietaryNavGraphKt.DietaryNavGraph.1.69.1.1)
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/0.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$3.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$3.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/1.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$8.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$8.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/2.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$13.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$13.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/3.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$18.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$18.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/4.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$18$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$18$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/5.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$23.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$23.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/6.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$28.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$28.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/7.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$33.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$33.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/8.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$33$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$33$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/9.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$33$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$33$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/10.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$38.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$38.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/11.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$45.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$45.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/12.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$53.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$53.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/13.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$58.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$58.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/14.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$58$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$58$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/15.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$63.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$63.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/16.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$63$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$63$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/17.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$69.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$69.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/18.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$69$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$69$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/19.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$75.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$75.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/20.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$75$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$75$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/21.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$83.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$83.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/22.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$83$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$83$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/23.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$83$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$83$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/24.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$88.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$88.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/25.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$94.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/navigation/DietaryNavGraphKt$DietaryNavGraph$1$94.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/26.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/27.backup
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/dirty-sources.txt file as newly added
+  Compile iteration:
+    app/src/main/java/org/cisnux/mydietary/presentation/navigation/DietaryNavGraph.kt <- was modified since last time
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/dirty-sources.txt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/last-build.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/28.backup
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/local-state/build-history.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/29.backup
+  [ClasspathSnapshot] Shrunk current classpath snapshot after compilation (shrink mode = UnchangedLookupsUnchangedClasspath), no updates since previous run
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/lookups/counters.tab to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups9634746777473340809/30.backup
+  Cleaning up stash
+  Incremental compilation completed
+Time metrics:
+  Total Gradle task time: 0.85 s
+  Spent time before task action: 0.05 s
+  Task action before worker execution: 0.03 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 0.73 s
+    Precise backup output: 0.00 s
+    Cleaning up the backup stash: 0.00 s
+    Connect to Kotlin daemon: 0.00 s
+    Run compilation: 0.73 s
+      Incremental compilation in daemon: 0.71 s
+        Calculate initial dirty sources set: 0.01 s
+          Detect removed classes: 0.01 s
+        Update caches: 0.01 s
+        Sources compilation round: 0.62 s
+          Compiler initialization time: 0.08 s
+          Compiler code analysis: 0.31 s
+          Compiler IR translation: 0.14 s
+          Compiler code generation: 0.08 s
+            Compiler IR lowering: 0.04 s
+            Compiler IR generation: 0.04 s
+  Start gradle worker: 0.00 s
+Size metrics:
+  Total size of the cache directory: 4.3 MB
+    ABI snapshot size: 6.4 KB
+  Increase memory usage: -131014072 B
+  Total memory usage at the end of build: 352.5 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 742
+    Number of lines for code generation: 742
+    Analysis lines per second: 2370
+    Code generation lines per second: 9392
+    Compiler IR translation line number: 742
+    Compiler IR lowering line number: 742
+    Compiler IR generation line number: 742
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 150
+    Size of classpath snapshot: 7.7 MB
+    Size of shrunk classpath snapshot: 191.4 KB
+  Start time of task action: 2024-05-24T19:17:21
+GC metrics:
+  PS MarkSweep:
+    GC count: 0
+    GC time: 0.00 s
+  PS Scavenge:
+    GC count: 1
+    GC time: 0.05 s
+
+Task ':app:dexBuilderDebug' finished in 0.16 s
+Time metrics:
+  Total Gradle task time: 0.16 s
+
+Task ':app:transformDebugClassesWithAsm' finished in 0.15 s
+Time metrics:
+  Total Gradle task time: 0.15 s
+
+Task ':app:hiltAggregateDepsDebug' finished in 0.15 s
+Time metrics:
+  Total Gradle task time: 0.15 s
+
+Task ':app:packageDebug' finished in 0.15 s
+Time metrics:
+  Total Gradle task time: 0.15 s
+
+Task ':app:extractIncludeDebugProto' finished in 0.14 s
+Time metrics:
+  Total Gradle task time: 0.14 s
+
+Task ':app:mergeExtDexDebug' finished in 0.05 s
+Time metrics:
+  Total Gradle task time: 0.05 s
+
+Task ':app:mergeProjectDexDebug' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:hiltJavaCompileDebug' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:checkDebugDuplicateClasses' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:compileDebugJavaWithJavac' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:mergeDebugAssets' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:mergeDebugNativeLibs' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:processDebugResources' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:javaPreCompileDebug' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:processDebugMainManifest' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeDebugJavaResource' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:checkDebugAarMetadata' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeDebugGlobalSynthetics' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:desugarDebugFileDependencies' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mapDebugSourceSetPaths' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugJavaRes' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:compileDebugShaders' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:compressDebugAssets' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugStartupProfile' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeLibDexDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:stripDebugDebugSymbols' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:writeDebugSigningConfigVersions' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugNativeDebugMetadata' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractDebugProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugResValues' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:packageDebugResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:parseDebugLocalResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugManifest' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugShaders' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugJniLibFolders' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:validateSigningDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:createDebugApkListingFileRedirect' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:preBuild' finished in 0.00 s
+
+Task ':app:preDebugBuild' finished in 0.00 s
+
+Task ':app:checkKotlinGradlePluginConfigurationErrors' was skipped: SKIPPED
+
+Task ':app:processDebugGoogleServices' finished in 0.00 s
+
+Task ':app:generateDebugResources' finished in 0.00 s
+
+Task ':app:createDebugCompatibleScreenManifests' finished in 0.00 s
+
+Task ':app:extractDeepLinksDebug' finished in 0.00 s
+
+Task ':app:processDebugManifestForPackage' finished in 0.00 s
+
+Task ':app:generateDebugAssets' finished in 0.00 s
+
+Task ':app:writeDebugAppMetadata' finished in 0.00 s
+
+Task ':app:assembleDebug' finished in 0.00 s
+

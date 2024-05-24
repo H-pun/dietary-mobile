@@ -320,6 +320,7 @@ class AuthenticationInteractor @Inject constructor(
                                 accessToken = it.second,
                                 userId = it.first
                             )
+
                             is UiState.Error -> flow { emit(uiState) }
                             is UiState.Loading -> flow { emit(uiState) }
                             is UiState.Initialize -> flow { emit(uiState) }
