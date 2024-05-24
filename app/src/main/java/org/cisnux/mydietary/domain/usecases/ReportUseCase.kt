@@ -11,6 +11,7 @@ import org.cisnux.mydietary.utils.UiState
 interface ReportUseCase {
     fun getDietProgress(scope: CoroutineScope): Flow<UiState<List<DietProgress>>>
     fun getDailyNutrition(scope: CoroutineScope): Flow<UiState<UserNutrition>>
+    fun getDailyNutritionForWidget(scope: CoroutineScope): Flow<UiState<UserNutrition>>
     fun getWeeklyNutrition(scope: CoroutineScope): Flow<UiState<WeeklyNutritionReport>>
     fun getMonthlyNutrition(scope: CoroutineScope): Flow<UiState<MonthlyNutritionReport>>
 }

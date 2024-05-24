@@ -368,6 +368,7 @@ class AuthenticationInteractor @Inject constructor(
             credentialManager.clearCredentialState(request = ClearCredentialStateRequest())
         } finally {
             authenticationRepository.deleteSession()
+            userProfileRepository.deleteCurrentUserProfile()
         }
     }
 }

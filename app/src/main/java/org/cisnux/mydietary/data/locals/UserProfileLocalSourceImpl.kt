@@ -32,4 +32,10 @@ class UserProfileLocalSourceImpl @Inject constructor(
                 .build()
         }
     }
+
+    override suspend fun delete() {
+        dataStore.updateData { userProfile ->
+            userProfile.toBuilder().clear().build()
+        }
+    }
 }

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import org.cisnux.mydietary.domain.models.DietProgress
 import org.cisnux.mydietary.domain.models.MonthlyNutritionReport
@@ -19,6 +20,7 @@ import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.models.WeeklyNutritionReport
 import org.cisnux.mydietary.domain.repositories.FoodRepository
 import org.cisnux.mydietary.domain.repositories.UserProfileRepository
+import org.cisnux.mydietary.utils.Failure
 import org.cisnux.mydietary.utils.ReportCategory
 import org.cisnux.mydietary.utils.UiState
 import org.cisnux.mydietary.utils.fromDateMonthYearToDateAndMonth
@@ -96,6 +98,47 @@ class ReportInteractor @Inject constructor(
                 started = SharingStarted.Lazily,
                 initialValue = UiState.Initialize
             )
+
+    override fun getDailyNutritionForWidget(scope: CoroutineScope): Flow<UiState<UserNutrition>> =
+        authenticationUseCase.getAccessToken(scope = scope)
+            .filterNotNull()
+            .filter { it.isNotBlank() }
+            .combine(userProfileUseCase.getUserProfileDetail()) { accessToken, userProfile ->
+                Pair(first = accessToken, userProfile)
+            }.flatMapLatest {
+                val accessToken = it.first
+                userProfileRepository.getUserNutrition(
+                    userId = it.second.userAccountId,
+                    accessToken = accessToken,
+                    date = Instant.now().fromMillisToIsoLocalDate
+                )
+                    .map { uiState ->
+                        if (uiState is UiState.Success) {
+                            // user profile
+                            val userProfile = it.second
+                            val userNutrition = uiState.data!!
+
+                            if (userProfile.userAccountId.isBlank()) UiState.Error(Failure.NotFoundFailure())
+                            else UiState.Success(
+                                data = userProfile.calculateMaxDailyNutrition(
+                                    userNutrition = userNutrition
+                                )
+                            )
+                        } else uiState
+                    }.distinctUntilChanged()
+                    .flowOn(Dispatchers.IO)
+                    .stateIn(
+                        scope = scope,
+                        started = SharingStarted.Lazily,
+                        initialValue = UiState.Initialize
+                    )
+            }.distinctUntilChanged()
+            .flowOn(Dispatchers.IO)
+            .shareIn(
+                scope = scope,
+                started = SharingStarted.WhileSubscribed(),
+            )
+
 
     override fun getWeeklyNutrition(scope: CoroutineScope): Flow<UiState<WeeklyNutritionReport>> =
         authenticationUseCase.getAccessTokenAndUserId(scope = scope).distinctUntilChanged()

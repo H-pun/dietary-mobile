@@ -18,6 +18,7 @@ interface UserProfileRepository {
     fun updateUserProfile(accessToken: String, userId: String, editableUserProfile: EditableUserProfile, isUsernameChanged: Boolean = false): Flow<UiState<Nothing>>
     fun getUserNutrition(accessToken: String, userId: String, date: String): Flow<UiState<UserNutrition>>
     fun getDietProgress(accessToken: String, userId: String): Flow<UiState<List<DietProgress>>>
+    suspend fun deleteCurrentUserProfile()
 
     val userProfileDetail: Flow<UserProfileDetail>
 }

@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface UserProfileLocalSource {
     val userProfile: Flow<UserProfile>
     suspend fun updateUserProfile(userProfileDetailResponse: UserProfileDetailResponse)
+    suspend fun delete()
 }

@@ -99,9 +99,10 @@ class ReportWidget : GlanceAppWidget() {
                 hiltEntryPoint.authenticationUseCase()
             }
             val coroutineScope = rememberCoroutineScope()
-            val accessToken by authenticationUseCase.getAccessToken(coroutineScope).collectAsState(initial = null)
+            val accessToken by authenticationUseCase.getAccessToken(coroutineScope)
+                .collectAsState(initial = null)
             val oneTimeDailyNutrition by rememberUpdatedState(
-                reportUseCase.getDailyNutrition(
+                reportUseCase.getDailyNutritionForWidget(
                     coroutineScope
                 )
             )
@@ -129,9 +130,10 @@ class ReportWidget : GlanceAppWidget() {
                 }
             }
             val userNutrition =
-                if (userDailyNutritionState.value is UiState.Success) (userDailyNutritionState.value as UiState.Success<UserNutrition>).data
-                    ?: UserNutrition()
-                else UserNutrition()
+                if (userDailyNutritionState.value is UiState.Success) {
+                    (userDailyNutritionState.value as UiState.Success<UserNutrition>).data
+                        ?: UserNutrition()
+                } else UserNutrition()
             val foodDiaries =
                 if (foodDiaryState.value is UiState.Success) (foodDiaryState.value as UiState.Success<List<FoodDiary>>).data
                     ?: listOf()
@@ -206,12 +208,14 @@ class ReportWidget : GlanceAppWidget() {
                             .clickable(onClick = action)
                     ) {
                         repeat(4) {
-                            val label = context.resources.getString(when (it) {
-                                0 -> R.string.calories
-                                1 -> R.string.carbohydrates
-                                2 -> R.string.protein
-                                else -> R.string.fat
-                            })
+                            val label = context.resources.getString(
+                                when (it) {
+                                    0 -> R.string.calories
+                                    1 -> R.string.carbohydrates
+                                    2 -> R.string.protein
+                                    else -> R.string.fat
+                                }
+                            )
                             val unit = if (it != 0) "g" else "kcal"
                             val totalNutrition = when (it) {
                                 0 -> totalCaloriesToday

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileWithUsernameBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.UserProfileDetailResponse
@@ -205,6 +206,10 @@ class UserProfileRepositoryImpl @Inject constructor(
         )
     }.flowOn(Dispatchers.IO)
         .distinctUntilChanged()
+
+    override suspend fun deleteCurrentUserProfile() = withContext(Dispatchers.IO) {
+        userProfileLocalSource.delete()
+    }
 
     override val userProfileDetail: Flow<UserProfileDetail>
         get() = userProfileLocalSource.userProfile.map {
