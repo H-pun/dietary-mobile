@@ -41,7 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.SubcomposeAsyncImage
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.AppDestination
@@ -188,8 +187,8 @@ private fun LandingContent(
                     .padding(4.dp)
             )
             Spacer(modifier = Modifier.height(2.dp))
-            SubcomposeAsyncImage(
-                model = "https://platform.fatsecret.com/api/static/images/powered_by_fatsecret_3x.png",
+            Image(
+                painter = painterResource(id = R.drawable.powered_by_fatsecret),
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
