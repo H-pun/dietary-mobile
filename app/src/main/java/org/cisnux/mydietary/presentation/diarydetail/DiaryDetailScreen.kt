@@ -90,6 +90,11 @@ fun DiaryDetailScreen(
     navigateUp: () -> Unit,
     viewModel: DiaryDetailViewModel = hiltViewModel()
 ) {
+    val hasAccess by viewModel.hasAccess.collectAsState(initial = null)
+
+    if (hasAccess == false)
+        navigateToSignIn(AppDestination.DiaryDetailRoute.route)
+
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberModalBottomSheetState(
             confirmValueChange = {

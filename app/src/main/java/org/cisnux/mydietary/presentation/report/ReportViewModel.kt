@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.DietProgress
 import org.cisnux.mydietary.domain.models.MonthlyNutritionReport
@@ -35,6 +36,9 @@ class ReportViewModel @Inject constructor(
         MutableStateFlow<UiState<MonthlyNutritionReport>>(UiState.Initialize)
     val monthlyNutritionReportState get() = _monthlyNutritionReportState.asSharedFlow()
 
+    val hasAccess
+        get() = authenticationUseCase.getAccessToken(scope = viewModelScope).map { it?.isNotBlank() == true }
+
     private val _userDailyNutritionState =
         MutableStateFlow<UiState<UserNutrition>>(UiState.Initialize)
     val userDailyNutritionState = _userDailyNutritionState.asSharedFlow()
@@ -46,14 +50,16 @@ class ReportViewModel @Inject constructor(
     init {
         getReports(0)
         viewModelScope.launch {
-            reportUseCase.getDietProgress(scope = viewModelScope).distinctUntilChanged().collectLatest {
-                _dietProgressState.value = it
-            }
+            reportUseCase.getDietProgress(scope = viewModelScope).distinctUntilChanged()
+                .collectLatest {
+                    _dietProgressState.value = it
+                }
         }
         viewModelScope.launch {
-            reportUseCase.getDailyNutrition(scope = viewModelScope).distinctUntilChanged().collectLatest {
-                _userDailyNutritionState.value = it
-            }
+            reportUseCase.getDailyNutrition(scope = viewModelScope).distinctUntilChanged()
+                .collectLatest {
+                    _userDailyNutritionState.value = it
+                }
         }
     }
 
@@ -61,13 +67,15 @@ class ReportViewModel @Inject constructor(
     fun getReports(index: Int = 0) = viewModelScope.launch {
         val reportCategory = index.reportCategory
         if (reportCategory == ReportCategory.WEEKLY)
-            reportUseCase.getWeeklyNutrition(scope = viewModelScope).distinctUntilChanged().collectLatest { uiState ->
-                _weeklyNutritionReportState.value = uiState
-            }
+            reportUseCase.getWeeklyNutrition(scope = viewModelScope).distinctUntilChanged()
+                .collectLatest { uiState ->
+                    _weeklyNutritionReportState.value = uiState
+                }
         else
-            reportUseCase.getMonthlyNutrition(scope = viewModelScope).distinctUntilChanged().collectLatest { uiState ->
-                _monthlyNutritionReportState.value = uiState
-            }
+            reportUseCase.getMonthlyNutrition(scope = viewModelScope).distinctUntilChanged()
+                .collectLatest { uiState ->
+                    _monthlyNutritionReportState.value = uiState
+                }
     }
 
     fun signOut() = CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {

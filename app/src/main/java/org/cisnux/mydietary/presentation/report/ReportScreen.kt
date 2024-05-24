@@ -118,10 +118,14 @@ fun ReportScreen(
     val monthlyNutritionReportState by viewModel.monthlyNutritionReportState.collectAsState(initial = UiState.Initialize)
     val dietProgressState by viewModel.dietProgressState.collectAsState(initial = UiState.Initialize)
     val context = LocalContext.current
+    val hasAccess by viewModel.hasAccess.collectAsState(initial = null)
 
     BackHandler {
         navigateUp()
     }
+
+    if (hasAccess == false)
+        navigateToSignIn(AppDestination.ReportRoute.route)
 
     if (weeklyNutritionReportState is UiState.Error)
         (weeklyNutritionReportState as UiState.Error).error?.let { exception ->

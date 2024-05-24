@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.AddFoodDiary
 import org.cisnux.mydietary.domain.models.UserNutrition
@@ -36,6 +37,8 @@ class DiaryDetailViewModel @Inject constructor(
     private val _userDailyNutritionState =
         MutableStateFlow<UiState<UserNutrition>>(UiState.Initialize)
     val userDailyNutritionState = _userDailyNutritionState.asSharedFlow()
+    val hasAccess
+        get() = authenticationUseCase.getAccessToken(scope = viewModelScope).map { it?.isNotBlank() == true }
 
     val foodDiaryDetailState get() = _foodDiaryDetailState.asStateFlow()
     private val _addFoodDiaryState =
