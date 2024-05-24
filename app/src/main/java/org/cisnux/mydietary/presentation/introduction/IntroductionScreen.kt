@@ -40,7 +40,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -59,7 +58,11 @@ fun IntroductionScreen(
     onSignIn: () -> Unit
 ) {
     IntroductionContent {
-        IntroductionBody(modifier = modifier.padding(it), onNavigateUp = navigateUp, onDone = onSignIn)
+        IntroductionBody(
+            modifier = modifier.padding(it),
+            onNavigateUp = navigateUp,
+            onDone = onSignIn
+        )
     }
 }
 
@@ -135,10 +138,12 @@ private fun IntroductionBody(
     }
 
     Column(
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
+            .padding(PaddingValues(16.dp))
     ) {
         FilledIconButton(
             onClick = onNavigateUp,
@@ -152,7 +157,9 @@ private fun IntroductionBody(
         }
         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth()) {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height((configuration.screenHeightDp * 0.8).dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -182,40 +189,41 @@ private fun IntroductionBody(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            Modifier
-                .wrapContentHeight()
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            repeat(pagerState.pageCount) { iteration ->
-                val color =
-                    if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
-                Box(
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .clip(CircleShape)
-                        .background(color)
-                        .size(12.dp)
-                )
+        Column {
+            Row(
+                Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                repeat(pagerState.pageCount) { iteration ->
+                    val color =
+                        if (pagerState.currentPage == iteration) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondaryContainer
+                    Box(
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .clip(CircleShape)
+                            .background(color)
+                            .size(12.dp)
+                    )
+                }
             }
-        }
-        Row(
-            Modifier
-                .padding(PaddingValues(horizontal = 8.dp))
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            TextButton(onClick = onDone) {
-                Text(text = "Skip")
-            }
-            Button(onClick = {
-                if (currentPage < (pagerState.pageCount - 1))
-                    currentPage++
-                else onDone()
-            }) {
-                Text(text = "Next")
+            Row(
+                Modifier
+                    .padding(PaddingValues(horizontal = 8.dp))
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TextButton(onClick = onDone) {
+                    Text(text = stringResource(R.string.skip))
+                }
+                Button(onClick = {
+                    if (currentPage < (pagerState.pageCount - 1))
+                        currentPage++
+                    else onDone()
+                }) {
+                    Text(text = stringResource(R.string.next))
+                }
             }
         }
     }

@@ -9,19 +9,27 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -33,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.SubcomposeAsyncImage
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.AppDestination
@@ -94,6 +103,9 @@ private fun LandingContent(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    var isDialogOpen by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     Scaffold {
         Column(
@@ -155,16 +167,16 @@ private fun LandingContent(
             }
             Text(
                 text = buildAnnotatedString {
+                    append(stringResource(R.string.terms_of_use_label_button))
+                    append('\n')
                     withStyle(
                         style = SpanStyle(
                             color = if (!isSystemInDarkTheme()) Color.Blue else Color.Cyan,
                             fontWeight = FontWeight.SemiBold
                         )
                     ) {
-                        append(stringResource(R.string.terms_of_use_label_button))
+                        append(stringResource(R.string.terms_of_use))
                     }
-                    append('\n')
-                    append(stringResource(R.string.terms_of_use))
                 },
                 style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center,
@@ -172,9 +184,50 @@ private fun LandingContent(
                 modifier = Modifier
                     .wrapContentWidth()
                     .clip(MaterialTheme.shapes.extraLarge)
-                    .clickable(onClick = {})
+                    .clickable(onClick = { isDialogOpen = true })
                     .padding(4.dp)
             )
+            Spacer(modifier = Modifier.height(2.dp))
+            SubcomposeAsyncImage(
+                model = "https://platform.fatsecret.com/api/static/images/powered_by_fatsecret_3x.png",
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier
+                    .width(130.dp)
+                    .height(18.dp)
+            )
         }
+        TermsOfUseDialog(isDialogOpen = isDialogOpen, onDismissRequest = { isDialogOpen = false })
     }
+}
+
+@Composable
+private fun TermsOfUseDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit = {},
+    isDialogOpen: Boolean = false,
+) {
+    if (isDialogOpen)
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            title = {
+                Text(
+                    text = stringResource(id = R.string.terms_of_use),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = onDismissRequest) {
+                    Text(text = "OK")
+                }
+            },
+            iconContentColor = Color.Unspecified,
+            text = {
+                Text(text = stringResource(id = R.string.terms_of_use_description), style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Justify, modifier = Modifier
+                    .height(400.dp)
+                    .verticalScroll(
+                        rememberScrollState()
+                    ))
+            }
+        )
 }

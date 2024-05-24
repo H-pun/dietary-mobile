@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Dietary</string>
-    <string name="take_photo_button">take picture</string>
     <string name="gallery_button">Gallery</string>
     <string name="rotate_button">Rotate</string>
     <string name="camera_supporting_text">Make sure all food is inside the circle</string>
@@ -9,10 +8,6 @@
     <string name="my_profile_title">My Profile</string>
     <string name="account_and_security_title">Account and Security</string>
     <string name="sign_out_title">Sign Out</string>
-    <string name="health_profile_dialog_title">Health Profile</string>
-    <string name="health_profile_dialog_negative_btn">Update</string>
-    <string name="health_profile_dialog_positive_btn">Done</string>
-    <string name="health_profile_dialog_message">Review your health profile: verify and update your info for accuracy.</string>
     <string name="age_label">Age</string>
     <string name="weight_label">Weight</string>
     <string name="height_label">Height</string>
@@ -49,7 +44,6 @@
     <string name="confirmation_password_placeholder">Re-enter your password</string>
     <string name="confirmation_password_error_text">Please confirm your password correctly</string>
     <string name="sign_up">Sign Up</string>
-    <string name="sign_up_with_google">Sign up with Google</string>
     <string name="have_an_account">Have an account?</string>
     <string name="sign_in_here">Sign in here</string>
     <string name="reset_password">Reset Password!</string>
@@ -76,7 +70,7 @@
     <string name="build_profile">Build Profile</string>
     <string name="confirmation_password_label">Confirm Password</string>
     <string name="verify_email">Verify Email</string>
-    <string name="terms_of_use_label_button">By clicking sign in, you agree to the</string>
+    <string name="terms_of_use_label_button">By clicking get started or sign in, you agree to the</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="welcome_to">Welcome to</string>
     <string name="dietary">" Dietary!"</string>
@@ -110,14 +104,10 @@
     <string name="empty_content_search">The food you\'re looking for can\'t be found</string>
     <string name="cm">%1$s cm</string>
     <string name="year">%1$s years</string>
-    <string name="error_text_float">%1$s must be a number greater than or equal to 0</string>
-    <string name="error_text_int">%1$s must be an integer greater than 0</string>
-    <string name="error_text_text">%1$s cannot be empty</string>
     <string name="kg">%1$s kg</string>
     <string name="title">Title</string>
     <string name="title_error_text">Title cannot be empty</string>
     <string name="title_placeholder">Enter food diary title</string>
-    <string name="food">Food</string>
     <string name="calories">Calories</string>
     <string name="kcal">%1$s kcal</string>
     <string name="fat">Fats</string>
@@ -126,9 +116,6 @@
     <string name="carbohydrates">Carbohydrates</string>
     <string name="sugar">Sugar</string>
     <string name="feedback">Feedback</string>
-    <string name="add">Add</string>
-    <string name="no">No</string>
-    <string name="status">Status</string>
     <string name="total_calories">Total Food Calories</string>
     <string name="category_label">Category</string>
     <string name="question">Question</string>
@@ -136,16 +123,6 @@
         <item>Breakfast</item>
         <item>Lunch</item>
         <item>Dinner</item>
-    </string-array>
-    <string-array name="food_status_level">
-        <item>okay to eat</item>
-        <item>less recommended</item>
-        <item>not recommended</item>
-    </string-array>
-    <string-array name="report_category">
-        <item>Today</item>
-        <item>This Week</item>
-        <item>This Month</item>
     </string-array>
     <string name="appwidget_text">Dietary</string>
     <string name="api_url_label">API URL</string>
@@ -205,4 +182,44 @@
     <string name="food_introduction_description">Craving a delicious meal that won\'t derail your health goals? Look no further! Our app is your personalized guide to navigating the world of food, where taste and nutrition go hand in hand.</string>
     <string name="take_picture_introduction_description">Snap a pic and we\'ll break down the nutrients, calories, and everything else you need to know to keep your health goals on track!</string>
     <string name="report_introduction_description">You\'ve logged your meals, now let\'s visualize your progress! Track your nutrition, weight, and waistline changes over time to make informed choices and celebrate your achievements!</string>
+    <string name="terms_of_use_description">
+1. API License, Use and Restrictions\nThe FatSecret Platform API is owned by FatSecret. Subject to the restrictions described in these Terms of Use, FatSecret grants you a non-exclusive, revocable, nonsublicensable, nontransferable license to download and use the FatSecret Platform API to develop an application (your \"Application\") through which you may access FatSecret and third party data, content, information and other materials (\"Content\").
+These Terms of Use define the legal use of the FatSecret Platform API, all updates, revisions, substitutions, and any copies of the FatSecret Platform API made by or for you. All rights not expressly granted to you are reserved by FatSecret.\n
+1.1 Your license to the FatSecret Platform API under these Terms of Use continues until it is terminated by either party. You may terminate the license by discontinuing use of all or any of the FatSecret Platform API. FatSecret may terminate the license at any time for any reason. Your license terminates automatically if (i) you violate any term of these Terms of Use, (ii) FatSecret sends a written notice of termination to you, or (iii) FatSecret ceases providing you access to the FatSecret Platform API.\n
+1.2 Your Application must be generally accessible to users. You may require users to log in to your Application but you must not (unless you have entered into a separate agreement with FatSecret or obtained FatSecret\'s written permission) operate only behind a firewall or only on an internal network (except during the development and testing phase).\n
+1.3 You must clearly attribute in every place that Content is provided or displayed through your Application (such as a web page or application screen), that FatSecret is the source of such Content and comply with the FatSecret Platform API Attribution Policy. You may not remove any copyright, trademark or other proprietary rights notices contained in or on the Content. You understand and agree that you must retain the attribution links for the Content regardless of whether you continue using the FatSecret Platform API for any reason.\n
+1.4 Your Application may make calls or data retrieval requests (\"Calls\") at any time that the FatSecret Platform API is available. You understand that there is a rate limit per Application utilizing the FatSecret Platform API and you agree to comply with that rate limit at all times. The amount of the rate limit is 5,000 calls per day and such amount may change from time to time our sole and absolute discretion. Any limit imposed on the number of Calls allowed per day per Key will expire at the close of each day, with any unused requests not being carried over. Increases in any limit imposed can be sought by contacting us. You understand and agree that programmatic methods intended to subvert rate limiting are considered a violation of these Terms of Use.\n
+1.5 You may not continue to use and must immediately remove or replace (by re-requesting) any Content in your possession or under your control not explicitly identified as being storable indefinitely within 24 hours after the time at which you obtained the Content, or such other time as FatSecret may specify to you from time to time. You may store and use indefinitely Content that is explicitly identified as being storable indefinitely provided, however, that you may not continue to use, and must immediately remove or replace (by re-requesting) any Content in your possession or under your control if FatSecret ceases to explicitly identify the Content as being storable indefinitely; or upon any termination of the license for any reason.\n
+1.6 If your Application uses the FatSecret Platform API to obtain and display Content in conjunction with your content for use by other users, you must:\n
+i. display to the users of your Applications the link to these Terms of Use;\n
+ii. explicitly state in your Applications terms of use that, by using your software application or website, your users are agreeing to be bound by these Terms of Use; and\n
+iii. protect the privacy and legal rights of those users.\n
+1.7 You must not:\n
+i. copy, rent, lease, sell, transfer, assign, sublicense, disassemble, reverse engineer or decompile (except to the limited extent expressly authorized by law), modify or alter any part of the FatSecret Platform API, without FatSecret\'s prior written consent;\n
+ii. use the FatSecret Platform API in any manner or for any purpose that violates any law or regulation, any right of any person, including but not limited to intellectual property rights, rights of privacy, or rights of personality, or in any manner inconsistent with the FatSecret Terms &amp; Conditions or these Terms of Use. You understand that all trademarks, copyright and other forms of intellectual property are property of their respective owners;\n
+iii. use the FatSecret Platform API to provide diet, nutrition or health advice, guidance or diagnosis and make clear that any information generated using the FatSecret Platform API should not be interpreted as a substitute for medical physician consultation, evaluation, or treatment. You understand that the FatSecret Platform API is not designed for such purposes and that its failure in such cases could lead to personal injury or damage for which FatSecret is not responsible; or\n
+iv. use the FatSecret Platform API in a manner that exceeds reasonable request volume, constitutes excessive or abusive usage (including using any robot, spider, site search/retrieval, or other automated application or device to retrieve or index any portion of the Content), or otherwise fails to comply with any part of the FatSecret Platform API documentation, as determined by FatSecret in our absolute discretion.\n
+You understand and agree to provide us with access to your Applications that uses the FatSecret Platform API as reasonably requested by us to verify your compliance with these Terms of Use. You agree that we may crawl or otherwise monitor these Applications and you agree not to block or interfere with such efforts by FatSecret in any way.\n\n
+2. Support\n
+These Terms of Use do not entitle you to any support for the FatSecret Platform API or your Applications, unless you make separate arrangements with FatSecret. FatSecret may elect to provide you with support or modifications for the FatSecret Platform API in our absolute discretion, and may terminate such Support at any time without notice to you. FatSecret may change, suspend, or discontinue any aspect of the FatSecret Platform API at any time, including their availability.\n\n
+3. Application Development, Promotion &amp; Advertising\n
+You understand and agree that FatSecret may independently create applications, content and other products or services that may be similar to or competitive with your Applications, and nothing in these Terms of Use will be construed as restricting or preventing FatSecret from creating and fully exploiting such applications, content and other items, without any obligation to you.
+We welcome the provision of feedback in relation to the FatSecret Platform API and if you elect to provide us with any feedback you understand and agree to assign all right, title and interest in such feedback to us and that we are entitled to use, implement and exploit any such feedback in any manner without restriction, and without any obligation of confidentiality, attribution or compensation.You may promote your Applications, including talking to traditional and online media and your users about your Application, so long as you do truthfully and without implying that your Application is created or endorsed by FatSecret.
+FatSecret reserves the right to include advertising in or associated with any images provided to you through the FatSecret Platform API. If FatSecret decides to include advertising, such decision will be disclosed to you prior to its effect.\n\n
+4. Disclaimer\n
+FatSecret does not represent or warrant that the FatSecret Platform API is free of inaccuracies, errors, bugs or interruptions, or are reliable, accurate or complete. In particular, product information from the FatSecret Platform API may vary from the information on products in distribution, and ingredients, formulations and packaging may change so you should refer to the nutrition information on a product package for the most accurate information.
+The FatSecret Platform API is provided \"as is\" with no warranty, express or implied, of any kind and FatSecret expressly disclaims any and all warranties and conditions, including but not limited to, any implied warranty of merchantability, accuracy, results of use, fitness for a particular purpose, availability, security, title and non-infringement of third-party rights.
+Your use of the FatSecret Platform API is at your own discretion and risk and you will be solely responsible for any damage that results from their use.\n\n
+5. Limitation of Liability\n
+FatSecret shall not, under any circumstances, be liable to you or any third party for any indirect, consequential, exemplary, incidental, special or punitive damages, including for loss of profits, lost or corrupted data, computer malfunction or business interruption, arising out of or in connection with your use of the FatSecret Platform API, even if FatSecret has been advised of the possibility of such damages. FatSecret disclaims all liability of any kind for any third party Content.\n\n
+6. Indemnity\n
+To the maximum extent permitted by applicable law, you agree to indemnify and hold FatSecret, its subsidiaries, and affiliates, and their respective officers, agents, partners and employees, harmless from any loss, liability, claim, or demand, including reasonable attorneys\' fees, made by any third party due to or arising out of or in connection with your use of the FatSecret Platform API. FatSecret shall use good faith efforts to provide you with written notice of such claim or demand.\n\n
+7. General\n
+7.1 These Terms of Use constitute the entire agreement between you and FatSecret regarding the use of the FatSecret Platform API.\n
+7.2 Notwithstanding any provision to the contrary, for all purposes of these Terms of Use, you and FatSecret shall be and act independently and not as partner, joint venturer, agent, employee or employer of the other. You shall not have any authority to assume or create any obligation for or on behalf of FatSecret, express or implied, and you shall not attempt to bind FatSecret to any contract.\n
+7.3 The failure of FatSecret to exercise or enforce any right or provision of these Terms of Use shall not operate as a waiver of such right or provision.\n
+7.4 If any provision of these Terms of Use is unlawful, void or unenforceable, that provision is deemed severable from these Terms of Use and does not affect the validity and enforceability of any remaining provisions.\n
+7.5 These Terms of Use and any dispute about or involving the FatSecret Platform API shall be governed by and construed in accordance with the laws of the State of Victoria, Australia, without regard to conflict of law provisions. You agree that any action at law or in equity arising out of or relating to your use of the FatSecret Platform API or these Terms of Use shall be filed only in the state or federal courts located in Victoria, Australia and you hereby consent and submit to the personal jurisdiction of such courts for the purposes of litigating any such action, provided that the foregoing shall not prevent FatSecret from seeking injunctive relief in a court of competent jurisdiction.</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
 </resources>
