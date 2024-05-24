@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -48,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 
@@ -122,19 +124,15 @@ private fun IntroductionBody(
         stringResource(R.string.take_picture_introduction_description),
         stringResource(R.string.report_introduction_description),
     )
+    val pagerState =
+        rememberPagerState(initialPage = 0, pageCount = { introductionIllustrations.size })
     var currentPage by rememberSaveable {
         mutableIntStateOf(0)
     }
-    val pagerState = rememberPagerState {
-        introductionIllustrations.size
-    }
+    val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(pagerState) {
+    LaunchedEffect(pagerState.currentPage) {
         currentPage = pagerState.currentPage
-    }
-
-    LaunchedEffect(currentPage) {
-        pagerState.animateScrollToPage(page = currentPage)
     }
 
     Column(
@@ -218,9 +216,13 @@ private fun IntroductionBody(
                     Text(text = stringResource(R.string.skip))
                 }
                 Button(onClick = {
-                    if (currentPage < (pagerState.pageCount - 1))
-                        currentPage++
-                    else onDone()
+                    currentPage++
+                    coroutineScope.launch {
+                        if (currentPage < pagerState.pageCount)
+                            pagerState.scrollToPage(page = currentPage)
+                        else
+                            onDone()
+                    }
                 }) {
                     Text(text = stringResource(R.string.next))
                 }
