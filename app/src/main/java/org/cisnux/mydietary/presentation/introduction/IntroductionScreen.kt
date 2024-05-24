@@ -32,7 +32,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -126,14 +125,10 @@ private fun IntroductionBody(
     )
     val pagerState =
         rememberPagerState(initialPage = 0, pageCount = { introductionIllustrations.size })
-    var currentPage by rememberSaveable {
-        mutableIntStateOf(0)
+    var currentPage by rememberSaveable(pagerState.currentPage) {
+        mutableIntStateOf(pagerState.currentPage)
     }
     val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(pagerState.currentPage) {
-        currentPage = pagerState.currentPage
-    }
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
