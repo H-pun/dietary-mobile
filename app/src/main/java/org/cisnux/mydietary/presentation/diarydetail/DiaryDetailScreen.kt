@@ -92,8 +92,10 @@ fun DiaryDetailScreen(
 ) {
     val hasAccess by viewModel.hasAccess.collectAsState(initial = null)
 
-    if (hasAccess == false)
+    if (hasAccess == false) {
+        viewModel.signOut()
         navigateToSignIn(AppDestination.DiaryDetailRoute.route)
+    }
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberModalBottomSheetState(

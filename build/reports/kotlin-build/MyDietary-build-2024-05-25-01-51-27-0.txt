@@ -1,0 +1,777 @@
+Gradle start parameters:
+  tasks = [:app:assembleDebug]
+  excluded tasks = []
+  current dir = /Users/cisnux/temp/dietary-capstone
+  project properties args = [android.studio.version: 233.14808.21.2331.11842104, android.injected.enableStableIds: true, android.injected.attribution.file.location: /Users/cisnux/temp/dietary-capstone/.gradle, android.injected.build.api: 34, android.injected.build.abi: arm64-v8a, android.injected.invoked.from.ide: true]
+  system properties args = [idea.active: true, idea.version: 2023.3, idea.vendor.name: Google]
+
+Time metrics:
+  Total Gradle task time: 21.68 s
+  Spent time before task action: 0.33 s
+  Task action before worker execution: 0.39 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 10.50 s
+    Clear jar cache: 0.00 s
+    Clear output: 0.01 s
+    Precise backup output: 0.01 s
+    Cleaning up the backup stash: 0.01 s
+    Connect to Kotlin daemon: 0.47 s
+    Calculate output size: 0.00 s
+    Run compilation: 4.48 s
+      Non incremental compilation in daemon: 5.53 s
+      Incremental compilation in daemon: 4.46 s
+        Calculate initial dirty sources set: 0.02 s
+          Detect removed classes: 0.02 s
+        Update caches: 0.03 s
+        Sources compilation round: 4.08 s
+          Compiler initialization time: 0.19 s
+          Compiler code analysis: 1.97 s
+          Compiler IR translation: 0.64 s
+          Compiler code generation: 1.23 s
+            Compiler IR lowering: 0.54 s
+            Compiler IR generation: 0.68 s
+        Write history file: 0.00 s
+        Shrink and save current classpath snapshot after compilation: 0.14 s
+          Shrink current classpath snapshot incrementally: 0.14 s
+            Load current classpath snapshot: 0.10 s
+            Load shrunk current classpath snapshot against previous lookups: 0.00 s
+          Save shrunk current classpath snapshot: 0.00 s
+  Start gradle worker: 0.02 s
+
+Size metrics:
+  Total size of the cache directory: 4.1 MB
+    ABI snapshot size: 4.9 KB
+  Increase memory usage: 186.8 MB
+  Total memory usage at the end of build: 378.9 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 2027
+    Number of lines for code generation: 2027
+    Analysis lines per second: 1026
+    Code generation lines per second: 1653
+    Compiler IR translation line number: 2027
+    Compiler IR lowering line number: 2027
+    Compiler IR generation line number: 2027
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 150
+    Size of classpath snapshot: 7.7 MB
+    Size of shrunk classpath snapshot: 191.4 KB
+  Number of times classpath snapshot is loaded: 1
+    Number of cache misses when loading classpath entry snapshots: 150
+  Start time of task action: 2078-10-16T13:42:20
+
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Total time for Kotlin tasks: 4.69 s (21.7 % of all tasks time)
+Time  |% of Kotlin time|Task                   
+4.69 s|100.0 %         |:app:compileDebugKotlin
+
+Task ':app:kspDebugKotlin' finished in 6.61 s
+Task info:
+  Kotlin language version: 1.9
+Compilation log for task ':app:kspDebugKotlin':
+  Compiler perf stats:
+  INIT: Compiler initialized in 522 ms
+          ANALYZE    4303 ms    4466.884 loc/s
+          ANALYZE     430 ms   44700.000 loc/s
+          ANALYZE     223 ms   86192.825 loc/s
+  Find Java class performed 66 times, total time 54 ms
+  Type info performed 469 times, total time 820 ms
+  Call resolve performed 541 times, total time 802 ms
+  Binary class from Kotlin file performed 594 times, total time 89 ms
+Time metrics:
+  Total Gradle task time: 6.61 s
+  Spent time before task action: 0.21 s
+  Task action before worker execution: 0.36 s
+  Run compilation in Gradle worker: 6.00 s
+    Clear jar cache: 0.00 s
+    Clear output: 0.01 s
+    Connect to Kotlin daemon: 0.46 s
+    Non incremental compilation in daemon: 5.53 s
+  Start gradle worker: 0.01 s
+Size metrics:
+  Increase memory usage: 139.7 MB
+  Total memory usage at the end of build: 164.3 MB
+  Start time of task action: 2024-05-24T18:51:07
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Task ':app:compileDebugKotlin' finished in 4.69 s
+Task info:
+  Kotlin language version: 2.0
+Compilation log for task ':app:compileDebugKotlin':
+  Classpath changes info passed from Gradle task: NoChanges
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailViewModel.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getMonthlyNutrition.lambda.8..inlined.map.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changeEmail.lambda.7..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getDailyNutrition.lambda.3..inlined.map.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAuthenticationState.lambda.2.lambda.1..inlined.map.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailScreen.6)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailViewModel.addFoodDiary.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailScreen.7)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.3)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.5)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.6)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.provideGlance.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.verifyEmail..inlined.filter.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.handleSignInWithGoogle.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getDailyNutrition..inlined.filter.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailScreen.5.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getWeeklyNutrition..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.UserProfileRepositoryImpl.addUserProfile.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailScreen.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAuthenticationState.lambda.2.lambda.1..inlined.map.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.UserProfileRepositoryImpl.updateUserProfile.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getDietProgress..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = .kotlin_module)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.5.1.1.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.ComposableSingletons.DiaryDetailScreenKt.lambda-3.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.2.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changePassword..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getMonthlyNutrition.lambda.8..inlined.map.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.provideGlance.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getMonthlyNutrition..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changeEmail.1.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changeEmail.1.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getWeeklyNutrition.lambda.6..inlined.map.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changeEmail.1.1.3)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailBody.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailBody.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getWeeklyNutrition.lambda.6..inlined.map.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailBody.1.3)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailBody.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.2.1.1.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.ComposableSingletons.DiaryDetailScreenKt)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.UserProfileRepositoryImpl.getDietProgress.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailScreen.7.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.5.1.1.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.signInWithGoogle.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailScreen.6.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.provideGlance.2.2.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.2.1.1.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.5.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getDailyNutrition..inlined.filter.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAuthenticationState..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId.3)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.ComposableSingletons.DiaryDetailScreenKt.lambda-6.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.ComposableSingletons.DiaryDetailScreenKt.lambda-2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailViewModel.getFoodDiaryDetailById.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.provideGlance.2.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailViewModel.deleteFoodDiaryById.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.UserProfileRepositoryImpl.special..inlined.map.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.2.1.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getWeeklyNutrition.lambda.6..inlined.map.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailViewModel.getFoodDiaryDetailById.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.5.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changeEmail..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.5.1.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.repositories.UserProfileRepository.DefaultImpls)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.verifyEmail..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailViewModel.signOut.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailScreen.3.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailViewModel.deleteFoodDiaryById.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailScreen.7.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailContentPreview.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailContentPreview.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.UserProfileRepositoryImpl.special..inlined.map.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.6.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.ComposableSingletons.DiaryDetailScreenKt.lambda-5.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.UserProfileRepositoryImpl.special..inlined.map.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.ComposableSingletons.DiaryDetailScreenKt.lambda-1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailContent.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.signInWithGoogle.1.1.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.UserProfileRepositoryImpl.getUserProfile.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailContent.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.provideGlance.2.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getDailyNutrition..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailContentPreview.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.verifyEmail..inlined.filter.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getDailyNutrition.lambda.3..inlined.map.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.provideGlance.2.3)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.signOut.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getDailyNutrition.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.locals.UserProfileLocalSourceImpl.updateUserProfile.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getDailyNutrition..inlined.filter.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getMonthlyNutrition.lambda.8..inlined.map.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.WidgetContent.1.3.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailScreenKt.DiaryDetailScreen.4.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.2.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAuthenticationState.lambda.2.lambda.1..inlined.map.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailViewModel.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.widgets.ReportWidget.provideGlance.2.1.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.ComposableSingletons.DiaryDetailScreenKt.lambda-4.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getDailyNutrition.lambda.3..inlined.map.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailViewModel.addFoodDiary.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAuthenticationState.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.verifyEmail..inlined.filter.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.UserProfileRepositoryImpl.getUserNutrition.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.1.2)
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/repositories/UserProfileRepository.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/repositories/UserProfileRepository.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/repositories/UserProfileRepository.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/0.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/repositories/UserProfileRepository$DefaultImpls.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/repositories/UserProfileRepository.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/repositories/UserProfileRepository$DefaultImpls.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/1.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/repositories/UserProfileRepository.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/2.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/3.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/4.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/5.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/6.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/7.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/8.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/9.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/10.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/11.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/12.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/13.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/14.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$3.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$3.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/15.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signInWithGoogle$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signInWithGoogle$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/16.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signInWithGoogle$1$1$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signInWithGoogle$1$1$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/17.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$handleSignInWithGoogle$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$handleSignInWithGoogle$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/18.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changePassword$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changePassword$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/19.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/20.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/21.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$3.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$3.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/22.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$lambda$7$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$lambda$7$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/23.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/24.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/25.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/26.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/27.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/28.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signOut$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signOut$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/29.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/30.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDietProgress$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDietProgress$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/31.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$$inlined$filter$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$$inlined$filter$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/32.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$$inlined$filter$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$$inlined$filter$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/33.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$$inlined$filter$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$$inlined$filter$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/34.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/35.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$lambda$3$$inlined$map$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$lambda$3$$inlined$map$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/36.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$lambda$3$$inlined$map$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$lambda$3$$inlined$map$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/37.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$lambda$3$$inlined$map$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$lambda$3$$inlined$map$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/38.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutrition$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/39.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$lambda$6$$inlined$map$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$lambda$6$$inlined$map$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/40.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$lambda$6$$inlined$map$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$lambda$6$$inlined$map$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/41.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$lambda$6$$inlined$map$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$lambda$6$$inlined$map$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/42.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/43.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$lambda$8$$inlined$map$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$lambda$8$$inlined$map$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/44.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$lambda$8$$inlined$map$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$lambda$8$$inlined$map$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/45.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$lambda$8$$inlined$map$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$lambda$8$$inlined$map$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/46.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/47.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/48.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$addUserProfile$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$addUserProfile$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/49.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$getUserProfile$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$getUserProfile$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/50.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$updateUserProfile$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$updateUserProfile$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/51.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$getUserNutrition$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$getUserNutrition$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/52.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$getDietProgress$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$getDietProgress$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/53.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$special$$inlined$map$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$special$$inlined$map$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/54.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$special$$inlined$map$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$special$$inlined$map$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/55.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$special$$inlined$map$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$special$$inlined$map$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/56.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportUseCase.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportUseCase.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportUseCase.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/57.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportUseCase.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/58.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/59.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/60.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-3$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-3$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/61.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-4$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-4$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/62.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-5$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-5$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/63.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-6$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/ComposableSingletons$DiaryDetailScreenKt$lambda-6$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/64.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/65.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/66.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$3$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$3$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/67.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$4$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$4$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/68.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$5$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$5$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/69.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$6.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$6.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/70.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$6$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$6$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/71.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$7.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$7.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/72.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$7$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$7$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/73.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$7$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailScreen$7$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/74.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailContentPreview$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailContentPreview$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/75.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailContentPreview$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailContentPreview$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/76.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailContentPreview$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailContentPreview$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/77.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailBody$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailBody$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/78.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailBody$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailBody$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/79.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailBody$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailBody$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/80.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailBody$1$3.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailBody$1$3.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/81.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailContent$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailContent$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/82.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailContent$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreenKt$DiaryDetailContent$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/83.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/locals/UserProfileLocalSource.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/locals/UserProfileLocalSource.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/locals/UserProfileLocalSource.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/84.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/locals/UserProfileLocalSource.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/85.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$addFoodDiary$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$addFoodDiary$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/86.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$addFoodDiary$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$addFoodDiary$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/87.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$getFoodDiaryDetailById$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$getFoodDiaryDetailById$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/88.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$getFoodDiaryDetailById$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$getFoodDiaryDetailById$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/89.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$deleteFoodDiaryById$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$deleteFoodDiaryById$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/90.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$deleteFoodDiaryById$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$deleteFoodDiaryById$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/91.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$signOut$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$signOut$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/92.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/93.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/94.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/95.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/96.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/97.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2$1$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2$1$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/98.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/99.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2$2$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2$2$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/100.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2$3.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$2$3.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/101.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$provideGlance$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/102.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/103.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/104.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/105.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/106.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$2$1$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$2$1$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/107.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$2$1$1$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$2$1$1$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/108.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$2$1$1$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$2$1$1$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/109.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$3.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$3.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/110.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$3$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$3$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/111.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/112.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/113.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/114.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5$1$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5$1$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/115.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5$1$1$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5$1$1$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/116.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5$1$1$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$5$1$1$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/117.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$6.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$6.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/118.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$6$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$WidgetContent$1$6$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/119.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$ReportWidgetEntryPoint.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/widgets/ReportWidget$ReportWidgetEntryPoint.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/120.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/locals/UserProfileLocalSourceImpl.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/locals/UserProfileLocalSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/locals/UserProfileLocalSourceImpl.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/121.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/locals/UserProfileLocalSourceImpl$updateUserProfile$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/locals/UserProfileLocalSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/locals/UserProfileLocalSourceImpl$updateUserProfile$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/122.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/locals/UserProfileLocalSourceImpl.kt
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/locals/UserProfileLocalSourceImpl$delete$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl$deleteCurrentUserProfile$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutritionForWidget$$inlined$filter$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutritionForWidget$$inlined$filter$1$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutritionForWidget$$inlined$filter$1$2$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutritionForWidget$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutritionForWidget$lambda$6$$inlined$map$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutritionForWidget$lambda$6$$inlined$map$1$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutritionForWidget$lambda$6$$inlined$map$1$2$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getDailyNutritionForWidget$$inlined$flatMapLatest$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$lambda$9$$inlined$map$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$lambda$9$$inlined$map$1$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getWeeklyNutrition$lambda$9$$inlined$map$1$2$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$lambda$11$$inlined$map$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$lambda$11$$inlined$map$1$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/ReportInteractor$getMonthlyNutrition$lambda$11$$inlined$map$1$2$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$special$$inlined$map$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$special$$inlined$map$1$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel$special$$inlined$map$1$2$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/dirty-sources.txt file as newly added
+  Compile iteration:
+    app/src/main/java/org/cisnux/mydietary/domain/repositories/UserProfileRepository.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportInteractor.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/data/repositories/UserProfileRepositoryImpl.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/domain/usecases/ReportUseCase.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailScreen.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/data/locals/UserProfileLocalSource.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/presentation/diarydetail/DiaryDetailViewModel.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/presentation/widgets/ReportWidget.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/data/locals/UserProfileLocalSourceImpl.kt <- was modified since last time
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/dirty-sources.txt
+  Process MembersChanged(fqName = org.cisnux.mydietary.domain.repositories.UserProfileRepository, names = [deleteCurrentUserProfile])
+  Process MembersChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportUseCase, names = [getDailyNutritionForWidget])
+  Process MembersChanged(fqName = org.cisnux.mydietary.presentation.diarydetail.DiaryDetailViewModel, names = [hasAccess])
+  Process MembersChanged(fqName = org.cisnux.mydietary.data.repositories.UserProfileRepositoryImpl, names = [deleteCurrentUserProfile])
+  Process MembersChanged(fqName = org.cisnux.mydietary.data.locals.UserProfileLocalSourceImpl, names = [delete])
+  Process MembersChanged(fqName = org.cisnux.mydietary.data.locals.UserProfileLocalSource, names = [delete])
+  Process MembersChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor, names = [getDailyNutritionForWidget])
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getWeeklyNutrition.lambda.6..inlined.map.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getMonthlyNutrition.lambda.8..inlined.map.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getWeeklyNutrition.lambda.6..inlined.map.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getWeeklyNutrition.lambda.6..inlined.map.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getMonthlyNutrition.lambda.8..inlined.map.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.ReportInteractor.getMonthlyNutrition.lambda.8..inlined.map.1)
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/last-build.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/123.backup
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/local-state/build-history.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/124.backup
+  [ClasspathSnapshot] Shrunk current classpath snapshot after compilation (shrink mode = ChangedLookupsUnchangedClasspath), retained 848 / 21110 classes
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/lookups/counters.tab to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups5312982019908027891/125.backup
+  Cleaning up stash
+  Incremental compilation completed
+Time metrics:
+  Total Gradle task time: 4.69 s
+  Spent time before task action: 0.12 s
+  Task action before worker execution: 0.03 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 4.50 s
+    Precise backup output: 0.01 s
+    Cleaning up the backup stash: 0.01 s
+    Connect to Kotlin daemon: 0.01 s
+    Calculate output size: 0.00 s
+    Run compilation: 4.48 s
+      Incremental compilation in daemon: 4.46 s
+        Calculate initial dirty sources set: 0.02 s
+          Detect removed classes: 0.02 s
+        Update caches: 0.03 s
+        Sources compilation round: 4.08 s
+          Compiler initialization time: 0.19 s
+          Compiler code analysis: 1.97 s
+          Compiler IR translation: 0.64 s
+          Compiler code generation: 1.23 s
+            Compiler IR lowering: 0.54 s
+            Compiler IR generation: 0.68 s
+        Write history file: 0.00 s
+        Shrink and save current classpath snapshot after compilation: 0.14 s
+          Shrink current classpath snapshot incrementally: 0.14 s
+            Load current classpath snapshot: 0.10 s
+            Load shrunk current classpath snapshot against previous lookups: 0.00 s
+          Save shrunk current classpath snapshot: 0.00 s
+  Start gradle worker: 0.01 s
+Size metrics:
+  Total size of the cache directory: 4.1 MB
+    ABI snapshot size: 4.9 KB
+  Increase memory usage: 47.1 MB
+  Total memory usage at the end of build: 214.6 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 2027
+    Number of lines for code generation: 2027
+    Analysis lines per second: 1026
+    Code generation lines per second: 1653
+    Compiler IR translation line number: 2027
+    Compiler IR lowering line number: 2027
+    Compiler IR generation line number: 2027
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 150
+    Size of classpath snapshot: 7.7 MB
+    Size of shrunk classpath snapshot: 191.4 KB
+  Number of times classpath snapshot is loaded: 1
+    Number of cache misses when loading classpath entry snapshots: 150
+  Start time of task action: 2024-05-24T18:51:13
+GC metrics:
+  PS MarkSweep:
+    GC count: 2
+    GC time: 0.23 s
+  PS Scavenge:
+    GC count: 5
+    GC time: 0.06 s
+
+Task ':app:dexBuilderDebug' finished in 4.27 s
+Time metrics:
+  Total Gradle task time: 4.27 s
+
+Task ':app:hiltJavaCompileDebug' finished in 1.65 s
+Time metrics:
+  Total Gradle task time: 1.65 s
+
+Task ':app:compileDebugJavaWithJavac' finished in 0.96 s
+Time metrics:
+  Total Gradle task time: 0.96 s
+
+Task ':app:transformDebugClassesWithAsm' finished in 0.78 s
+Time metrics:
+  Total Gradle task time: 0.78 s
+
+Task ':app:mergeProjectDexDebug' finished in 0.64 s
+Time metrics:
+  Total Gradle task time: 0.64 s
+
+Task ':app:extractIncludeDebugProto' finished in 0.51 s
+Time metrics:
+  Total Gradle task time: 0.51 s
+
+Task ':app:packageDebug' finished in 0.42 s
+Time metrics:
+  Total Gradle task time: 0.42 s
+
+Task ':app:hiltAggregateDepsDebug' finished in 0.21 s
+Time metrics:
+  Total Gradle task time: 0.21 s
+
+Task ':app:processDebugResources' finished in 0.14 s
+Time metrics:
+  Total Gradle task time: 0.14 s
+
+Task ':app:mergeExtDexDebug' finished in 0.14 s
+Time metrics:
+  Total Gradle task time: 0.14 s
+
+Task ':app:mergeDebugJavaResource' finished in 0.10 s
+Time metrics:
+  Total Gradle task time: 0.10 s
+
+Task ':app:checkDebugDuplicateClasses' finished in 0.10 s
+Time metrics:
+  Total Gradle task time: 0.10 s
+
+Task ':app:mergeDebugGlobalSynthetics' finished in 0.07 s
+Time metrics:
+  Total Gradle task time: 0.07 s
+
+Task ':app:mapDebugSourceSetPaths' finished in 0.06 s
+Time metrics:
+  Total Gradle task time: 0.06 s
+
+Task ':app:mergeDebugNativeLibs' finished in 0.06 s
+Time metrics:
+  Total Gradle task time: 0.06 s
+
+Task ':app:processDebugMainManifest' finished in 0.05 s
+Time metrics:
+  Total Gradle task time: 0.05 s
+
+Task ':app:checkDebugAarMetadata' finished in 0.05 s
+Time metrics:
+  Total Gradle task time: 0.05 s
+
+Task ':app:mergeDebugResources' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:mergeDebugAssets' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:mergeDebugNativeDebugMetadata' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:generateDebugProto' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:extractDebugProto' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:packageDebugResources' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:parseDebugLocalResources' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:javaPreCompileDebug' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:processDebugJavaRes' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:processDebugGoogleServices' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:validateSigningDebug' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:extractProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeLibDexDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:stripDebugDebugSymbols' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugResValues' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:desugarDebugFileDependencies' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugStartupProfile' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugJniLibFolders' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:createDebugApkListingFileRedirect' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:preBuild' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:preDebugBuild' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:createDebugCompatibleScreenManifests' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractDeepLinksDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugManifest' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugManifestForPackage' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugShaders' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:compileDebugShaders' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:compressDebugAssets' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:writeDebugAppMetadata' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:writeDebugSigningConfigVersions' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:checkKotlinGradlePluginConfigurationErrors' was skipped: SKIPPED
+
+Task ':app:generateDebugAssets' finished in 0.00 s
+
+Task ':app:assembleDebug' finished in 0.00 s
+

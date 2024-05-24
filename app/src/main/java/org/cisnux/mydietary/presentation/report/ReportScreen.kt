@@ -124,8 +124,10 @@ fun ReportScreen(
         navigateUp()
     }
 
-    if (hasAccess == false)
+    if (hasAccess == false) {
+        viewModel.signOut()
         navigateToSignIn(AppDestination.ReportRoute.route)
+    }
 
     if (weeklyNutritionReportState is UiState.Error)
         (weeklyNutritionReportState as UiState.Error).error?.let { exception ->
