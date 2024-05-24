@@ -206,12 +206,12 @@ class ReportWidget : GlanceAppWidget() {
                             .clickable(onClick = action)
                     ) {
                         repeat(4) {
-                            val label = when (it) {
-                                0 -> "Kalori"
-                                1 -> "Karbohidrat"
-                                2 -> "Protein"
-                                else -> "Lemak"
-                            }
+                            val label = context.resources.getString(when (it) {
+                                0 -> R.string.calories
+                                1 -> R.string.carbohydrates
+                                2 -> R.string.protein
+                                else -> R.string.fat
+                            })
                             val unit = if (it != 0) "g" else "kcal"
                             val totalNutrition = when (it) {
                                 0 -> totalCaloriesToday
