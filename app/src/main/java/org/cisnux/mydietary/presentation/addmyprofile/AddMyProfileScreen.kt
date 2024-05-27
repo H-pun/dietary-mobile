@@ -43,11 +43,11 @@ import org.cisnux.mydietary.presentation.ui.components.MyProfileForm
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.utils.AppDestination
 import org.cisnux.mydietary.utils.Failure
-import org.cisnux.mydietary.utils.isIntAndGreaterThanZero
 import org.cisnux.mydietary.utils.isFloatAndGreaterThanZero
 import org.cisnux.mydietary.utils.isFloatAndGreaterAndEqualToZero
 import org.cisnux.mydietary.utils.isUsernameValid
 import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.utils.isAgeValid
 
 @Composable
 fun AddMyProfileScreen(
@@ -139,8 +139,6 @@ fun AddMyProfileScreen(
                 onGenderChange = { newValue -> myProfile = myProfile.copy(gender = newValue) },
                 onGoalChange = { newValue ->
                     myProfile = myProfile.copy(goal = newValue)
-                    if (myProfile.goal == goals[1])
-                        myProfile = myProfile.copy(weightTarget = "0")
                 },
                 onTargetWeightChange = { newValue ->
                     myProfile = myProfile.copy(weightTarget = newValue)
@@ -459,7 +457,7 @@ private fun MyProfileBody(
             onClick = onBuildProfile,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium,
-            enabled = username.isUsernameValid() and age.isIntAndGreaterThanZero()
+            enabled = username.isUsernameValid() and age.isAgeValid()
                     and weight.isFloatAndGreaterThanZero() and height.isFloatAndGreaterThanZero()
                     and weightTarget.isFloatAndGreaterAndEqualToZero() and !isBuildProfileLoading,
         ) {

@@ -70,9 +70,9 @@ fun String.isUsernameValid(): Boolean {
     return Regex(usernameRegex).matches(this)
 }
 
-fun String.isIntAndGreaterThanZero(): Boolean = try {
+fun String.isAgeValid(): Boolean = try {
     val value = this.toInt()
-    value > 0
+    value >= 18
 } catch (e: NumberFormatException) {
     false
 }

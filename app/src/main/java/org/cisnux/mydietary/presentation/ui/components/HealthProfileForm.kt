@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.isIntAndGreaterThanZero
+import org.cisnux.mydietary.utils.isAgeValid
 import org.cisnux.mydietary.utils.isFloatAndGreaterThanZero
 
 @Preview(showBackground = true)
@@ -116,7 +116,7 @@ fun HealthProfileForm(
                 )
             },
             supportingText = {
-                if (age.isNotEmpty() and !age.isIntAndGreaterThanZero())
+                if (age.isNotEmpty() and !age.isAgeValid())
                     Text(
                         text = stringResource(R.string.age_error_text),
                         style = MaterialTheme.typography.bodySmall,
@@ -127,9 +127,9 @@ fun HealthProfileForm(
                         style = MaterialTheme.typography.bodySmall,
                     )
             },
-            isError = age.isNotEmpty() and !age.isIntAndGreaterThanZero(),
+            isError = age.isNotEmpty() and !age.isAgeValid(),
             trailingIcon = {
-                if (age.isNotEmpty() and !age.isIntAndGreaterThanZero())
+                if (age.isNotEmpty() and !age.isAgeValid())
                     Icon(
                         painter = painterResource(id = R.drawable.ic_round_error_24dp),
                         contentDescription = null,

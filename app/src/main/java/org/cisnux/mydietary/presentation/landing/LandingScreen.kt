@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -102,7 +103,10 @@ private fun LandingContent(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
-    var isDialogOpen by rememberSaveable {
+    var isPrivacyDialogOpen by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var isTermsOfUseDialogOpen by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -165,28 +169,40 @@ private fun LandingContent(
                 Text(text = stringResource(id = R.string.sign_in))
             }
             Text(
-                text = buildAnnotatedString {
-                    append(stringResource(R.string.terms_of_use_label_button))
-                    append('\n')
-                    withStyle(
-                        style = SpanStyle(
-                            color = if (!isSystemInDarkTheme()) Color.Blue else Color.Cyan,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    ) {
-                        append(stringResource(R.string.terms_of_use))
-                    }
-                },
+                text = stringResource(R.string.terms_of_use_label_button),
                 style = MaterialTheme.typography.labelLarge,
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .clip(MaterialTheme.shapes.extraLarge)
-                    .clickable(onClick = { isDialogOpen = true })
-                    .padding(4.dp)
             )
-            Spacer(modifier = Modifier.height(2.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = stringResource(R.string.terms_of_use),
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        color = if (!isSystemInDarkTheme()) Color.Blue else Color.Cyan,
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .clip(MaterialTheme.shapes.extraLarge)
+                        .clickable(onClick = { isTermsOfUseDialogOpen = true })
+                        .padding(4.dp)
+                )
+                Text(
+                    text = stringResource(R.string.and),
+                    style = MaterialTheme.typography.labelLarge,
+                )
+                Text(
+                    text = stringResource(R.string.privacy_policy_title),
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        color = if (!isSystemInDarkTheme()) Color.Blue else Color.Cyan,
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .clip(MaterialTheme.shapes.extraLarge)
+                        .clickable(onClick = { isPrivacyDialogOpen = true })
+                        .padding(4.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
             Image(
                 painter = painterResource(id = R.drawable.powered_by_fatsecret),
                 contentDescription = null,
@@ -196,37 +212,75 @@ private fun LandingContent(
                     .height(18.dp)
             )
         }
-        TermsOfUseDialog(isDialogOpen = isDialogOpen, onDismissRequest = { isDialogOpen = false })
+        PrivacyPolicyOrTermsOfUseDialog(
+            isDialogOpen = isTermsOfUseDialogOpen,
+            onDismissRequest = { isTermsOfUseDialogOpen = false },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.terms_of_use),
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+            content = {
+                Text(
+                    text = stringResource(id = R.string.terms_of_use_description),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier
+                        .height(400.dp)
+                        .verticalScroll(
+                            rememberScrollState()
+                        )
+                )
+            }
+        )
+        PrivacyPolicyOrTermsOfUseDialog(
+            isDialogOpen = isPrivacyDialogOpen,
+            onDismissRequest = { isPrivacyDialogOpen = false },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.privacy_policy_title),
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+            content = {
+                Text(
+                    text = stringResource(id = R.string.privacy_policy),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier
+                        .height(400.dp)
+                        .verticalScroll(
+                            rememberScrollState()
+                        )
+                )
+            }
+        )
     }
 }
 
 @Composable
-private fun TermsOfUseDialog(
+private fun PrivacyPolicyOrTermsOfUseDialog(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
+    title: @Composable () -> Unit = {},
+    content: @Composable () -> Unit = {},
     isDialogOpen: Boolean = false,
 ) {
     if (isDialogOpen)
         AlertDialog(
             onDismissRequest = onDismissRequest,
-            title = {
-                Text(
-                    text = stringResource(id = R.string.terms_of_use),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            },
+            title = title,
             confirmButton = {
                 TextButton(onClick = onDismissRequest) {
                     Text(text = "OK")
                 }
             },
             iconContentColor = Color.Unspecified,
-            text = {
-                Text(text = stringResource(id = R.string.terms_of_use_description), style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Justify, modifier = Modifier
-                    .height(400.dp)
-                    .verticalScroll(
-                        rememberScrollState()
-                    ))
-            }
+            text = content
         )
 }
