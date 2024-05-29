@@ -120,14 +120,18 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateUp: () -> Unit,
 ) {
-    BackHandler {
-        navigateUp()
-    }
     val snackbarHostState = remember {
         SnackbarHostState()
     }
     val coroutineScope = rememberCoroutineScope()
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    BackHandler {
+        if (drawerState.isClosed)
+            navigateUp()
+        else coroutineScope.launch {
+            drawerState.close()
+        }
+    }
     val context = LocalContext.current
     val cameraLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
