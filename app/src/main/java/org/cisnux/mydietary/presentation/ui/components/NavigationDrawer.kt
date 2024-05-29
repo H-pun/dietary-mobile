@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -70,12 +69,6 @@ fun NavigationDrawer(
             icon = Icons.Rounded.Home,
             destination = AppDestination.HomeRoute,
             contentDescription = stringResource(id = R.string.home_title)
-        ),
-        NavigationItem(
-            title = stringResource(id = R.string.my_profile_title),
-            icon = Icons.Rounded.AccountCircle,
-            destination = AppDestination.MyProfileRoute,
-            contentDescription = stringResource(id = R.string.my_profile_title)
         ),
         NavigationItem(
             title = stringResource(id = R.string.account_and_security_title),

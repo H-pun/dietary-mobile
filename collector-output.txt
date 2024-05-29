@@ -1,0 +1,2111 @@
+2024-05-29T03:38:39.886Z	info	service@v0.101.0/service.go:102	Setting up own telemetry...
+2024-05-29T03:38:39.887Z	info	service@v0.101.0/telemetry.go:103	Serving metrics	{"address": ":8888", "level": "Normal"}
+2024-05-29T03:38:39.887Z	info	exporter@v0.101.0/exporter.go:275	Development component. May change in the future.	{"kind": "exporter", "data_type": "logs", "name": "debug"}
+2024-05-29T03:38:39.889Z	info	exporter@v0.101.0/exporter.go:275	Development component. May change in the future.	{"kind": "exporter", "data_type": "traces", "name": "debug"}
+2024-05-29T03:38:39.889Z	warn	jaegerreceiver@v0.101.0/factory.go:49	jaeger receiver will deprecate Thrift-gen and replace it with Proto-gen to be compatbible to jaeger 1.42.0 and higher. See https://github.com/open-telemetry/opentelemetry-collector-contrib/pull/18485 for more details.	{"kind": "receiver", "name": "jaeger", "data_type": "traces"}
+2024-05-29T03:38:39.890Z	info	exporter@v0.101.0/exporter.go:275	Development component. May change in the future.	{"kind": "exporter", "data_type": "metrics", "name": "debug"}
+2024-05-29T03:38:39.891Z	info	service@v0.101.0/service.go:169	Starting otelcol...	{"Version": "0.101.0", "NumCPU": 8}
+2024-05-29T03:38:39.891Z	info	extensions/extensions.go:34	Starting extensions...
+2024-05-29T03:38:39.891Z	info	extensions/extensions.go:37	Extension is starting...	{"kind": "extension", "name": "zpages"}
+2024-05-29T03:38:39.891Z	info	zpagesextension@v0.101.0/zpagesextension.go:53	Registered zPages span processor on tracer provider	{"kind": "extension", "name": "zpages"}
+2024-05-29T03:38:39.891Z	info	zpagesextension@v0.101.0/zpagesextension.go:63	Registered Host's zPages	{"kind": "extension", "name": "zpages"}
+2024-05-29T03:38:39.891Z	info	zpagesextension@v0.101.0/zpagesextension.go:75	Starting zPages extension	{"kind": "extension", "name": "zpages", "config": {"TCPAddr":{"Endpoint":"0.0.0.0:55679","DialerConfig":{"Timeout":0}}}}
+2024-05-29T03:38:39.891Z	info	extensions/extensions.go:52	Extension started.	{"kind": "extension", "name": "zpages"}
+2024-05-29T03:38:39.891Z	info	extensions/extensions.go:37	Extension is starting...	{"kind": "extension", "name": "pprof"}
+2024-05-29T03:38:39.891Z	info	pprofextension@v0.101.0/pprofextension.go:60	Starting net/http/pprof server	{"kind": "extension", "name": "pprof", "config": {"TCPAddr":{"Endpoint":"0.0.0.0:1777","DialerConfig":{"Timeout":0}},"BlockProfileFraction":0,"MutexProfileFraction":0,"SaveToFile":""}}
+2024-05-29T03:38:39.891Z	info	extensions/extensions.go:52	Extension started.	{"kind": "extension", "name": "pprof"}
+2024-05-29T03:38:39.891Z	info	extensions/extensions.go:37	Extension is starting...	{"kind": "extension", "name": "health_check"}
+2024-05-29T03:38:39.891Z	info	healthcheckextension@v0.101.0/healthcheckextension.go:35	Starting health_check extension	{"kind": "extension", "name": "health_check", "config": {"Endpoint":"0.0.0.0:13133","TLSSetting":null,"CORS":null,"Auth":null,"MaxRequestBodySize":0,"IncludeMetadata":false,"ResponseHeaders":null,"Path":"/","ResponseBody":null,"CheckCollectorPipeline":{"Enabled":false,"Interval":"5m","ExporterFailureThreshold":5}}}
+2024-05-29T03:38:39.891Z	warn	internal@v0.101.0/warning.go:42	Using the 0.0.0.0 address exposes this server to every network interface, which may facilitate Denial of Service attacks. Enable the feature gate to change the default and remove this warning.	{"kind": "extension", "name": "health_check", "documentation": "https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks", "feature gate ID": "component.UseLocalHostAsDefaultHost"}
+2024-05-29T03:38:39.892Z	info	extensions/extensions.go:52	Extension started.	{"kind": "extension", "name": "health_check"}
+2024-05-29T03:38:39.892Z	warn	internal@v0.101.0/warning.go:42	Using the 0.0.0.0 address exposes this server to every network interface, which may facilitate Denial of Service attacks. Enable the feature gate to change the default and remove this warning.	{"kind": "receiver", "name": "otlp", "data_type": "logs", "documentation": "https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks", "feature gate ID": "component.UseLocalHostAsDefaultHost"}
+2024-05-29T03:38:39.892Z	info	otlpreceiver@v0.101.0/otlp.go:102	Starting GRPC server	{"kind": "receiver", "name": "otlp", "data_type": "logs", "endpoint": "0.0.0.0:4317"}
+2024-05-29T03:38:39.892Z	warn	internal@v0.101.0/warning.go:42	Using the 0.0.0.0 address exposes this server to every network interface, which may facilitate Denial of Service attacks. Enable the feature gate to change the default and remove this warning.	{"kind": "receiver", "name": "otlp", "data_type": "logs", "documentation": "https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks", "feature gate ID": "component.UseLocalHostAsDefaultHost"}
+2024-05-29T03:38:39.892Z	info	otlpreceiver@v0.101.0/otlp.go:152	Starting HTTP server	{"kind": "receiver", "name": "otlp", "data_type": "logs", "endpoint": "0.0.0.0:4318"}
+2024-05-29T03:38:39.892Z	warn	internal@v0.101.0/warning.go:42	Using the 0.0.0.0 address exposes this server to every network interface, which may facilitate Denial of Service attacks. Enable the feature gate to change the default and remove this warning.	{"kind": "receiver", "name": "zipkin", "data_type": "traces", "documentation": "https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks", "feature gate ID": "component.UseLocalHostAsDefaultHost"}
+2024-05-29T03:38:39.892Z	warn	internal@v0.101.0/warning.go:42	Using the 0.0.0.0 address exposes this server to every network interface, which may facilitate Denial of Service attacks. Enable the feature gate to change the default and remove this warning.	{"kind": "receiver", "name": "opencensus", "data_type": "metrics", "documentation": "https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks", "feature gate ID": "component.UseLocalHostAsDefaultHost"}
+2024-05-29T03:38:39.895Z	warn	internal@v0.101.0/warning.go:42	Using the 0.0.0.0 address exposes this server to every network interface, which may facilitate Denial of Service attacks. Enable the feature gate to change the default and remove this warning.	{"kind": "receiver", "name": "jaeger", "data_type": "traces", "documentation": "https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks", "feature gate ID": "component.UseLocalHostAsDefaultHost"}
+2024-05-29T03:38:39.895Z	warn	internal@v0.101.0/warning.go:42	Using the 0.0.0.0 address exposes this server to every network interface, which may facilitate Denial of Service attacks. Enable the feature gate to change the default and remove this warning.	{"kind": "receiver", "name": "jaeger", "data_type": "traces", "documentation": "https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks", "feature gate ID": "component.UseLocalHostAsDefaultHost"}
+2024-05-29T03:38:39.897Z	info	prometheusreceiver@v0.101.0/metrics_receiver.go:275	Starting discovery manager	{"kind": "receiver", "name": "prometheus", "data_type": "metrics"}
+2024-05-29T03:38:39.898Z	info	prometheusreceiver@v0.101.0/metrics_receiver.go:253	Scrape job added	{"kind": "receiver", "name": "prometheus", "data_type": "metrics", "jobName": "otel-collector"}
+2024-05-29T03:38:39.898Z	info	healthcheck/handler.go:132	Health Check state change	{"kind": "extension", "name": "health_check", "status": "ready"}
+2024-05-29T03:38:39.898Z	info	service@v0.101.0/service.go:195	Everything is ready. Begin running and processing data.
+2024-05-29T03:38:39.898Z	warn	localhostgate/featuregate.go:63	The default endpoints for all servers in components will change to use localhost instead of 0.0.0.0 in a future version. Use the feature gate to preview the new default.	{"feature gate ID": "component.UseLocalHostAsDefaultHost"}
+2024-05-29T03:38:39.898Z	info	prometheusreceiver@v0.101.0/metrics_receiver.go:340	Starting scrape manager	{"kind": "receiver", "name": "prometheus", "data_type": "metrics"}
+2024-05-29T03:38:50.650Z	info	MetricsExporter	{"kind": "exporter", "data_type": "metrics", "name": "debug", "resource metrics": 1, "metrics": 12, "data points": 12}
+2024-05-29T03:38:50.652Z	info	ResourceMetrics #0
+Resource SchemaURL: 
+Resource attributes:
+     -> service.name: Str(otel-collector)
+     -> service.instance.id: Str(0.0.0.0:8888)
+     -> net.host.port: Str(8888)
+     -> http.scheme: Str(http)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+ScopeMetrics #0
+ScopeMetrics SchemaURL: 
+InstrumentationScope otelcol/prometheusreceiver 0.101.0
+Metric #0
+Descriptor:
+     -> Name: otelcol_process_uptime
+     -> Description: Uptime of the process
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 10.548813
+Metric #1
+Descriptor:
+     -> Name: otelcol_processor_batch_
+     -> Description: 
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 1.000000
+Metric #2
+Descriptor:
+     -> Name: scrape_duration_seconds
+     -> Description: Duration of the scrape
+     -> Unit: s
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 0.026128
+Metric #3
+Descriptor:
+     -> Name: otelcol_process_cpu_seconds
+     -> Description: Total CPU user and system time in seconds
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 0.100000
+Metric #4
+Descriptor:
+     -> Name: otelcol_process_memory_rss
+     -> Description: Total physical memory (resident set size)
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 72486912.000000
+Metric #5
+Descriptor:
+     -> Name: otelcol_process_runtime_heap_alloc_bytes
+     -> Description: Bytes of allocated heap objects (see 'go doc runtime.MemStats.HeapAlloc')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 9212128.000000
+Metric #6
+Descriptor:
+     -> Name: otelcol_process_runtime_total_alloc_bytes
+     -> Description: Cumulative bytes allocated for heap objects (see 'go doc runtime.MemStats.TotalAlloc')
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 15068920.000000
+Metric #7
+Descriptor:
+     -> Name: scrape_series_added
+     -> Description: The approximate number of new series in this scrape
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 8.000000
+Metric #8
+Descriptor:
+     -> Name: otelcol_process_runtime_total_sys_memory_bytes
+     -> Description: Total bytes of memory obtained from the OS (see 'go doc runtime.MemStats.Sys')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 23418120.000000
+Metric #9
+Descriptor:
+     -> Name: up
+     -> Description: The scraping was successful
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 1.000000
+Metric #10
+Descriptor:
+     -> Name: scrape_samples_scraped
+     -> Description: The number of samples the target exposed
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 8.000000
+Metric #11
+Descriptor:
+     -> Name: scrape_samples_post_metric_relabeling
+     -> Description: The number of samples remaining after metric relabeling was applied
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Value: 8.000000
+	{"kind": "exporter", "data_type": "metrics", "name": "debug"}
+2024-05-29T03:39:00.585Z	info	MetricsExporter	{"kind": "exporter", "data_type": "metrics", "name": "debug", "resource metrics": 1, "metrics": 18, "data points": 18}
+2024-05-29T03:39:00.586Z	info	ResourceMetrics #0
+Resource SchemaURL: 
+Resource attributes:
+     -> service.name: Str(otel-collector)
+     -> service.instance.id: Str(0.0.0.0:8888)
+     -> net.host.port: Str(8888)
+     -> http.scheme: Str(http)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+ScopeMetrics #0
+ScopeMetrics SchemaURL: 
+InstrumentationScope otelcol/prometheusreceiver 0.101.0
+Metric #0
+Descriptor:
+     -> Name: otelcol_process_uptime
+     -> Description: Uptime of the process
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 20.535187
+Metric #1
+Descriptor:
+     -> Name: otelcol_processor_batch_timeout_trigger_send
+     -> Description: Number of times the batch was sent due to a timeout trigger
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 1.000000
+Metric #2
+Descriptor:
+     -> Name: scrape_samples_post_metric_relabeling
+     -> Description: The number of samples remaining after metric relabeling was applied
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 38.000000
+Metric #3
+Descriptor:
+     -> Name: otelcol_exporter_send_failed_metric_points
+     -> Description: Number of metric points in failed attempts to send to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 0.000000
+Metric #4
+Descriptor:
+     -> Name: otelcol_process_runtime_total_alloc_bytes
+     -> Description: Cumulative bytes allocated for heap objects (see 'go doc runtime.MemStats.TotalAlloc')
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 16198616.000000
+Metric #5
+Descriptor:
+     -> Name: otelcol_process_runtime_total_sys_memory_bytes
+     -> Description: Total bytes of memory obtained from the OS (see 'go doc runtime.MemStats.Sys')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 23418120.000000
+Metric #6
+Descriptor:
+     -> Name: otelcol_receiver_accepted_metric_points
+     -> Description: Number of metric points successfully pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 12.000000
+Metric #7
+Descriptor:
+     -> Name: scrape_samples_scraped
+     -> Description: The number of samples the target exposed
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 38.000000
+Metric #8
+Descriptor:
+     -> Name: otelcol_process_cpu_seconds
+     -> Description: Total CPU user and system time in seconds
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 0.130000
+Metric #9
+Descriptor:
+     -> Name: otelcol_process_runtime_heap_alloc_bytes
+     -> Description: Bytes of allocated heap objects (see 'go doc runtime.MemStats.HeapAlloc')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 10341824.000000
+Metric #10
+Descriptor:
+     -> Name: up
+     -> Description: The scraping was successful
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 1.000000
+Metric #11
+Descriptor:
+     -> Name: scrape_duration_seconds
+     -> Description: Duration of the scrape
+     -> Unit: s
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 0.008744
+Metric #12
+Descriptor:
+     -> Name: otelcol_processor_batch_
+     -> Description: 
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 1.000000
+Metric #13
+Descriptor:
+     -> Name: otelcol_processor_batch_batch_send_size
+     -> Description: Number of units in the batch
+     -> Unit: 
+     -> DataType: Histogram
+     -> AggregationTemporality: Cumulative
+HistogramDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Count: 1
+Sum: 12.000000
+ExplicitBounds #0: 10.000000
+ExplicitBounds #1: 25.000000
+ExplicitBounds #2: 50.000000
+ExplicitBounds #3: 75.000000
+ExplicitBounds #4: 100.000000
+ExplicitBounds #5: 250.000000
+ExplicitBounds #6: 500.000000
+ExplicitBounds #7: 750.000000
+ExplicitBounds #8: 1000.000000
+ExplicitBounds #9: 2000.000000
+ExplicitBounds #10: 3000.000000
+ExplicitBounds #11: 4000.000000
+ExplicitBounds #12: 5000.000000
+ExplicitBounds #13: 6000.000000
+ExplicitBounds #14: 7000.000000
+ExplicitBounds #15: 8000.000000
+ExplicitBounds #16: 9000.000000
+ExplicitBounds #17: 10000.000000
+ExplicitBounds #18: 20000.000000
+ExplicitBounds #19: 30000.000000
+ExplicitBounds #20: 50000.000000
+ExplicitBounds #21: 100000.000000
+Buckets #0, Count: 0
+Buckets #1, Count: 1
+Buckets #2, Count: 0
+Buckets #3, Count: 0
+Buckets #4, Count: 0
+Buckets #5, Count: 0
+Buckets #6, Count: 0
+Buckets #7, Count: 0
+Buckets #8, Count: 0
+Buckets #9, Count: 0
+Buckets #10, Count: 0
+Buckets #11, Count: 0
+Buckets #12, Count: 0
+Buckets #13, Count: 0
+Buckets #14, Count: 0
+Buckets #15, Count: 0
+Buckets #16, Count: 0
+Buckets #17, Count: 0
+Buckets #18, Count: 0
+Buckets #19, Count: 0
+Buckets #20, Count: 0
+Buckets #21, Count: 0
+Buckets #22, Count: 0
+Metric #14
+Descriptor:
+     -> Name: otelcol_receiver_refused_metric_points
+     -> Description: Number of metric points that could not be pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 0.000000
+Metric #15
+Descriptor:
+     -> Name: scrape_series_added
+     -> Description: The approximate number of new series in this scrape
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 38.000000
+Metric #16
+Descriptor:
+     -> Name: otelcol_exporter_sent_metric_points
+     -> Description: Number of metric points successfully sent to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 12.000000
+Metric #17
+Descriptor:
+     -> Name: otelcol_process_memory_rss
+     -> Description: Total physical memory (resident set size)
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Value: 73142272.000000
+	{"kind": "exporter", "data_type": "metrics", "name": "debug"}
+2024-05-29T03:39:10.563Z	info	MetricsExporter	{"kind": "exporter", "data_type": "metrics", "name": "debug", "resource metrics": 1, "metrics": 18, "data points": 18}
+2024-05-29T03:39:10.564Z	info	ResourceMetrics #0
+Resource SchemaURL: 
+Resource attributes:
+     -> service.name: Str(otel-collector)
+     -> service.instance.id: Str(0.0.0.0:8888)
+     -> net.host.port: Str(8888)
+     -> http.scheme: Str(http)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+ScopeMetrics #0
+ScopeMetrics SchemaURL: 
+InstrumentationScope otelcol/prometheusreceiver 0.101.0
+Metric #0
+Descriptor:
+     -> Name: otelcol_exporter_sent_metric_points
+     -> Description: Number of metric points successfully sent to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 30.000000
+Metric #1
+Descriptor:
+     -> Name: otelcol_process_runtime_heap_alloc_bytes
+     -> Description: Bytes of allocated heap objects (see 'go doc runtime.MemStats.HeapAlloc')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 11438344.000000
+Metric #2
+Descriptor:
+     -> Name: otelcol_process_uptime
+     -> Description: Uptime of the process
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 30.536140
+Metric #3
+Descriptor:
+     -> Name: scrape_duration_seconds
+     -> Description: Duration of the scrape
+     -> Unit: s
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 0.004754
+Metric #4
+Descriptor:
+     -> Name: scrape_samples_scraped
+     -> Description: The number of samples the target exposed
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 38.000000
+Metric #5
+Descriptor:
+     -> Name: otelcol_process_memory_rss
+     -> Description: Total physical memory (resident set size)
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 73666560.000000
+Metric #6
+Descriptor:
+     -> Name: otelcol_process_runtime_total_sys_memory_bytes
+     -> Description: Total bytes of memory obtained from the OS (see 'go doc runtime.MemStats.Sys')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 23418120.000000
+Metric #7
+Descriptor:
+     -> Name: otelcol_processor_batch_timeout_trigger_send
+     -> Description: Number of times the batch was sent due to a timeout trigger
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 2.000000
+Metric #8
+Descriptor:
+     -> Name: otelcol_receiver_accepted_metric_points
+     -> Description: Number of metric points successfully pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 30.000000
+Metric #9
+Descriptor:
+     -> Name: otelcol_receiver_refused_metric_points
+     -> Description: Number of metric points that could not be pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 0.000000
+Metric #10
+Descriptor:
+     -> Name: scrape_samples_post_metric_relabeling
+     -> Description: The number of samples remaining after metric relabeling was applied
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 38.000000
+Metric #11
+Descriptor:
+     -> Name: otelcol_process_runtime_total_alloc_bytes
+     -> Description: Cumulative bytes allocated for heap objects (see 'go doc runtime.MemStats.TotalAlloc')
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 17295136.000000
+Metric #12
+Descriptor:
+     -> Name: otelcol_processor_batch_
+     -> Description: 
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 1.000000
+Metric #13
+Descriptor:
+     -> Name: up
+     -> Description: The scraping was successful
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 1.000000
+Metric #14
+Descriptor:
+     -> Name: otelcol_exporter_send_failed_metric_points
+     -> Description: Number of metric points in failed attempts to send to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 0.000000
+Metric #15
+Descriptor:
+     -> Name: otelcol_process_cpu_seconds
+     -> Description: Total CPU user and system time in seconds
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 0.150000
+Metric #16
+Descriptor:
+     -> Name: otelcol_processor_batch_batch_send_size
+     -> Description: Number of units in the batch
+     -> Unit: 
+     -> DataType: Histogram
+     -> AggregationTemporality: Cumulative
+HistogramDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Count: 2
+Sum: 30.000000
+ExplicitBounds #0: 10.000000
+ExplicitBounds #1: 25.000000
+ExplicitBounds #2: 50.000000
+ExplicitBounds #3: 75.000000
+ExplicitBounds #4: 100.000000
+ExplicitBounds #5: 250.000000
+ExplicitBounds #6: 500.000000
+ExplicitBounds #7: 750.000000
+ExplicitBounds #8: 1000.000000
+ExplicitBounds #9: 2000.000000
+ExplicitBounds #10: 3000.000000
+ExplicitBounds #11: 4000.000000
+ExplicitBounds #12: 5000.000000
+ExplicitBounds #13: 6000.000000
+ExplicitBounds #14: 7000.000000
+ExplicitBounds #15: 8000.000000
+ExplicitBounds #16: 9000.000000
+ExplicitBounds #17: 10000.000000
+ExplicitBounds #18: 20000.000000
+ExplicitBounds #19: 30000.000000
+ExplicitBounds #20: 50000.000000
+ExplicitBounds #21: 100000.000000
+Buckets #0, Count: 0
+Buckets #1, Count: 2
+Buckets #2, Count: 0
+Buckets #3, Count: 0
+Buckets #4, Count: 0
+Buckets #5, Count: 0
+Buckets #6, Count: 0
+Buckets #7, Count: 0
+Buckets #8, Count: 0
+Buckets #9, Count: 0
+Buckets #10, Count: 0
+Buckets #11, Count: 0
+Buckets #12, Count: 0
+Buckets #13, Count: 0
+Buckets #14, Count: 0
+Buckets #15, Count: 0
+Buckets #16, Count: 0
+Buckets #17, Count: 0
+Buckets #18, Count: 0
+Buckets #19, Count: 0
+Buckets #20, Count: 0
+Buckets #21, Count: 0
+Buckets #22, Count: 0
+Metric #17
+Descriptor:
+     -> Name: scrape_series_added
+     -> Description: The approximate number of new series in this scrape
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:10.425 +0000 UTC
+Value: 38.000000
+	{"kind": "exporter", "data_type": "metrics", "name": "debug"}
+2024-05-29T03:39:20.511Z	info	MetricsExporter	{"kind": "exporter", "data_type": "metrics", "name": "debug", "resource metrics": 1, "metrics": 18, "data points": 18}
+2024-05-29T03:39:20.512Z	info	ResourceMetrics #0
+Resource SchemaURL: 
+Resource attributes:
+     -> service.name: Str(otel-collector)
+     -> service.instance.id: Str(0.0.0.0:8888)
+     -> net.host.port: Str(8888)
+     -> http.scheme: Str(http)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+ScopeMetrics #0
+ScopeMetrics SchemaURL: 
+InstrumentationScope otelcol/prometheusreceiver 0.101.0
+Metric #0
+Descriptor:
+     -> Name: otelcol_process_uptime
+     -> Description: Uptime of the process
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 40.533143
+Metric #1
+Descriptor:
+     -> Name: scrape_samples_scraped
+     -> Description: The number of samples the target exposed
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 38.000000
+Metric #2
+Descriptor:
+     -> Name: scrape_samples_post_metric_relabeling
+     -> Description: The number of samples remaining after metric relabeling was applied
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 38.000000
+Metric #3
+Descriptor:
+     -> Name: up
+     -> Description: The scraping was successful
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 1.000000
+Metric #4
+Descriptor:
+     -> Name: scrape_series_added
+     -> Description: The approximate number of new series in this scrape
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 38.000000
+Metric #5
+Descriptor:
+     -> Name: otelcol_process_runtime_heap_alloc_bytes
+     -> Description: Bytes of allocated heap objects (see 'go doc runtime.MemStats.HeapAlloc')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 11674376.000000
+Metric #6
+Descriptor:
+     -> Name: otelcol_processor_batch_
+     -> Description: 
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 1.000000
+Metric #7
+Descriptor:
+     -> Name: otelcol_processor_batch_batch_send_size
+     -> Description: Number of units in the batch
+     -> Unit: 
+     -> DataType: Histogram
+     -> AggregationTemporality: Cumulative
+HistogramDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Count: 3
+Sum: 48.000000
+ExplicitBounds #0: 10.000000
+ExplicitBounds #1: 25.000000
+ExplicitBounds #2: 50.000000
+ExplicitBounds #3: 75.000000
+ExplicitBounds #4: 100.000000
+ExplicitBounds #5: 250.000000
+ExplicitBounds #6: 500.000000
+ExplicitBounds #7: 750.000000
+ExplicitBounds #8: 1000.000000
+ExplicitBounds #9: 2000.000000
+ExplicitBounds #10: 3000.000000
+ExplicitBounds #11: 4000.000000
+ExplicitBounds #12: 5000.000000
+ExplicitBounds #13: 6000.000000
+ExplicitBounds #14: 7000.000000
+ExplicitBounds #15: 8000.000000
+ExplicitBounds #16: 9000.000000
+ExplicitBounds #17: 10000.000000
+ExplicitBounds #18: 20000.000000
+ExplicitBounds #19: 30000.000000
+ExplicitBounds #20: 50000.000000
+ExplicitBounds #21: 100000.000000
+Buckets #0, Count: 0
+Buckets #1, Count: 3
+Buckets #2, Count: 0
+Buckets #3, Count: 0
+Buckets #4, Count: 0
+Buckets #5, Count: 0
+Buckets #6, Count: 0
+Buckets #7, Count: 0
+Buckets #8, Count: 0
+Buckets #9, Count: 0
+Buckets #10, Count: 0
+Buckets #11, Count: 0
+Buckets #12, Count: 0
+Buckets #13, Count: 0
+Buckets #14, Count: 0
+Buckets #15, Count: 0
+Buckets #16, Count: 0
+Buckets #17, Count: 0
+Buckets #18, Count: 0
+Buckets #19, Count: 0
+Buckets #20, Count: 0
+Buckets #21, Count: 0
+Buckets #22, Count: 0
+Metric #8
+Descriptor:
+     -> Name: otelcol_receiver_accepted_metric_points
+     -> Description: Number of metric points successfully pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 48.000000
+Metric #9
+Descriptor:
+     -> Name: otelcol_process_runtime_total_sys_memory_bytes
+     -> Description: Total bytes of memory obtained from the OS (see 'go doc runtime.MemStats.Sys')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 23418120.000000
+Metric #10
+Descriptor:
+     -> Name: otelcol_processor_batch_timeout_trigger_send
+     -> Description: Number of times the batch was sent due to a timeout trigger
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 3.000000
+Metric #11
+Descriptor:
+     -> Name: otelcol_receiver_refused_metric_points
+     -> Description: Number of metric points that could not be pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 0.000000
+Metric #12
+Descriptor:
+     -> Name: scrape_duration_seconds
+     -> Description: Duration of the scrape
+     -> Unit: s
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 0.006431
+Metric #13
+Descriptor:
+     -> Name: otelcol_exporter_send_failed_metric_points
+     -> Description: Number of metric points in failed attempts to send to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 0.000000
+Metric #14
+Descriptor:
+     -> Name: otelcol_process_cpu_seconds
+     -> Description: Total CPU user and system time in seconds
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 0.160000
+Metric #15
+Descriptor:
+     -> Name: otelcol_process_memory_rss
+     -> Description: Total physical memory (resident set size)
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 73797632.000000
+Metric #16
+Descriptor:
+     -> Name: otelcol_process_runtime_total_alloc_bytes
+     -> Description: Cumulative bytes allocated for heap objects (see 'go doc runtime.MemStats.TotalAlloc')
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 17531168.000000
+Metric #17
+Descriptor:
+     -> Name: otelcol_exporter_sent_metric_points
+     -> Description: Number of metric points successfully sent to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:20.422 +0000 UTC
+Value: 48.000000
+	{"kind": "exporter", "data_type": "metrics", "name": "debug"}
+2024-05-29T03:39:30.618Z	info	MetricsExporter	{"kind": "exporter", "data_type": "metrics", "name": "debug", "resource metrics": 1, "metrics": 18, "data points": 18}
+2024-05-29T03:39:30.619Z	info	ResourceMetrics #0
+Resource SchemaURL: 
+Resource attributes:
+     -> service.name: Str(otel-collector)
+     -> service.instance.id: Str(0.0.0.0:8888)
+     -> net.host.port: Str(8888)
+     -> http.scheme: Str(http)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+ScopeMetrics #0
+ScopeMetrics SchemaURL: 
+InstrumentationScope otelcol/prometheusreceiver 0.101.0
+Metric #0
+Descriptor:
+     -> Name: up
+     -> Description: The scraping was successful
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 1.000000
+Metric #1
+Descriptor:
+     -> Name: scrape_duration_seconds
+     -> Description: Duration of the scrape
+     -> Unit: s
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 0.007724
+Metric #2
+Descriptor:
+     -> Name: scrape_samples_scraped
+     -> Description: The number of samples the target exposed
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 38.000000
+Metric #3
+Descriptor:
+     -> Name: scrape_series_added
+     -> Description: The approximate number of new series in this scrape
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 38.000000
+Metric #4
+Descriptor:
+     -> Name: otelcol_process_cpu_seconds
+     -> Description: Total CPU user and system time in seconds
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 0.190000
+Metric #5
+Descriptor:
+     -> Name: otelcol_process_runtime_total_sys_memory_bytes
+     -> Description: Total bytes of memory obtained from the OS (see 'go doc runtime.MemStats.Sys')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 23418120.000000
+Metric #6
+Descriptor:
+     -> Name: otelcol_receiver_refused_metric_points
+     -> Description: Number of metric points that could not be pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 0.000000
+Metric #7
+Descriptor:
+     -> Name: otelcol_exporter_send_failed_metric_points
+     -> Description: Number of metric points in failed attempts to send to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 0.000000
+Metric #8
+Descriptor:
+     -> Name: otelcol_process_memory_rss
+     -> Description: Total physical memory (resident set size)
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 74452992.000000
+Metric #9
+Descriptor:
+     -> Name: otelcol_processor_batch_timeout_trigger_send
+     -> Description: Number of times the batch was sent due to a timeout trigger
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 4.000000
+Metric #10
+Descriptor:
+     -> Name: otelcol_processor_batch_
+     -> Description: 
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 1.000000
+Metric #11
+Descriptor:
+     -> Name: otelcol_processor_batch_batch_send_size
+     -> Description: Number of units in the batch
+     -> Unit: 
+     -> DataType: Histogram
+     -> AggregationTemporality: Cumulative
+HistogramDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Count: 4
+Sum: 66.000000
+ExplicitBounds #0: 10.000000
+ExplicitBounds #1: 25.000000
+ExplicitBounds #2: 50.000000
+ExplicitBounds #3: 75.000000
+ExplicitBounds #4: 100.000000
+ExplicitBounds #5: 250.000000
+ExplicitBounds #6: 500.000000
+ExplicitBounds #7: 750.000000
+ExplicitBounds #8: 1000.000000
+ExplicitBounds #9: 2000.000000
+ExplicitBounds #10: 3000.000000
+ExplicitBounds #11: 4000.000000
+ExplicitBounds #12: 5000.000000
+ExplicitBounds #13: 6000.000000
+ExplicitBounds #14: 7000.000000
+ExplicitBounds #15: 8000.000000
+ExplicitBounds #16: 9000.000000
+ExplicitBounds #17: 10000.000000
+ExplicitBounds #18: 20000.000000
+ExplicitBounds #19: 30000.000000
+ExplicitBounds #20: 50000.000000
+ExplicitBounds #21: 100000.000000
+Buckets #0, Count: 0
+Buckets #1, Count: 4
+Buckets #2, Count: 0
+Buckets #3, Count: 0
+Buckets #4, Count: 0
+Buckets #5, Count: 0
+Buckets #6, Count: 0
+Buckets #7, Count: 0
+Buckets #8, Count: 0
+Buckets #9, Count: 0
+Buckets #10, Count: 0
+Buckets #11, Count: 0
+Buckets #12, Count: 0
+Buckets #13, Count: 0
+Buckets #14, Count: 0
+Buckets #15, Count: 0
+Buckets #16, Count: 0
+Buckets #17, Count: 0
+Buckets #18, Count: 0
+Buckets #19, Count: 0
+Buckets #20, Count: 0
+Buckets #21, Count: 0
+Buckets #22, Count: 0
+Metric #12
+Descriptor:
+     -> Name: otelcol_receiver_accepted_metric_points
+     -> Description: Number of metric points successfully pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 66.000000
+Metric #13
+Descriptor:
+     -> Name: scrape_samples_post_metric_relabeling
+     -> Description: The number of samples remaining after metric relabeling was applied
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 38.000000
+Metric #14
+Descriptor:
+     -> Name: otelcol_exporter_sent_metric_points
+     -> Description: Number of metric points successfully sent to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 66.000000
+Metric #15
+Descriptor:
+     -> Name: otelcol_process_runtime_heap_alloc_bytes
+     -> Description: Bytes of allocated heap objects (see 'go doc runtime.MemStats.HeapAlloc')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 12734696.000000
+Metric #16
+Descriptor:
+     -> Name: otelcol_process_uptime
+     -> Description: Uptime of the process
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 50.532335
+Metric #17
+Descriptor:
+     -> Name: otelcol_process_runtime_total_alloc_bytes
+     -> Description: Cumulative bytes allocated for heap objects (see 'go doc runtime.MemStats.TotalAlloc')
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:30.421 +0000 UTC
+Value: 18591488.000000
+	{"kind": "exporter", "data_type": "metrics", "name": "debug"}
+2024-05-29T03:39:40.602Z	info	MetricsExporter	{"kind": "exporter", "data_type": "metrics", "name": "debug", "resource metrics": 1, "metrics": 18, "data points": 18}
+2024-05-29T03:39:40.603Z	info	ResourceMetrics #0
+Resource SchemaURL: 
+Resource attributes:
+     -> service.name: Str(otel-collector)
+     -> service.instance.id: Str(0.0.0.0:8888)
+     -> net.host.port: Str(8888)
+     -> http.scheme: Str(http)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+ScopeMetrics #0
+ScopeMetrics SchemaURL: 
+InstrumentationScope otelcol/prometheusreceiver 0.101.0
+Metric #0
+Descriptor:
+     -> Name: otelcol_receiver_accepted_metric_points
+     -> Description: Number of metric points successfully pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 84.000000
+Metric #1
+Descriptor:
+     -> Name: scrape_series_added
+     -> Description: The approximate number of new series in this scrape
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 38.000000
+Metric #2
+Descriptor:
+     -> Name: otelcol_process_runtime_total_alloc_bytes
+     -> Description: Cumulative bytes allocated for heap objects (see 'go doc runtime.MemStats.TotalAlloc')
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 19642752.000000
+Metric #3
+Descriptor:
+     -> Name: otelcol_process_uptime
+     -> Description: Uptime of the process
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 60.538066
+Metric #4
+Descriptor:
+     -> Name: otelcol_processor_batch_batch_send_size
+     -> Description: Number of units in the batch
+     -> Unit: 
+     -> DataType: Histogram
+     -> AggregationTemporality: Cumulative
+HistogramDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Count: 5
+Sum: 84.000000
+ExplicitBounds #0: 10.000000
+ExplicitBounds #1: 25.000000
+ExplicitBounds #2: 50.000000
+ExplicitBounds #3: 75.000000
+ExplicitBounds #4: 100.000000
+ExplicitBounds #5: 250.000000
+ExplicitBounds #6: 500.000000
+ExplicitBounds #7: 750.000000
+ExplicitBounds #8: 1000.000000
+ExplicitBounds #9: 2000.000000
+ExplicitBounds #10: 3000.000000
+ExplicitBounds #11: 4000.000000
+ExplicitBounds #12: 5000.000000
+ExplicitBounds #13: 6000.000000
+ExplicitBounds #14: 7000.000000
+ExplicitBounds #15: 8000.000000
+ExplicitBounds #16: 9000.000000
+ExplicitBounds #17: 10000.000000
+ExplicitBounds #18: 20000.000000
+ExplicitBounds #19: 30000.000000
+ExplicitBounds #20: 50000.000000
+ExplicitBounds #21: 100000.000000
+Buckets #0, Count: 0
+Buckets #1, Count: 5
+Buckets #2, Count: 0
+Buckets #3, Count: 0
+Buckets #4, Count: 0
+Buckets #5, Count: 0
+Buckets #6, Count: 0
+Buckets #7, Count: 0
+Buckets #8, Count: 0
+Buckets #9, Count: 0
+Buckets #10, Count: 0
+Buckets #11, Count: 0
+Buckets #12, Count: 0
+Buckets #13, Count: 0
+Buckets #14, Count: 0
+Buckets #15, Count: 0
+Buckets #16, Count: 0
+Buckets #17, Count: 0
+Buckets #18, Count: 0
+Buckets #19, Count: 0
+Buckets #20, Count: 0
+Buckets #21, Count: 0
+Buckets #22, Count: 0
+Metric #5
+Descriptor:
+     -> Name: otelcol_exporter_sent_metric_points
+     -> Description: Number of metric points successfully sent to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 84.000000
+Metric #6
+Descriptor:
+     -> Name: otelcol_process_runtime_total_sys_memory_bytes
+     -> Description: Total bytes of memory obtained from the OS (see 'go doc runtime.MemStats.Sys')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 27612424.000000
+Metric #7
+Descriptor:
+     -> Name: up
+     -> Description: The scraping was successful
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 1.000000
+Metric #8
+Descriptor:
+     -> Name: scrape_samples_scraped
+     -> Description: The number of samples the target exposed
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 38.000000
+Metric #9
+Descriptor:
+     -> Name: otelcol_exporter_send_failed_metric_points
+     -> Description: Number of metric points in failed attempts to send to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 0.000000
+Metric #10
+Descriptor:
+     -> Name: otelcol_process_memory_rss
+     -> Description: Total physical memory (resident set size)
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 76599296.000000
+Metric #11
+Descriptor:
+     -> Name: otelcol_receiver_refused_metric_points
+     -> Description: Number of metric points that could not be pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 0.000000
+Metric #12
+Descriptor:
+     -> Name: otelcol_processor_batch_timeout_trigger_send
+     -> Description: Number of times the batch was sent due to a timeout trigger
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 5.000000
+Metric #13
+Descriptor:
+     -> Name: scrape_duration_seconds
+     -> Description: Duration of the scrape
+     -> Unit: s
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 0.004131
+Metric #14
+Descriptor:
+     -> Name: scrape_samples_post_metric_relabeling
+     -> Description: The number of samples remaining after metric relabeling was applied
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 38.000000
+Metric #15
+Descriptor:
+     -> Name: otelcol_process_cpu_seconds
+     -> Description: Total CPU user and system time in seconds
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 0.210000
+Metric #16
+Descriptor:
+     -> Name: otelcol_process_runtime_heap_alloc_bytes
+     -> Description: Bytes of allocated heap objects (see 'go doc runtime.MemStats.HeapAlloc')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 13785960.000000
+Metric #17
+Descriptor:
+     -> Name: otelcol_processor_batch_
+     -> Description: 
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:40.427 +0000 UTC
+Value: 1.000000
+	{"kind": "exporter", "data_type": "metrics", "name": "debug"}
+2024-05-29T03:39:50.572Z	info	MetricsExporter	{"kind": "exporter", "data_type": "metrics", "name": "debug", "resource metrics": 1, "metrics": 18, "data points": 18}
+2024-05-29T03:39:50.585Z	info	ResourceMetrics #0
+Resource SchemaURL: 
+Resource attributes:
+     -> service.name: Str(otel-collector)
+     -> service.instance.id: Str(0.0.0.0:8888)
+     -> net.host.port: Str(8888)
+     -> http.scheme: Str(http)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+ScopeMetrics #0
+ScopeMetrics SchemaURL: 
+InstrumentationScope otelcol/prometheusreceiver 0.101.0
+Metric #0
+Descriptor:
+     -> Name: otelcol_exporter_sent_metric_points
+     -> Description: Number of metric points successfully sent to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 102.000000
+Metric #1
+Descriptor:
+     -> Name: otelcol_process_memory_rss
+     -> Description: Total physical memory (resident set size)
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 76730368.000000
+Metric #2
+Descriptor:
+     -> Name: otelcol_receiver_refused_metric_points
+     -> Description: Number of metric points that could not be pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 0.000000
+Metric #3
+Descriptor:
+     -> Name: scrape_duration_seconds
+     -> Description: Duration of the scrape
+     -> Unit: s
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 0.006920
+Metric #4
+Descriptor:
+     -> Name: scrape_samples_scraped
+     -> Description: The number of samples the target exposed
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 38.000000
+Metric #5
+Descriptor:
+     -> Name: scrape_samples_post_metric_relabeling
+     -> Description: The number of samples remaining after metric relabeling was applied
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 38.000000
+Metric #6
+Descriptor:
+     -> Name: otelcol_process_runtime_total_alloc_bytes
+     -> Description: Cumulative bytes allocated for heap objects (see 'go doc runtime.MemStats.TotalAlloc')
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 19872720.000000
+Metric #7
+Descriptor:
+     -> Name: otelcol_process_runtime_total_sys_memory_bytes
+     -> Description: Total bytes of memory obtained from the OS (see 'go doc runtime.MemStats.Sys')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 27612424.000000
+Metric #8
+Descriptor:
+     -> Name: otelcol_process_uptime
+     -> Description: Uptime of the process
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 70.535224
+Metric #9
+Descriptor:
+     -> Name: otelcol_process_runtime_heap_alloc_bytes
+     -> Description: Bytes of allocated heap objects (see 'go doc runtime.MemStats.HeapAlloc')
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 14015928.000000
+Metric #10
+Descriptor:
+     -> Name: otelcol_processor_batch_timeout_trigger_send
+     -> Description: Number of times the batch was sent due to a timeout trigger
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 6.000000
+Metric #11
+Descriptor:
+     -> Name: up
+     -> Description: The scraping was successful
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 1.000000
+Metric #12
+Descriptor:
+     -> Name: otelcol_processor_batch_batch_send_size
+     -> Description: Number of units in the batch
+     -> Unit: 
+     -> DataType: Histogram
+     -> AggregationTemporality: Cumulative
+HistogramDataPoints #0
+Data point attributes:
+     -> processor: Str(batch)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Count: 6
+Sum: 102.000000
+ExplicitBounds #0: 10.000000
+ExplicitBounds #1: 25.000000
+ExplicitBounds #2: 50.000000
+ExplicitBounds #3: 75.000000
+ExplicitBounds #4: 100.000000
+ExplicitBounds #5: 250.000000
+ExplicitBounds #6: 500.000000
+ExplicitBounds #7: 750.000000
+ExplicitBounds #8: 1000.000000
+ExplicitBounds #9: 2000.000000
+ExplicitBounds #10: 3000.000000
+ExplicitBounds #11: 4000.000000
+ExplicitBounds #12: 5000.000000
+ExplicitBounds #13: 6000.000000
+ExplicitBounds #14: 7000.000000
+ExplicitBounds #15: 8000.000000
+ExplicitBounds #16: 9000.000000
+ExplicitBounds #17: 10000.000000
+ExplicitBounds #18: 20000.000000
+ExplicitBounds #19: 30000.000000
+ExplicitBounds #20: 50000.000000
+ExplicitBounds #21: 100000.000000
+Buckets #0, Count: 0
+Buckets #1, Count: 6
+Buckets #2, Count: 0
+Buckets #3, Count: 0
+Buckets #4, Count: 0
+Buckets #5, Count: 0
+Buckets #6, Count: 0
+Buckets #7, Count: 0
+Buckets #8, Count: 0
+Buckets #9, Count: 0
+Buckets #10, Count: 0
+Buckets #11, Count: 0
+Buckets #12, Count: 0
+Buckets #13, Count: 0
+Buckets #14, Count: 0
+Buckets #15, Count: 0
+Buckets #16, Count: 0
+Buckets #17, Count: 0
+Buckets #18, Count: 0
+Buckets #19, Count: 0
+Buckets #20, Count: 0
+Buckets #21, Count: 0
+Buckets #22, Count: 0
+Metric #13
+Descriptor:
+     -> Name: otelcol_receiver_accepted_metric_points
+     -> Description: Number of metric points successfully pushed into the pipeline.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> receiver: Str(prometheus)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+     -> transport: Str(http)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 102.000000
+Metric #14
+Descriptor:
+     -> Name: scrape_series_added
+     -> Description: The approximate number of new series in this scrape
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 38.000000
+Metric #15
+Descriptor:
+     -> Name: otelcol_exporter_send_failed_metric_points
+     -> Description: Number of metric points in failed attempts to send to destination.
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> exporter: Str(debug)
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:39:00.424 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 0.000000
+Metric #16
+Descriptor:
+     -> Name: otelcol_process_cpu_seconds
+     -> Description: Total CPU user and system time in seconds
+     -> Unit: 
+     -> DataType: Sum
+     -> IsMonotonic: true
+     -> AggregationTemporality: Cumulative
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 2024-05-29 03:38:50.422 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 0.230000
+Metric #17
+Descriptor:
+     -> Name: otelcol_processor_batch_
+     -> Description: 
+     -> Unit: 
+     -> DataType: Gauge
+NumberDataPoints #0
+Data point attributes:
+     -> service_instance_id: Str(028819cf-6dc7-4407-8dfc-c67eda26c489)
+     -> service_name: Str(otelcol)
+     -> service_version: Str(0.101.0)
+StartTimestamp: 1970-01-01 00:00:00 +0000 UTC
+Timestamp: 2024-05-29 03:39:50.422 +0000 UTC
+Value: 1.000000
+	{"kind": "exporter", "data_type": "metrics", "name": "debug"}

@@ -18,9 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -36,7 +34,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -65,9 +62,9 @@ import kotlinx.coroutines.launch
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.domain.models.UserProfileDetail
 import org.cisnux.mydietary.presentation.addmyprofile.MyProfile
+import org.cisnux.mydietary.presentation.ui.components.BottomBar
 import org.cisnux.mydietary.presentation.ui.components.ListTileProfile
 import org.cisnux.mydietary.presentation.ui.components.MyProfileForm
-import org.cisnux.mydietary.presentation.ui.components.NavigationDrawer
 import org.cisnux.mydietary.presentation.ui.components.UserAccountCard
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.presentation.ui.theme.darkProgress
@@ -454,46 +451,36 @@ private fun MyProfileContent(
     signOut: () -> Unit = {},
     isSuccess: Boolean = true
 ) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val coroutineScope = rememberCoroutineScope()
-
-    NavigationDrawer(
-        title = drawerTitle,
-        signOut = signOut,
-        currentRoute = AppDestination.MyProfileRoute,
-        onSelectedDestination = onSelectedDestination,
-        drawerState = drawerState
-    ) {
-        Scaffold(
-            topBar = {
-                CenterAlignedTopAppBar(
-                    navigationIcon = {
-                        IconButton(onClick = { coroutineScope.launch { drawerState.open() } }) {
-                            Icon(imageVector = Icons.Rounded.Menu, contentDescription = null)
-                        }
-                    },
-                    title = {
-                        Text(
-                            text = stringResource(id = R.string.my_profile_title),
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                    },
-                )
-            },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
-            },
-            floatingActionButton = {
-                if (isSuccess)
-                    FloatingActionButton(onClick = onEdit) {
-                        Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
-                    }
-            },
-            modifier = modifier
-        ) { innerPadding ->
-            body(innerPadding)
-        }
+    Scaffold(
+        bottomBar = {
+            BottomBar(
+                currentRoute = AppDestination.MyProfileRoute,
+                onSelectedDestination = onSelectedDestination
+            )
+        },
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.my_profile_title),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                },
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+        floatingActionButton = {
+            if (isSuccess)
+                FloatingActionButton(onClick = onEdit) {
+                    Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
+                }
+        },
+        modifier = modifier
+    ) { innerPadding ->
+        body(innerPadding)
     }
 }
 

@@ -111,7 +111,7 @@ fun DiaryCard(
                             content = {}
                         )
                     },
-                    contentScale = ContentScale.FillBounds,
+                    contentScale = ContentScale.Crop,
                     contentDescription = foodName,
                     modifier = modifier
                         .size(height = 90.dp, width = 90.dp)

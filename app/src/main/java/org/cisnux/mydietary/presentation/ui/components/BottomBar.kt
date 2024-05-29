@@ -1,6 +1,7 @@
 package org.cisnux.mydietary.presentation.ui.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -50,6 +51,12 @@ fun BottomBar(
             icon = painterResource(id = R.drawable.ic_report_24dp),
             destination = AppDestination.ReportRoute,
             contentDescription = stringResource(id = R.string.report_title)
+        ),
+        NavigationItem(
+            title = stringResource(id = R.string.my_profile_title),
+            icon = Icons.Rounded.AccountCircle,
+            destination = AppDestination.MyProfileRoute,
+            contentDescription = stringResource(id = R.string.my_profile_title)
         ),
     ),
 ) {
