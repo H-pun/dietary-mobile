@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import org.cisnux.mydietary.data.remotes.bodyrequests.ChangePasswordBodyRequest
-import org.cisnux.mydietary.data.remotes.bodyrequests.GoogleTokenRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.GoogleTokenBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.NewPasswordBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.ResetPasswordBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateEmailBodyRequest
@@ -33,10 +33,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
     override val userId: Flow<String?>
         get() = userAccountLocalSource.userId
 
-    override fun verifyUserAccount(userAccount: UserAccount): Flow<UiState<Nothing>> =
+    override fun signInWithEmailAddressAndPassword(userAccount: UserAccount): Flow<UiState<Nothing>> =
         flow {
             emit(UiState.Loading)
-            userAccountRemoteSource.signInUserAccount(userAccount.userAccountBodyRequest)
+            userAccountRemoteSource.signInWithEmailAddressAndPassword(userAccount.userAccountBodyRequest)
                 .fold(
                     ifLeft = {
                         emit(UiState.Error(it))
@@ -50,10 +50,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
 
-    override fun addUserAccount(userAccount: UserAccount): Flow<UiState<Nothing>> =
+    override fun signUp(userAccount: UserAccount): Flow<UiState<Nothing>> =
         channelFlow {
             send(UiState.Loading)
-            userAccountRemoteSource.addUserAccount(userAccount.userAccountBodyRequest)
+            userAccountRemoteSource.signUp(userAccount.userAccountBodyRequest)
                 .fold(
                     ifLeft = {
                         send(UiState.Error(it))
@@ -65,9 +65,9 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
 
-    override suspend fun verifyGoogleAccount(token: String): Flow<UiState<Nothing>> = flow {
+    override suspend fun signInWithGoogle(token: String): Flow<UiState<Nothing>> = flow {
         emit(UiState.Loading)
-        userAccountRemoteSource.verifyGoogleAccount(googleToken = GoogleTokenRequest(idToken = token))
+        userAccountRemoteSource.signInWithGoogle(googleToken = GoogleTokenBodyRequest(idToken = token))
             .fold(
                 ifLeft = {
                     emit(UiState.Error(it))
@@ -80,10 +80,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
             )
     }
 
-    override fun resetPassword(emailAddress: String): Flow<UiState<String>> =
+    override fun sendResetPassword(emailAddress: String): Flow<UiState<String>> =
         flow {
             emit(UiState.Loading)
-            userAccountRemoteSource.resetPassword(
+            userAccountRemoteSource.sendResetPassword(
                 resetPassword = ResetPasswordBodyRequest(
                     emailAddress = emailAddress
                 )
@@ -98,9 +98,9 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)
 
-    override fun updatePassword(forgotPassword: ForgotPassword): Flow<UiState<String>> = flow {
+    override fun forgotPassword(forgotPassword: ForgotPassword): Flow<UiState<String>> = flow {
         emit(UiState.Loading)
-        userAccountRemoteSource.updatePassword(
+        userAccountRemoteSource.forgotPassword(
             newPassword = NewPasswordBodyRequest(
                 code = forgotPassword.code,
                 newPassword = forgotPassword.newPassword,
@@ -123,7 +123,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         changePassword: ChangePassword
     ): Flow<UiState<String>> = flow {
         emit(UiState.Loading)
-        userAccountRemoteSource.updatePassword(
+        userAccountRemoteSource.changePassword(
             accessToken = accessToken,
             changePasswordBodyRequest = ChangePasswordBodyRequest(
                 id = id,

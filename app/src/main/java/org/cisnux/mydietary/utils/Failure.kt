@@ -15,6 +15,10 @@ sealed class Failure(override var message: String?) : Exception(message) {
         override var message: String? = null,
     ) : HttpFailure(message)
 
+    data class ConflictFailure(
+        override var message: String? = null,
+    ) : HttpFailure(message)
+
     data class ServerFailure(
         override var message: String? = null,
     ) : HttpFailure(message)
@@ -29,6 +33,7 @@ sealed class Failure(override var message: String?) : Exception(message) {
 
     companion object {
         val HTTP_FAILURES = mapOf(
+            HttpStatusCode.Conflict to ConflictFailure(),
             HttpStatusCode.BadRequest to BadRequestFailure(),
             HttpStatusCode.Unauthorized to UnauthorizedFailure(),
             HttpStatusCode.NotFound to NotFoundFailure(),

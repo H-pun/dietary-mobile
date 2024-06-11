@@ -3,6 +3,6 @@ package org.cisnux.mydietary.data.remotes.bodyrequests
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GoogleTokenRequest(
+data class GoogleTokenBodyRequest(
     val idToken: String
 )

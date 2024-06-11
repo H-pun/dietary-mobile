@@ -1,0 +1,1393 @@
+Gradle start parameters:
+  tasks = [:app:assembleDebug, :app:assembleDebugUnitTest, :app:assembleDebugAndroidTest]
+  excluded tasks = []
+  current dir = /Users/cisnux/temp/dietary-capstone
+  project properties args = [android.studio.version: 233.14808.21.2331.11926650, android.injected.attribution.file.location: /Users/cisnux/temp/dietary-capstone/.gradle, android.injected.invoked.from.ide: true]
+  system properties args = [idea.active: true, idea.version: 2023.3, idea.vendor.name: Google]
+
+Time metrics:
+  Total Gradle task time: 130.12 s
+  Spent time before task action: 1.65 s
+  Task action before worker execution: 0.91 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 22.45 s
+    Clear jar cache: 0.01 s
+    Clear output: 0.02 s
+    Precise backup output: 0.02 s
+    Cleaning up the backup stash: 0.01 s
+    Connect to Kotlin daemon: 0.14 s
+    Calculate output size: 0.00 s
+    Run compilation: 9.45 s
+      Non incremental compilation in daemon: 12.84 s
+      Incremental compilation in daemon: 9.34 s
+        Store build info: 0.00 s
+        Calculate initial dirty sources set: 0.33 s
+          Compute classpath changes: 0.24 s
+            Load current classpath snapshot: 0.11 s
+              Remove duplicate classes: 0.02 s
+            Shrink current classpath snapshot: 0.10 s
+              Get lookup symbols: 0.01 s
+              Find referenced classes: 0.05 s
+              Find transitively referenced classes: 0.05 s
+            Load shrunk previous classpath snapshot: 0.00 s
+            Compute changed and impacted set: 0.02 s
+              Compute class changes: 0.02 s
+                Compute Kotlin class changes: 0.02 s
+          Detect removed classes: 0.07 s
+        Update caches: 0.09 s
+        Sources compilation round: 7.41 s
+          Compiler initialization time: 0.43 s
+          Compiler code analysis: 3.13 s
+          Compiler IR translation: 1.82 s
+          Compiler code generation: 1.96 s
+            Compiler IR lowering: 0.64 s
+            Compiler IR generation: 1.32 s
+        Write history file: 0.00 s
+        Shrink and save current classpath snapshot after compilation: 0.45 s
+          Shrink current classpath snapshot incrementally: 0.36 s
+            Load current classpath snapshot: 0.16 s
+            Load shrunk current classpath snapshot against previous lookups: 0.02 s
+          Shrink current classpath snapshot non-incrementally: 0.07 s
+            Load current classpath snapshot: 0.03 s
+          Save shrunk current classpath snapshot: 0.01 s
+  Start gradle worker: 0.02 s
+
+Size metrics:
+  Total size of the cache directory: 3.2 MB
+    ABI snapshot size: 18.7 KB
+  Increase memory usage: 342.8 MB
+  Total memory usage at the end of build: 1.9 GB
+  Total compiler iteration: 3
+    Number of lines analyzed: 1367
+    Number of lines for code generation: 1367
+    Analysis lines per second: 1593
+    Code generation lines per second: 2590
+    Compiler IR translation line number: 1367
+    Compiler IR lowering line number: 1367
+    Compiler IR generation line number: 1367
+  Number of times classpath changes are computed: 1
+  Number of times classpath snapshot is shrunk and saved after compilation: 3
+    Number of classpath entries: 488
+    Size of classpath snapshot: 27.6 MB
+    Size of shrunk classpath snapshot: 235.2 KB
+  Number of times classpath snapshot is loaded: 3
+    Number of cache hits when loading classpath entry snapshots: 469
+    Number of cache misses when loading classpath entry snapshots: 19
+  Start time of task action: 2296-09-01T17:32:27
+
+Build attributes:
+  REBUILD_REASON:
+    Incremental compilation is not enabled(3)
+    Unknown Gradle changes(1)
+
+Total time for Kotlin tasks: 9.85 s (7.6 % of all tasks time)
+Time  |% of Kotlin time|Task                              
+6.99 s|70.9 %          |:app:compileDebugKotlin           
+2.19 s|22.2 %          |:app:compileDebugUnitTestKotlin   
+0.67 s|6.8 %           |:app:compileDebugAndroidTestKotlin
+
+Task ':app:mergeExtDexDebug' finished in 51.22 s
+Time metrics:
+  Total Gradle task time: 51.22 s
+
+Task ':app:kspDebugKotlin' finished in 39.27 s
+Task info:
+  Kotlin language version: 1.9
+Compilation log for task ':app:kspDebugKotlin':
+  Compiler perf stats:
+  INIT: Compiler initialized in 843 ms
+          ANALYZE    9333 ms    2064.395 loc/s
+          ANALYZE     809 ms   23815.822 loc/s
+  Find Java class performed 101 times, total time 33 ms
+  Type info performed 1006 times, total time 5886 ms
+  Call resolve performed 1468 times, total time 5880 ms
+  Binary class from Kotlin file performed 38899 times, total time 7277 ms
+  Find Java class performed 41 times, total time 21 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 15 times, total time 2 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 2 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 1 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 5 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 5 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 10 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 11 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 4 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 4 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 24 ms
+Time metrics:
+  Total Gradle task time: 39.27 s
+  Spent time before task action: 0.08 s
+  Task action before worker execution: 0.17 s
+  Run compilation in Gradle worker: 11.14 s
+    Clear jar cache: 0.01 s
+    Clear output: 0.02 s
+    Connect to Kotlin daemon: 0.06 s
+    Non incremental compilation in daemon: 11.07 s
+  Start gradle worker: 0.00 s
+Size metrics:
+  Increase memory usage: -94901424 B
+  Total memory usage at the end of build: 162.8 MB
+  Start time of task action: 2024-06-11T14:54:36
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Task ':app:compileDebugKotlin' finished in 6.99 s
+Task info:
+  Kotlin language version: 2.0
+Compilation log for task ':app:compileDebugKotlin':
+  Classpath changes info passed from Gradle task: NoChanges
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.signInWithGoogle.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.updatePassword.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changeEmail.1.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changeEmail.1.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changeEmail.lambda.7..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.changePassword.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAuthenticationState.lambda.2.lambda.1..inlined.map.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changeEmail.1.1.3)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.verifyEmail..inlined.filter.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changeEmail..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.updateEmail.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.signUp.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.verifyEmail.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.signOut.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.signInWithGoogle.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.verifyEmailAddress.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.verifyEmail..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.resetPassword.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.updatePassword.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.verifyEmail..inlined.filter.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.handleSignInWithGoogle.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.signInWithEmailAddressAndPassword.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.signInWithGoogle.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.deleteSession.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.updatePassword.4)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.2.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.signInWithEmailAddressAndPassword.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAuthenticationState.lambda.2.lambda.1..inlined.map.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.signUp.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAuthenticationState..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = .kotlin_module)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId.3)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.resetPassword.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAuthenticationState.lambda.2.lambda.1..inlined.map.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.changeEmail.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAuthenticationState.1.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.2.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.changePassword..inlined.flatMapLatest.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.signInWithGoogle.1.1.1.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.verifyEmail..inlined.filter.1.2.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.domain.usecases.AuthenticationInteractor.getAccessTokenAndUserId..inlined.filter.1.2)
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/0.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/1.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/2.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$lambda$2$lambda$1$$inlined$map$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/3.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/4.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAuthenticationState$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/5.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/6.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/7.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/8.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/9.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/10.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$$inlined$filter$2$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/11.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$3.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$getAccessTokenAndUserId$3.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/12.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signInWithGoogle$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signInWithGoogle$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/13.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signInWithGoogle$1$1$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signInWithGoogle$1$1$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/14.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$handleSignInWithGoogle$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$handleSignInWithGoogle$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/15.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changePassword$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changePassword$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/16.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/17.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/18.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$3.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$1$1$3.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/19.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$lambda$7$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$lambda$7$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/20.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$changeEmail$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/21.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/22.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/23.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1$2$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$filter$1$2$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/24.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$flatMapLatest$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$verifyEmail$$inlined$flatMapLatest$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/25.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signOut$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor$signOut$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/26.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/27.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/28.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$signInWithEmailAddressAndPassword$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$signInWithEmailAddressAndPassword$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/29.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$signUp$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$signUp$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/30.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$signInWithGoogle$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$signInWithGoogle$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/31.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$resetPassword$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$resetPassword$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/32.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$updatePassword$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$updatePassword$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/33.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$changePassword$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$changePassword$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/34.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$changeEmail$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$changeEmail$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/35.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$verifyEmail$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$verifyEmail$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/36.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$deleteSession$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$deleteSession$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/37.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSource.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSource.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSource.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/38.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSource.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/repositories/AuthenticationRepository.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/repositories/AuthenticationRepository.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/domain/repositories/AuthenticationRepository.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/39.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/domain/repositories/AuthenticationRepository.kt
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/40.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$signInWithEmailAddressAndPassword$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$signInWithEmailAddressAndPassword$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/41.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$verifyEmailAddress$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$verifyEmailAddress$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/42.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$updateEmail$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$updateEmail$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/43.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$updatePassword$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$updatePassword$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/44.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$signInWithGoogle$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$signInWithGoogle$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/45.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$signUp$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$signUp$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/46.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$resetPassword$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$resetPassword$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/47.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$updatePassword$4.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$updatePassword$4.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/48.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/META-INF/app_debug.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$changePassword$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$sendResetPassword$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl$forgotPassword$2.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$sendResetPassword$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debug/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl$forgotPassword$1.class file as newly added
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/dirty-sources.txt file as newly added
+  Compile iteration:
+    app/src/main/java/org/cisnux/mydietary/domain/usecases/AuthenticationInteractor.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/data/repositories/AuthenticationRepositoryImpl.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSource.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/domain/repositories/AuthenticationRepository.kt <- was modified since last time
+    app/src/main/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl.kt <- was modified since last time
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/dirty-sources.txt
+  Process MembersChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSource, names = [resetPassword, sendResetPassword, forgotPassword, updatePassword, changePassword])
+  Process MembersChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl, names = [resetPassword, sendResetPassword, forgotPassword, updatePassword])
+  Process MembersChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl, names = [resetPassword, sendResetPassword, forgotPassword, updatePassword, changePassword])
+  Process MembersChanged(fqName = org.cisnux.mydietary.domain.repositories.AuthenticationRepository, names = [resetPassword, sendResetPassword, forgotPassword, updatePassword])
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.updatePassword.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.updatePassword.1)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.resetPassword.2)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl.updatePassword.4)
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.repositories.AuthenticationRepositoryImpl.resetPassword.1)
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/last-build.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/49.backup
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/local-state/build-history.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/50.backup
+  [ClasspathSnapshot] Shrunk current classpath snapshot after compilation (shrink mode = ChangedLookupsUnchangedClasspath), retained 839 / 21108 classes
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugKotlin/cacheable/caches-jvm/lookups/counters.tab to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups16526360012325868499/51.backup
+  Cleaning up stash
+  Incremental compilation completed
+Time metrics:
+  Total Gradle task time: 6.99 s
+  Spent time before task action: 0.07 s
+  Task action before worker execution: 0.06 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 6.79 s
+    Clear jar cache: 0.00 s
+    Precise backup output: 0.01 s
+    Cleaning up the backup stash: 0.00 s
+    Connect to Kotlin daemon: 0.05 s
+    Calculate output size: 0.00 s
+    Run compilation: 6.74 s
+      Incremental compilation in daemon: 6.67 s
+        Store build info: 0.00 s
+        Calculate initial dirty sources set: 0.08 s
+          Detect removed classes: 0.07 s
+        Update caches: 0.06 s
+        Sources compilation round: 5.85 s
+          Compiler initialization time: 0.25 s
+          Compiler code analysis: 2.55 s
+          Compiler IR translation: 1.46 s
+          Compiler code generation: 1.55 s
+            Compiler IR lowering: 0.32 s
+            Compiler IR generation: 1.23 s
+        Write history file: 0.00 s
+        Shrink and save current classpath snapshot after compilation: 0.37 s
+          Shrink current classpath snapshot incrementally: 0.36 s
+            Load current classpath snapshot: 0.16 s
+            Load shrunk current classpath snapshot against previous lookups: 0.02 s
+          Save shrunk current classpath snapshot: 0.01 s
+  Start gradle worker: 0.01 s
+Size metrics:
+  Total size of the cache directory: 2.0 MB
+    ABI snapshot size: 11.2 KB
+  Increase memory usage: 372.5 MB
+  Total memory usage at the end of build: 536.5 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 908
+    Number of lines for code generation: 908
+    Analysis lines per second: 356
+    Code generation lines per second: 586
+    Compiler IR translation line number: 908
+    Compiler IR lowering line number: 908
+    Compiler IR generation line number: 908
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 150
+    Size of classpath snapshot: 7.8 MB
+    Size of shrunk classpath snapshot: 189.8 KB
+  Number of times classpath snapshot is loaded: 1
+    Number of cache hits when loading classpath entry snapshots: 150
+  Start time of task action: 2024-06-11T14:55:20
+GC metrics:
+  PS MarkSweep:
+    GC count: 0
+    GC time: 0.00 s
+  PS Scavenge:
+    GC count: 0
+    GC time: 0.00 s
+
+Task ':app:mergeExtDexDebugAndroidTest' finished in 4.43 s
+Time metrics:
+  Total Gradle task time: 4.43 s
+
+Task ':app:dexBuilderDebug' finished in 3.56 s
+Time metrics:
+  Total Gradle task time: 3.56 s
+
+Task ':app:packageDebug' finished in 3.47 s
+Time metrics:
+  Total Gradle task time: 3.47 s
+
+Task ':app:kspDebugUnitTestKotlin' finished in 2.73 s
+Task info:
+  Kotlin language version: 1.9
+Compilation log for task ':app:kspDebugUnitTestKotlin':
+  Compiler perf stats:
+  INIT: Compiler initialized in 403 ms
+          ANALYZE     924 ms     649.351 loc/s
+  Find Java class performed 101 times, total time 33 ms
+  Type info performed 1006 times, total time 5886 ms
+  Call resolve performed 1468 times, total time 5880 ms
+  Binary class from Kotlin file performed 39734 times, total time 7567 ms
+  Find Java class performed 41 times, total time 21 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 15 times, total time 2 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 2 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 1 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 5 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 5 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 10 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 11 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 4 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 4 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 24 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+Time metrics:
+  Total Gradle task time: 2.73 s
+  Spent time before task action: 1.08 s
+  Task action before worker execution: 0.27 s
+  Run compilation in Gradle worker: 1.38 s
+    Clear output: 0.00 s
+    Connect to Kotlin daemon: 0.02 s
+    Non incremental compilation in daemon: 1.36 s
+Size metrics:
+  Increase memory usage: -368980912 B
+  Total memory usage at the end of build: 184.7 MB
+  Start time of task action: 2024-06-11T14:55:36
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Task ':app:processDebugAndroidTestResources' finished in 2.35 s
+Time metrics:
+  Total Gradle task time: 2.35 s
+
+Task ':app:compileDebugUnitTestKotlin' finished in 2.19 s
+Task info:
+  Kotlin language version: 2.0
+Compilation log for task ':app:compileDebugUnitTestKotlin':
+  Classpath changes info passed from Gradle task: ToBeComputedByIncrementalCompiler
+  [ClasspathSnapshot] Shrunk current classpath snapshot for diffing, retained 84 / 25444 classes
+  [ClasspathSnapshot] Loaded shrunk previous classpath snapshot for diffing, found 84 classes
+  [ClasspathSnapshot] Changed set = ProgramSymbolSet(classes = [org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceImpl], classMembers = {org/cisnux/mydietary/data/remotes/UserAccountRemoteSource=[updatePassword, changePassword, forgotPassword, <SAM-CONSTRUCTOR>, resetPassword, sendResetPassword]}, packageMembers = {})
+  [ClasspathSnapshot] Impacted classes = []
+  Process SignatureChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSourceImpl)
+  Process MembersChanged(fqName = org.cisnux.mydietary.data.remotes.UserAccountRemoteSource, names = [updatePassword, changePassword, forgotPassword, <SAM-CONSTRUCTOR>, resetPassword, sendResetPassword])
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/0.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/1.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by correct email address and password then should return (200 Success)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by correct email address and password then should return (200 Success)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/2.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by correct email address and password then should return (200 Success)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by correct email address and password then should return (200 Success)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/3.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by incorrect password then should return (401 Unauthorized)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by incorrect password then should return (401 Unauthorized)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/4.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by incorrect password then should return (401 Unauthorized)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by incorrect password then should return (401 Unauthorized)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/5.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by incorrect email address then should return (401 Unauthorized)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by incorrect email address then should return (401 Unauthorized)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/6.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by incorrect email address then should return (401 Unauthorized)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by incorrect email address then should return (401 Unauthorized)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/7.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by correct email address and password but server got error then should return (500 Internal Server Error)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by correct email address and password but server got error then should return (500 Internal Server Error)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/8.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by correct email address and password but server got error then should return (500 Internal Server Error)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithEmailAddressAndPassword$by correct email address and password but server got error then should return (500 Internal Server Error)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/9.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$VerifyEmailAddress.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$VerifyEmailAddress.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/10.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$VerifyEmailAddress$by valid email address then should return (200 Success)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$VerifyEmailAddress$by valid email address then should return (200 Success)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/11.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$VerifyEmailAddress$by valid email address then should return (200 Success)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$VerifyEmailAddress$by valid email address then should return (200 Success)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/12.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$VerifyEmailAddress$by valid email address but server got error then should return (500 Internal Server Error)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$VerifyEmailAddress$by valid email address but server got error then should return (500 Internal Server Error)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/13.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$VerifyEmailAddress$by valid email address but server got error then should return (500 Internal Server Error)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$VerifyEmailAddress$by valid email address but server got error then should return (500 Internal Server Error)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/14.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/15.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by valid email address then should return (200 Success)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by valid email address then should return (200 Success)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/16.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by valid email address then should return (200 Success)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by valid email address then should return (200 Success)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/17.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by email address that already used then should return (409 Conflict)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by email address that already used then should return (409 Conflict)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/18.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by email address that already used then should return (409 Conflict)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by email address that already used then should return (409 Conflict)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/19.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by valid email address but server got error then should return (500 Internal Server Error)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by valid email address but server got error then should return (500 Internal Server Error)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/20.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by valid email address but server got error then should return (500 Internal Server Error)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$UpdateEmailAddress$by valid email address but server got error then should return (500 Internal Server Error)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/21.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithGoogle.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithGoogle.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/22.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithGoogle$by valid Google email address then should return (200 Success)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithGoogle$by valid Google email address then should return (200 Success)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/23.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithGoogle$by valid Google email address then should return (200 Success)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithGoogle$by valid Google email address then should return (200 Success)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/24.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithGoogle$by valid Google email address but server got error then should return (500 Internal Server Error)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithGoogle$by valid Google email address but server got error then should return (500 Internal Server Error)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/25.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithGoogle$by valid Google email address but server got error then should return (500 Internal Server Error)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignInWithGoogle$by valid Google email address but server got error then should return (500 Internal Server Error)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/26.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/27.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by valid email address and password then should return (201 Created)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by valid email address and password then should return (201 Created)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/28.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by valid email address and password then should return (201 Created)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by valid email address and password then should return (201 Created)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/29.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by email address that already used then should return (409 Conflict)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by email address that already used then should return (409 Conflict)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/30.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by email address that already used then should return (409 Conflict)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by email address that already used then should return (409 Conflict)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/31.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by valid email address and password but server got error then should return (500 Internal Server Error)$1.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by valid email address and password but server got error then should return (500 Internal Server Error)$1.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/32.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by valid email address and password but server got error then should return (500 Internal Server Error)$1$2.class on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest$SignUp$by valid email address and password but server got error then should return (500 Internal Server Error)$1$2.class to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/33.backup
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/META-INF/app_debugUnitTest.kotlin_module on clearing cache for /Users/cisnux/temp/dietary-capstone/app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/tmp/kotlin-classes/debugUnitTest/META-INF/app_debugUnitTest.kotlin_module to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/34.backup
+  Marking the /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugUnitTestKotlin/cacheable/dirty-sources.txt file as newly added
+  Compile iteration:
+    app/src/test/java/org/cisnux/mydietary/data/remotes/UserAccountRemoteSourceTest.kt <- dirty member org.cisnux.mydietary.data.remotes#UserAccountRemoteSourceImpl
+  Deleting /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugUnitTestKotlin/cacheable/dirty-sources.txt
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugUnitTestKotlin/cacheable/last-build.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/35.backup
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugUnitTestKotlin/local-state/build-history.bin to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/36.backup
+  [ClasspathSnapshot] Shrunk current classpath snapshot after compilation (shrink mode = UnchangedLookupsChangedClasspath), retained 84 / 25444 classes
+  Moving /Users/cisnux/temp/dietary-capstone/app/build/kotlin/compileDebugUnitTestKotlin/cacheable/caches-jvm/lookups/counters.tab to the stash as /var/folders/4r/5ykklqds4bd0364_qtyvkwnr0000gn/T/kotlin-backups4134188337907694352/37.backup
+  Cleaning up stash
+  Incremental compilation completed
+Time metrics:
+  Total Gradle task time: 2.19 s
+  Spent time before task action: 0.04 s
+  Task action before worker execution: 0.01 s
+    Backup output: 0.00 s
+  Run compilation in Gradle worker: 2.12 s
+    Precise backup output: 0.01 s
+    Cleaning up the backup stash: 0.00 s
+    Connect to Kotlin daemon: 0.00 s
+    Calculate output size: 0.00 s
+    Run compilation: 2.11 s
+      Incremental compilation in daemon: 2.08 s
+        Calculate initial dirty sources set: 0.25 s
+          Compute classpath changes: 0.24 s
+            Load current classpath snapshot: 0.11 s
+              Remove duplicate classes: 0.02 s
+            Shrink current classpath snapshot: 0.10 s
+              Get lookup symbols: 0.01 s
+              Find referenced classes: 0.05 s
+              Find transitively referenced classes: 0.05 s
+            Load shrunk previous classpath snapshot: 0.00 s
+            Compute changed and impacted set: 0.02 s
+              Compute class changes: 0.02 s
+                Compute Kotlin class changes: 0.02 s
+        Update caches: 0.03 s
+        Sources compilation round: 1.09 s
+          Compiler initialization time: 0.09 s
+          Compiler code analysis: 0.39 s
+          Compiler IR translation: 0.20 s
+          Compiler code generation: 0.38 s
+            Compiler IR lowering: 0.30 s
+            Compiler IR generation: 0.08 s
+        Shrink and save current classpath snapshot after compilation: 0.00 s
+  Start gradle worker: 0.00 s
+Size metrics:
+  Total size of the cache directory: 895.5 KB
+    ABI snapshot size: 7.5 KB
+  Increase memory usage: 14.6 MB
+  Total memory usage at the end of build: 207.5 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 435
+    Number of lines for code generation: 435
+    Analysis lines per second: 1112
+    Code generation lines per second: 1147
+    Compiler IR translation line number: 435
+    Compiler IR lowering line number: 435
+    Compiler IR generation line number: 435
+  Number of times classpath changes are computed: 1
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 169
+    Size of classpath snapshot: 10.7 MB
+    Size of shrunk classpath snapshot: 43.6 KB
+  Number of times classpath snapshot is loaded: 1
+    Number of cache hits when loading classpath entry snapshots: 168
+    Number of cache misses when loading classpath entry snapshots: 1
+  Start time of task action: 2024-06-11T14:55:38
+GC metrics:
+  PS MarkSweep:
+    GC count: 0
+    GC time: 0.00 s
+  PS Scavenge:
+    GC count: 1
+    GC time: 0.21 s
+
+Task ':app:mergeDebugJavaResource' finished in 2.12 s
+Time metrics:
+  Total Gradle task time: 2.12 s
+
+Task ':app:hiltJavaCompileDebug' finished in 1.63 s
+Time metrics:
+  Total Gradle task time: 1.63 s
+
+Task ':app:kspDebugAndroidTestKotlin' finished in 1.16 s
+Task info:
+  Kotlin language version: 1.9
+Compilation log for task ':app:kspDebugAndroidTestKotlin':
+  Compiler perf stats:
+  INIT: Compiler initialized in 30 ms
+          ANALYZE     368 ms      65.217 loc/s
+  Find Java class performed 101 times, total time 33 ms
+  Type info performed 1006 times, total time 5886 ms
+  Call resolve performed 1468 times, total time 5880 ms
+  Binary class from Kotlin file performed 39771 times, total time 7575 ms
+  Find Java class performed 41 times, total time 21 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 15 times, total time 2 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 2 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 1 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 5 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 5 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 21 times, total time 10 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 11 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 4 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 4 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 27 times, total time 24 ms
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+  Find Java class performed 0 times
+Time metrics:
+  Total Gradle task time: 1.16 s
+  Spent time before task action: 0.34 s
+  Task action before worker execution: 0.40 s
+  Run compilation in Gradle worker: 0.42 s
+    Connect to Kotlin daemon: 0.01 s
+    Non incremental compilation in daemon: 0.41 s
+  Start gradle worker: 0.00 s
+Size metrics:
+  Increase memory usage: 94.1 MB
+  Total memory usage at the end of build: 255.9 MB
+  Start time of task action: 2024-06-11T14:55:37
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Task ':app:compileDebugJavaWithJavac' finished in 1.03 s
+Time metrics:
+  Total Gradle task time: 1.03 s
+
+Task ':app:mergeDebugAndroidTestJavaResource' finished in 0.76 s
+Time metrics:
+  Total Gradle task time: 0.76 s
+
+Task ':app:compileDebugAndroidTestKotlin' finished in 0.67 s
+Task info:
+  Kotlin language version: 2.0
+Compilation log for task ':app:compileDebugAndroidTestKotlin':
+  Non-incremental compilation will be performed: UNKNOWN_CHANGES_IN_GRADLE_INPUTS
+  Cleaning 3 output directories
+  [ClasspathSnapshot] Shrunk current classpath snapshot after compilation (shrink mode = NonIncremental), retained 13 / 22899 classes
+Time metrics:
+  Total Gradle task time: 0.67 s
+  Spent time before task action: 0.05 s
+  Task action before worker execution: 0.01 s
+  Run compilation in Gradle worker: 0.61 s
+    Connect to Kotlin daemon: 0.00 s
+    Calculate output size: 0.00 s
+    Run compilation: 0.60 s
+      Incremental compilation in daemon: 0.59 s
+        Sources compilation round: 0.47 s
+          Compiler initialization time: 0.09 s
+          Compiler code analysis: 0.19 s
+          Compiler IR translation: 0.16 s
+          Compiler code generation: 0.03 s
+            Compiler IR lowering: 0.02 s
+            Compiler IR generation: 0.01 s
+        Shrink and save current classpath snapshot after compilation: 0.08 s
+          Shrink current classpath snapshot non-incrementally: 0.07 s
+            Load current classpath snapshot: 0.03 s
+  Start gradle worker: 0.00 s
+Size metrics:
+  Total size of the cache directory: 329.8 KB
+    ABI snapshot size: 49 B
+  Increase memory usage: 304.1 MB
+  Total memory usage at the end of build: 566.6 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 24
+    Number of lines for code generation: 24
+    Analysis lines per second: 125
+    Code generation lines per second: 857
+    Compiler IR translation line number: 24
+    Compiler IR lowering line number: 24
+    Compiler IR generation line number: 24
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 169
+    Size of classpath snapshot: 9.2 MB
+    Size of shrunk classpath snapshot: 1.8 KB
+  Number of times classpath snapshot is loaded: 1
+    Number of cache hits when loading classpath entry snapshots: 151
+    Number of cache misses when loading classpath entry snapshots: 18
+  Start time of task action: 2024-06-11T14:55:38
+Build attributes:
+  REBUILD_REASON: Unknown Gradle changes
+GC metrics:
+  PS MarkSweep:
+    GC count: 0
+    GC time: 0.00 s
+  PS Scavenge:
+    GC count: 0
+    GC time: 0.00 s
+
+Task ':app:extractIncludeDebugUnitTestProto' finished in 0.62 s
+Time metrics:
+  Total Gradle task time: 0.62 s
+
+Task ':app:mergeDebugAndroidTestResources' finished in 0.58 s
+Time metrics:
+  Total Gradle task time: 0.58 s
+
+Task ':app:extractIncludeDebugAndroidTestProto' finished in 0.48 s
+Time metrics:
+  Total Gradle task time: 0.48 s
+
+Task ':app:bundleDebugClassesToCompileJar' finished in 0.41 s
+Time metrics:
+  Total Gradle task time: 0.41 s
+
+Task ':app:mergeProjectDexDebug' finished in 0.40 s
+Time metrics:
+  Total Gradle task time: 0.40 s
+
+Task ':app:transformDebugAndroidTestClassesWithAsm' finished in 0.34 s
+Time metrics:
+  Total Gradle task time: 0.34 s
+
+Task ':app:mergeDebugNativeLibs' finished in 0.33 s
+Time metrics:
+  Total Gradle task time: 0.33 s
+
+Task ':app:bundleDebugClassesToRuntimeJar' finished in 0.30 s
+Time metrics:
+  Total Gradle task time: 0.30 s
+
+Task ':app:extractIncludeDebugProto' finished in 0.26 s
+Time metrics:
+  Total Gradle task time: 0.26 s
+
+Task ':app:processDebugAndroidTestManifest' finished in 0.22 s
+Time metrics:
+  Total Gradle task time: 0.22 s
+
+Task ':app:mergeDebugAssets' finished in 0.20 s
+Time metrics:
+  Total Gradle task time: 0.20 s
+
+Task ':app:checkDebugDuplicateClasses' finished in 0.20 s
+Time metrics:
+  Total Gradle task time: 0.20 s
+
+Task ':app:checkDebugAndroidTestDuplicateClasses' finished in 0.20 s
+Time metrics:
+  Total Gradle task time: 0.20 s
+
+Task ':app:hiltAggregateDepsDebug' finished in 0.17 s
+Time metrics:
+  Total Gradle task time: 0.17 s
+
+Task ':app:checkDebugAndroidTestAarMetadata' finished in 0.17 s
+Time metrics:
+  Total Gradle task time: 0.17 s
+
+Task ':app:packageDebugAndroidTest' finished in 0.17 s
+Time metrics:
+  Total Gradle task time: 0.17 s
+
+Task ':app:mergeDebugGlobalSynthetics' finished in 0.16 s
+Time metrics:
+  Total Gradle task time: 0.16 s
+
+Task ':app:hiltAggregateDepsDebugAndroidTest' finished in 0.15 s
+Time metrics:
+  Total Gradle task time: 0.15 s
+
+Task ':app:transformDebugUnitTestClassesWithAsm' finished in 0.11 s
+Time metrics:
+  Total Gradle task time: 0.11 s
+
+Task ':app:processDebugResources' finished in 0.11 s
+Time metrics:
+  Total Gradle task time: 0.11 s
+
+Task ':app:transformDebugClassesWithAsm' finished in 0.10 s
+Time metrics:
+  Total Gradle task time: 0.10 s
+
+Task ':app:generateDebugUnitTestProto' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.10 s
+
+Task ':app:stripDebugDebugSymbols' finished in 0.09 s
+Time metrics:
+  Total Gradle task time: 0.09 s
+
+Task ':app:dexBuilderDebugAndroidTest' finished in 0.08 s
+Time metrics:
+  Total Gradle task time: 0.08 s
+
+Task ':app:writeDebugSigningConfigVersions' finished in 0.05 s
+Time metrics:
+  Total Gradle task time: 0.05 s
+
+Task ':app:processDebugAndroidTestJavaRes' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:mergeDebugAndroidTestGlobalSynthetics' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:mergeLibDexDebugAndroidTest' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:hiltAggregateDepsDebugUnitTest' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:checkDebugAarMetadata' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:mergeDebugAndroidTestNativeLibs' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:mergeDebugShaders' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:mergeLibDexDebug' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:mergeDebugAndroidTestAssets' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:compressDebugAssets' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:mapDebugAndroidTestSourceSetPaths' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:mergeDebugAndroidTestJniLibFolders' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:javaPreCompileDebugAndroidTest' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:processDebugMainManifest' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:createDebugApkListingFileRedirect' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:mergeProjectDexDebugAndroidTest' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:validateSigningDebug' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:writeDebugAppMetadata' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:generateDebugAndroidTestResources' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeDebugAndroidTestShaders' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mapDebugSourceSetPaths' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:generateDebugAndroidTestProto' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:processDebugJavaRes' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeDebugStartupProfile' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:extractAndroidTestDebugProto' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:compressDebugAndroidTestAssets' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:validateSigningDebugAndroidTest' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:writeDebugAndroidTestSigningConfigVersions' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:compileDebugAndroidTestJavaWithJavac' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:desugarDebugAndroidTestFileDependencies' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:javaPreCompileDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:desugarDebugFileDependencies' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractAndroidTestProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugAndroidTestResValues' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:compileDebugAndroidTestShaders' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:hiltJavaCompileDebugAndroidTest' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugNativeDebugMetadata' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugJniLibFolders' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractTestDebugProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:javaPreCompileDebugUnitTest' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:stripDebugAndroidTestDebugSymbols' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:compileDebugUnitTestJavaWithJavac' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractDebugProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:packageDebugResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:parseDebugLocalResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugManifest' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugManifestForPackage' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:compileDebugShaders' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractTestProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:assembleDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:hiltJavaCompileDebugUnitTest' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:createDebugAndroidTestApkListingFileRedirect' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:preBuild' finished in 0.00 s
+
+Task ':app:preDebugBuild' finished in 0.00 s
+
+Task ':app:checkKotlinGradlePluginConfigurationErrors' was skipped: SKIPPED
+
+Task ':app:generateDebugResValues' finished in 0.00 s
+
+Task ':app:processDebugGoogleServices' finished in 0.00 s
+
+Task ':app:generateDebugResources' finished in 0.00 s
+
+Task ':app:createDebugCompatibleScreenManifests' finished in 0.00 s
+
+Task ':app:extractDeepLinksDebug' finished in 0.00 s
+
+Task ':app:generateDebugAssets' finished in 0.00 s
+
+Task ':app:preDebugUnitTestBuild' finished in 0.00 s
+
+Task ':app:preDebugAndroidTestBuild' was skipped: SKIPPED
+
+Task ':app:generateDebugAndroidTestAssets' finished in 0.00 s
+
+Task ':app:assembleDebugUnitTest' finished in 0.00 s
+
+Task ':app:assembleDebugAndroidTest' finished in 0.00 s
+

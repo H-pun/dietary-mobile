@@ -130,7 +130,7 @@ class AuthenticationInteractor @Inject constructor(
         userAccount: UserAccount,
         scope: CoroutineScope
     ): Flow<UiState<Nothing>> =
-        authenticationRepository.verifyUserAccount(userAccount)
+        authenticationRepository.signInWithEmailAddressAndPassword(userAccount)
             .distinctUntilChanged()
             .flowOn(Dispatchers.IO)
             .stateIn(
@@ -152,7 +152,7 @@ class AuthenticationInteractor @Inject constructor(
                     val authUser = authResult.user
                     val googleToken = authUser?.getIdToken(true)?.await()?.token
                     googleToken?.let { token ->
-                        authenticationRepository.verifyGoogleAccount(token = token)
+                        authenticationRepository.signInWithGoogle(token = token)
                             .distinctUntilChanged()
                             .flowOn(Dispatchers.IO)
                             .stateIn(
@@ -243,7 +243,7 @@ class AuthenticationInteractor @Inject constructor(
         userAccount: UserAccount,
         scope: CoroutineScope
     ): Flow<UiState<Nothing>> =
-        authenticationRepository.addUserAccount(userAccount)
+        authenticationRepository.signUp(userAccount)
             .distinctUntilChanged()
             .flowOn(Dispatchers.IO)
             .stateIn(
@@ -256,7 +256,7 @@ class AuthenticationInteractor @Inject constructor(
         emailAddress: String,
         scope: CoroutineScope
     ): Flow<UiState<String>> =
-        authenticationRepository.resetPassword(emailAddress)
+        authenticationRepository.sendResetPassword(emailAddress)
             .distinctUntilChanged()
             .flowOn(Dispatchers.IO)
             .stateIn(
@@ -269,7 +269,7 @@ class AuthenticationInteractor @Inject constructor(
         forgotPassword: ForgotPassword,
         scope: CoroutineScope
     ): Flow<UiState<String>> =
-        authenticationRepository.updatePassword(forgotPassword = forgotPassword)
+        authenticationRepository.forgotPassword(forgotPassword = forgotPassword)
             .distinctUntilChanged()
             .flowOn(Dispatchers.IO)
             .stateIn(

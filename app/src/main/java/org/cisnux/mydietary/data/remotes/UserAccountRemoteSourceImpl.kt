@@ -25,7 +25,7 @@ import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import org.cisnux.mydietary.data.remotes.bodyrequests.ChangePasswordBodyRequest
-import org.cisnux.mydietary.data.remotes.bodyrequests.GoogleTokenRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.GoogleTokenBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateEmailBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.VerifyEmailBodyRequest
 
@@ -33,7 +33,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
     private val client: HttpClient,
     private val baseApiUrlLocalSource: BaseApiUrlLocalSource
 ) : UserAccountRemoteSource {
-    override suspend fun signInUserAccount(userAccount: UserAccountBodyRequest): Either<Exception, AddedUserAccountResponse> =
+    override suspend fun signInWithEmailAddressAndPassword(userAccount: UserAccountBodyRequest): Either<Exception, AddedUserAccountResponse> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
@@ -136,7 +136,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun updatePassword(
+    override suspend fun changePassword(
         accessToken: String,
         changePasswordBodyRequest: ChangePasswordBodyRequest
     ): Either<Exception, String> = withContext(Dispatchers.IO) {
@@ -173,7 +173,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
     }
 
 
-    override suspend fun verifyGoogleAccount(googleToken: GoogleTokenRequest): Either<Exception, AddedUserAccountResponse> =
+    override suspend fun signInWithGoogle(googleToken: GoogleTokenBodyRequest): Either<Exception, AddedUserAccountResponse> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
@@ -204,7 +204,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
             }
         }
 
-    override suspend fun addUserAccount(userAccount: UserAccountBodyRequest): Either<Exception, Nothing?> =
+    override suspend fun signUp(userAccount: UserAccountBodyRequest): Either<Exception, Nothing?> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
@@ -234,7 +234,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
             }
         }
 
-    override suspend fun resetPassword(resetPassword: ResetPasswordBodyRequest): Either<Exception, String> =
+    override suspend fun sendResetPassword(resetPassword: ResetPasswordBodyRequest): Either<Exception, String> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
@@ -266,7 +266,7 @@ class UserAccountRemoteSourceImpl @Inject constructor(
         }
 
 
-    override suspend fun updatePassword(newPassword: NewPasswordBodyRequest): Either<Exception, String> =
+    override suspend fun forgotPassword(newPassword: NewPasswordBodyRequest): Either<Exception, String> =
         withContext(Dispatchers.IO) {
             try {
                 val baseUrl = baseApiUrlLocalSource.baseApiUrl.flowOn(Dispatchers.IO).first()
