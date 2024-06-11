@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import com.google.protobuf.gradle.GenerateProtoTask
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
 
@@ -52,6 +54,11 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
         }
     }
 }
@@ -135,7 +142,9 @@ dependencies {
     implementation(libs.compose.shimmer)
     // testing
     testImplementation(libs.ktor.client.mock)
-    testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     // datastore
     implementation(libs.datastore.proto)
