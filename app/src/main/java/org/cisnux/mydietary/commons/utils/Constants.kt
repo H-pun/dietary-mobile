@@ -10,6 +10,7 @@ const val DAY_DATE_MONTH = "EEEE, $SHORT_DATE_MONTH"
 const val DAY_DATE_MONTH_YEAR = "$DAY_DATE_MONTH yyyy"
 const val HOURS_AND_MINUTES = "HH:mm"
 
+
 // nilai faktor untuk masing-masing level aktivitas
 val ACTIVITY_FACTOR = mapOf(
     "sedentary" to 1.2,
