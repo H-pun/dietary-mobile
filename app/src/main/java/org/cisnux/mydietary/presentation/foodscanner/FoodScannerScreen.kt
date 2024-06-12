@@ -97,6 +97,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -388,7 +390,9 @@ fun FoodScannerScreen(
                 title = title,
                 selectedFoodDiaryCategory = selectedFoodDiaryCategory,
                 onTitleChange = { newValue -> title = newValue },
-                onFoodDiaryCategoryChange = { newValue -> selectedFoodDiaryCategoryIndex = newValue },
+                onFoodDiaryCategoryChange = { newValue ->
+                    selectedFoodDiaryCategoryIndex = newValue
+                },
                 foodDiaryCategories = foodDiaryCategories,
                 onSave = { isAddDiaryDialogOpen = false },
             )
@@ -625,12 +629,15 @@ private fun FoodScannerBody(
                 .fillMaxWidth()
                 .height(120.dp)
                 .blur(radius = 2.dp)) {}
-        TextButton(onClick = onGalleryButton, enabled = !isLoading, modifier = Modifier.constrainAs(galleryButton) {
-            top.linkTo(buttonContainer.top)
-            start.linkTo(buttonContainer.start)
-            end.linkTo(takePictureButton.start)
-            bottom.linkTo(buttonContainer.bottom)
-        }) {
+        TextButton(
+            onClick = onGalleryButton,
+            enabled = !isLoading,
+            modifier = Modifier.constrainAs(galleryButton) {
+                top.linkTo(buttonContainer.top)
+                start.linkTo(buttonContainer.start)
+                end.linkTo(takePictureButton.start)
+                bottom.linkTo(buttonContainer.bottom)
+            }) {
             Text(
                 text = stringResource(id = R.string.gallery_button),
                 color = ComposeColor.White,
@@ -648,7 +655,7 @@ private fun FoodScannerBody(
             }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_photo_camera_24dp),
-                contentDescription = stringResource(id = R.string.food_scanner_title),
+                contentDescription = stringResource(R.string.take_a_picture),
                 tint = ComposeColor.White,
             )
         }
@@ -933,7 +940,11 @@ private fun PredictedResultDialog(
                                 Button(
                                     onClick = onQuestionDialog,
                                     modifier = Modifier
-                                        .fillMaxWidth(),
+                                        .fillMaxWidth()
+                                        .semantics {
+                                            contentDescription =
+                                                context.getString(R.string.continue_button)
+                                        },
                                     enabled = addFoodDiaryState !is UiState.Loading
                                 ) {
                                     if (addFoodDiaryState is UiState.Loading)

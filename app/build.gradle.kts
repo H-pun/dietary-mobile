@@ -26,7 +26,7 @@ android {
         versionCode = 3
         versionName = "1.2"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "org.cisnux.mydietary.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -57,6 +57,7 @@ android {
         }
     }
     testOptions {
+        animationsDisabled = true
         unitTests.all {
             it.useJUnitPlatform()
         }
@@ -105,7 +106,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -116,9 +116,11 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose)
     // hilt
     implementation(libs.google.dagger.hilt.android)
+    androidTestImplementation(libs.google.dagger.hilt.android.testing)
     ksp(libs.google.dagger.hilt.android.compiler)
     // navigation compose
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.testing)
     // hilt navigation compose
     implementation(libs.androidx.hilt.navigation.compose)
     // camerax
@@ -160,4 +162,6 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
+    //UI automator
+    androidTestImplementation(libs.androidx.uiautomator)
 }

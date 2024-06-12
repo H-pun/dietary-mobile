@@ -27,7 +27,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -58,12 +61,16 @@ fun FoodNutritionModal(
     val locale = remember {
         Locale.getDefault()
     }
+    val context = LocalContext.current
 
     LazyColumn(
         contentPadding = PaddingValues(start = 8.dp, end = 16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .semantics {
+                contentDescription = context.getString(R.string.list_of_foods)
+            }
             .fillMaxWidth()
     ) {
         item {
