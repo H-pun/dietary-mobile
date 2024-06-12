@@ -1,4 +1,4 @@
-package org.cisnux.mydietary.utils
+package org.cisnux.mydietary.commons.utils
 
 const val DIETARY_API = "https://api.dietary.cloud"
 const val IMAGE_LOCATION = "https://storage.googleapis.com/dietary-app-407405.appspot.com"
@@ -18,7 +18,7 @@ val ACTIVITY_FACTOR = mapOf(
     "very active" to 1.725
 )
 // nilai faktor untuk masing-masing goals
-val GOALS_FACTOR = mapOf(
+val GOAL_FACTOR = mapOf(
     "menurunkan berat badan" to 0.9,
     "pertahankan berat saat ini" to 1.0, // default
     "menambah berat badan" to 1.1,

@@ -9,7 +9,7 @@ import org.cisnux.mydietary.data.remotes.responses.FoodDiaryDetailResponse
 import org.cisnux.mydietary.data.remotes.responses.FoodDiaryResponse
 import org.cisnux.mydietary.data.remotes.responses.DetectedResponse
 import org.cisnux.mydietary.data.remotes.responses.MonthlyReportResponse
-import org.cisnux.mydietary.utils.Failure
+import org.cisnux.mydietary.commons.utils.Failure
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -276,7 +276,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
      * @return [Either]<[Exception], [DetectedResponse]> Method ini akan mengembalikan exception
      * jika request gagal dan jika request berhasil maka akan mengembalikan data makanan yang terdeteksi.
      * */
-    override suspend fun predictFoods(
+    override suspend fun detectFoods(
         accessToken: String,
         foodPicture: File
     ): Either<Exception, DetectedResponse> =
@@ -381,7 +381,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getKeywordSuggestions(
+    override suspend fun getSuggestionKeywords(
         accessToken: String,
         getFoodDiaryParams: GetFoodDiaryParams
     ): Either<Exception, List<KeywordResponse>> = withContext(Dispatchers.IO) {

@@ -3,7 +3,7 @@ package org.cisnux.mydietary.domain.repositories
 import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.models.EditableUserProfile
 import org.cisnux.mydietary.domain.models.UserProfileDetail
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.UiState
 import kotlinx.coroutines.flow.Flow
 import org.cisnux.mydietary.domain.models.DietProgress
 

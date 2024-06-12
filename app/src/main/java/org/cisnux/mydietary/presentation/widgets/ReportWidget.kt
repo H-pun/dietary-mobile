@@ -67,9 +67,9 @@ import org.cisnux.mydietary.presentation.ui.theme.lightRed
 import org.cisnux.mydietary.presentation.ui.theme.lightYellow
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerDark
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerLight
-import org.cisnux.mydietary.utils.AppDestination
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.fromMillisToIsoLocalDate
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.fromMillisToIsoLocalDate
 import java.time.Instant
 import java.util.Locale
 

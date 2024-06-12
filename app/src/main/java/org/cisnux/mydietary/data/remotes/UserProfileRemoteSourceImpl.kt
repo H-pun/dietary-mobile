@@ -6,7 +6,7 @@ import org.cisnux.mydietary.data.remotes.responses.CommonResponse
 import org.cisnux.mydietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.NutrientResponse
 import org.cisnux.mydietary.data.remotes.responses.UserProfileDetailResponse
-import org.cisnux.mydietary.utils.Failure
+import org.cisnux.mydietary.commons.utils.Failure
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

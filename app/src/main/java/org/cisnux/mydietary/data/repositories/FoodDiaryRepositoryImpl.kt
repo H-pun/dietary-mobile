@@ -13,11 +13,11 @@ import org.cisnux.mydietary.domain.models.Option
 import org.cisnux.mydietary.domain.models.Food
 import org.cisnux.mydietary.domain.models.Question
 import org.cisnux.mydietary.domain.repositories.FoodRepository
-import org.cisnux.mydietary.utils.fromMillisToDayDateMonthYear
-import org.cisnux.mydietary.utils.fromMillisToHoursAndMinutes
-import org.cisnux.mydietary.utils.IMAGE_LOCATION
-import org.cisnux.mydietary.utils.ReportCategory
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.fromMillisToDayDateMonthYear
+import org.cisnux.mydietary.commons.utils.fromMillisToHoursAndMinutes
+import org.cisnux.mydietary.commons.utils.IMAGE_LOCATION
+import org.cisnux.mydietary.commons.utils.ReportCategory
+import org.cisnux.mydietary.commons.utils.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -29,12 +29,12 @@ import org.cisnux.mydietary.data.remotes.bodyrequests.ReportBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.MonthlyReportResponse
 import org.cisnux.mydietary.data.remotes.responses.WeeklyReportResponse
 import org.cisnux.mydietary.domain.models.Keyword
-import org.cisnux.mydietary.utils.FoodDiaryCategory
-import org.cisnux.mydietary.utils.fromDateMonthYearToDateAndMonth
-import org.cisnux.mydietary.utils.fromDateMonthYearToDay
-import org.cisnux.mydietary.utils.asInstant
-import org.cisnux.mydietary.utils.currentLocalDateTime
-import org.cisnux.mydietary.utils.fromDateMonthYearToDayDateMonth
+import org.cisnux.mydietary.commons.utils.FoodDiaryCategory
+import org.cisnux.mydietary.commons.utils.fromDateMonthYearToDateAndMonth
+import org.cisnux.mydietary.commons.utils.fromDateMonthYearToDay
+import org.cisnux.mydietary.commons.utils.asInstant
+import org.cisnux.mydietary.commons.utils.currentLocalDateTime
+import org.cisnux.mydietary.commons.utils.fromDateMonthYearToDayDateMonth
 import java.io.File
 
 class FoodDiaryRepositoryImpl @Inject constructor(
@@ -117,13 +117,13 @@ class FoodDiaryRepositoryImpl @Inject constructor(
     }.distinctUntilChanged()
         .flowOn(Dispatchers.IO)
 
-    override fun getKeywordSuggestions(
+    override fun getSuggestionKeywords(
         accessToken: String,
         userId: String,
         query: String,
     ): Flow<UiState<List<Keyword>>> = flow {
         emit(UiState.Loading)
-        foodDiaryRemoteSource.getKeywordSuggestions(
+        foodDiaryRemoteSource.getSuggestionKeywords(
             accessToken = accessToken,
             getFoodDiaryParams = GetFoodDiaryParams(userId = userId, query = query)
         )
@@ -187,10 +187,11 @@ class FoodDiaryRepositoryImpl @Inject constructor(
     ): Flow<UiState<FoodNutrition>> =
         flow {
             emit(UiState.Loading)
-            foodDiaryRemoteSource.predictFoods(accessToken, foodPicture).fold(
+            foodDiaryRemoteSource.detectFoods(accessToken, foodPicture).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
                 ifRight = {
-                    emit(UiState.Success(data = FoodNutrition(
+                    emit(
+                        UiState.Success(data = FoodNutrition(
                         image = "$IMAGE_LOCATION/${it.imagePath}",
                         totalFat = it.totalFat,
                         totalProtein = it.totalProtein,
@@ -260,7 +261,8 @@ class FoodDiaryRepositoryImpl @Inject constructor(
                     emit(UiState.Error(it))
                 },
                 ifRight = {
-                    emit(UiState.Success(FoodDiaryDetail(id = it.id,
+                    emit(
+                        UiState.Success(FoodDiaryDetail(id = it.id,
                         title = it.title,
                         feedback = it.feedback ?: listOf(),
                         status = it.status,

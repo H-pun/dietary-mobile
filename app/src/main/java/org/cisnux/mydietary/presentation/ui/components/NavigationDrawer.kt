@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.navigation.NavigationItem
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.AppDestination
 
 @Preview(showBackground = true)
 @Composable

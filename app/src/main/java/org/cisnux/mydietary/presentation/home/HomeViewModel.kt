@@ -7,10 +7,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.FoodDiaryUseCase
-import org.cisnux.mydietary.utils.FoodDiaryCategory
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.fromMillisToIsoLocalDate
-import org.cisnux.mydietary.utils.foodDiaryCategory
+import org.cisnux.mydietary.commons.utils.FoodDiaryCategory
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.fromMillisToIsoLocalDate
+import org.cisnux.mydietary.commons.utils.foodDiaryCategory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
@@ -109,7 +109,7 @@ class HomeViewModel @Inject constructor(
                         emit(UiState.Success(listOf()))
                         refreshSuggestionKeywords.value = false
                     }
-                else foodDiaryUseCase.getKeywordSuggestionsByQuery(
+                else foodDiaryUseCase.getSuggestionKeywordsByQuery(
                     query = query,
                     scope = viewModelScope
                 ).also {

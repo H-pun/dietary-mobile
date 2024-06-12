@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.isHttps
+import org.cisnux.mydietary.commons.utils.isHttps
 
 @Composable
 fun DevModeScreen(

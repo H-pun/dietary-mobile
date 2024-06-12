@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import org.cisnux.mydietary.domain.models.EditableUserProfile
 import org.cisnux.mydietary.domain.models.UserProfileDetail
 import org.cisnux.mydietary.domain.repositories.UserProfileRepository
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

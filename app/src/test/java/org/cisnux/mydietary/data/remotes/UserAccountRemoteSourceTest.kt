@@ -6,41 +6,41 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.test.runTest
-import org.cisnux.mydietary.utils.DUMMY_ACCESS_TOKEN
-import org.cisnux.mydietary.utils.dummyAddedUserAccount200ResponseJson
-import org.cisnux.mydietary.utils.dummyAddedUserAccountIncorrectEmailAddressResponseJson
-import org.cisnux.mydietary.utils.dummyAddedUserAccountIncorrectPasswordResponseJson
-import org.cisnux.mydietary.utils.dummyUserAccountBodyRequest
-import org.cisnux.mydietary.utils.dummyVerifyEmail200ResponseJson
-import org.cisnux.mydietary.utils.dummyVerifyEmailBodyRequest
-import org.cisnux.mydietary.utils.expectedAddedUserAccount200Response
-import org.cisnux.mydietary.utils.expectedAddedUserAccountIncorrectEmailAddressResponse
-import org.cisnux.mydietary.utils.expectedAddedUserAccountIncorrectPasswordResponse
-import org.cisnux.mydietary.utils.expectedVerifyEmail200Response
-import org.cisnux.mydietary.utils.expectedInternalServerErrorResponse
-import org.cisnux.mydietary.utils.dummyAddedUserAccount201ResponseJson
-import org.cisnux.mydietary.utils.dummyChangePassword200ResponseJson
-import org.cisnux.mydietary.utils.dummyChangePassword401ResponseJson
-import org.cisnux.mydietary.utils.dummyChangePasswordBodyRequest
-import org.cisnux.mydietary.utils.dummyGoogleTokenBodyRequest
-import org.cisnux.mydietary.utils.dummyInternalServerErrorResponseJson
-import org.cisnux.mydietary.utils.dummyUpdateEmail200ResponseJson
-import org.cisnux.mydietary.utils.dummyEmailAddress400ResponseJson
-import org.cisnux.mydietary.utils.dummyForgotPassword200ResponseJson
-import org.cisnux.mydietary.utils.dummyForgotPassword401ResponseJson
-import org.cisnux.mydietary.utils.dummyNewPasswordBodyRequest
-import org.cisnux.mydietary.utils.dummySendResetPassword200ResponseJson
-import org.cisnux.mydietary.utils.dummySendResetPassword401ResponseJson
-import org.cisnux.mydietary.utils.dummySendResetPasswordBodyRequest
-import org.cisnux.mydietary.utils.dummyUpdateEmailBodyRequest
-import org.cisnux.mydietary.utils.expectedChangePassword200Response
-import org.cisnux.mydietary.utils.expectedChangePassword401Response
-import org.cisnux.mydietary.utils.expectedUpdateEmail200Response
-import org.cisnux.mydietary.utils.expectedEmail400Response
-import org.cisnux.mydietary.utils.expectedForgotPassword200Response
-import org.cisnux.mydietary.utils.expectedForgotPassword401Response
-import org.cisnux.mydietary.utils.expectedSendResetPassword200Response
-import org.cisnux.mydietary.utils.expectedSendResetPassword401Response
+import org.cisnux.mydietary.commons.utils.DUMMY_ACCESS_TOKEN
+import org.cisnux.mydietary.commons.utils.dummyAddedUserAccount200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyAddedUserAccountIncorrectEmailAddressResponseJson
+import org.cisnux.mydietary.commons.utils.dummyAddedUserAccountIncorrectPasswordResponseJson
+import org.cisnux.mydietary.commons.utils.dummyUserAccountBodyRequest
+import org.cisnux.mydietary.commons.utils.dummyVerifyEmail200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyVerifyEmailBodyRequest
+import org.cisnux.mydietary.commons.utils.expectedAddedUserAccount200Response
+import org.cisnux.mydietary.commons.utils.expectedAddedUserAccountIncorrectEmailAddressResponse
+import org.cisnux.mydietary.commons.utils.expectedAddedUserAccountIncorrectPasswordResponse
+import org.cisnux.mydietary.commons.utils.expectedVerifyEmail200Response
+import org.cisnux.mydietary.commons.utils.expectedInternalServerErrorResponse
+import org.cisnux.mydietary.commons.utils.dummyAddedUserAccount201ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyChangePassword200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyChangePassword401ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyChangePasswordBodyRequest
+import org.cisnux.mydietary.commons.utils.dummyGoogleTokenBodyRequest
+import org.cisnux.mydietary.commons.utils.dummyInternalServerErrorResponseJson
+import org.cisnux.mydietary.commons.utils.dummyUpdateEmail200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyEmailAddress400ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyForgotPassword200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyForgotPassword401ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyNewPasswordBodyRequest
+import org.cisnux.mydietary.commons.utils.dummySendResetPassword200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummySendResetPassword401ResponseJson
+import org.cisnux.mydietary.commons.utils.dummySendResetPasswordBodyRequest
+import org.cisnux.mydietary.commons.utils.dummyUpdateEmailBodyRequest
+import org.cisnux.mydietary.commons.utils.expectedChangePassword200Response
+import org.cisnux.mydietary.commons.utils.expectedChangePassword401Response
+import org.cisnux.mydietary.commons.utils.expectedUpdateEmail200Response
+import org.cisnux.mydietary.commons.utils.expectedEmail400Response
+import org.cisnux.mydietary.commons.utils.expectedForgotPassword200Response
+import org.cisnux.mydietary.commons.utils.expectedForgotPassword401Response
+import org.cisnux.mydietary.commons.utils.expectedSendResetPassword200Response
+import org.cisnux.mydietary.commons.utils.expectedSendResetPassword401Response
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -56,7 +56,7 @@ class UserAccountRemoteSourceTest : BaseRemoteTest() {
     inner class SignInWithEmailAddressAndPassword {
 
         @Test
-        fun `by correct email address and password then should return (200 Success)`() = runTest {
+        fun `by correct email address and password then should return (200 OK)`() = runTest {
             // arrange
             val userAccountRemoteSource = UserAccountRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -159,7 +159,7 @@ class UserAccountRemoteSourceTest : BaseRemoteTest() {
     inner class VerifyEmailAddress {
 
         @Test
-        fun `by valid email address then should return (200 Success)`() = runTest {
+        fun `by valid email address then should return (200 OK)`() = runTest {
             // arrange
             val userAccountRemoteSource = UserAccountRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -214,7 +214,7 @@ class UserAccountRemoteSourceTest : BaseRemoteTest() {
     inner class UpdateEmailAddress {
 
         @Test
-        fun `by valid email address then should return (200 Success)`() = runTest {
+        fun `by valid email address then should return (200 OK)`() = runTest {
             // arrange
             val userAccountRemoteSource = UserAccountRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -295,7 +295,7 @@ class UserAccountRemoteSourceTest : BaseRemoteTest() {
     inner class SignInWithGoogle {
 
         @Test
-        fun `by valid Google email address then should return (200 Success)`() = runTest {
+        fun `by valid Google email address then should return (200 OK)`() = runTest {
             // arrange
             val userAccountRemoteSource = UserAccountRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -426,7 +426,7 @@ class UserAccountRemoteSourceTest : BaseRemoteTest() {
     inner class ChangePassword {
 
         @Test
-        fun `by correct old password then should return (200 Success)`() = runTest {
+        fun `by correct old password then should return (200 OK)`() = runTest {
             // arrange
             val userAccountRemoteSource = UserAccountRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -507,7 +507,7 @@ class UserAccountRemoteSourceTest : BaseRemoteTest() {
     inner class SendResetPassword {
 
         @Test
-        fun `by verified email address then should return (200 Success)`() = runTest {
+        fun `by verified email address then should return (200 OK)`() = runTest {
             // arrange
             val userAccountRemoteSource = UserAccountRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -585,7 +585,7 @@ class UserAccountRemoteSourceTest : BaseRemoteTest() {
     inner class ForgotPassword {
 
         @Test
-        fun `by valid OTP then should return (200 Success)`() = runTest {
+        fun `by valid OTP then should return (200 OK)`() = runTest {
             // arrange
             val userAccountRemoteSource = UserAccountRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,

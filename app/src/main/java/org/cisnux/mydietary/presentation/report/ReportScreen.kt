@@ -93,11 +93,11 @@ import org.cisnux.mydietary.presentation.ui.theme.lightProgress
 import org.cisnux.mydietary.presentation.ui.theme.lightYellow
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerDark
 import org.cisnux.mydietary.presentation.ui.theme.primaryContainerLight
-import org.cisnux.mydietary.utils.AppDestination
-import org.cisnux.mydietary.utils.Failure
-import org.cisnux.mydietary.utils.ReportCategory
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.reportCategory
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.Failure
+import org.cisnux.mydietary.commons.utils.ReportCategory
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.reportCategory
 import kotlin.random.Random
 
 @Composable

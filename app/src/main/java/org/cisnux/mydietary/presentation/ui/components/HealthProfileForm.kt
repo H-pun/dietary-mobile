@@ -29,8 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.isAgeValid
-import org.cisnux.mydietary.utils.isFloatAndGreaterThanZero
+import org.cisnux.mydietary.commons.utils.isAgeValid
+import org.cisnux.mydietary.commons.utils.isFloatAndGreaterThanZero
 
 @Preview(showBackground = true)
 @Composable

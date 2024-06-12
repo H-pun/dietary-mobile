@@ -1,28 +1,85 @@
-package org.cisnux.mydietary.utils
+package org.cisnux.mydietary.commons.utils
 
 import arrow.core.Either
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.cisnux.mydietary.commons.utils.Failure
 import org.cisnux.mydietary.data.remotes.bodyrequests.ChangePasswordBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.GetFoodDiaryParams
 import org.cisnux.mydietary.data.remotes.bodyrequests.GoogleTokenBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.NewPasswordBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.NewUserProfileBodyRequest
+import org.cisnux.mydietary.data.remotes.bodyrequests.ReportBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.ResetPasswordBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateEmailBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileWithUsernameBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.UserAccountBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.VerifyEmailBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.AddedUserAccountResponse
+import org.cisnux.mydietary.data.remotes.responses.BoundResponse
+import org.cisnux.mydietary.data.remotes.responses.BoundResponses
+import org.cisnux.mydietary.data.remotes.responses.CommonResponse
+import org.cisnux.mydietary.data.remotes.responses.DetectedFoodResponse
+import org.cisnux.mydietary.data.remotes.responses.DetectedResponse
 import org.cisnux.mydietary.data.remotes.responses.DietProgressResponse
+import org.cisnux.mydietary.data.remotes.responses.FoodDiaryDetailResponse
+import org.cisnux.mydietary.data.remotes.responses.FoodDiaryResponse
+import org.cisnux.mydietary.data.remotes.responses.KeywordResponse
 import org.cisnux.mydietary.data.remotes.responses.NutrientResponse
+import org.cisnux.mydietary.data.remotes.responses.OptionResponse
+import org.cisnux.mydietary.data.remotes.responses.PredictedFoodDetailResponse
+import org.cisnux.mydietary.data.remotes.responses.QuestionResponse
+import org.cisnux.mydietary.data.remotes.responses.ServingResponse
 import org.cisnux.mydietary.data.remotes.responses.UserProfileDetailResponse
+import org.cisnux.mydietary.data.remotes.responses.WeeklyReportResponse
+import java.io.File
+import java.nio.file.Path
 
 const val DUMMY_ACCESS_TOKEN = "123"
 const val DUMMY_USER_ACCOUNT_ID = "123"
 const val DUMMY_DATE = "2022-01-01"
+const val DUMMY_FOOD_DIARY_ID = "123"
+val dummyFile: File = Path.of("file.jpg").toFile()
+val dummyGetFoodDiaryParams = GetFoodDiaryParams(
+    userId = DUMMY_USER_ACCOUNT_ID,
+    date = DUMMY_DATE,
+    query = "query",
+    category = "category"
+)
 
 val dummyUserAccountBodyRequest = UserAccountBodyRequest(
     emailAddress = "test@example.com",
     password = "123",
+)
+
+val dummyReportBodyRequest = ReportBodyRequest(
+    userId = DUMMY_USER_ACCOUNT_ID,
+    reportType = "weekly"
+)
+
+val expectedGetFoodDiaryReports200Response = Either.Right(
+    listOf(
+        WeeklyReportResponse(
+            date = DUMMY_DATE,
+            averageCarbohydrate = 211f,
+            averageFat = 510f,
+            averageProtein = 211f,
+            averageCalories = 250.2f,
+        ),
+        WeeklyReportResponse(
+            date = DUMMY_DATE,
+            averageCarbohydrate = 271f,
+            averageFat = 515f,
+            averageProtein = 221f,
+            averageCalories = 210.2f,
+        )
+    )
+)
+
+val dummyGetFoodDiaryReports200ResponseJson = Json.encodeToString(
+    CommonResponse(message = "success", data = expectedGetFoodDiaryReports200Response.value)
 )
 
 val dummyNewUserProfileBodyRequest = NewUserProfileBodyRequest(
@@ -87,6 +144,128 @@ val dummyDietProgressBodyRequest = DietProgressBodyRequest(
     updatedAt = "2021-01-01T00:00:00.000Z"
 )
 
+val dummyFoodDiaryBodyRequest = FoodDiaryBodyRequest(
+    userAccountId = DUMMY_USER_ACCOUNT_ID,
+    title = "title",
+    feedback = listOf("not bad", "not good"),
+    totalFat = 100f,
+    totalProtein = 210f,
+    totalCalories = 211f,
+    totalCarbohydrate = 22.7f,
+    foodPicture = Path.of("food.jpg").toFile(),
+    category = "food",
+    foodIds = listOf("1", "2", "3"),
+    addedAt = "2021-01-01T00:00:00.000Z"
+)
+
+val expectedDetected200Response = Either.Right(
+    DetectedResponse(
+        totalFat = 510f,
+        totalCalories = 211f,
+        totalProtein = 200f,
+        totalCarbohydrate = 41f,
+        imagePath = "file.jpg",
+        foods = listOf(
+            DetectedFoodResponse(
+                foodDetail = PredictedFoodDetailResponse(
+                    id = "1",
+                    name = "food",
+                    serving = listOf(
+                        ServingResponse(
+                            calories = 200f,
+                            carbohydrate = 100f,
+                            sugar = 20.5f,
+                            fat = 50.2f,
+                            protein = 27.5f,
+                            metricServingAmount = 100f
+                        ),
+                    ),
+                    questions = listOf(
+                        QuestionResponse(
+                            id = "1",
+                            options = listOf(
+                                OptionResponse(
+                                    id = "1",
+                                    answer = "fatty",
+                                    reference = "1"
+                                )
+                            ),
+                            question = "why?",
+                            type = "question"
+                        )
+                    )
+                ),
+                bounds = BoundResponses(
+                    bound = BoundResponse(
+                        x = 2.2,
+                        y = 2.7,
+                        width = 50.5,
+                        height = 12.5
+                    )
+                )
+            )
+        )
+    )
+)
+
+val dummyDetected200ResponseJson = Json.encodeToString(
+    CommonResponse(
+        message = "success",
+        data = expectedDetected200Response.value
+    )
+)
+
+val expectedAddedFoodDiary201Response = Either.Right(
+    "food diary has already been added"
+)
+
+val dummyAddedFoodDiary201ResponseJson = Json.encodeToString(
+    CommonResponse(
+        message = "success",
+        data = expectedAddedFoodDiary201Response.value
+    )
+)
+
+val expectedGetFoodDiary200Response = Either.Right(
+    FoodDiaryDetailResponse(
+        id = "1",
+        totalCalories = 100f,
+        status = "Good",
+        filePath = "test1.jpg",
+        title = "title1",
+        foods = listOf(
+            PredictedFoodDetailResponse(
+                id = "1",
+                name = "food",
+                serving = listOf(
+                    ServingResponse(
+                        calories = 200f,
+                        carbohydrate = 100f,
+                        sugar = 20.5f,
+                        fat = 50.2f,
+                        protein = 27.5f,
+                        metricServingAmount = 100f
+                    ),
+                ),
+                questions = listOf()
+            )
+        ),
+        feedback = listOf(),
+        totalFat = 100f,
+        totalProtein = 500f,
+        totalCarbohydrate = 240f
+    )
+)
+
+val dummyGetFoodDiaryResponse200Json = Json.encodeToString(
+    CommonResponse(
+        message = "success",
+        data = expectedGetFoodDiary200Response.value
+    )
+)
+
+val dummyDeleteFoodDiaryResponse200Json = Json.encodeToString(CommonResponse(message = "success", data = "the food diary has been deleted"))
+
 val dummyNutrient200ResponseJson = """
     {
         "message": "success",
@@ -98,6 +277,40 @@ val dummyNutrient200ResponseJson = """
         }
     }
 """.trimIndent()
+
+val expectedGetFoodDiaries200Response = Either.Right(
+    listOf(
+        FoodDiaryResponse(
+            id = "1",
+            title = "title2",
+            addedAt = "2020-01-01T00:00:00.000Z",
+            category = "makan siang",
+            totalCalories = 120f,
+            filePath = "test1.jpg"
+        ),
+        FoodDiaryResponse(
+            id = "2",
+            title = "title1",
+            addedAt = "2021-01-01T00:00:00.000Z",
+            totalCalories = 100f,
+            filePath = "test2.jpg",
+            category = "makan malam"
+        )
+    )
+)
+
+val expectedGetSuggestionKeywords200Response = Either.Right(
+    expectedGetFoodDiaries200Response.value.map {
+        KeywordResponse(id = it.id, title = it.title)
+    }
+)
+
+val dummyGetFoodDiaries200ResponseJson = Json.encodeToString(
+    CommonResponse(
+        message = "success",
+        data = expectedGetFoodDiaries200Response.value
+    )
+)
 
 val dummyGetDietProgress200ResponseJson = """
     {
@@ -230,6 +443,13 @@ val dummyUserAccount404ResponseJson = """
     }
 """.trimIndent()
 
+val dummyFoodDiary404ResponseJson = """
+    {
+        "message": "the food diary has not been found",
+        "data": null
+    }
+""".trimIndent()
+
 val dummyExpiredAccessTokenResponseJson = """
     {
         "message": "the access token has expired",
@@ -315,6 +535,10 @@ val expectedUserProfile400Response = Either.Left(
 
 val expectedUserAccount404Response = Either.Left(
     Failure.NotFoundFailure(message = "the user account has not been found")
+)
+
+val expectedFoodDiary404Response = Either.Left(
+    Failure.NotFoundFailure(message = "the food diary has not been found")
 )
 
 val expectedInternalServerErrorResponse = Either.Left(

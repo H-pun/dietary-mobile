@@ -66,11 +66,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.AppDestination
-import org.cisnux.mydietary.utils.AuthenticationState
-import org.cisnux.mydietary.utils.isEmailValid
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.activity
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.AuthenticationState
+import org.cisnux.mydietary.commons.utils.isEmailValid
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.activity
 
 @Composable
 fun SignInScreen(

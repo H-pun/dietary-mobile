@@ -1,7 +1,7 @@
 package org.cisnux.mydietary.domain.repositories
 
 import org.cisnux.mydietary.domain.models.UserAccount
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.UiState
 import kotlinx.coroutines.flow.Flow
 import org.cisnux.mydietary.domain.models.ChangePassword
 import org.cisnux.mydietary.domain.models.ForgotPassword

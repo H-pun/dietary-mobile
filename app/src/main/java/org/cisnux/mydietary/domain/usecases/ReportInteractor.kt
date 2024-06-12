@@ -20,11 +20,11 @@ import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.models.WeeklyNutritionReport
 import org.cisnux.mydietary.domain.repositories.FoodRepository
 import org.cisnux.mydietary.domain.repositories.UserProfileRepository
-import org.cisnux.mydietary.utils.Failure
-import org.cisnux.mydietary.utils.ReportCategory
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.fromDateMonthYearToDateAndMonth
-import org.cisnux.mydietary.utils.fromMillisToIsoLocalDate
+import org.cisnux.mydietary.commons.utils.Failure
+import org.cisnux.mydietary.commons.utils.ReportCategory
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.fromDateMonthYearToDateAndMonth
+import org.cisnux.mydietary.commons.utils.fromMillisToIsoLocalDate
 import java.time.Instant
 import javax.inject.Inject
 

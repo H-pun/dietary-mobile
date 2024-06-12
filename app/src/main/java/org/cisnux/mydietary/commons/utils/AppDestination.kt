@@ -1,4 +1,4 @@
-package org.cisnux.mydietary.utils
+package org.cisnux.mydietary.commons.utils
 
 import android.net.Uri
 import androidx.compose.runtime.Immutable

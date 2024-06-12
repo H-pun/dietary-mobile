@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import org.cisnux.mydietary.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.AppDestination
 
 class NavComponentAction(
     navController: NavHostController,

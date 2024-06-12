@@ -7,9 +7,9 @@ import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.FoodDiaryReport
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.Keyword
-import org.cisnux.mydietary.utils.FoodDiaryCategory
-import org.cisnux.mydietary.utils.ReportCategory
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.FoodDiaryCategory
+import org.cisnux.mydietary.commons.utils.ReportCategory
+import org.cisnux.mydietary.commons.utils.UiState
 import java.io.File
 
 interface FoodRepository {
@@ -28,7 +28,7 @@ interface FoodRepository {
         date: String,
     ): Flow<UiState<List<FoodDiary>>>
 
-    fun getKeywordSuggestions(
+    fun getSuggestionKeywords(
         accessToken: String,
         userId: String,
         query: String,

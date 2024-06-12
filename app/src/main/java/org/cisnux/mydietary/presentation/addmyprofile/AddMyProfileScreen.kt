@@ -41,13 +41,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.components.MyProfileForm
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.AppDestination
-import org.cisnux.mydietary.utils.Failure
-import org.cisnux.mydietary.utils.isFloatAndGreaterThanZero
-import org.cisnux.mydietary.utils.isFloatAndGreaterAndEqualToZero
-import org.cisnux.mydietary.utils.isUsernameValid
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.isAgeValid
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.Failure
+import org.cisnux.mydietary.commons.utils.isFloatAndGreaterThanZero
+import org.cisnux.mydietary.commons.utils.isFloatAndGreaterAndEqualToZero
+import org.cisnux.mydietary.commons.utils.isUsernameValid
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.isAgeValid
 
 @Composable
 fun AddMyProfileScreen(

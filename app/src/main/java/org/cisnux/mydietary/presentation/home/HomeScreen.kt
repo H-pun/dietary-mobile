@@ -8,7 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import org.cisnux.mydietary.utils.Failure
+import org.cisnux.mydietary.commons.utils.Failure
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -93,17 +93,17 @@ import org.cisnux.mydietary.presentation.ui.components.DietarySearchBar
 import org.cisnux.mydietary.presentation.ui.components.EmptyContents
 import org.cisnux.mydietary.presentation.ui.components.rememberSearchBarState
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.AppDestination
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.activity
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.activity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.domain.models.Keyword
 import org.cisnux.mydietary.presentation.ui.components.NavigationDrawer
 import org.cisnux.mydietary.presentation.ui.components.UserAccountCard
-import org.cisnux.mydietary.utils.fromMillisToDayDateMonthYear
-import org.cisnux.mydietary.utils.fromMillisToHoursAndMinutes
+import org.cisnux.mydietary.commons.utils.fromMillisToDayDateMonthYear
+import org.cisnux.mydietary.commons.utils.fromMillisToHoursAndMinutes
 import java.time.Instant
 
 @OptIn(

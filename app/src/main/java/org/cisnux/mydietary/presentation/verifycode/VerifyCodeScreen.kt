@@ -68,8 +68,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.isResetCodeValid
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.isResetCodeValid
 
 @Composable
 fun VerifyCodeScreen(

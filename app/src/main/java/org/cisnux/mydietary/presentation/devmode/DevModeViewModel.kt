@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.cisnux.mydietary.domain.usecases.FoodDiaryUseCase
-import org.cisnux.mydietary.utils.DIETARY_API
+import org.cisnux.mydietary.commons.utils.DIETARY_API
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch

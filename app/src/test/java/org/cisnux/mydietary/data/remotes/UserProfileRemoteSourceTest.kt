@@ -7,30 +7,30 @@ import io.ktor.http.headersOf
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import org.cisnux.mydietary.utils.DUMMY_ACCESS_TOKEN
-import org.cisnux.mydietary.utils.DUMMY_DATE
-import org.cisnux.mydietary.utils.DUMMY_USER_ACCOUNT_ID
-import org.cisnux.mydietary.utils.Failure
-import org.cisnux.mydietary.utils.dummyAddUserProfile200ResponseJson
-import org.cisnux.mydietary.utils.dummyDietProgressBodyRequest
-import org.cisnux.mydietary.utils.dummyExpiredAccessTokenResponseJson
-import org.cisnux.mydietary.utils.dummyGetDietProgress200ResponseJson
-import org.cisnux.mydietary.utils.dummyInternalServerErrorResponseJson
-import org.cisnux.mydietary.utils.dummyNewUserProfileBodyRequest
-import org.cisnux.mydietary.utils.dummyNutrient200ResponseJson
-import org.cisnux.mydietary.utils.dummyUpdateDietProgress200ResponseJson
-import org.cisnux.mydietary.utils.dummyUpdateUserProfile200ResponseJson
-import org.cisnux.mydietary.utils.dummyUpdateUserProfileBodyRequest
-import org.cisnux.mydietary.utils.dummyUserProfile400ResponseJson
-import org.cisnux.mydietary.utils.dummyUserAccount404ResponseJson
-import org.cisnux.mydietary.utils.dummyUserProfileDetail200ResponseJson
-import org.cisnux.mydietary.utils.expectedAddUserProfile200Response
-import org.cisnux.mydietary.utils.expectedGetDietProgress200Response
-import org.cisnux.mydietary.utils.expectedInternalServerErrorResponse
-import org.cisnux.mydietary.utils.expectedNutrient200Response
-import org.cisnux.mydietary.utils.expectedUserProfile400Response
-import org.cisnux.mydietary.utils.expectedUserAccount404Response
-import org.cisnux.mydietary.utils.expectedUserProfileDetail200Response
+import org.cisnux.mydietary.commons.utils.DUMMY_ACCESS_TOKEN
+import org.cisnux.mydietary.commons.utils.DUMMY_DATE
+import org.cisnux.mydietary.commons.utils.DUMMY_USER_ACCOUNT_ID
+import org.cisnux.mydietary.commons.utils.Failure
+import org.cisnux.mydietary.commons.utils.dummyAddUserProfile200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyDietProgressBodyRequest
+import org.cisnux.mydietary.commons.utils.dummyExpiredAccessTokenResponseJson
+import org.cisnux.mydietary.commons.utils.dummyGetDietProgress200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyInternalServerErrorResponseJson
+import org.cisnux.mydietary.commons.utils.dummyNewUserProfileBodyRequest
+import org.cisnux.mydietary.commons.utils.dummyNutrient200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyUpdateDietProgress200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyUpdateUserProfile200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyUpdateUserProfileBodyRequest
+import org.cisnux.mydietary.commons.utils.dummyUserProfile400ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyUserAccount404ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyUserProfileDetail200ResponseJson
+import org.cisnux.mydietary.commons.utils.expectedAddUserProfile200Response
+import org.cisnux.mydietary.commons.utils.expectedGetDietProgress200Response
+import org.cisnux.mydietary.commons.utils.expectedInternalServerErrorResponse
+import org.cisnux.mydietary.commons.utils.expectedNutrient200Response
+import org.cisnux.mydietary.commons.utils.expectedUserProfile400Response
+import org.cisnux.mydietary.commons.utils.expectedUserAccount404Response
+import org.cisnux.mydietary.commons.utils.expectedUserProfileDetail200Response
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -45,7 +45,7 @@ class UserProfileRemoteSourceTest : BaseRemoteTest() {
     inner class AddUserProfile {
 
         @Test
-        fun `by valid body request then should return (200 Success)`() = runTest {
+        fun `by valid body request then should return (200 OK)`() = runTest {
             // arrange
             val userProfileRemoteSource = UserProfileRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -126,7 +126,7 @@ class UserProfileRemoteSourceTest : BaseRemoteTest() {
     inner class UpdateUserProfile {
 
         @Test
-        fun `by valid body request then should return (200 Success)`() = runTest {
+        fun `by valid body request then should return (200 OK)`() = runTest {
             // arrange
             val userProfileRemoteSource = UserProfileRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -208,7 +208,7 @@ class UserProfileRemoteSourceTest : BaseRemoteTest() {
     inner class GetUserProfile {
 
         @Test
-        fun `by valid id then should return (200 Success)`() = runTest {
+        fun `by valid id then should return (200 OK)`() = runTest {
             // arrange
             val userProfileRemoteSource = UserProfileRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -312,7 +312,7 @@ class UserProfileRemoteSourceTest : BaseRemoteTest() {
     @DisplayName("when get daily nutrients")
     inner class GetDailyNutrients {
         @Test
-        fun `by valid id then should return (200 Success)`() = runTest {
+        fun `by valid id then should return (200 OK)`() = runTest {
             // arrange
             val userProfileRemoteSource = UserProfileRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -421,7 +421,7 @@ class UserProfileRemoteSourceTest : BaseRemoteTest() {
     @DisplayName("when update diet progress")
     inner class UpdateDietProgress {
         @Test
-        fun `by valid body request then should return (200 Success)`() = runTest {
+        fun `by valid body request then should return (200 OK)`() = runTest {
             // arrange
             val userProfileRemoteSource = UserProfileRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
@@ -526,7 +526,7 @@ class UserProfileRemoteSourceTest : BaseRemoteTest() {
     @DisplayName("when get diet progress")
     inner class GetDietProgress {
         @Test
-        fun `by valid id then should return (200 Success)`() = runTest {
+        fun `by valid id then should return (200 OK)`() = runTest {
             // arrange
             val userProfileRemoteSource = UserProfileRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,

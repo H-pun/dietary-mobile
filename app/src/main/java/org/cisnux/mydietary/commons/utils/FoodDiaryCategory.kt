@@ -1,4 +1,4 @@
-package org.cisnux.mydietary.utils
+package org.cisnux.mydietary.commons.utils
 
 enum class FoodDiaryCategory(val value: String) {
     BREAKFAST("Sarapan"),

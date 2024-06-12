@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.cisnux.mydietary.domain.models.EditableUserProfile
 import org.cisnux.mydietary.domain.models.UserProfileDetail
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.UiState
 import kotlinx.coroutines.flow.Flow
 
 interface UserProfileUseCase {

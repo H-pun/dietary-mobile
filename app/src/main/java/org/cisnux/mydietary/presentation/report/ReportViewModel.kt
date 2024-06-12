@@ -7,8 +7,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.reportCategory
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.reportCategory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -20,7 +20,7 @@ import org.cisnux.mydietary.domain.models.MonthlyNutritionReport
 import org.cisnux.mydietary.domain.models.WeeklyNutritionReport
 import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.usecases.ReportUseCase
-import org.cisnux.mydietary.utils.ReportCategory
+import org.cisnux.mydietary.commons.utils.ReportCategory
 import javax.inject.Inject
 
 @HiltViewModel

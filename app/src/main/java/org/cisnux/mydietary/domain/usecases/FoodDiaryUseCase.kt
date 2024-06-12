@@ -9,8 +9,8 @@ import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.models.Keyword
-import org.cisnux.mydietary.utils.FoodDiaryCategory
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.FoodDiaryCategory
+import org.cisnux.mydietary.commons.utils.UiState
 import java.io.File
 
 interface FoodDiaryUseCase {
@@ -26,7 +26,7 @@ interface FoodDiaryUseCase {
     ): Flow<UiState<List<FoodDiary>>>
 
     fun getFoodDiariesByQuery(query: String, scope: CoroutineScope): Flow<UiState<List<FoodDiary>>>
-    fun getKeywordSuggestionsByQuery(
+    fun getSuggestionKeywordsByQuery(
         query: String,
         scope: CoroutineScope
     ): Flow<UiState<List<Keyword>>>

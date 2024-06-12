@@ -12,7 +12,7 @@ import io.ktor.client.request.post
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import org.cisnux.mydietary.utils.Failure
+import org.cisnux.mydietary.commons.utils.Failure
 import io.ktor.client.call.body
 import io.ktor.client.request.headers
 import io.ktor.client.request.put

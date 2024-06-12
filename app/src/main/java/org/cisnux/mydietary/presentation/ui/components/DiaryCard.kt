@@ -32,8 +32,8 @@ import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.presentation.ui.theme.darkProgress
 import org.cisnux.mydietary.presentation.ui.theme.lightProgress
-import org.cisnux.mydietary.utils.fromMillisToDayDateMonthYear
-import org.cisnux.mydietary.utils.fromMillisToHoursAndMinutes
+import org.cisnux.mydietary.commons.utils.fromMillisToDayDateMonthYear
+import org.cisnux.mydietary.commons.utils.fromMillisToHoursAndMinutes
 import java.time.Instant
 import java.util.Locale
 

@@ -31,8 +31,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.MainActivity
-import org.cisnux.mydietary.utils.AppDestination
-import org.cisnux.mydietary.utils.isDevModeActive
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.isDevModeActive
 import kotlinx.coroutines.launch
 
 private const val NOTIFICATION_ID = 1

@@ -67,11 +67,11 @@ import org.cisnux.mydietary.presentation.ui.components.ListTileProfile
 import org.cisnux.mydietary.presentation.ui.components.NavigationDrawer
 import org.cisnux.mydietary.presentation.ui.components.UserAccountCard
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.AppDestination
-import org.cisnux.mydietary.utils.Failure
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.isEmailValid
-import org.cisnux.mydietary.utils.isPasswordSecure
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.Failure
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.isEmailValid
+import org.cisnux.mydietary.commons.utils.isPasswordSecure
 
 @Composable
 fun SecurityAccountScreen(

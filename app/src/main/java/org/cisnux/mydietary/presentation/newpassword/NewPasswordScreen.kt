@@ -54,9 +54,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.AppDestination
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.isPasswordSecure
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.isPasswordSecure
 
 @Composable
 fun NewPasswordScreen(

@@ -1,4 +1,4 @@
-package org.cisnux.mydietary.utils
+package org.cisnux.mydietary.commons.utils
 
 import android.content.Context
 import android.content.ContextWrapper

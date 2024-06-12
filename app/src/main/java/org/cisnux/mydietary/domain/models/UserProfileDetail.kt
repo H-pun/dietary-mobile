@@ -1,7 +1,7 @@
 package org.cisnux.mydietary.domain.models
 
-import org.cisnux.mydietary.utils.ACTIVITY_FACTOR
-import org.cisnux.mydietary.utils.GOALS_FACTOR
+import org.cisnux.mydietary.commons.utils.ACTIVITY_FACTOR
+import org.cisnux.mydietary.commons.utils.GOAL_FACTOR
 
 data class UserProfileDetail(
     val id: String,
@@ -33,8 +33,8 @@ data class UserProfileDetail(
         // mengambil nilai faktor level aktivitas
         val activityFactor =
             ACTIVITY_FACTOR[userProfile.activityLevel.lowercase()] ?: 1.0
-        // mengambil nilai faktor goals
-        val goalsFactor = GOALS_FACTOR[userProfile.goal] ?: 1.0
+        // mengambil nilai faktor goal
+        val goalsFactor = GOAL_FACTOR[userProfile.goal] ?: 1.0
         // menghitung maksimal kalori
         val userMaxDailyCalories =
             (bmr * activityFactor * goalsFactor).toFloat()

@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.addmyprofile.MyProfile
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.isFloatAndGreaterThanZero
-import org.cisnux.mydietary.utils.isUsernameValid
+import org.cisnux.mydietary.commons.utils.isFloatAndGreaterThanZero
+import org.cisnux.mydietary.commons.utils.isUsernameValid
 
 @Preview(showBackground = true, locale = "in")
 @Composable

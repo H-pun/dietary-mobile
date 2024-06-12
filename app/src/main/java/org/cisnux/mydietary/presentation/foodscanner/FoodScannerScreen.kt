@@ -118,15 +118,15 @@ import org.cisnux.mydietary.presentation.ui.components.AddedDiaryShimmer
 import org.cisnux.mydietary.presentation.ui.components.FoodNutritionModal
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.cisnux.mydietary.presentation.ui.theme.surfaceDark
-import org.cisnux.mydietary.utils.AppDestination
-import org.cisnux.mydietary.utils.Failure
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.afterMeasured
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.Failure
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.afterMeasured
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.cisnux.mydietary.presentation.ui.components.AddFoodDiaryDialog
 import org.cisnux.mydietary.presentation.widgets.ReportWidget
-import org.cisnux.mydietary.utils.foodDiaryCategory
+import org.cisnux.mydietary.commons.utils.foodDiaryCategory
 import java.io.File
 import java.util.concurrent.TimeUnit
 

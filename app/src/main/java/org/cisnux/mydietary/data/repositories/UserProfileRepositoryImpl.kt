@@ -8,7 +8,7 @@ import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.models.EditableUserProfile
 import org.cisnux.mydietary.domain.models.UserProfileDetail
 import org.cisnux.mydietary.domain.repositories.UserProfileRepository
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -21,8 +21,8 @@ import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.UpdateUserProfileWithUsernameBodyRequest
 import org.cisnux.mydietary.data.remotes.responses.UserProfileDetailResponse
 import org.cisnux.mydietary.domain.models.DietProgress
-import org.cisnux.mydietary.utils.currentLocalDateTime
-import org.cisnux.mydietary.utils.fromIsoOffsetDateTimeToDayDateMonth
+import org.cisnux.mydietary.commons.utils.currentLocalDateTime
+import org.cisnux.mydietary.commons.utils.fromIsoOffsetDateTimeToDayDateMonth
 
 class UserProfileRepositoryImpl @Inject constructor(
     private val userProfileRemoteSource: UserProfileRemoteSource,

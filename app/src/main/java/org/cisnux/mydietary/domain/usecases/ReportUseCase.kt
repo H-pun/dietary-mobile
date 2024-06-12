@@ -6,7 +6,7 @@ import org.cisnux.mydietary.domain.models.DietProgress
 import org.cisnux.mydietary.domain.models.MonthlyNutritionReport
 import org.cisnux.mydietary.domain.models.UserNutrition
 import org.cisnux.mydietary.domain.models.WeeklyNutritionReport
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.UiState
 
 interface ReportUseCase {
     fun getDietProgress(scope: CoroutineScope): Flow<UiState<List<DietProgress>>>

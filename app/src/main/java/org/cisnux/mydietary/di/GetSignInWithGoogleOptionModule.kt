@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.cisnux.mydietary.utils.WEB_CLIENT_ID
+import org.cisnux.mydietary.commons.utils.WEB_CLIENT_ID
 import javax.inject.Singleton
 
 @Module

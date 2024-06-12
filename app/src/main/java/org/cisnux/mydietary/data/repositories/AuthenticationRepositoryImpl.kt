@@ -4,8 +4,8 @@ import org.cisnux.mydietary.data.locals.UserAccountLocalSource
 import org.cisnux.mydietary.data.remotes.UserAccountRemoteSource
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.domain.repositories.AuthenticationRepository
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.userAccountBodyRequest
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.userAccountBodyRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow

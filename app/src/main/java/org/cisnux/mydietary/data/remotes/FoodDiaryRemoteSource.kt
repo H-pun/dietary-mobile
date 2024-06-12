@@ -27,7 +27,7 @@ interface FoodDiaryRemoteSource {
         foodDiary: FoodDiaryBodyRequest
     ): Either<Exception, String>
 
-    suspend fun predictFoods(
+    suspend fun detectFoods(
         accessToken: String,
         foodPicture: File
     ): Either<Exception, DetectedResponse>
@@ -38,7 +38,7 @@ interface FoodDiaryRemoteSource {
     ): Either<Exception, List<ReportResponse>>
 
 
-    suspend fun getKeywordSuggestions(
+    suspend fun getSuggestionKeywords(
         accessToken: String,
         getFoodDiaryParams: GetFoodDiaryParams
     ): Either<Exception, List<KeywordResponse>>

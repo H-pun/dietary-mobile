@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.navigation.NavigationItem
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.AppDestination
 
 @Preview
 @Composable

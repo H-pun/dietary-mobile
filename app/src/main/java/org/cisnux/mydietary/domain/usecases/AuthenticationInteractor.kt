@@ -19,13 +19,13 @@ import kotlinx.coroutines.CoroutineScope
 import org.cisnux.mydietary.domain.models.UserAccount
 import org.cisnux.mydietary.domain.repositories.AuthenticationRepository
 import org.cisnux.mydietary.domain.repositories.UserProfileRepository
-import org.cisnux.mydietary.utils.AuthenticationState
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.AuthenticationState
+import org.cisnux.mydietary.commons.utils.UiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import org.cisnux.mydietary.utils.Failure
+import org.cisnux.mydietary.commons.utils.Failure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.channelFlow

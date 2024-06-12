@@ -14,8 +14,8 @@ import org.cisnux.mydietary.domain.models.FoodDiary
 import org.cisnux.mydietary.domain.models.FoodDiaryDetail
 import org.cisnux.mydietary.domain.models.FoodNutrition
 import org.cisnux.mydietary.domain.repositories.FoodRepository
-import org.cisnux.mydietary.utils.FoodDiaryCategory
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.FoodDiaryCategory
+import org.cisnux.mydietary.commons.utils.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -124,14 +124,14 @@ class FoodDiaryInteractor @Inject constructor(
                 initialValue = UiState.Initialize
             )
 
-    override fun getKeywordSuggestionsByQuery(
+    override fun getSuggestionKeywordsByQuery(
         query: String,
         scope: CoroutineScope
     ): Flow<UiState<List<Keyword>>> =
         authenticationUseCase.getAccessTokenAndUserId(scope = scope)
             .filterNotNull()
             .flatMapLatest {
-                foodRepository.getKeywordSuggestions(
+                foodRepository.getSuggestionKeywords(
                     userId = it.first, accessToken = it.second, query = query
                 )
                     .flowOn(Dispatchers.IO)

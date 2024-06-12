@@ -8,8 +8,8 @@ import kotlinx.coroutines.Dispatchers
 import org.cisnux.mydietary.domain.usecases.AuthenticationUseCase
 import org.cisnux.mydietary.domain.usecases.UserProfileUseCase
 import org.cisnux.mydietary.presentation.addmyprofile.MyProfile
-import org.cisnux.mydietary.utils.UiState
-import org.cisnux.mydietary.utils.asEditableUserProfile
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.asEditableUserProfile
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow

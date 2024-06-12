@@ -38,7 +38,7 @@ import org.cisnux.mydietary.presentation.splash.SplashScreen
 import org.cisnux.mydietary.presentation.ui.components.NotificationDialog
 import org.cisnux.mydietary.presentation.verifycode.VerifyCodeScreen
 import org.cisnux.mydietary.presentation.widgets.ReportWidget
-import org.cisnux.mydietary.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.AppDestination
 
 @Composable
 fun DietaryNavGraph(

@@ -22,9 +22,9 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import org.cisnux.mydietary.R
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.utils.AppDestination
-import org.cisnux.mydietary.utils.AuthenticationState
-import org.cisnux.mydietary.utils.SplashWaitTimeMillis
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.AuthenticationState
+import org.cisnux.mydietary.commons.utils.SplashWaitTimeMillis
 import kotlinx.coroutines.delay
 
 @Composable

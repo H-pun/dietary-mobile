@@ -1,4 +1,4 @@
-package org.cisnux.mydietary.utils
+package org.cisnux.mydietary.commons.utils
 
 sealed class UiState<out T : Any?> {
     data object Initialize : UiState<Nothing>()

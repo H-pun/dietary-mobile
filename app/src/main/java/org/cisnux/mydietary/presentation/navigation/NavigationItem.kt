@@ -1,7 +1,7 @@
 package org.cisnux.mydietary.presentation.navigation
 
 import androidx.compose.runtime.Immutable
-import org.cisnux.mydietary.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.AppDestination
 
 @Immutable
 data class NavigationItem<out T>(

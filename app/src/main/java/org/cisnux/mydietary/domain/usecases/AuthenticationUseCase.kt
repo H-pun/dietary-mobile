@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 import org.cisnux.mydietary.domain.models.ChangePassword
 import org.cisnux.mydietary.domain.models.ForgotPassword
 import org.cisnux.mydietary.domain.models.UserAccount
-import org.cisnux.mydietary.utils.AuthenticationState
-import org.cisnux.mydietary.utils.UiState
+import org.cisnux.mydietary.commons.utils.AuthenticationState
+import org.cisnux.mydietary.commons.utils.UiState
 
 interface AuthenticationUseCase {
     fun getAuthenticationState(scope: CoroutineScope): Flow<AuthenticationState>
