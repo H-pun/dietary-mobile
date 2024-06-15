@@ -276,7 +276,7 @@ class FoodDiaryRemoteSourceImpl @Inject constructor(
      * @return [Either]<[Exception], [DetectedResponse]> Method ini akan mengembalikan exception
      * jika request gagal dan jika request berhasil maka akan mengembalikan data makanan yang terdeteksi.
      * */
-    override suspend fun detectFoods(
+    override suspend fun predict(
         accessToken: String,
         foodPicture: File
     ): Either<Exception, DetectedResponse> =

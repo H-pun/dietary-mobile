@@ -27,12 +27,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.cisnux.mydietary.DummyActivity
 import org.cisnux.mydietary.R
+import org.cisnux.mydietary.commons.DUMMY_FOOD_DIARY_TITLE
 import org.cisnux.mydietary.presentation.navigation.DietaryNavGraph
 import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.Instant
 import java.util.Locale
 
 @OptIn(ExperimentalTestApi::class)
@@ -75,13 +75,12 @@ class FoodScannerScreenTest {
     }
 
     @Test
-    fun addFoodDiarySuccessfully_ShouldDisplayFoodDiaryDetailScreen(): Unit = runBlocking {
+    fun addFoodDiary_Success(): Unit = runBlocking {
         with(composeTestRule) {
-            val emailAddress = "ddactor7@gmail.com"
+            val emailAddress = "j4478072@gmail.com"
             val password = "@Cisnux21"
             val cameraLabelPermission =
                 if (Locale.getDefault().language != Locale("id").language) "Only this time" else "Hanya kali ini"
-            val foodDiaryTitle = "food diary title-${Instant.now().toEpochMilli()}"
 
             onNodeWithText(composeTestRule.activity.getString(R.string.sign_in))
                 .assertIsDisplayed()
@@ -127,7 +126,97 @@ class FoodScannerScreenTest {
 
             onNodeWithText(composeTestRule.activity.getString(R.string.title))
                 .assertIsDisplayed()
-                .performTextInput(foodDiaryTitle)
+                .performTextInput(DUMMY_FOOD_DIARY_TITLE)
+
+            onNodeWithContentDescription(composeTestRule.activity.getString(R.string.save_food_diary))
+                .assertIsDisplayed()
+                .performClick()
+
+            delay(3000L)
+
+            onNodeWithContentDescription(composeTestRule.activity.getString(R.string.take_a_picture))
+                .assertIsDisplayed()
+                .performClick()
+
+            waitForIdle()
+
+            waitUntilExactlyOneExists(
+                hasContentDescription(composeTestRule.activity.getString(R.string.continue_button)),
+                timeoutMillis = 60_000L
+            )
+
+            onNodeWithContentDescription(composeTestRule.activity.getString(R.string.list_of_foods))
+                .performScrollToNode(hasContentDescription(composeTestRule.activity.getString(R.string.continue_button)))
+                .onChildren()
+                .filterToOne(hasContentDescription(composeTestRule.activity.getString(R.string.continue_button)))
+                .assertHasClickAction()
+                .performClick()
+
+            waitForIdle()
+
+            waitUntilExactlyOneExists(
+                hasText(DUMMY_FOOD_DIARY_TITLE),
+                timeoutMillis = 60_000L
+            )
+
+            onNodeWithText(DUMMY_FOOD_DIARY_TITLE)
+                .assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun addFoodDiary_Failed(): Unit = runBlocking {
+        with(composeTestRule) {
+            val emailAddress = "j4478072@gmail.com"
+            val password = "@Cisnux21"
+            val cameraLabelPermission =
+                if (Locale.getDefault().language != Locale("id").language) "Only this time" else "Hanya kali ini"
+
+            onNodeWithText(composeTestRule.activity.getString(R.string.sign_in))
+                .assertIsDisplayed()
+                .performClick()
+
+            waitUntilExactlyOneExists(
+                hasText(composeTestRule.activity.getString(R.string.welcome_back)),
+                timeoutMillis = 3000L
+            )
+
+            onNodeWithText(composeTestRule.activity.getString(R.string.email_address_label))
+                .assertIsDisplayed()
+                .performTextInput(emailAddress)
+
+            onNodeWithText(composeTestRule.activity.getString(R.string.password_label))
+                .assertIsDisplayed()
+                .performTextInput(password)
+
+            onNodeWithText(composeTestRule.activity.getString(R.string.sign_in))
+                .assertIsDisplayed()
+                .performClick()
+
+            waitUntilExactlyOneExists(
+                hasText(composeTestRule.activity.getString(R.string.diary_display)),
+                timeoutMillis = 10_000L
+            )
+
+            onNodeWithContentDescription(label = composeTestRule.activity.getString(R.string.food_scanner_title))
+                .assertIsDisplayed()
+                .performClick()
+
+            device.wait(
+                Until.findObject(By.text(cameraLabelPermission)),
+                5000L
+            )
+            device.findObject(By.text(cameraLabelPermission))
+                .click()
+
+            waitUntilExactlyOneExists(
+                hasText(composeTestRule.activity.getString(R.string.food_diary)),
+                timeoutMillis = 10_000L
+            )
+
+            onNodeWithText(composeTestRule.activity.getString(R.string.title))
+                .assertIsDisplayed()
+                .performTextInput(DUMMY_FOOD_DIARY_TITLE)
 
             onNodeWithContentDescription(composeTestRule.activity.getString(R.string.save_food_diary))
                 .assertIsDisplayed()
@@ -140,23 +229,11 @@ class FoodScannerScreenTest {
                 .performClick()
 
             waitUntilExactlyOneExists(
-                hasContentDescription(composeTestRule.activity.getString(R.string.continue_button)),
+                hasText("No food detected!"),
                 timeoutMillis = 10_000L
             )
 
-            onNodeWithContentDescription(composeTestRule.activity.getString(R.string.list_of_foods))
-                .performScrollToNode(hasContentDescription(composeTestRule.activity.getString(R.string.continue_button)))
-                .onChildren()
-                .filterToOne(hasContentDescription(composeTestRule.activity.getString(R.string.continue_button)))
-                .assertHasClickAction()
-                .performClick()
-
-            waitUntilExactlyOneExists(
-                hasText(foodDiaryTitle),
-                timeoutMillis = 15_000L
-            )
-
-            onNodeWithText(foodDiaryTitle)
+            onNodeWithText("No food detected!")
                 .assertIsDisplayed()
         }
     }

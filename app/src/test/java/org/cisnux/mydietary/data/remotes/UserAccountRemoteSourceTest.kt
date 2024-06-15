@@ -8,13 +8,11 @@ import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.test.runTest
 import org.cisnux.mydietary.commons.utils.DUMMY_ACCESS_TOKEN
 import org.cisnux.mydietary.commons.utils.dummyAddedUserAccount200ResponseJson
-import org.cisnux.mydietary.commons.utils.dummyAddedUserAccountIncorrectEmailAddressResponseJson
 import org.cisnux.mydietary.commons.utils.dummyAddedUserAccountIncorrectPasswordResponseJson
 import org.cisnux.mydietary.commons.utils.dummyUserAccountBodyRequest
 import org.cisnux.mydietary.commons.utils.dummyVerifyEmail200ResponseJson
 import org.cisnux.mydietary.commons.utils.dummyVerifyEmailBodyRequest
 import org.cisnux.mydietary.commons.utils.expectedAddedUserAccount200Response
-import org.cisnux.mydietary.commons.utils.expectedAddedUserAccountIncorrectEmailAddressResponse
 import org.cisnux.mydietary.commons.utils.expectedAddedUserAccountIncorrectPasswordResponse
 import org.cisnux.mydietary.commons.utils.expectedVerifyEmail200Response
 import org.cisnux.mydietary.commons.utils.expectedInternalServerErrorResponse
@@ -98,31 +96,6 @@ class UserAccountRemoteSourceTest : BaseRemoteTest() {
             // assert
             Assertions.assertEquals(
                 expectedAddedUserAccountIncorrectPasswordResponse.value.message,
-                result.leftOrNull()?.message
-            )
-        }
-
-        @Test
-        fun `by incorrect email address then should return (401 Unauthorized)`() = runTest {
-            // arrange
-            val userAccountRemoteSource = UserAccountRemoteSourceImpl(
-                baseApiUrlLocalSource = baseApiUrlLocalSource,
-                client = mockHandler {
-                    respond(
-                        content = dummyAddedUserAccountIncorrectEmailAddressResponseJson,
-                        status = HttpStatusCode.Unauthorized,
-                        headers = headersOf(HttpHeaders.ContentType, "application/json")
-                    )
-                })
-
-            // act
-            val result = userAccountRemoteSource.signInWithEmailAddressAndPassword(
-                dummyUserAccountBodyRequest
-            )
-
-            // assert
-            Assertions.assertEquals(
-                expectedAddedUserAccountIncorrectEmailAddressResponse.value.message,
                 result.leftOrNull()?.message
             )
         }

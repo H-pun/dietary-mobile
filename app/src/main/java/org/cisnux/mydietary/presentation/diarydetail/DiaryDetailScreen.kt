@@ -59,6 +59,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -456,7 +458,7 @@ fun DiaryDetailBody(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.navigate_up),
                 tint = Color.White,
             )
         }
@@ -480,7 +482,10 @@ fun DiaryDetailBody(
                     colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = Color.Black.copy(alpha = 0.5f)
                     ),
-                    enabled = isRemoveEnable
+                    enabled = isRemoveEnable,
+                    modifier = Modifier.semantics {
+                        testTag = "delete_food_diary"
+                    }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_outline_cancel_24dp),

@@ -1,0 +1,289 @@
+Gradle start parameters:
+  tasks = [:app:connectedDebugAndroidTest]
+  excluded tasks = []
+  current dir = /Users/cisnux/temp/dietary-capstone
+  project properties args = [android.studio.version: 233.14808.21.2331.11926650, android.injected.attribution.file.location: /Users/cisnux/temp/dietary-capstone/.gradle, android.injected.build.api: 34, android.injected.build.abi: arm64-v8a, com.android.tools.utp.GradleAndroidProjectResolverExtension.enable: true, android.injected.invoked.from.ide: true, android.testInstrumentationRunnerArguments.class: org.cisnux.mydietary.presentation.foodscanner.FoodScannerScreenTest#addFoodDiarySuccessfully_ShouldDisplayFoodDiaryDetailScreen, android.experimental.testOptions.emulatorSnapshots.maxSnapshotsForTestFailures: 0]
+  system properties args = [idea.active: true, idea.version: 2023.3, idea.vendor.name: Google]
+
+Build failed: [Execution failed for task ':app:kspDebugAndroidTestKotlin'.]
+
+Time metrics:
+  Total Gradle task time: 3.32 s
+  Spent time before task action: 0.02 s
+  Task action before worker execution: 0.17 s
+  Run compilation in Gradle worker: 2.41 s
+    Clear output: 0.00 s
+    Connect to Kotlin daemon: 0.02 s
+    Non incremental compilation in daemon: 2.39 s
+  Start gradle worker: 0.00 s
+
+Size metrics:
+  Increase memory usage: -368341168 B
+  Total memory usage at the end of build: 391.9 MB
+  Start time of task action: 2024-06-13T08:08:58
+
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+No Kotlin task was run
+Task ':app:kspDebugAndroidTestKotlin' finished in 2.62 s
+Task info:
+  Kotlin language version: 1.9
+Compilation log for task ':app:kspDebugAndroidTestKotlin':
+  Compiler perf stats:
+  INIT: Compiler initialized in 408 ms
+          ANALYZE    1558 ms     306.804 loc/s
+          ANALYZE     239 ms    2000.000 loc/s
+          ANALYZE     171 ms    2795.322 loc/s
+  Find Java class performed 28 times, total time 39 ms
+  Type info performed 16 times, total time 351 ms
+  Call resolve performed 40 times, total time 381 ms
+  Binary class from Kotlin file performed 6146 times, total time 556 ms
+  Find Java class performed 0 times
+  Find Java class performed 4 times, total time 1 ms
+  Find Java class performed 28 times, total time 4 ms
+  Find Java class performed 0 times
+  Find Java class performed 4 times, total time 1 ms
+  Find Java class performed 15 times, total time 0 ms
+  Find Java class performed 0 times
+  Find Java class performed 3 times, total time 1 ms
+  Find Java class performed 28 times, total time 4 ms
+  Find Java class performed 0 times
+  Find Java class performed 4 times, total time 0 ms
+  Find Java class performed 28 times, total time 12 ms
+Time metrics:
+  Total Gradle task time: 2.62 s
+  Spent time before task action: 0.02 s
+  Task action before worker execution: 0.17 s
+  Run compilation in Gradle worker: 2.41 s
+    Clear output: 0.00 s
+    Connect to Kotlin daemon: 0.02 s
+    Non incremental compilation in daemon: 2.39 s
+  Start gradle worker: 0.00 s
+Size metrics:
+  Increase memory usage: -368341168 B
+  Total memory usage at the end of build: 391.9 MB
+  Start time of task action: 2024-06-13T08:08:58
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Task ':app:extractIncludeDebugProto' finished in 0.31 s
+Time metrics:
+  Total Gradle task time: 0.31 s
+
+Task ':app:extractIncludeDebugAndroidTestProto' finished in 0.05 s
+Time metrics:
+  Total Gradle task time: 0.05 s
+
+Task ':app:kspDebugKotlin' finished in 0.05 s
+Time metrics:
+  Total Gradle task time: 0.05 s
+
+Task ':app:mergeDebugGlobalSynthetics' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:hiltJavaCompileDebug' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:mergeExtDexDebug' finished in 0.03 s
+Time metrics:
+  Total Gradle task time: 0.03 s
+
+Task ':app:hiltAggregateDepsDebug' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:checkDebugAarMetadata' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:checkDebugDuplicateClasses' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeDebugNativeLibs' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:compileDebugKotlin' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:processDebugResources' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:transformDebugClassesWithAsm' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mapDebugSourceSetPaths' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeDebugJavaResource' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:packageDebug' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:processDebugMainManifest' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mergeDebugAssets' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:processDebugAndroidTestManifest' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:compileDebugJavaWithJavac' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:mapDebugAndroidTestSourceSetPaths' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:parseDebugLocalResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:dexBuilderDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugJavaRes' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractDebugProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:javaPreCompileDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugAndroidTestResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugAndroidTestResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:stripDebugDebugSymbols' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:checkDebugAndroidTestAarMetadata' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugGoogleServices' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:packageDebugResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugManifest' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugShaders' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:compileDebugShaders' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:desugarDebugFileDependencies' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeLibDexDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeProjectDexDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:writeDebugSigningConfigVersions' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:bundleDebugClassesToCompileJar' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractAndroidTestProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugAndroidTestProto' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugAndroidTestResValues' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:checkKotlinGradlePluginConfigurationErrors' was skipped: SKIPPED
+
+Task ':app:preBuild' finished in 0.00 s
+
+Task ':app:preDebugBuild' finished in 0.00 s
+
+Task ':app:generateDebugResValues' finished in 0.00 s
+
+Task ':app:generateDebugResources' finished in 0.00 s
+
+Task ':app:createDebugCompatibleScreenManifests' finished in 0.00 s
+
+Task ':app:extractDeepLinksDebug' finished in 0.00 s
+
+Task ':app:processDebugManifestForPackage' finished in 0.00 s
+
+Task ':app:generateDebugAssets' finished in 0.00 s
+
+Task ':app:compressDebugAssets' finished in 0.00 s
+
+Task ':app:mergeDebugStartupProfile' finished in 0.00 s
+
+Task ':app:mergeDebugJniLibFolders' finished in 0.00 s
+
+Task ':app:validateSigningDebug' finished in 0.00 s
+
+Task ':app:writeDebugAppMetadata' finished in 0.00 s
+
+Task ':app:createDebugApkListingFileRedirect' finished in 0.00 s
+
+Task ':app:extractAndroidTestDebugProto' finished in 0.00 s
+
+Task ':app:preDebugAndroidTestBuild' was skipped: SKIPPED
+
+Task ':app:generateDebugAndroidTestResources' finished in 0.00 s
+

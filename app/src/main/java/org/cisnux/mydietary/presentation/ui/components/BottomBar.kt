@@ -74,13 +74,13 @@ fun BottomBar(
                     when (item.icon) {
                         is ImageVector -> Icon(
                             imageVector = item.icon,
-                            contentDescription = null
+                            contentDescription = item.title
                         )
 
                         is Painter ->
                             Icon(
                                 painter = item.icon,
-                                contentDescription = null
+                                contentDescription = item.title
                             )
                     }
 

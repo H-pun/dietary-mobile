@@ -60,8 +60,8 @@ class SignInScreenTest {
     }
 
     @Test
-    fun successfulSignIn_ShouldDisplayHomeScreen(): Unit = with(composeTestRule) {
-        val emailAddress = "ddactor7@gmail.com"
+    fun signIn_Success(): Unit = with(composeTestRule) {
+        val emailAddress = "j4478072@gmail.com"
         val password = "@Cisnux21"
 
         onNodeWithText(composeTestRule.activity.getString(R.string.sign_in))
@@ -94,8 +94,8 @@ class SignInScreenTest {
     }
 
     @Test
-    fun failedSignIn_ShouldDisplaySnackbarWithErrorMessage(): Unit = with(composeTestRule) {
-        val emailAddress = "ddactor7@gmail.com"
+    fun signIn_Failed(): Unit = with(composeTestRule) {
+        val emailAddress = "j4478072@gmail.com"
         val password = "@Cisnux61"
 
         onNodeWithText(composeTestRule.activity.getString(R.string.sign_in))

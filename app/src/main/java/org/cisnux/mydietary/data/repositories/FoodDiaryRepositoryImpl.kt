@@ -187,7 +187,7 @@ class FoodDiaryRepositoryImpl @Inject constructor(
     ): Flow<UiState<FoodNutrition>> =
         flow {
             emit(UiState.Loading)
-            foodDiaryRemoteSource.detectFoods(accessToken, foodPicture).fold(
+            foodDiaryRemoteSource.predict(accessToken, foodPicture).fold(
                 ifLeft = { exception -> emit(UiState.Error(exception)) },
                 ifRight = {
                     emit(

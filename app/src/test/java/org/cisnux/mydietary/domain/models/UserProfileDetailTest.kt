@@ -1,12 +1,10 @@
-package org.cisnux.mydietary.domain
+package org.cisnux.mydietary.domain.models
 
-import org.cisnux.mydietary.domain.models.UserNutrition
-import org.cisnux.mydietary.domain.models.UserProfileDetail
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class UserProfileDataTest {
+class UserProfileDetailTest {
     private lateinit var userProfileDetail: UserProfileDetail
 
     @BeforeEach

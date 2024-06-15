@@ -8,7 +8,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import org.cisnux.mydietary.commons.utils.Failure
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -75,6 +74,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -84,26 +85,27 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.cisnux.mydietary.R
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.commons.utils.Failure
+import org.cisnux.mydietary.commons.utils.UiState
+import org.cisnux.mydietary.commons.utils.activity
+import org.cisnux.mydietary.commons.utils.fromMillisToDayDateMonthYear
+import org.cisnux.mydietary.commons.utils.fromMillisToHoursAndMinutes
 import org.cisnux.mydietary.domain.models.FoodDiary
+import org.cisnux.mydietary.domain.models.Keyword
 import org.cisnux.mydietary.presentation.ui.components.BottomBar
 import org.cisnux.mydietary.presentation.ui.components.DiaryCard
 import org.cisnux.mydietary.presentation.ui.components.DiaryCardShimmer
 import org.cisnux.mydietary.presentation.ui.components.DietarySearchBar
 import org.cisnux.mydietary.presentation.ui.components.EmptyContents
-import org.cisnux.mydietary.presentation.ui.components.rememberSearchBarState
-import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
-import org.cisnux.mydietary.commons.utils.AppDestination
-import org.cisnux.mydietary.commons.utils.UiState
-import org.cisnux.mydietary.commons.utils.activity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.cisnux.mydietary.domain.models.Keyword
 import org.cisnux.mydietary.presentation.ui.components.NavigationDrawer
 import org.cisnux.mydietary.presentation.ui.components.UserAccountCard
-import org.cisnux.mydietary.commons.utils.fromMillisToDayDateMonthYear
-import org.cisnux.mydietary.commons.utils.fromMillisToHoursAndMinutes
+import org.cisnux.mydietary.presentation.ui.components.rememberSearchBarState
+import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
 import java.time.Instant
 
 @OptIn(
@@ -657,14 +659,22 @@ private fun HomeBody(
                         contentPadding = PaddingValues(bottom = 8.dp, end = 16.dp),
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxHeight()
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .semantics {
+                                testTag = "food_diary_list"
+                            }
                     ) {
                         item {
                             Column {
                                 AnimatedVisibility(visible = isDiaryLoading) {
                                     Column {
                                         repeat(8) {
-                                            DiaryCardShimmer()
+                                            DiaryCardShimmer(
+                                                modifier = Modifier.semantics {
+                                                    testTag = "diary_card_shimmer"
+                                                }
+                                            )
                                         }
                                     }
                                 }
@@ -679,6 +689,9 @@ private fun HomeBody(
                                     foodImageUrl = foodDiary.foodPictureUrl,
                                     calorie = foodDiary.totalFoodCalories,
                                     onClick = { onCardTapped(foodDiary.id) },
+                                    modifier = Modifier.semantics {
+                                        testTag = "diary_card"
+                                    }
                                 )
                             }
                         }

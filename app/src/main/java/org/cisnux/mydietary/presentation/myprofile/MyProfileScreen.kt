@@ -47,9 +47,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -321,7 +324,9 @@ fun MyProfileScreen(
                         userProfileState is UiState.Error && (userProfileState as UiState.Error).error !is Failure.ConnectionFailure
                         || userProfileDetail.username.isBlank()
             ) {
-                MyProfileShimmer(modifier = modifier.padding(it))
+                MyProfileShimmer(modifier = modifier.padding(it).semantics {
+                    testTag = "my_profile_shimmer"
+                })
             }
         },
         snackbarHostState = snackbarHostState
@@ -474,7 +479,7 @@ private fun MyProfileContent(
         },
         floatingActionButton = {
             if (isSuccess)
-                FloatingActionButton(onClick = onEdit) {
+                FloatingActionButton(onClick = onEdit, modifier = Modifier.testTag(tag = "edit_profile_button")) {
                     Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
                 }
         },

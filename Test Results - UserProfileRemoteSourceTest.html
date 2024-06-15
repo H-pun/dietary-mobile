@@ -572,9 +572,9 @@ jQuery.cookie = function(name, value, options) {
     <body>
         <div id="container">
             <div id="header">
-                <div class="time" xmlns="">285 ms</div>
+                <div class="time" xmlns="">313 ms</div>
                 <h1>
-                    UserProfileRemoteSourceTest: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">22 total, </span><span class="passed">22 passed</span></strong>
+                    UserProfileRemoteSourceTest: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">24 total, </span><span class="passed">24 passed</span></strong>
                 </h1>
                 <div id="treecontrol">
                     <ul>
@@ -593,34 +593,39 @@ jQuery.cookie = function(name, value, options) {
                 <ul id="tree">
                     <li xmlns="" class="level top open">
                         <span><em class="time">
-                                <div class="time">285 ms</div>
+                                <div class="time">313 ms</div>
                             </em>User Profile</span>
                         <ul>
                             <li class="level suite open">
                                 <span><em class="time">
-                                        <div class="time">215 ms</div>
+                                        <div class="time">237 ms</div>
                                     </em>when add new user profile</span>
                                 <ul>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">207 ms</div>
+                                                <div class="time">226 ms</div>
                                             </em><em class="status">passed</em>by username that already used then should return (400 Bad Request)</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">4 ms</div>
-                                            </em><em class="status">passed</em>by valid body request but server got internal error then should return (500 Internal Server Error)</span>
+                                                <div class="time">5 ms</div>
+                                            </em><em class="status">passed</em>by valid body request but access token has expired then should return (401 Unauthorized)</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">4 ms</div>
-                                            </em><em class="status">passed</em>by valid body request then should return (200 OK)</span>
+                                                <div class="time">3 ms</div>
+                                            </em><em class="status">passed</em>by valid body request then should return (201 Created)</span>
+                                    </li>
+                                    <li class="level test">
+                                        <span><em class="time">
+                                                <div class="time">3 ms</div>
+                                            </em><em class="status">passed</em>by valid body request but server got internal error then should return (500 Internal Server Error)</span>
                                     </li>
                                 </ul>
                             </li>
                             <li class="level suite open">
                                 <span><em class="time">
-                                        <div class="time">20 ms</div>
+                                        <div class="time">19 ms</div>
                                     </em>when get daily nutrients</span>
                                 <ul>
                                     <li class="level test">
@@ -630,18 +635,18 @@ jQuery.cookie = function(name, value, options) {
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">3 ms</div>
+                                                <div class="time">4 ms</div>
                                             </em><em class="status">passed</em>by non-existent id then should return (404 Not Found)</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
                                                 <div class="time">5 ms</div>
-                                            </em><em class="status">passed</em>by valid id but access token has expired then should return (401 Unauthorized)</span>
+                                            </em><em class="status">passed</em>by valid id then should return (200 OK)</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">4 ms</div>
-                                            </em><em class="status">passed</em>by valid id then should return (200 OK)</span>
+                                                <div class="time">2 ms</div>
+                                            </em><em class="status">passed</em>by valid id but access token has expired then should return (401 Unauthorized)</span>
                                     </li>
                                 </ul>
                             </li>
@@ -657,45 +662,45 @@ jQuery.cookie = function(name, value, options) {
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">2 ms</div>
+                                                <div class="time">3 ms</div>
                                             </em><em class="status">passed</em>by non-existent id then should return (404 Not Found)</span>
+                                    </li>
+                                    <li class="level test">
+                                        <span><em class="time">
+                                                <div class="time">5 ms</div>
+                                            </em><em class="status">passed</em>by valid id then should return (200 OK)</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
                                                 <div class="time">2 ms</div>
                                             </em><em class="status">passed</em>by valid id but access token has expired then should return (401 Unauthorized)</span>
-                                    </li>
-                                    <li class="level test">
-                                        <span><em class="time">
-                                                <div class="time">6 ms</div>
-                                            </em><em class="status">passed</em>by valid id then should return (200 OK)</span>
                                     </li>
                                 </ul>
                             </li>
                             <li class="level suite open">
                                 <span><em class="time">
-                                        <div class="time">11 ms</div>
+                                        <div class="time">13 ms</div>
                                     </em>when get user profile</span>
                                 <ul>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">3 ms</div>
+                                                <div class="time">4 ms</div>
                                             </em><em class="status">passed</em>by valid id but server got internal error then should return (500 Internal Server Error)</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">2 ms</div>
+                                                <div class="time">3 ms</div>
                                             </em><em class="status">passed</em>by non-existent id then should return (404 Not Found)</span>
-                                    </li>
-                                    <li class="level test">
-                                        <span><em class="time">
-                                                <div class="time">2 ms</div>
-                                            </em><em class="status">passed</em>by valid id but access token has expired then should return (401 Unauthorized)</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
                                                 <div class="time">4 ms</div>
                                             </em><em class="status">passed</em>by valid id then should return (200 OK)</span>
+                                    </li>
+                                    <li class="level test">
+                                        <span><em class="time">
+                                                <div class="time">2 ms</div>
+                                            </em><em class="status">passed</em>by valid id but access token has expired then should return (401 Unauthorized)</span>
                                     </li>
                                 </ul>
                             </li>
@@ -707,11 +712,16 @@ jQuery.cookie = function(name, value, options) {
                                     <li class="level test">
                                         <span><em class="time">
                                                 <div class="time">5 ms</div>
-                                            </em><em class="status">passed</em>by valid id but server got internal error then should return (500 Internal Server Error)</span>
+                                            </em><em class="status">passed</em>by valid body request then should return (200 OK)</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
                                                 <div class="time">3 ms</div>
+                                            </em><em class="status">passed</em>by valid id but server got internal error then should return (500 Internal Server Error)</span>
+                                    </li>
+                                    <li class="level test">
+                                        <span><em class="time">
+                                                <div class="time">2 ms</div>
                                             </em><em class="status">passed</em>by non-existent id then should return (404 Not Found)</span>
                                     </li>
                                     <li class="level test">
@@ -719,32 +729,32 @@ jQuery.cookie = function(name, value, options) {
                                                 <div class="time">2 ms</div>
                                             </em><em class="status">passed</em>by valid id but access token has expired then should return (401 Unauthorized)</span>
                                     </li>
-                                    <li class="level test">
-                                        <span><em class="time">
-                                                <div class="time">2 ms</div>
-                                            </em><em class="status">passed</em>by valid body request then should return (200 OK)</span>
-                                    </li>
                                 </ul>
                             </li>
                             <li class="level suite open">
                                 <span><em class="time">
-                                        <div class="time">13 ms</div>
+                                        <div class="time">18 ms</div>
                                     </em>when update user profile</span>
                                 <ul>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">2 ms</div>
-                                            </em><em class="status">passed</em>by username that already used then should return (400 Bad Request)</span>
-                                    </li>
-                                    <li class="level test">
-                                        <span><em class="time">
-                                                <div class="time">8 ms</div>
-                                            </em><em class="status">passed</em>by valid body request but server got internal error then should return (500 Internal Server Error)</span>
+                                                <div class="time">9 ms</div>
+                                            </em><em class="status">passed</em>by valid body request then should return (200 OK)</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
                                                 <div class="time">3 ms</div>
-                                            </em><em class="status">passed</em>by valid body request then should return (200 OK)</span>
+                                            </em><em class="status">passed</em>by username that already used then should return (400 Bad Request)</span>
+                                    </li>
+                                    <li class="level test">
+                                        <span><em class="time">
+                                                <div class="time">3 ms</div>
+                                            </em><em class="status">passed</em>by valid body request but access token has expired then should return (401 Unauthorized)</span>
+                                    </li>
+                                    <li class="level test">
+                                        <span><em class="time">
+                                                <div class="time">3 ms</div>
+                                            </em><em class="status">passed</em>by valid body request but server got internal error then should return (500 Internal Server Error)</span>
                                     </li>
                                 </ul>
                             </li>
@@ -754,7 +764,7 @@ jQuery.cookie = function(name, value, options) {
             </div>
         </div>
         <div id="footer">
-            <p>Generated by Android Studio on 6/12/24, 2:38 AM</p>
+            <p>Generated by Android Studio on 6/14/24, 1:09 PM</p>
         </div>
     </body>
 </html>

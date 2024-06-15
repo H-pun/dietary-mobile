@@ -59,7 +59,7 @@ class SignUpScreenTest {
     }
 
     @Test
-    fun successfulSignUp_ShouldDisplaySnackbarWithSuccessMessage(): Unit = with(composeTestRule) {
+    fun signUp_Success(): Unit = with(composeTestRule) {
         val emailAddress = "test${UUID.randomUUID()}@gmail.com"
         val password = "@Cisnux21"
         val confirmPassword = "@Cisnux21"
@@ -107,8 +107,8 @@ class SignUpScreenTest {
     }
 
     @Test
-    fun failedSignUp_ShouldDisplaySnackbarWithErrorMessage(): Unit = with(composeTestRule) {
-        val emailAddress = "ddactor7@gmail.com"
+    fun signUp_Failed(): Unit = with(composeTestRule) {
+        val emailAddress = "fajrarisqulla@gmail.com"
         val password = "@Cisnux21"
         val confirmPassword = "@Cisnux21"
 

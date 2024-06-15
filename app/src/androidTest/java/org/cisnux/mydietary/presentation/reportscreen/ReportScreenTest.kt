@@ -1,0 +1,164 @@
+package org.cisnux.mydietary.presentation.reportscreen
+
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.navigation.compose.ComposeNavigator
+import androidx.navigation.testing.TestNavHostController
+import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import org.cisnux.mydietary.DummyActivity
+import org.cisnux.mydietary.R
+import org.cisnux.mydietary.commons.utils.AppDestination
+import org.cisnux.mydietary.presentation.navigation.DietaryNavGraph
+import org.cisnux.mydietary.presentation.ui.theme.DietaryTheme
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+
+@OptIn(ExperimentalTestApi::class)
+@LargeTest
+@HiltAndroidTest
+class ReportScreenTest {
+    private lateinit var device: UiDevice
+
+    @get:Rule(order = 1)
+    val hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 2)
+    val composeTestRule = createAndroidComposeRule<DummyActivity>()
+
+    private lateinit var navController: TestNavHostController
+
+    @Before
+    fun setUp() {
+        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        hiltRule.inject()
+        composeTestRule.setContent {
+            navController = TestNavHostController(LocalContext.current)
+            navController.navigatorProvider.addNavigator(ComposeNavigator())
+            DietaryTheme {
+                DietaryNavGraph(
+                    navController = navController
+                )
+            }
+        }
+        device.wait(
+            Until.findObject(By.text(composeTestRule.activity.getString(R.string.allow))),
+            5000L
+        )
+        device.findObject(By.text(composeTestRule.activity.getString(R.string.allow)))
+            .click()
+        composeTestRule.waitUntilAtLeastOneExists(
+            hasText(composeTestRule.activity.getString(R.string.get_started)),
+            5000L
+        )
+    }
+
+    @Test
+    fun displayAllReports(): Unit = with(composeTestRule) {
+        val emailAddress = "j4478072@gmail.com"
+        val password = "@Cisnux21"
+        val todayCalories = "400.00"
+        val lastNutritionUpdated = "16"
+
+        onNodeWithText(composeTestRule.activity.getString(R.string.sign_in))
+            .assertIsDisplayed()
+            .performClick()
+
+        waitUntilExactlyOneExists(
+            hasText(composeTestRule.activity.getString(R.string.welcome_back)),
+            timeoutMillis = 3000L
+        )
+
+        onNodeWithText(composeTestRule.activity.getString(R.string.email_address_label))
+            .assertIsDisplayed()
+            .performTextInput(emailAddress)
+
+        onNodeWithText(composeTestRule.activity.getString(R.string.password_label))
+            .assertIsDisplayed()
+            .performTextInput(password)
+
+        onNodeWithText(composeTestRule.activity.getString(R.string.sign_in))
+            .assertIsDisplayed()
+            .performClick()
+
+        waitUntilExactlyOneExists(
+            hasText(composeTestRule.activity.getString(R.string.diary_display)),
+            timeoutMillis = 60_000L
+        )
+
+        Assert.assertEquals(
+            AppDestination.HomeRoute.route,
+            navController.currentBackStackEntry?.destination?.route
+        )
+
+        waitForIdle()
+
+        Assert.assertEquals(
+            AppDestination.HomeRoute.route,
+            navController.currentBackStackEntry?.destination?.route
+        )
+
+        onNodeWithContentDescription(label = composeTestRule.activity.getString(R.string.report_title))
+            .assertIsDisplayed()
+            .performClick()
+
+        waitForIdle()
+
+        waitUntilExactlyOneExists(
+            hasText(
+                substring = true,
+                text = todayCalories,
+                ignoreCase = true
+            ),
+            timeoutMillis = 60_000L
+        )
+
+        waitUntilExactlyOneExists(
+            hasText(
+                substring = true,
+                text = todayCalories,
+                ignoreCase = true
+            ),
+            timeoutMillis = 60_000L
+        )
+        waitUntilExactlyOneExists(
+            hasText(
+                substring = true,
+                text = lastNutritionUpdated,
+                ignoreCase = true
+            ),
+            timeoutMillis = 60_000L
+        )
+
+        onNode(
+            hasText(
+                substring = true,
+                text = todayCalories,
+                ignoreCase = true
+            ),
+        )
+            .assertIsDisplayed()
+        onNode(
+            hasText(
+                substring = true,
+                text = lastNutritionUpdated,
+                ignoreCase = true
+            )
+        )
+            .assertIsDisplayed()
+    }
+}

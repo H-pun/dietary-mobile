@@ -11,7 +11,7 @@ import org.cisnux.mydietary.commons.utils.DUMMY_ACCESS_TOKEN
 import org.cisnux.mydietary.commons.utils.DUMMY_DATE
 import org.cisnux.mydietary.commons.utils.DUMMY_USER_ACCOUNT_ID
 import org.cisnux.mydietary.commons.utils.Failure
-import org.cisnux.mydietary.commons.utils.dummyAddUserProfile200ResponseJson
+import org.cisnux.mydietary.commons.utils.dummyAddUserProfile201ResponseJson
 import org.cisnux.mydietary.commons.utils.dummyDietProgressBodyRequest
 import org.cisnux.mydietary.commons.utils.dummyExpiredAccessTokenResponseJson
 import org.cisnux.mydietary.commons.utils.dummyGetDietProgress200ResponseJson
@@ -24,7 +24,7 @@ import org.cisnux.mydietary.commons.utils.dummyUpdateUserProfileBodyRequest
 import org.cisnux.mydietary.commons.utils.dummyUserProfile400ResponseJson
 import org.cisnux.mydietary.commons.utils.dummyUserAccount404ResponseJson
 import org.cisnux.mydietary.commons.utils.dummyUserProfileDetail200ResponseJson
-import org.cisnux.mydietary.commons.utils.expectedAddUserProfile200Response
+import org.cisnux.mydietary.commons.utils.expectedAddUserProfile201Response
 import org.cisnux.mydietary.commons.utils.expectedGetDietProgress200Response
 import org.cisnux.mydietary.commons.utils.expectedInternalServerErrorResponse
 import org.cisnux.mydietary.commons.utils.expectedNutrient200Response
@@ -45,14 +45,14 @@ class UserProfileRemoteSourceTest : BaseRemoteTest() {
     inner class AddUserProfile {
 
         @Test
-        fun `by valid body request then should return (200 OK)`() = runTest {
+        fun `by valid body request then should return (201 Created)`() = runTest {
             // arrange
             val userProfileRemoteSource = UserProfileRemoteSourceImpl(
                 baseApiUrlLocalSource = baseApiUrlLocalSource,
                 client = mockHandler {
                     respond(
-                        content = dummyAddUserProfile200ResponseJson,
-                        status = HttpStatusCode.OK,
+                        content = dummyAddUserProfile201ResponseJson,
+                        status = HttpStatusCode.Created,
                         headers = headersOf(HttpHeaders.ContentType, "application/json")
                     )
                 })
@@ -64,7 +64,7 @@ class UserProfileRemoteSourceTest : BaseRemoteTest() {
             )
 
             // assert
-            Assertions.assertEquals(expectedAddUserProfile200Response, result)
+            Assertions.assertEquals(expectedAddUserProfile201Response, result)
         }
 
         @Test
@@ -92,6 +92,30 @@ class UserProfileRemoteSourceTest : BaseRemoteTest() {
                 result.leftOrNull()?.message
             )
         }
+
+        @Test
+        fun `by valid body request but access token has expired then should return (401 Unauthorized)`() =
+            runTest {
+                // arrange
+                val userProfileRemoteSource = UserProfileRemoteSourceImpl(
+                    baseApiUrlLocalSource = baseApiUrlLocalSource,
+                    client = mockHandler {
+                        respond(
+                            content = dummyExpiredAccessTokenResponseJson,
+                            status = HttpStatusCode.Unauthorized,
+                            headers = headersOf(HttpHeaders.ContentType, "application/json")
+                        )
+                    })
+
+                // act
+                val result = userProfileRemoteSource.addUserProfile(
+                    accessToken = DUMMY_ACCESS_TOKEN,
+                    userProfile = dummyNewUserProfileBodyRequest
+                )
+
+                // assert
+                Assertions.assertTrue(result.leftOrNull() is Failure.UnauthorizedFailure)
+            }
 
         @Test
         fun `by valid body request but server got internal error then should return (500 Internal Server Error)`() =
@@ -173,6 +197,30 @@ class UserProfileRemoteSourceTest : BaseRemoteTest() {
                 result.leftOrNull()?.message
             )
         }
+
+        @Test
+        fun `by valid body request but access token has expired then should return (401 Unauthorized)`() =
+            runTest {
+                // arrange
+                val userProfileRemoteSource = UserProfileRemoteSourceImpl(
+                    baseApiUrlLocalSource = baseApiUrlLocalSource,
+                    client = mockHandler {
+                        respond(
+                            content = dummyExpiredAccessTokenResponseJson,
+                            status = HttpStatusCode.Unauthorized,
+                            headers = headersOf(HttpHeaders.ContentType, "application/json")
+                        )
+                    })
+
+                // act
+                val result = userProfileRemoteSource.updateUserProfile(
+                    accessToken = DUMMY_ACCESS_TOKEN,
+                    userProfile = dummyUpdateUserProfileBodyRequest
+                )
+
+                // assert
+                Assertions.assertTrue(result.leftOrNull() is Failure.UnauthorizedFailure)
+            }
 
         @Test
         fun `by valid body request but server got internal error then should return (500 Internal Server Error)`() =

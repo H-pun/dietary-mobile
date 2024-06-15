@@ -13,19 +13,16 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="successfulSignUp_ShouldDisplaySnackbar()">
+      <SelectionState runConfigName="deleteFoodDiary()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="successfulSignUp_ShouldDisplaySnackbarWithErrorMessage()">
+      <SelectionState runConfigName="displayAllReports()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="successfulSignUp_ShouldDisplaySnackbarWithSuccessMessage()">
+      <SelectionState runConfigName="signInWithGoogle()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="failedSignUp_ShouldDisplaySnackbarWithErrorMessage()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="addFoodDiarySuccessfully_ShouldDisplayFoodDiaryDetailScreen()">
+      <SelectionState runConfigName="signUp_Success()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

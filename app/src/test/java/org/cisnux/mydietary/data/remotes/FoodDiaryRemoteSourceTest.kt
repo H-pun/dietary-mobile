@@ -21,6 +21,7 @@ import org.cisnux.mydietary.commons.utils.dummyGetFoodDiaryParams
 import org.cisnux.mydietary.commons.utils.dummyGetFoodDiaryReports200ResponseJson
 import org.cisnux.mydietary.commons.utils.dummyGetFoodDiaryResponse200Json
 import org.cisnux.mydietary.commons.utils.dummyInternalServerErrorResponseJson
+import org.cisnux.mydietary.commons.utils.dummyPredict400ResponseJson
 import org.cisnux.mydietary.commons.utils.dummyReportBodyRequest
 import org.cisnux.mydietary.commons.utils.dummyUserAccount404ResponseJson
 import org.cisnux.mydietary.commons.utils.expectedAddedFoodDiary201Response
@@ -31,6 +32,7 @@ import org.cisnux.mydietary.commons.utils.expectedFoodDiary404Response
 import org.cisnux.mydietary.commons.utils.expectedGetFoodDiaryReports200Response
 import org.cisnux.mydietary.commons.utils.expectedGetSuggestionKeywords200Response
 import org.cisnux.mydietary.commons.utils.expectedInternalServerErrorResponse
+import org.cisnux.mydietary.commons.utils.expectedPredict400Response
 import org.cisnux.mydietary.commons.utils.expectedUserAccount404Response
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
@@ -358,8 +360,8 @@ class FoodDiaryRemoteSourceTest : BaseRemoteTest() {
     }
 
     @Nested
-    @DisplayName("when detect foods")
-    inner class DetectFoods {
+    @DisplayName("when predict")
+    inner class Predict {
 
         @Test
         fun `by valid body request then should return (200 OK)`() = runTest {
@@ -375,13 +377,39 @@ class FoodDiaryRemoteSourceTest : BaseRemoteTest() {
                 })
 
             // act
-            val result = foodDiaryRemoteSource.detectFoods(
+            val result = foodDiaryRemoteSource.predict(
                 accessToken = DUMMY_ACCESS_TOKEN,
                 foodPicture = dummyFile
             )
 
             // assert
             Assertions.assertEquals(expectedDetected200Response, result)
+        }
+
+        @Test
+        fun `by non-food image then should return (400 Bad Request)`() = runTest {
+            // arrange
+            val foodDiaryRemoteSource = FoodDiaryRemoteSourceImpl(
+                baseApiUrlLocalSource = baseApiUrlLocalSource,
+                client = mockHandler {
+                    respond(
+                        content = dummyPredict400ResponseJson,
+                        status = HttpStatusCode.BadRequest,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json")
+                    )
+                })
+
+            // act
+            val result = foodDiaryRemoteSource.predict(
+                accessToken = DUMMY_ACCESS_TOKEN,
+                foodPicture = dummyFile
+            )
+
+            // assert
+            Assertions.assertEquals(
+                expectedPredict400Response.value.message,
+                result.leftOrNull()?.message
+            )
         }
 
         @Test
@@ -399,7 +427,7 @@ class FoodDiaryRemoteSourceTest : BaseRemoteTest() {
                     })
 
                 // act
-                val result = foodDiaryRemoteSource.detectFoods(
+                val result = foodDiaryRemoteSource.predict(
                     accessToken = DUMMY_ACCESS_TOKEN,
                     foodPicture = dummyFile
                 )
@@ -423,7 +451,7 @@ class FoodDiaryRemoteSourceTest : BaseRemoteTest() {
                     })
 
                 // act
-                val result = foodDiaryRemoteSource.detectFoods(
+                val result = foodDiaryRemoteSource.predict(
                     accessToken = DUMMY_ACCESS_TOKEN,
                     foodPicture = dummyFile
                 )

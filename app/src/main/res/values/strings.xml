@@ -229,4 +229,5 @@ To the maximum extent permitted by applicable law, you agree to indemnify and ho
     <string name="save_food_diary">save food diary</string>
     <string name="take_a_picture">take a picture</string>
     <string name="list_of_foods">list of foods</string>
+    <string name="navigate_up" translatable="false">navigate up</string>
 </resources>

@@ -32,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -416,7 +418,10 @@ private fun MyProfileBody(
         modifier = modifier
             .fillMaxWidth()
             .verticalScroll(state = scrollState)
-            .padding(PaddingValues(16.dp)),
+            .padding(PaddingValues(16.dp))
+            .semantics {
+                testTag = "add_my_profile_body"
+            },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -455,7 +460,9 @@ private fun MyProfileBody(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = onBuildProfile,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().semantics {
+                testTag = "build_profile_button"
+            },
             shape = MaterialTheme.shapes.medium,
             enabled = username.isUsernameValid() and age.isAgeValid()
                     and weight.isFloatAndGreaterThanZero() and height.isFloatAndGreaterThanZero()

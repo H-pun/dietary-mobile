@@ -3,7 +3,6 @@ package org.cisnux.mydietary.commons.utils
 import arrow.core.Either
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.cisnux.mydietary.commons.utils.Failure
 import org.cisnux.mydietary.data.remotes.bodyrequests.ChangePasswordBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.DietProgressBodyRequest
 import org.cisnux.mydietary.data.remotes.bodyrequests.FoodDiaryBodyRequest
@@ -92,7 +91,7 @@ val dummyNewUserProfileBodyRequest = NewUserProfileBodyRequest(
     gender = "male",
     goal = "menurunkan berat badan",
     weightTarget = 50f,
-    activityLevel = "sedang",
+    activityLevel = "Sedentary",
 )
 
 val dummyUpdateUserProfileBodyRequest = UpdateUserProfileWithUsernameBodyRequest(
@@ -103,9 +102,9 @@ val dummyUpdateUserProfileBodyRequest = UpdateUserProfileWithUsernameBodyRequest
     height = 170f,
     waistCircumference = 80f,
     gender = "male",
-    goal = "menurunkan berat badan",
+    goal = "Weight Loss",
     weightTarget = 50f,
-    activityLevel = "sedang",
+    activityLevel = "Sedentary",
 )
 
 val dummyNewPasswordBodyRequest = NewPasswordBodyRequest(
@@ -216,7 +215,7 @@ val dummyDetected200ResponseJson = Json.encodeToString(
 )
 
 val expectedAddedFoodDiary201Response = Either.Right(
-    "food diary has already been added"
+    "1"
 )
 
 val dummyAddedFoodDiary201ResponseJson = Json.encodeToString(
@@ -401,7 +400,7 @@ val dummySendResetPassword401ResponseJson = """
 """.trimIndent()
 
 
-val dummyAddUserProfile200ResponseJson = """
+val dummyAddUserProfile201ResponseJson = """
     {
         "message": "success",
         "data": "your profile has been added"
@@ -411,7 +410,7 @@ val dummyAddUserProfile200ResponseJson = """
 val dummyUpdateUserProfile200ResponseJson = """
     {
         "message": "success",
-        "data": "your profile has been updated
+        "data": "your profile has been updated"
     }
 """.trimIndent()
 
@@ -425,6 +424,13 @@ val dummyUpdateEmail200ResponseJson = """
 val dummyEmailAddress400ResponseJson = """
     {
         "message": "the email address has been taken",
+        "data": null
+    }
+""".trimIndent()
+
+val dummyPredict400ResponseJson = """
+    {
+        "message": "No food detected!",
         "data": null
     }
 """.trimIndent()
@@ -492,13 +498,6 @@ val dummyAddedUserAccountIncorrectPasswordResponseJson = """
     }
 """.trimIndent()
 
-val dummyAddedUserAccountIncorrectEmailAddressResponseJson = """
-    {
-        "message": "the email address is incorrect",
-        "data": null
-    }
-""".trimIndent()
-
 val dummyInternalServerErrorResponseJson = """
     {
         "message": "our server has encountered an error",
@@ -520,10 +519,6 @@ val expectedAddedUserAccountIncorrectPasswordResponse = Either.Left(
 
 val expectedSendResetPassword200Response =
     Either.Right("the OTP to reset your password has been sent")
-
-val expectedAddedUserAccountIncorrectEmailAddressResponse = Either.Left(
-    Failure.UnauthorizedFailure(message = "the email address is incorrect")
-)
 
 val expectedEmail400Response = Either.Left(
     Failure.BadRequestFailure(message = "the email address has been taken")
@@ -594,9 +589,10 @@ val expectedNutrient200Response = Either.Right(
         carbohydrate = 150f
     )
 )
+val expectedPredict400Response = Either.Left(Failure.BadRequestFailure("No food detected!"))
 
 val expectedVerifyEmail200Response = Either.Right("the verification email has been sent")
 val expectedUpdateEmail200Response = Either.Right("the email address has been updated")
 val expectedChangePassword200Response = Either.Right("your password has been changed")
 val expectedForgotPassword200Response = Either.Right("your password has been changed")
-val expectedAddUserProfile200Response = Either.Right("your profile has been added")
+val expectedAddUserProfile201Response = Either.Right("your profile has been added")
