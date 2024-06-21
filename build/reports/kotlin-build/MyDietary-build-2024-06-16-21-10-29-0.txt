@@ -1,0 +1,344 @@
+Gradle start parameters:
+  tasks = [:app:assembleDebug]
+  excluded tasks = []
+  current dir = /Users/cisnux/temp/dietary-capstone
+  project properties args = [android.studio.version: 241.15989.150.2411.11948838, android.injected.enableStableIds: true, android.profilingMode: debuggable, android.injected.attribution.file.location: /Users/cisnux/temp/dietary-capstone/.gradle, android.injected.build.api: 34, android.injected.build.abi: arm64-v8a, android.injected.invoked.from.ide: true]
+  system properties args = [idea.active: true, idea.version: 2024.1, idea.vendor.name: Google]
+
+Time metrics:
+  Total Gradle task time: 35.15 s
+  Spent time before task action: 0.34 s
+  Task action before worker execution: 2.21 s
+  Run compilation in Gradle worker: 16.49 s
+    Connect to Kotlin daemon: 0.58 s
+    Calculate output size: 0.00 s
+    Run compilation: 8.86 s
+      Non incremental compilation in daemon: 7.05 s
+      Incremental compilation in daemon: 8.84 s
+        Update caches: 0.05 s
+        Sources compilation round: 8.40 s
+          Compiler initialization time: 0.04 s
+          Compiler code analysis: 3.31 s
+          Compiler IR translation: 1.05 s
+          Compiler code generation: 3.98 s
+            Compiler IR lowering: 1.56 s
+            Compiler IR generation: 2.42 s
+        Shrink and save current classpath snapshot after compilation: 0.14 s
+          Shrink current classpath snapshot non-incrementally: 0.13 s
+            Load current classpath snapshot: 0.01 s
+          Save shrunk current classpath snapshot: 0.00 s
+  Start gradle worker: 0.12 s
+
+Size metrics:
+  Total size of the cache directory: 1.8 MB
+    ABI snapshot size: 49 B
+  Increase memory usage: 6.4 MB
+  Total memory usage at the end of build: 655.1 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 19403
+    Number of lines for code generation: 19403
+    Analysis lines per second: 5861
+    Code generation lines per second: 4878
+    Compiler IR translation line number: 19403
+    Compiler IR lowering line number: 19403
+    Compiler IR generation line number: 19403
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 152
+    Size of classpath snapshot: 7.8 MB
+    Size of shrunk classpath snapshot: 189.9 KB
+  Number of times classpath snapshot is loaded: 1
+    Number of cache hits when loading classpath entry snapshots: 152
+  Start time of task action: 2078-12-01T04:20:19
+
+Build attributes:
+  REBUILD_REASON:
+    Incremental compilation is not enabled(1)
+    Unknown Gradle changes(1)
+
+Total time for Kotlin tasks: 9.14 s (26.0 % of all tasks time)
+Time  |% of Kotlin time|Task                   
+9.14 s|100.0 %         |:app:compileDebugKotlin
+
+Task ':app:kspDebugKotlin' finished in 10.01 s
+Task info:
+  Kotlin language version: 1.9
+Compilation log for task ':app:kspDebugKotlin':
+  Compiler perf stats:
+  INIT: Compiler initialized in 1688 ms
+          ANALYZE    3719 ms    5198.440 loc/s
+          ANALYZE    1287 ms   15021.756 loc/s
+          ANALYZE     175 ms  110474.286 loc/s
+  Find Java class performed 102 times, total time 34 ms
+  Type info performed 3336 times, total time 2508 ms
+  Call resolve performed 4668 times, total time 2426 ms
+  Binary class from Kotlin file performed 12038 times, total time 2326 ms
+  Find Java class performed 41 times, total time 23 ms
+  Find Java class performed 102 times, total time 14 ms
+  Find Java class performed 41 times, total time 39 ms
+  Find Java class performed 102 times, total time 14 ms
+  Find Java class performed 41 times, total time 12 ms
+  Find Java class performed 102 times, total time 19 ms
+Time metrics:
+  Total Gradle task time: 10.01 s
+  Spent time before task action: 0.17 s
+  Task action before worker execution: 2.18 s
+  Run compilation in Gradle worker: 7.62 s
+    Connect to Kotlin daemon: 0.57 s
+    Non incremental compilation in daemon: 7.05 s
+  Start gradle worker: 0.11 s
+Size metrics:
+  Increase memory usage: -158439520 B
+  Total memory usage at the end of build: 245.9 MB
+  Start time of task action: 2024-06-16T14:10:04
+Build attributes:
+  REBUILD_REASON: Incremental compilation is not enabled
+
+Task ':app:compileDebugKotlin' finished in 9.14 s
+Task info:
+  Kotlin language version: 2.0
+Compilation log for task ':app:compileDebugKotlin':
+  Non-incremental compilation will be performed: UNKNOWN_CHANGES_IN_GRADLE_INPUTS
+  Cleaning 3 output directories
+  [ClasspathSnapshot] Shrunk current classpath snapshot after compilation (shrink mode = NonIncremental), retained 839 / 21115 classes
+Time metrics:
+  Total Gradle task time: 9.14 s
+  Spent time before task action: 0.17 s
+  Task action before worker execution: 0.03 s
+  Run compilation in Gradle worker: 8.87 s
+    Connect to Kotlin daemon: 0.01 s
+    Calculate output size: 0.00 s
+    Run compilation: 8.86 s
+      Incremental compilation in daemon: 8.84 s
+        Update caches: 0.05 s
+        Sources compilation round: 8.40 s
+          Compiler initialization time: 0.04 s
+          Compiler code analysis: 3.31 s
+          Compiler IR translation: 1.05 s
+          Compiler code generation: 3.98 s
+            Compiler IR lowering: 1.56 s
+            Compiler IR generation: 2.42 s
+        Shrink and save current classpath snapshot after compilation: 0.14 s
+          Shrink current classpath snapshot non-incrementally: 0.13 s
+            Load current classpath snapshot: 0.01 s
+          Save shrunk current classpath snapshot: 0.00 s
+  Start gradle worker: 0.01 s
+Size metrics:
+  Total size of the cache directory: 1.8 MB
+    ABI snapshot size: 49 B
+  Increase memory usage: 157.5 MB
+  Total memory usage at the end of build: 409.2 MB
+  Total compiler iteration: 1
+    Number of lines analyzed: 19403
+    Number of lines for code generation: 19403
+    Analysis lines per second: 5861
+    Code generation lines per second: 4878
+    Compiler IR translation line number: 19403
+    Compiler IR lowering line number: 19403
+    Compiler IR generation line number: 19403
+  Number of times classpath snapshot is shrunk and saved after compilation: 1
+    Number of classpath entries: 152
+    Size of classpath snapshot: 7.8 MB
+    Size of shrunk classpath snapshot: 189.9 KB
+  Number of times classpath snapshot is loaded: 1
+    Number of cache hits when loading classpath entry snapshots: 152
+  Start time of task action: 2024-06-16T14:10:14
+Build attributes:
+  REBUILD_REASON: Unknown Gradle changes
+GC metrics:
+  PS MarkSweep:
+    GC count: 1
+    GC time: 0.48 s
+  PS Scavenge:
+    GC count: 4
+    GC time: 0.65 s
+
+Task ':app:mergeExtDexDebug' finished in 8.14 s
+Time metrics:
+  Total Gradle task time: 8.14 s
+
+Task ':app:dexBuilderDebug' finished in 4.13 s
+Time metrics:
+  Total Gradle task time: 4.13 s
+
+Task ':app:processDebugResources' finished in 1.68 s
+Time metrics:
+  Total Gradle task time: 1.68 s
+
+Task ':app:transformDebugClassesWithAsm' finished in 0.51 s
+Time metrics:
+  Total Gradle task time: 0.51 s
+
+Task ':app:packageDebug' finished in 0.41 s
+Time metrics:
+  Total Gradle task time: 0.41 s
+
+Task ':app:hiltAggregateDepsDebug' finished in 0.26 s
+Time metrics:
+  Total Gradle task time: 0.26 s
+
+Task ':app:processDebugManifestForPackage' finished in 0.16 s
+Time metrics:
+  Total Gradle task time: 0.16 s
+
+Task ':app:mergeProjectDexDebug' finished in 0.15 s
+Time metrics:
+  Total Gradle task time: 0.15 s
+
+Task ':app:extractIncludeDebugProto' finished in 0.12 s
+Time metrics:
+  Total Gradle task time: 0.12 s
+
+Task ':app:processDebugMainManifest' finished in 0.11 s
+Time metrics:
+  Total Gradle task time: 0.11 s
+
+Task ':app:checkDebugDuplicateClasses' finished in 0.06 s
+Time metrics:
+  Total Gradle task time: 0.06 s
+
+Task ':app:compileDebugJavaWithJavac' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:mergeDebugGlobalSynthetics' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:mergeDebugJavaResource' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:hiltJavaCompileDebug' finished in 0.04 s
+Time metrics:
+  Total Gradle task time: 0.04 s
+
+Task ':app:checkDebugAarMetadata' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:mergeDebugNativeLibs' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:mergeDebugAssets' finished in 0.02 s
+Time metrics:
+  Total Gradle task time: 0.02 s
+
+Task ':app:mapDebugSourceSetPaths' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:javaPreCompileDebug' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:processDebugJavaRes' finished in 0.01 s
+Time metrics:
+  Total Gradle task time: 0.01 s
+
+Task ':app:parseDebugLocalResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugManifest' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:desugarDebugFileDependencies' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractDebugProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:processDebugGoogleServices' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:compressDebugAssets' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:validateSigningDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:createDebugApkListingFileRedirect' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:preBuild' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugNativeDebugMetadata' was skipped: NO-SOURCE
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:extractProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugProto' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:packageDebugResources' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:createDebugCompatibleScreenManifests' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugShaders' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:generateDebugAssets' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugStartupProfile' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeLibDexDebug' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:mergeDebugJniLibFolders' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:stripDebugDebugSymbols' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:writeDebugAppMetadata' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:writeDebugSigningConfigVersions' finished in 0.00 s
+Time metrics:
+  Total Gradle task time: 0.00 s
+
+Task ':app:preDebugBuild' finished in 0.00 s
+
+Task ':app:checkKotlinGradlePluginConfigurationErrors' was skipped: SKIPPED
+
+Task ':app:generateDebugResValues' finished in 0.00 s
+
+Task ':app:generateDebugResources' finished in 0.00 s
+
+Task ':app:extractDeepLinksDebug' finished in 0.00 s
+
+Task ':app:compileDebugShaders' was skipped: NO-SOURCE
+
+Task ':app:assembleDebug' finished in 0.00 s
+

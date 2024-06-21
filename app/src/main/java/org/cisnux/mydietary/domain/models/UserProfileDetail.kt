@@ -38,7 +38,7 @@ data class UserProfileDetail(
         // menghitung maksimal kalori
         val userMaxDailyCalories =
             (bmr * activityFactor * goalsFactor).toFloat()
-        // menghitung maksimal protein (15% dari maksimal kalori_
+        // menghitung maksimal protein (15% dari maksimal kalori)
         val userMaxDailyProtein = 0.15f * userMaxDailyCalories
         // menghitung maksimal lemak (25% dari maksimal kalori)
         val userMaxDailyFat = 0.25f * userMaxDailyCalories
