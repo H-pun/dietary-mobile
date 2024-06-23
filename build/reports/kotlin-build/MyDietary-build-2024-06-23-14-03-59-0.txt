@@ -1,0 +1,17 @@
+Gradle start parameters:
+  tasks = [clean]
+  excluded tasks = []
+  current dir = /Users/cisnux/Downloads/dietary-capstone
+  project properties args = []
+  system properties args = []
+
+Time metrics:
+  Total Gradle task time: 0,01 s
+
+
+
+No Kotlin task was run
+Task ':app:clean' finished in 0,01 s
+Time metrics:
+  Total Gradle task time: 0,01 s
+
